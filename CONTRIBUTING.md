@@ -1,7 +1,7 @@
 Thanks for contributing to Search & Replace WordPress plugin &mdash; you rock!
 
 # Search & Replace
-* MLP should be backwards compatible with the two versions prior to the current stable version of WordPress.
+
 * the plugin respects the [WordPress Coding Standards](https://make.wordpress.org/core/handbook/coding-standards/) and follows additional [conventions and best practices](https://github.com/inpsyde/Codex/blob/master/accepted/styleguide_conventions_bestpractices_EN.md). 
 
 # Getting Started
