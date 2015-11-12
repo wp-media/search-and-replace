@@ -1,0 +1,8 @@
+input[name="search"], input[name="replace"], #select_tables {
+	width: 100%;
+	max-width: 400px;
+}
+
+
+
+
