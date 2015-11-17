@@ -89,9 +89,11 @@ class Admin {
 		//adjust height of select according to table count, but max 20 rows
 		$select_rows = $table_count < 20 ? $table_count : 20;
 
+		#TODO add missing close tag for select
 		echo '<select id="select_tables" name="select_tables[]" multiple="multiple"  size = "' . $select_rows . '">';
 		foreach ( $tables as $table ) {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
+			#TODO remove invalid markup
 			echo "<option value='$table'>$table $table_size</option>option>";
 
 		}
@@ -123,6 +125,7 @@ class Admin {
 
 	}
 
+	#TODO replace this with the get_submit_button() funktion - https://codex.wordpress.org/Function_Reference/get_submit_button
 	protected function show_submit_button() {
 
 		wp_nonce_field( 'do_search_replace', 'insr_nonce' );
@@ -190,10 +193,14 @@ class Admin {
 
 		$results = $this->replace->replace_values( $search, $replace, $table );
 		$changes = $results[ 'changes' ];
+
 		if ( count( $changes ) > 0 ) {
+
 			$html = '<table class = "widefat fixed"><thead><strong>Table: </strong>' . $table . '</thead>';
 
 			foreach ( $changes as $change ) {
+
+				#TODO use instade of $html = $html - $html .=
 				$html = $html . '<tr>';
 				$html = $html . '<th>' . __( 'row',
 				                             'insr' ) . '</th><td>' . $change [ 'row' ] . '</td><th> ' . __( 'column',
