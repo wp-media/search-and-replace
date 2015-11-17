@@ -85,6 +85,8 @@ class Replace {
 			return $table_report;
 		}
 
+
+		#TODO formate source code like the codex rules
 		//list( $primary_key, $columns ) = $this->dbm->get_columns( $table );
 		$columns =$this->dbm->get_columns( $table );
 		$primary_key = $columns[0];
@@ -129,6 +131,7 @@ class Replace {
 
 				foreach ( $columns as $column ) {
 
+					#TODO remove unused variable or used
 					$edited_data = $data_to_fix = $row[ $column ];
 
 					if ( $column == $primary_key ) {
@@ -259,6 +262,7 @@ class Replace {
 	 *
 	 * @return bool
 	 */
+	#TODO add type
 	function is_json( $string, $strict = FALSE ) {
 
 		$json = @json_decode( $string, TRUE );
@@ -279,6 +283,7 @@ class Replace {
 	 *
 	 * @return string
 	 */
+	#TODO do formate this well
 	public
 	function mysql_escape_mimic(
 		$input

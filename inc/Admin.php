@@ -55,6 +55,7 @@ class Admin {
 		//can be overridden by filter 'insr-capability'
 		$cap = apply_filters( 'insr-capability', 'install_plugins' );
 
+		#TODO remove not needed variables or use it
 		$page = add_submenu_page( 'tools.php', __( 'Inpsyde Search & Replace', 'insr' ),
 		                          __( 'Inpsyde Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
 		                          array( $this, 'show_dashboard' ) );
@@ -216,6 +217,7 @@ class Admin {
 	 *
 	 * @param $errors
 	 */
+	#TODO for displaying errors use WordPress functions
 	protected function display_errors( $errors ) {
 
 		echo '<div class = "error"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';

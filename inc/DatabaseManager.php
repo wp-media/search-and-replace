@@ -1,6 +1,6 @@
 <?php
 /**
- *  User: S Hinse
+ *  User: S Hinse #TODO remove unused space
  * Date: 26.10.2015
  * Time: 12:33
  */
@@ -119,6 +119,7 @@ class DatabaseManager {
 
 	public function update( $table, $update_sql, $where_sql ) {
 
+		#TODO remove line break
 		$sql    = 'UPDATE ' . $table . ' SET ' . implode( ', ', $update_sql ) . ' WHERE ' . implode( ' AND ',
 		                                                                                             array_filter( $where_sql ) );
 		$result = $this->wpdb->query( $sql );
