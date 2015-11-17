@@ -4,5 +4,9 @@ input[name="search"], input[name="replace"], #select_tables {
 }
 
 
+.widefat th  {
+	vertical-align: baseline;
+}
+
 
 
