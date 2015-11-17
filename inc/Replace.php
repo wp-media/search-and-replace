@@ -152,12 +152,12 @@ class Replace {
 						$table_report[ 'change' ] ++;
 
 						// log changes
-
+						//TODO : does it work with non UTF-8 encodings?
 						$table_report[ 'changes' ][] = array(
 							'row'    => $table_report[ 'rows' ],
 							'column' => $column,
-							'from'   => utf8_encode( $data_to_fix ),
-							'to'     => utf8_encode( $edited_data )
+							'from'   => ( $data_to_fix ),
+							'to'     => ( $edited_data )
 						);
 
 						$update_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $edited_data ) . '"';

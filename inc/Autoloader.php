@@ -96,16 +96,18 @@ class Autoloader {
 		if ( strpos( $class, $this->_namespace ) === FALSE ) {
 			return false;
 		} else {
-			//get position of first backslash
+
+			//cut off the Base Namespace including the backslash
 			$pos = strpos( $this->_namespace, '\\' );
-			//cut off the Base Namespace before the backslash
+			$class = substr( $class, $pos+1);
+
+			//cut off the second part of namespace before the backslash, plugin directory may have another name
+			$pos = strpos( $class, '\\' );
 			$class = substr( $class, $pos );
 
-			//strip plugin dir, it is already part of $class
-			$plugin_dir = dirname( $this->_basepath );
-			$parent_dir = str_replace( $this->_namespace, '', $plugin_dir );
+
 			//build path
-			$filename = $parent_dir . str_replace( '\\', DIRECTORY_SEPARATOR, $class ) . $this->_extension;
+			$filename = $this->_basepath . str_replace( '\\', DIRECTORY_SEPARATOR, $class ) . $this->_extension;
 			if ( file_exists( $filename ) ) {
 				require_once( $filename );
 				return $filename;

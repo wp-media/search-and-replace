@@ -33,7 +33,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			<tr>
 
 				<th><label for="dry_run"><strong><?php _e( 'Dry Run', 'insr' ); ?></strong></label></th>
-				<td><input type="checkbox" name=dry_run" checked/> </td>
+				<td><input type="checkbox" name=dry_run checked/> </td>
 			</tr>
 
 			<tr><th></th><td><?php $this->show_submit_button()?></td></tr>

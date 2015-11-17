@@ -46,22 +46,22 @@ class DatabaseManager {
 		return $tables;
 	}
 
-
 	/**
 	 * Returns an array containing the size of each database table.
+	 *
 	 * @access public
 	 * @return array
 	 */
 	public function get_sizes() {
 
-		$sizes 	= array();
-		$tables	= $this->wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
+		$sizes  = array();
+		$tables = $this->wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
 
 		if ( is_array( $tables ) && ! empty( $tables ) ) {
 
 			foreach ( $tables as $table ) {
-				$size = round( $table['Data_length'] / 1024 , 2 );
-				$sizes[$table['Name']] = sprintf( __( '(%s KB)', 'insr' ), $size );
+				$size                      = round( $table[ 'Data_length' ] / 1024, 2 );
+				$sizes[ $table[ 'Name' ] ] = sprintf( __( '(%s KB)', 'insr' ), $size );
 			}
 
 		}

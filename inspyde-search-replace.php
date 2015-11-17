@@ -28,30 +28,25 @@ require_once( 'inc/Autoloader.php' );
 $autoloader = new inc\Autoloader( __NAMESPACE__, __DIR__ );
 $autoloader->register();
 
-
-
-
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
-
+add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
 
 function init() {
+
 	//this sets the capability needed to run the plugin
 	//can be overridden by filter 'insr-capability'
 	$cap = apply_filters( 'insr-capability', 'install_plugins' );
 
-	if (current_user_can($cap)) {
+	if ( current_user_can( $cap ) ) {
 
 		// Defines the path to the main plugin directory.
-		define( 'INSR_DIR', __DIR__ );
+		$plugin_dir_url = plugin_dir_url( __FILE__ );
+		define( 'INSR_DIR', $plugin_dir_url );
 
+		//set up objects
 		$dbm     = new inc\DatabaseManager();
 		$replace = new inc\Replace( $dbm );
-		//call admin
-		$admin = new inc\Admin($dbm);
-
-
+		$admin = new inc\Admin( $dbm, $replace );
 
 	}
-
 
 }

@@ -172,4 +172,49 @@ class ReplaceTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $result[ 'changes' ][ 0 ][ 'to' ], 'a:1:{s:4:"Test";s:9:"Mr Drupal";}' );
 	}
 
+
+	function test_umlaut_replace() {
+
+		$columns       = array(
+			0 => 'comment_ID',
+			1 =>
+				array(
+					0 => 'comment_ID',
+					1 => 'comment_post_ID',
+					2 => 'comment_author',
+
+				),
+		);
+		$table_content = array(
+			0 =>
+				array(
+					'comment_ID'      => '1',
+					'comment_post_ID' => '1',
+					'comment_author'  => 'Mr Wordpress',
+
+				),
+		);
+
+		$dbm_mock = $this->getMock( '\Inpsyde\searchReplace\inc\DatabaseManager',
+		                            array( 'get_columns', 'get_rows', 'get_table_content', 'flush' ) );
+
+		$dbm_mock->expects( $this->any() )
+		         ->method( 'get_columns' )
+		         ->will( $this->returnValue( $columns ) );
+
+		$dbm_mock->expects( $this->once() )
+		         ->method( 'get_rows' )
+		         ->will( $this->returnValue( 1 ) );
+
+		$dbm_mock->expects( $this->once() )
+		         ->method( 'get_table_content' )
+		         ->will( $this->returnValue( $table_content ) );
+
+		$dbm_mock->expects( $this->once() )
+		         ->method( 'flush' );
+
+		$testee = new Replace( $dbm_mock );
+		$result = $testee->replace_values( 'Mr Wordpress', 'Mr. Drüpal', 'wp_plugin_test_comments' );
+		$this->assertEquals( $result[ 'changes' ][ 0 ][ 'to' ], 'Mr. Drüpal' );
+	}
 }
