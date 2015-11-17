@@ -17,12 +17,15 @@ namespace Inpsyde\SearchReplace;
 
 $correct_php_version = version_compare( phpversion(), '5.3', '>=' );
 
+
+#TODO show message into admin notice on plugin and run this on activation hook
 if ( ! $correct_php_version ) {
 	echo "This Plugin requires <strong>PHP 5.3</strong> or higher.<br>";
 	echo "You are running PHP " . phpversion();
 	exit;
 }
 
+#TODO run autoloade if plugin activated
 //set up the autoloader
 require_once( 'inc/Autoloader.php' );
 $autoloader = new inc\Autoloader( __NAMESPACE__, __DIR__ );
@@ -45,7 +48,7 @@ function init() {
 		//set up objects
 		$dbm     = new inc\DatabaseManager();
 		$replace = new inc\Replace( $dbm );
-		$admin = new inc\Admin( $dbm, $replace );
+		$admin = new inc\Admin( $dbm, $replace ); #TODO remove not needed variables or use it
 
 	}
 
