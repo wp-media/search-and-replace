@@ -25,6 +25,9 @@ class DatabaseManager {
 	/**
 	 * Returns an array of tables in the database.
 	 *
+	 * if multisite && mainsite: all tables of the site
+	 * if multisite && subsite: all tables of the subsite
+	 * if single site: all tables of the site "SHOW TABLES LIKE'". $this->wpdb->base_prefix."%'"
 	 * @access public
 	 * @return array
 	 */
@@ -33,14 +36,14 @@ class DatabaseManager {
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 
 			if ( is_main_site() ) {
-				$tables = $this->wpdb->get_col( 'SHOW TABLES' );
+				$tables = $this->wpdb->get_col( "SHOW TABLES LIKE'". $this->wpdb->base_prefix."%'");
 			} else {
 				$blog_id = get_current_blog_id();
 				$tables  = $this->wpdb->get_col( "SHOW TABLES LIKE '" . $this->wpdb->base_prefix . absint( $blog_id ) . "\_%'" );
 			}
 
 		} else {
-			$tables = $this->wpdb->get_col( 'SHOW TABLES' );
+			$tables = $this->wpdb->get_col( "SHOW TABLES LIKE'". $this->wpdb->base_prefix."%'");
 		}
 
 		return $tables;
@@ -119,8 +122,7 @@ class DatabaseManager {
 
 	public function update( $table, $update_sql, $where_sql ) {
 
-		$sql    = 'UPDATE ' . $table . ' SET ' . implode( ', ', $update_sql ) . ' WHERE ' . implode( ' AND ',
-		                                                                                             array_filter( $where_sql ) );
+		$sql    = 'UPDATE ' . $table . ' SET ' . implode( ', ', $update_sql ) . ' WHERE ' . implode( ' AND ', array_filter( $where_sql ) );
 		$result = $this->wpdb->query( $sql );
 
 		return $result;
