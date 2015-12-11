@@ -9,20 +9,18 @@ class Admin {
 	 * stores instance of DatabaseManager
 	 */
 	protected $dbm;
+	protected $dbe;
+	protected $replace;
 
-	public function __construct( $dbm, $replace ) {
+	public function __construct( DatabaseManager $dbm, DatabaseExporter $dbe, Replace $replace ) {
 
-		if ( ! $dbm instanceof DatabaseManager ) {
-			throw new \InvalidArgumentException ( "Class Replace needs Object of Type DatabaseManager as Parameter" );
-
-		}
-		if ( ! $replace instanceof Replace ) {
-			throw new \InvalidArgumentException ( "Class Replace needs Object of Type Replace as Parameter" );
-
-		}
 
 		$this->dbm     = $dbm;
+		$this->dbe = $dbe;
 		$this->replace = $replace;
+
+		//if "download" was selected we have to check that early to prevent "headers already sent" error
+		add_action( 'init',array($this,'download_backup') );
 
 		//add plugin menu & plugin css
 		add_action( 'admin_menu', array( $this, 'register_plugin_menu' ) );
@@ -55,10 +53,9 @@ class Admin {
 		//can be overridden by filter 'insr-capability'
 		$cap = apply_filters( 'insr-capability', 'install_plugins' );
 
-		#TODO remove not needed variables or use it
-		$page = add_submenu_page( 'tools.php', __( 'Inpsyde Search & Replace', 'insr' ),
-		                          __( 'Inpsyde Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
-		                          array( $this, 'show_dashboard' ) );
+		add_submenu_page( 'tools.php', __( 'Inpsyde Search & Replace', 'insr' ),
+		                  __( 'Inpsyde Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
+		                  array( $this, 'show_dashboard' ) );
 
 	}
 
@@ -89,15 +86,14 @@ class Admin {
 		//adjust height of select according to table count, but max 20 rows
 		$select_rows = $table_count < 20 ? $table_count : 20;
 
-		#TODO add missing close tag for select
 		echo '<select id="select_tables" name="select_tables[]" multiple="multiple"  size = "' . $select_rows . '">';
 		foreach ( $tables as $table ) {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
-			#TODO remove invalid markup
-			echo "<option value='$table'>$table $table_size</option>option>";
+
+			echo "<option value='$table'>$table $table_size</option>";
 
 		}
-
+		echo( '</select>' );
 	}
 
 	protected function handle_search_replace_event() {
@@ -119,21 +115,37 @@ class Admin {
 			return;
 		}
 
-		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 
-		$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
+		else {
+
+			$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+
+			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
+		}
 
 	}
 
-	#TODO replace this with the get_submit_button() funktion - https://codex.wordpress.org/Function_Reference/get_submit_button
+	public function download_backup() {
+		if (isset ($_POST['export']) && $_POST ['export'] =="true") {
+			if ( isset ( $_POST[ 'select_tables' ] ) ) {
+				$tables = ( $_POST[ 'select_tables' ] );
+
+				$file = $this->dbe->db_backup($tables);
+			//TODO: error handling
+			$compress = isset ( $_POST['compress'])? TRUE : FALSE;
+			$this->dbe->deliver_backup($file, $compress);
+
+		}}
+	}
+
 	protected function show_submit_button() {
 
 		wp_nonce_field( 'do_search_replace', 'insr_nonce' );
 		$value = translate( "Do Search / Replace", "insr" );
 
 		$html = '	<input type="hidden" name="action" value="search_replace" /><input id ="insr_submit"type="submit" value="' . $value . ' "class="button" />';
-
 		echo $html;
+
 	}
 
 	/**
@@ -179,43 +191,45 @@ class Admin {
 
 	/**
 	 * runs search replace on the table in $table
-	 * returns a html-formatted string with the changes on success, FALSE if no changes were found
+	 * returns a html-formatted string with the changes on success, empty string if no changes were found
 	 *
 	 * @param $search
 	 * @param $replace
 	 * @param $table
 	 *
-	 * @return bool|string
+	 * @return string
 	 *
 	 *
 	 */
+
 	protected function run_replace_table( $search, $replace, $table ) {
 
-		$results = $this->replace->replace_values( $search, $replace, $table );
-		$changes = $results[ 'changes' ];
+		$results      = $this->replace->replace_values( $search, $replace, $table );
+		$changes      = $results[ 'changes' ];
+		$changes_made = count( $changes );
 
-		if ( count( $changes ) > 0 ) {
+		if ( $changes_made > 0 ) {
 
-			$html = '<table class = "widefat fixed"><thead><strong>Table: </strong>' . $table . '</thead>';
-
+			$html = '<table class = "widefat fixed"><thead><strong>' . __( 'Table', 'insr' ) . ':  </strong>' . $table;
+			$html .= '&nbsp; <strong>  ' . __( 'Changes', 'insr' ) . ': </strong> ' . $changes_made . '<thead>';
 			foreach ( $changes as $change ) {
 
-				#TODO use instade of $html = $html - $html .=
-				$html = $html . '<tr>';
-				$html = $html . '<th>' . __( 'row',
-				                             'insr' ) . '</th><td>' . $change [ 'row' ] . '</td><th> ' . __( 'column',
-				                                                                                             'insr' ) . '</th><td>' . $change [ 'column' ] . '</td> ';
-				$html = $html . '<th>' . __( 'Old value:',
-				                             'insr' ) . '</th><td>' . $change [ 'from' ] . '</th><td>' . '</td><th> ' . __( 'New value:',
-				                                                                                                            'insr' ) . '</th><td>' . $change[ 'to' ] . '</td>';
-				$html = $html . '</tr>';
+				$html .= '<tr>';
+				$html .= '<th>' . __( 'row', 'insr' ) . '</th>
+						<td>' . $change [ 'row' ] . '</td>
+				         <th> ' . __( 'column', 'insr' ) . '</th>
+				        <td>' . $change [ 'column' ] . '</td> ';
+				$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
+							<td>' . esc_html($change [ 'from' ]) . '</th><td>' . '</td>
+						<th> ' . __( 'New value:', 'insr' ) . '</th><td>' .esc_html( $change[ 'to' ]) . '</td>';
+				$html .= '</tr>';
 			}
-			$html = $html . '</table>';
+			$html .= '</table>';
 
 			return $html;
 		}
 
-		return FALSE;
+		return "";
 
 	}
 
@@ -224,7 +238,7 @@ class Admin {
 	 *
 	 * @param $errors
 	 */
-	#TODO for displaying errors use WordPress functions
+
 	protected function display_errors( $errors ) {
 
 		echo '<div class = "error"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';

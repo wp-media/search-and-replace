@@ -94,35 +94,30 @@ class Autoloader {
 
 		//only include plugin classes at this point
 		if ( strpos( $class, $this->_namespace ) === FALSE ) {
-			return false;
+			return FALSE;
 		} else {
 
 			//cut off the Base Namespace including the backslash
-			$pos = strpos( $this->_namespace, '\\' );
-			$class = substr( $class, $pos+1);
+			$pos   = strpos( $this->_namespace, '\\' );
+			$class = substr( $class, $pos + 1 );
 
 			//cut off the second part of namespace before the backslash, plugin directory may have another name
-			$pos = strpos( $class, '\\' );
+			$pos   = strpos( $class, '\\' );
 			$class = substr( $class, $pos );
-
 
 			//build path
 			$filename = $this->_basepath . str_replace( '\\', DIRECTORY_SEPARATOR, $class ) . $this->_extension;
 			if ( file_exists( $filename ) ) {
 				require_once( $filename );
+
 				return $filename;
-			}
-
-
-			else {
-					throw new \Exception( 'Class ' . $class . ' not found in ' . $filename );
+			} else {
+				throw new \Exception( 'Class ' . $class . ' not found in ' . $filename );
 
 			}
 
 		}
 	}
-
-
 
 }
 

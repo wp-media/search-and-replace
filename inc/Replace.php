@@ -6,7 +6,12 @@ use InvalidArgumentException;
 /**
  * Class Replace
  *
+ * runs search & replace on a database table
+ * adapted from: https://github.com/interconnectit/Search-Replace-DB/blob/master/srdb.class.php
+ *
  */
+
+//TODO: Use WP_Error for error reporting
 class Replace {
 
 	/**
@@ -62,7 +67,7 @@ class Replace {
 	 *
 	 * @param string $search  What we want to replace
 	 * @param string $replace What we want to replace it with.
-	 * @param array  $tables  The tables we want to look at.
+	 * @param string $tables  The name of teh table we want to look at.
 	 *
 	 * @return array    Collection of information gathered during the run.
 	 */
@@ -84,15 +89,10 @@ class Replace {
 
 			return $table_report;
 		}
-
-
-		#TODO formate source code like the codex rules
-		//list( $primary_key, $columns ) = $this->dbm->get_columns( $table );
-		$columns =$this->dbm->get_columns( $table );
-		$primary_key = $columns[0];
-		$columns = $columns [1];
-
-
+		//split columns array in primary key string and columns array
+		$columns     = $this->dbm->get_columns( $table );
+		$primary_key = $columns[ 0 ];
+		$columns     = $columns[ 1 ];
 
 		if ( $primary_key === NULL ) {
 			array_push( $table_report[ 'errors' ],
@@ -131,8 +131,7 @@ class Replace {
 
 				foreach ( $columns as $column ) {
 
-					#TODO remove unused variable or used
-					$edited_data = $data_to_fix = $row[ $column ];
+					$data_to_fix = $row[ $column ];
 
 					if ( $column == $primary_key ) {
 						$where_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $data_to_fix ) . '"';
@@ -262,8 +261,8 @@ class Replace {
 	 *
 	 * @return bool
 	 */
-	#TODO add type
-	function is_json( $string, $strict = FALSE ) {
+
+	protected function is_json( $string, $strict = FALSE ) {
 
 		$json = @json_decode( $string, TRUE );
 		if ( $strict == TRUE && ! is_array( $json ) ) {
@@ -283,11 +282,8 @@ class Replace {
 	 *
 	 * @return string
 	 */
-	#TODO do formate this well
-	public
-	function mysql_escape_mimic(
-		$input
-	) {
+
+	public function mysql_escape_mimic( $input ) {
 
 		if ( is_array( $input ) ) {
 			return array_map( __METHOD__, $input );
@@ -302,7 +298,8 @@ class Replace {
 
 	/**
 	 * Sets the dry run option
-	 * @param $state
+	 *
+	 * @param bool $state: TRUE for dry run, FALSE for writing changes to DB
 	 */
 	public function set_dry_run( $state ) {
 
@@ -310,11 +307,13 @@ class Replace {
 
 			$this->dry_run = $state;
 		}
+
 		return $state;
 	}
 
 	/**
 	 * Returns true, if dry run, false if not
+	 *
 	 * @return bool
 	 */
 	public function get_dry_run() {
