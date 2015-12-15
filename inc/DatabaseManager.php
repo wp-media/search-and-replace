@@ -127,6 +127,11 @@ class DatabaseManager {
 
 	}
 
+	public function get_table_structure( $table ) {
+
+		return $this->wpdb->get_results( "DESCRIBE $table" );
+	}
+
 	public function flush() {
 
 		$this->wpdb->flush();

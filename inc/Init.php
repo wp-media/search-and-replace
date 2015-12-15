@@ -14,8 +14,9 @@ class Init {
 
 		//set up objects
 		$dbm     = new DatabaseManager();
-		$dbe = new DatabaseExporter();
+
 		$replace = new Replace( $dbm );
+		$dbe = new DatabaseExporter($replace,$dbm);
 		$admin = new Admin( $dbm, $dbe,$replace );
 
 

@@ -6,11 +6,10 @@ use InvalidArgumentException;
 /**
  * Class Replace
  *
- * runs search & replace on a database table
+ * runs search & replace on a database
  * adapted from: https://github.com/interconnectit/Search-Replace-DB/blob/master/srdb.class.php
  *
  */
-
 //TODO: Use WP_Error for error reporting
 class Replace {
 
@@ -40,7 +39,7 @@ class Replace {
 	 *
 	 * @var int
 	 */
-	protected $page_size = 20000;
+	protected $page_size = 100;
 
 	/**
 	 * @var bool - set if dry run
@@ -62,18 +61,40 @@ class Replace {
 	 * The main loop triggered in step 5. Up here to keep it out of the way of the
 	 * HTML. This walks every table in the db that was selected in step 3 and then
 	 * walks every row and column replacing all occurences of a string with another.
-	 * We split large tables into 50,000 row blocks when dealing with them to save
+	 * We split large tables into  blocks (size is set via $page_size)when dealing with them to save
 	 * on memory consumption.
 	 *
 	 * @param string $search  What we want to replace
 	 * @param string $replace What we want to replace it with.
-	 * @param string $tables  The name of teh table we want to look at.
+	 * @param string $tables  The name of the table we want to look at.
 	 *
 	 * @return array    Collection of information gathered during the run.
+	 *
+	 *
 	 */
+
+	public function run_search_replace( $search, $replace, $tables ) {
+
+		$report = array(
+			'errors'  => NULL,
+			'changes' => array()
+		);
+
+		foreach ( $tables as $table ) {
+			$table_report = $this->replace_values( $search, $replace, $table );
+			//log changes if any
+			if ( $table_report[ 'change' ] != 0 ) {
+				$report[ 'changes' ][ $table ] = $table_report;
+			}
+
+		}
+		return $report;
+	}
+
 	public function replace_values( $search = '', $replace = '', $table ) {
 
 		$table_report = array(
+			'table_name'=>$table,
 			'rows'    => 0,
 			'change'  => 0,
 			'changes' => array(),
@@ -299,7 +320,7 @@ class Replace {
 	/**
 	 * Sets the dry run option
 	 *
-	 * @param bool $state: TRUE for dry run, FALSE for writing changes to DB
+	 * @param bool $state : TRUE for dry run, FALSE for writing changes to DB
 	 */
 	public function set_dry_run( $state ) {
 
