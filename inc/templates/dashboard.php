@@ -11,6 +11,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 	<h1 id="title"><?php _e( 'Inpsyde Search Replace', 'insr' ); ?></h1>
 
+
 	<form action="" method="post">
 		<table class="form-table">
 			<tbody>

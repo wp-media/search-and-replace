@@ -3,15 +3,9 @@ input[name="search"], input[name="replace"], #select_tables {
 	max-width: 400px;
 }
 
-
-.widefat th  {
+.widefat th {
 	vertical-align: baseline;
 }
-
-.insr_sql_button_wrap {
-	height: 40px;
-}
-
 
 .insr_sql_button_wrap .button {
 	margin: 5px;

@@ -173,7 +173,7 @@ class Admin {
 
 			//if no changes found report that
 			if ( count( $report [ 'changes' ] ) == 0 ) {
-				echo __( 'Search pattern not found.', 'insr' );
+				echo '<p>' . __( 'Search pattern not found.', 'insr' ) . '</p>';
 			}
 
 			echo '</div>';
@@ -218,8 +218,9 @@ class Admin {
 	 */
 	protected function show_download_button( $file, $compress ) {
 
-		echo( '<div class="updated insr_sql_button_wrap">	<form action method="post">' );
+		echo( '<div class="updated insr_sql_button_wrap">	<p>' );
 		echo _e( 'Your SQL file was created!' );
+		echo( '</p><form action method="post">' );
 		wp_nonce_field( 'download_sql', 'insr_nonce' );
 		$value = translate( "Download SQL File", "insr" );
 
@@ -276,7 +277,7 @@ class Admin {
 
 		//if no changes found report that
 		if ( count( $report [ 'changes' ] ) == 0 ) {
-			echo __( 'Search pattern not found.', 'insr' );
+			echo '<p>' . __( 'Search pattern not found.', 'insr' ) . '</p>';
 		}
 		echo '</div>';
 
