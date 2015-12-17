@@ -61,11 +61,13 @@ class DatabaseExporter {
 	 */
 
 	public function backup_table( $search = '', $replace = '', $table ) {
+
 		//TODO:  DB access via DatabaseManager
 		$table_report = array(
 			'table_name' => $table,
 			'rows'       => 0,
-			'changes'    => array(),
+			'change'     => 0,
+			'changes'    => array()
 
 		);
 
@@ -209,7 +211,7 @@ class DatabaseExporter {
 	 * Better addslashes for SQL queries.
 	 * Taken from phpMyAdmin.
 	 */
-	protected function sql_addslashes($a_string = '', $is_like = FALSE) {
+	protected function sql_addslashes( $a_string = '', $is_like = FALSE ) {
 
 		if ( $is_like ) {
 			$a_string = str_replace( '\\', '\\\\\\\\', $a_string );
@@ -260,6 +262,7 @@ class DatabaseExporter {
 
 	/**
 	 * writes a line to the backup file
+	 *
 	 * @param $query_line
 	 */
 	protected function stow( $query_line ) {
@@ -438,7 +441,7 @@ class DatabaseExporter {
 	/**
 	 * @string  $backup_dir
 	 */
-	public function setBackupDir($backup_dir) {
+	public function setBackupDir( $backup_dir ) {
 
 		$this->backup_dir = $backup_dir;
 	}
