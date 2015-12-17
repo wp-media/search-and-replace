@@ -22,7 +22,7 @@ class SearchReplaceAdmin extends Admin {
 
 	public function __construct() {
 
-		parent::construct();
+		parent::__construct();
 
 	}
 
