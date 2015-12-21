@@ -24,6 +24,7 @@ class Init {
 			add_action( 'admin_head', array( $this, 'remove_submenu_pages' ), 110 );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_css' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_js' ) );
 
 		}
 
@@ -42,6 +43,24 @@ class Init {
 			$handle = "insr-styles";
 			wp_register_script( $handle, $url );
 			wp_enqueue_style( $handle, $url, array(), FALSE, FALSE );
+		}
+	}
+
+	/**
+	 *registers the Plugin javascript
+	 */
+
+	public function register_admin_js( $hook ) {
+
+
+
+		//register on sql export page only
+		if ( $hook == "tools_page_sql_export") {
+
+			$url    = ( INSR_DIR . '/js/inpsyde-search-replace.js' );
+			$handle = "insr-js";
+			wp_register_script( $handle, $url );
+			wp_enqueue_script( $handle, $url, array(), FALSE, FALSE );
 		}
 	}
 

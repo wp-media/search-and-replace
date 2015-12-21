@@ -84,99 +84,98 @@ class SearchReplaceAdmin extends Admin {
 			$tables = ( $_POST[ 'select_tables' ] );
 		}
 
+		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+
 		//'export'-button was checked
 		if ( isset ( $_POST[ 'export' ] ) && $_POST [ 'export' ] == "true" ) {
+			//if dry run is checked we do not run the export function but the replace function with dry run
+			if ( $dry_run == TRUE ) {
+				$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
 
+			} else {
 
-		//check db again in dry run mode to show the changes that have been made
+				$this->create_backup_file( $_POST[ 'search' ], $_POST[ 'replace' ], $tables );
+			}
 
-		$this->create_backup_file( $tables );
+		} else {
 
-		return;
-	} else {
+			//"Save changes to database" was checked
 
-	//"Save changes to database" was checked
+			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
 
-$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-
-$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
-
-}
-}
-
-
-
-/**
- *displays the html for the submit button
- */
-protected
-function show_submit_button() {
-
-	wp_nonce_field( 'do_search_replace', 'insr_nonce' );
-
-	$html = '	<input type="hidden" name="action" value="search_replace" />';
-	echo $html;
-	submit_button( __( 'Do Search / Replace', 'insr' ) );
-
-}
-
-/**
- *
- * calls run_replace_table()  on each table provided in array $tables
- *
- * @param $search
- * @param $replace
- * @param $tables  array of tables we want to search
- * @param $dry_run True if dry run (no changes are written to db)
- *
- * @return null
- */
-protected
-function run_replace( $search, $replace, $tables, $dry_run ) {
-
-	$no_matches = TRUE;
-
-	echo '<div class = "updated">';
-	if ( $dry_run ) {
-		echo '<p><strong>' . __( 'Dry run is selected. No changes will be made to the database.',
-		                         'insr' ) . '</strong></p>';
-
-	} else {
-		echo '<p><strong>' . __( 'The following changes were made to the database: ',
-		                         'insr' ) . '</strong></p>';
+		}
 	}
-	$this->replace->set_dry_run( $dry_run );
 
-	$report = $this->replace->run_search_replace( $search, $replace, $tables );
-	foreach ( $report[ 'changes' ] as $table_report ) {
-		$this->show_changes( $table_report );
+	/**
+	 *displays the html for the submit button
+	 */
+	protected
+	function show_submit_button() {
+
+		wp_nonce_field( 'do_search_replace', 'insr_nonce' );
+
+		$html = '	<input type="hidden" name="action" value="search_replace" />';
+		echo $html;
+		submit_button( __( 'Do Search / Replace', 'insr' ) );
 
 	}
 
-	//if no changes found report that
-	if ( count( $report [ 'changes' ] ) == 0 ) {
-		echo '<p>' . __( 'Search pattern not found.', 'insr' ) . '</p>';
+	/**
+	 *
+	 * calls run_replace_table()  on each table provided in array $tables
+	 *
+	 * @param $search
+	 * @param $replace
+	 * @param $tables  array of tables we want to search
+	 * @param $dry_run True if dry run (no changes are written to db)
+	 *
+	 * @return null
+	 */
+	protected
+	function run_replace(
+		$search, $replace, $tables, $dry_run
+	) {
+
+		$no_matches = TRUE;
+
+		echo '<div class = "updated notice is-dismissible">';
+		if ( $dry_run ) {
+			echo '<p><strong>' . __( 'Dry run is selected. No changes were made to the database and no SQL file was written .',
+			                         'insr' ) . '</strong></p>';
+
+		} else {
+			echo '<p><strong>' . __( 'The following changes were made to the database: ',
+			                         'insr' ) . '</strong></p>';
+		}
+		$this->replace->set_dry_run( $dry_run );
+
+		$report = $this->replace->run_search_replace( $search, $replace, $tables );
+		foreach ( $report[ 'changes' ] as $table_report ) {
+			$this->show_changes( $table_report );
+
+		}
+
+		//if no changes found report that
+		if ( count( $report [ 'changes' ] ) == 0 ) {
+			echo '<p>' . __( 'Search pattern not found.', 'insr' ) . '</p>';
+		}
+		echo '</div>';
+
 	}
-	echo '</div>';
 
-}
+	/**
+	 *checks the input form and writes possible errors to a WP_Error object
+	 */
+	protected function check_input_form() {
 
+		if ( ! isset ( $_POST[ 'select_tables' ] ) ) {
 
+			$this->errors->add( 'no_table_selected', __( 'No Tables were selected.', 'insr' ) );
 
-/**
- *checks the input form and writes possible errors to a WP_Error object
- */
-protected
-function check_input_form() {
-
-	if ( ! isset ( $_POST[ 'select_tables' ] ) ) {
-
-		$this->errors->add( 'no_table_selected', __( 'No Tables were selected.', 'insr' ) );
-
+		}
+		if ( ! isset ( $_POST[ 'search' ] ) || $_POST[ 'search' ] == "" ) {
+			$this->errors->add( 'empty_search', __( 'Search field is empty.', 'insr' ) );
+		}
 	}
-	if ( ! isset ( $_POST[ 'search' ] ) || $_POST[ 'search' ] == "" ) {
-		$this->errors->add( 'empty_search', __( 'Search field is empty.', 'insr' ) );
-	}
-}
 
 }

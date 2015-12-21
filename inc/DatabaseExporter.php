@@ -35,6 +35,11 @@ class DatabaseExporter {
 
 	protected $page_size = 100;
 
+	/**
+	 * @String stores the filename of the backup file
+	 */
+	protected $backup_filename;
+
 	//TODO: make a common value for exporter and replacer
 
 	public function  __construct( Replace $replace, DatabaseManager $dbm ) {
@@ -54,15 +59,15 @@ class DatabaseExporter {
 	 * Modified by Scott Merrill (http://www.skippy.net/)
 	 * to use the WordPress $wpdb object
 	 *
+	 * @param string $search
+	 * @param string $replace
 	 * @param string $table
-	 * @param string $segment
 	 *
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
 	public function backup_table( $search = '', $replace = '', $table ) {
 
-		//TODO:  DB access via DatabaseManager
 		$table_report = array(
 			'table_name' => $table,
 			'rows'       => 0,
@@ -70,8 +75,6 @@ class DatabaseExporter {
 			'changes'    => array()
 
 		);
-
-		global $wpdb;
 
 		$table_structure = $this->dbm->get_table_structure( $table );
 		if ( ! $table_structure ) {
@@ -97,7 +100,7 @@ class DatabaseExporter {
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
 
-		$create_table = $wpdb->get_results( "SHOW CREATE TABLE $table", ARRAY_N );
+		$create_table = $this->dbm->get_create_table_statement( $table );
 		if ( $create_table === FALSE ) {
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'insr' ), $table );
 			$this->errors->add( 2, $err_msg );
@@ -156,27 +159,30 @@ class DatabaseExporter {
 					$table_report[ 'rows' ] ++;
 
 					foreach ( $row as $column => $value ) {
+						//skip replace if no search pattern
+						if ( $search != '' ) {
 
-						//check if we need to replace something
-						//skip primary_key
-						if ( $column != $primary_key ) {
+							//check if we need to replace something
+							//skip primary_key
+							if ( $column != $primary_key ) {
 
-							$edited_data = $this->replace->recursive_unserialize_replace( $search, $replace, $value );
+								$edited_data = $this->replace->recursive_unserialize_replace( $search, $replace, $value );
 
-							// Something was changed
-							if ( $edited_data != $value ) {
+								// Something was changed
+								if ( $edited_data != $value ) {
 
-								$table_report[ 'change' ] ++;
+									$table_report[ 'change' ] ++;
 
-								// log changes
+									// log changes
 
-								$table_report[ 'changes' ][] = array(
-									'row'    => $table_report[ 'rows' ],
-									'column' => $column,
-									'from'   => ( $value ),
-									'to'     => ( $edited_data )
-								);
-								$value                       = $edited_data;
+									$table_report[ 'changes' ][] = array(
+										'row'    => $table_report[ 'rows' ],
+										'column' => $column,
+										'from'   => ( $value ),
+										'to'     => ( $edited_data )
+									);
+									$value                       = $edited_data;
+								}
 							}
 						}
 						if ( isset ( $ints[ strtolower( $column ) ] ) ) {
@@ -292,9 +298,7 @@ class DatabaseExporter {
 			'changes'  => array()
 		);
 
-		global $table_prefix, $wpdb;
-
-		$table_prefix          = ( isset( $table_prefix ) ) ? $table_prefix : $wpdb->prefix;
+		$table_prefix          = $this->dbm->get_base_prefix();
 		$datum                 = date( "Ymd_B" );
 		$this->backup_filename = DB_NAME . "_$table_prefix$datum.sql";
 
@@ -433,7 +437,7 @@ class DatabaseExporter {
 	/**
 	 * @return string
 	 */
-	public function getBackupDir() {
+	public function get_backup_dir() {
 
 		return $this->backup_dir;
 	}
@@ -441,7 +445,7 @@ class DatabaseExporter {
 	/**
 	 * @string  $backup_dir
 	 */
-	public function setBackupDir( $backup_dir ) {
+	public function set_backup_dir( $backup_dir ) {
 
 		$this->backup_dir = $backup_dir;
 	}

@@ -17,16 +17,24 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		<a class="nav-tab" href="<?php echo admin_url() ?>/tools.php?page=sql_import"><?php _e( 'Import SQL file', 'insr' ); ?></a>
 	</h2>
 
+	<p><?php _e( 'Create a backup of your Database by clicking "Create SQL File". Check "Change URL" and enter the new URL in the field "Replace with" if you want to migrate your site to another domain.',
+	             'insr' ); ?> </p>
+
 	<form action="" method="post">
+
 		<table class="form-table">
 			<tbody>
 			<tr>
+				<th><strong><?php _e( 'Change Site URL: ', 'insr' ); ?></strong></th>
+				<td><input type="checkbox" id="change_url" name="change_url" /></td>
+			</tr>
+			<tr>
 				<th><strong><?php _e( 'Search for: ', 'insr' ); ?></strong></th>
-				<td><input type="text" name="search" value="<?php $this->show_site_url(); ?>" /></td>
+				<td><input type="text" class="maybe_disabled" name="search" disabled value="<?php $this->show_site_url(); ?>" /></td>
 			</tr>
 			<tr>
 				<th><strong><?php _e( 'Replace with: ', 'insr' ); ?></strong></th>
-				<td><input type="text" name="replace" placeholder="<?php _e( 'New URL' ) ?>" /></td>
+				<td><input type="text" class="maybe_disabled" name="replace" disabled placeholder="<?php _e( 'New URL' ) ?>" /></td>
 			</tr>
 			</tbody>
 		</table><?php $this->show_submit_button(); ?></form>

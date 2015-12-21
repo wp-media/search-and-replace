@@ -10,6 +10,7 @@ class Admin {
 	protected $errors;
 
 	public function __construct() {
+
 		$this->dbm     = new DatabaseManager();
 		$this->replace = new Replace( $this->dbm );
 		$this->dbe     = new DatabaseExporter( $this->replace, $this->dbm );
@@ -17,9 +18,6 @@ class Admin {
 
 		//if "download" was selected we have to check that early to prevent "headers already sent" error
 		add_action( 'init', array( $this, 'deliver_backup_file' ) );
-
-
-
 
 	}
 
@@ -30,14 +28,15 @@ class Admin {
 	 *
 	 * @return null
 	 */
-	protected function create_backup_file( $tables ) {
+	protected function create_backup_file( $search, $replace, $tables ) {
 
-		$report = $this->dbe->db_backup( $_POST[ 'search' ], $_POST[ 'replace' ], $tables );
-		echo '<div class = "updated">';
-		//show changes if there are any
-		foreach ( $report[ 'changes' ] as $table_report ) {
-			$this->show_changes( $table_report );
-		}
+		$report = $this->dbe->db_backup( $search, $replace, $tables );
+		if ( $search != '' ) {
+			echo '<div class = "updated notice is-dismissible">';
+			//show changes if there are any
+			foreach ( $report[ 'changes' ] as $table_report ) {
+				$this->show_changes( $table_report );
+			}
 
 			//if no changes found report that
 			if ( count( $report [ 'changes' ] ) == 0 ) {
@@ -45,16 +44,16 @@ class Admin {
 			}
 
 			echo '</div>';
+		}
 
-			//TODO: error handling
+		//TODO: error handling
 
-			$compress = ( isset ( $_POST[ 'compress' ] ) && $_POST [ 'compress' ] == 'on' ) ? TRUE : FALSE;
+		$compress = ( isset ( $_POST[ 'compress' ] ) && $_POST [ 'compress' ] == 'on' ) ? TRUE : FALSE;
 
-			$this->show_download_button( $report[ 'filename' ], $compress );
-
-
+		$this->show_download_button( $report[ 'filename' ], $compress );
 
 	}
+
 	/**
 	 * displays the changes made to the db
 	 * echoes the changes in formatted html
@@ -72,8 +71,7 @@ class Admin {
 	 *
 	 */
 
-	protected
-	function show_changes( $results ) {
+	protected function show_changes($results) {
 
 		$changes      = $results[ 'changes' ];
 		$changes_made = count( $changes );
@@ -101,6 +99,7 @@ class Admin {
 		}
 
 	}
+
 	/**
 	 * @param void
 	 *
@@ -126,12 +125,12 @@ class Admin {
 	/**
 	 * creates an input element to start the download of the sql file
 	 *
-	 * @param $file     The name of the file to be downloaded
-	 * @param $compress Set true if gz compression should be used
+	 * @param $file     String The name of the file to be downloaded
+	 * @param $compress Boolean Set true if gz compression should be used
 	 */
 	protected function show_download_button( $file, $compress ) {
 
-		echo( '<div class="updated insr_sql_button_wrap">	<p>' );
+		echo( '<div class="updated notice is-dismissible insr_sql_button_wrap">	<p>' );
 		echo _e( 'Your SQL file was created!' );
 		echo( '</p><form action method="post">' );
 		wp_nonce_field( 'download_sql', 'insr_nonce' );
@@ -148,7 +147,7 @@ class Admin {
 	 */
 	protected function display_errors() {
 
-		echo '<div class = "error"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';
+		echo '<div class = "error notice is-dismissible"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';
 		$messages = $this->errors->get_error_messages();
 		foreach ( $messages as $error ) {
 			echo '<li>' . $error . '</li>';

@@ -110,6 +110,13 @@ class DatabaseManager {
 		return array( $primary_key, $columns );
 	}
 
+	/**
+	 * @param $table String The Table Name
+	 * @param $start Int The start row
+	 * @param $end   Int Number of Rows to be fetched
+	 *
+	 * @return array|null|object
+	 */
 	public function get_table_content( $table, $start, $end ) {
 
 		$data = $this->wpdb->get_results( "SELECT * FROM $table LIMIT $start, $end", ARRAY_A );
@@ -132,9 +139,23 @@ class DatabaseManager {
 		return $this->wpdb->get_results( "DESCRIBE $table" );
 	}
 
+	/**
+	 * returns a SQL CREATE TABLE Steatment for the table provide in $table
+	 * @param $table String The Name of the table we want to create the statement for.
+	 *
+	 * @return string
+	 */
+	public function get_create_table_statement ($table){
+		return $this->wpdb->get_results( "SHOW CREATE TABLE $table", ARRAY_N );
+	}
+
 	public function flush() {
 
 		$this->wpdb->flush();
+	}
+
+	public function get_base_prefix() {
+		return $this->wpdb->base_prefix;
 	}
 
 }

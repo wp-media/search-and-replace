@@ -9,22 +9,16 @@ use Inpsyde\SearchReplace\inc\Replace;
  */
 class ReplaceTest extends \PHPUnit_Framework_TestCase {
 
-	//test if exception is thrown when no array is provided
-	function test_setup_no_array() {
+	//test if exception is thrown when no instance of DatabaseManager is provided
+	function test_setup_wrong_argument() {
 
-		$args = "noArray";
+		$args = "not an instance of Database Manager";
 		$this->setExpectedException( "InvalidArgumentException" );
 		$testee = new Replace( $args );
 
 	}
 
-	//test if exception is thrown if wrong array is provided
-	function test_setup_wrong_array() {
 
-		$args = Array( 1, 2 );
-		$this->setExpectedException( "InvalidArgumentException" );
-		$testee = new Replace( $args );
-	}
 
 	function test_empty_search_string() {
 
