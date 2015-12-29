@@ -293,9 +293,11 @@ class DatabaseExporter {
 	function db_backup( $search, $replace, $tables ) {
 
 		$report = array(
-			'filename' => '',
-			'errors'   => NULL,
-			'changes'  => array()
+			'errors'  => NULL,
+			'changes' => array(),
+			'tables' => '0',
+			'changes_count'=>'0',
+			'filename'=>''
 		);
 
 		$table_prefix          = $this->dbm->get_base_prefix();
@@ -315,6 +317,7 @@ class DatabaseExporter {
 			return $report;
 		}
 
+
 		//Begin new backup of MySql
 		$this->stow( "# " . __( 'WordPress MySQL database backup', 'insr' ) . "\n" );
 		$this->stow( "#\n" );
@@ -332,11 +335,17 @@ class DatabaseExporter {
 			$this->stow( "# --------------------------------------------------------\n" );
 			$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $table ) ) . "\n" );
 			$this->stow( "# --------------------------------------------------------\n" );
-			$table_report = $this->backup_table( $search, $replace, $table );
 
+
+			//count tables
+			$report ['tables']++;
+			$table_report = $this->backup_table( $search, $replace, $table );
 			//log changes if any
+
 			if ( $table_report[ 'change' ] != 0 ) {
 				$report[ 'changes' ][ $table ] = $table_report;
+
+				$report ['changes_count'] += $table_report['change'];
 			}
 		}
 

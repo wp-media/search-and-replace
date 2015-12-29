@@ -34,8 +34,8 @@ class Admin {
 		if ( $search != '' ) {
 			echo '<div class = "updated notice is-dismissible">';
 			//show changes if there are any
-			foreach ( $report[ 'changes' ] as $table_report ) {
-				$this->show_changes( $table_report );
+			if ( count( $report[ 'changes' ] ) > 0 ) {
+				$this->show_changes( $report );
 			}
 
 			//if no changes found report that
@@ -59,7 +59,12 @@ class Admin {
 	 * echoes the changes in formatted html
 	 *
 	 *
-	 * @param $results          Array  with at least these elements:
+	 * @param $report           Array 'errors' : WP-Error Object if Errors
+
+								'tables' : Number of tables processed
+								'changes_count' : Number of changes made
+	 *                                'changes'
+	 *                          Array  with at least these elements:
 	 *                          'table_name'=>$[name of current table],
 	 *                          'changes' => array('row'    => [row that has been changed ],
 	 *                          'column' => [column that has been changed],
@@ -71,33 +76,47 @@ class Admin {
 	 *
 	 */
 
-	protected function show_changes($results) {
+	protected function show_changes( $report ) {
+		$msg = sprintf( __( '<p><strong>%d</strong> tables were processed, <strong>%d</strong> cells were found that need to be updated.</p>', 'insr' ),
+		                $report['tables'],
+		                $report['changes_count']);
 
-		$changes      = $results[ 'changes' ];
-		$changes_made = count( $changes );
+		echo $msg;
+		//create modal window for detailed view of changes
+		add_thickbox(); ?>
+		<a href="#TB_inline?width=1000&height=550&inlineId=changes-modal" class="thickbox"><?php _e( 'View details', 'insr' ); ?></a>    <?php
 
-		if ( $changes_made > 0 ) {
-			$table = $results[ 'table_name' ];
+		echo '<div id = "changes-modal" style= "display:none">';
 
-			$html = '<table class = "widefat fixed"><thead><strong>' . __( 'Table', 'insr' ) . ':  </strong>' . $table;
-			$html .= '&nbsp; <strong>  ' . __( 'Changes', 'insr' ) . ': </strong> ' . $changes_made . '<thead>';
-			foreach ( $changes as $change ) {
+		foreach ( $report[ 'changes' ] as $table_report ) {
+			$changes      = $table_report[ 'changes' ];
+			$changes_made = count( $changes );
 
-				$html .= '<tr>';
-				$html .= '<th>' . __( 'row', 'insr' ) . '</th>
+			if ( $changes_made > 0 ) {
+				$table = $table_report[ 'table_name' ];
+
+				$html = '<table class="search-replace-modal-table"><tr><th colspan="8"><strong>' . __( 'Table', 'insr' ) . ': </strong>' . $table;
+				$html .= '&nbsp;  <strong> ' . __( 'Changes', 'insr' ) . ': </strong>' . $changes_made . '</th></tr>';
+				foreach ( $changes as $change ) {
+
+					$html .= '<tr>';
+					$html .= '<th>' . __( 'row', 'insr' ) . '</th>
 						<td>' . $change [ 'row' ] . '</td>
 				         <th> ' . __( 'column', 'insr' ) . '</th>
 				        <td>' . $change [ 'column' ] . '</td> ';
-				$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
+					$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
 							<td>' . esc_html( $change [ 'from' ] ) . '</th><td>' . '</td>
 						<th> ' . __( 'New value:', 'insr' ) . '</th><td>' . esc_html( $change[ 'to' ] ) . '</td>';
-				$html .= '</tr>';
+					$html .= '</tr>';
+				}
+				$html .= '</table>';
+
+
+				echo $html;
 			}
-			$html .= '</table>';
-
-			echo $html;
 		}
-
+		//close thickbox div
+		echo '</div>';
 	}
 
 	/**

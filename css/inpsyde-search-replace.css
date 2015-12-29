@@ -3,12 +3,23 @@ input[name="search"], input[name="replace"], #select_tables {
 	max-width: 400px;
 }
 
-.widefat th {
+.search-replace-modal-table {
+	width: 100%;
+	border: 1px solid #e5e5e5;
+	table-layout: fixed;
+	margin-bottom: 10px;
+
+}
+
+.search-replace-modal-table * {
+	word-wrap: break-word;
 	vertical-align: baseline;
 }
 
 .insr_sql_button_wrap .button {
 	margin: 5px;
 }
+
+
 
 

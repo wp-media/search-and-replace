@@ -77,14 +77,21 @@ class Replace {
 
 		$report = array(
 			'errors'  => NULL,
-			'changes' => array()
+			'changes' => array(),
+			'tables' => '0',
+			'changes_count'=>'0'
 		);
 
 		foreach ( $tables as $table ) {
+			//count tables
+			$report ['tables']++;
 			$table_report = $this->replace_values( $search, $replace, $table );
 			//log changes if any
+
 			if ( $table_report[ 'change' ] != 0 ) {
 				$report[ 'changes' ][ $table ] = $table_report;
+
+				$report ['changes_count'] += $table_report['change'];
 			}
 
 		}

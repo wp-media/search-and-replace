@@ -109,8 +109,7 @@ class SearchReplaceAdmin extends Admin {
 	/**
 	 *displays the html for the submit button
 	 */
-	protected
-	function show_submit_button() {
+	protected function show_submit_button() {
 
 		wp_nonce_field( 'do_search_replace', 'insr_nonce' );
 
@@ -131,10 +130,7 @@ class SearchReplaceAdmin extends Admin {
 	 *
 	 * @return null
 	 */
-	protected
-	function run_replace(
-		$search, $replace, $tables, $dry_run
-	) {
+	protected function run_replace( $search, $replace, $tables, $dry_run ) {
 
 		$no_matches = TRUE;
 
@@ -150,9 +146,9 @@ class SearchReplaceAdmin extends Admin {
 		$this->replace->set_dry_run( $dry_run );
 
 		$report = $this->replace->run_search_replace( $search, $replace, $tables );
-		foreach ( $report[ 'changes' ] as $table_report ) {
-			$this->show_changes( $table_report );
 
+		if ( count( $report[ 'changes' ] ) > 0 ) {
+			$this->show_changes( $report );
 		}
 
 		//if no changes found report that

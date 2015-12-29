@@ -2,9 +2,8 @@
 namespace Inpsyde\SearchReplace\inc;
 
 class Init {
+
 	public $admin;
-
-
 
 	/**
 	 * @param string $file : The path to the Plugin main file
@@ -15,18 +14,17 @@ class Init {
 		$plugin_dir_url = plugin_dir_url( $file );
 		define( 'INSR_DIR', $plugin_dir_url );
 
-		$this->admin =new Admin();
+		$this->admin = new Admin();
 
+		//add plugin menu & plugin css
+		add_action( 'admin_menu', array( $this, 'register_plugin_pages' ) );
+		//hide subpages in admin tools menu
+		add_action( 'admin_head', array( $this, 'remove_submenu_pages' ), 110 );
 
-			//add plugin menu & plugin css
-			add_action( 'admin_menu', array( $this, 'register_plugin_pages' ) );
-			//hide subpages in admin tools menu
-			add_action( 'admin_head', array( $this, 'remove_submenu_pages' ), 110 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_css' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_js' ) );
 
-			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_css' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_js' ) );
-
-		}
+	}
 
 	/**
 	 *registers the Plugin stylesheet
@@ -34,10 +32,10 @@ class Init {
 
 	public function register_admin_css( $hook ) {
 
-		$plugin_pages = array ('tools_page_inpsyde_search_replace', 'tools_page_sql_export','tools_page_sql_import');
+		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_sql_export', 'tools_page_sql_import' );
 
 		//register on plugin  pages only
-		if ( in_array($hook, $plugin_pages) ) {
+		if ( in_array( $hook, $plugin_pages ) ) {
 
 			$url    = ( INSR_DIR . '/css/inpsyde-search-replace.css' );
 			$handle = "insr-styles";
@@ -52,22 +50,24 @@ class Init {
 
 	public function register_admin_js( $hook ) {
 
+		//register on plugin  pages only
+		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_sql_export', 'tools_page_sql_import' );
+		{
+			if ( in_array( $hook, $plugin_pages ) ) {
 
-
-		//register on sql export page only
-		if ( $hook == "tools_page_sql_export") {
-
-			$url    = ( INSR_DIR . '/js/inpsyde-search-replace.js' );
-			$handle = "insr-js";
-			wp_register_script( $handle, $url );
-			wp_enqueue_script( $handle, $url, array(), FALSE, FALSE );
+				$url    = ( INSR_DIR . '/js/inpsyde-search-replace.js' );
+				$handle = "insr-js";
+				wp_register_script( $handle, $url );
+				wp_enqueue_script( $handle, $url, array(), FALSE, FALSE );
+			}
 		}
 	}
 
 	/**
 	 *registers admin pages
 	 */
-	public function register_plugin_pages() {
+	public
+	function register_plugin_pages() {
 
 		//this sets the capability needed to access the menu
 		//can be overridden by filter 'insr-capability'
@@ -90,17 +90,18 @@ class Init {
 	/**
 	 *removes the plugins submenu pages from admin menu
 	 */
-	public function remove_submenu_pages() {
+	public
+	function remove_submenu_pages() {
 
 		remove_submenu_page( 'tools.php', 'sql_export' );
 		remove_submenu_page( 'tools.php', 'sql_import' );
 	}
 
-
 	/**
 	 *callback function for search and replace page
 	 */
-	public function show_search_replace_page() {
+	public
+	function show_search_replace_page() {
 
 		$search_replace_admin = new SearchReplaceAdmin();
 		$search_replace_admin->show_page();
@@ -109,7 +110,8 @@ class Init {
 	/**
 	 *callback function for export page
 	 */
-	public function show_export_page() {
+	public
+	function show_export_page() {
 
 		$export_admin = new SqlExportAdmin();
 		$export_admin->show_page();
@@ -118,12 +120,10 @@ class Init {
 	/**
 	 *callback function for import page
 	 */
-	public function show_import_page() {
+	public
+	function show_import_page() {
 
 		require_once( 'templates/sql_import.php' );
 	}
-
-
-
 
 }
