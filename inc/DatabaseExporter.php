@@ -326,6 +326,10 @@ class DatabaseExporter {
 		$this->stow( "# " . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 
+		//set charset to utf8
+		$this->stow( "# force utf8\n" );
+		$this->stow( "/*!40101 SET NAMES utf8mb4 */;\n" );
+		$this->stow( "# --------------------------------------------------------\n" );
 		foreach ( $tables as $table ) {
 			// Increase script execution time-limit to 15 min for every table.
 			if ( ! ini_get( 'safe_mode' ) ) {
@@ -334,7 +338,7 @@ class DatabaseExporter {
 			// Create the SQL statements
 			$this->stow( "# --------------------------------------------------------\n" );
 			$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $table ) ) . "\n" );
-			$this->stow( "# --------------------------------------------------------\n" );
+
 
 
 			//count tables

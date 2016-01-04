@@ -141,11 +141,13 @@ class DatabaseManager {
 
 	/**
 	 * returns a SQL CREATE TABLE Steatment for the table provide in $table
+	 *
 	 * @param $table String The Name of the table we want to create the statement for.
 	 *
 	 * @return string
 	 */
-	public function get_create_table_statement ($table){
+	public function get_create_table_statement( $table ) {
+
 		return $this->wpdb->get_results( "SHOW CREATE TABLE $table", ARRAY_N );
 	}
 
@@ -155,7 +157,19 @@ class DatabaseManager {
 	}
 
 	public function get_base_prefix() {
+
 		return $this->wpdb->base_prefix;
+	}
+
+	public function import_sql( $sql ) {
+
+		//connect via mysqli for easier db import
+		$connection = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
+		$success    = mysqli_multi_query( $connection, $sql );
+		mysqli_close( $connection );
+
+		return $success;
+
 	}
 
 }

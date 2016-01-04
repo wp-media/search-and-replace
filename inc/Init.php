@@ -123,7 +123,8 @@ class Init {
 	public
 	function show_import_page() {
 
-		require_once( 'templates/sql_import.php' );
+		$import_admin = new SqlImportAdmin();
+		$import_admin->show_page();
 	}
 
 }

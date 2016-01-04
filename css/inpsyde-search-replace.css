@@ -20,6 +20,11 @@ input[name="search"], input[name="replace"], #select_tables {
 	margin: 5px;
 }
 
+/*width of file upload input on import page */
+#file_to_upload {
+	width: 100%;
+}
+
 
 
 

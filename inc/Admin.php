@@ -60,9 +60,9 @@ class Admin {
 	 *
 	 *
 	 * @param $report           Array 'errors' : WP-Error Object if Errors
-
-								'tables' : Number of tables processed
-								'changes_count' : Number of changes made
+	 *
+	 * 'tables' : Number of tables processed
+	 * 'changes_count' : Number of changes made
 	 *                                'changes'
 	 *                          Array  with at least these elements:
 	 *                          'table_name'=>$[name of current table],
@@ -77,9 +77,10 @@ class Admin {
 	 */
 
 	protected function show_changes( $report ) {
+
 		$msg = sprintf( __( '<p><strong>%d</strong> tables were processed, <strong>%d</strong> cells were found that need to be updated.</p>', 'insr' ),
-		                $report['tables'],
-		                $report['changes_count']);
+		                $report[ 'tables' ],
+		                $report[ 'changes_count' ] );
 
 		echo $msg;
 		//create modal window for detailed view of changes
@@ -110,7 +111,6 @@ class Admin {
 					$html .= '</tr>';
 				}
 				$html .= '</table>';
-
 
 				echo $html;
 			}
@@ -161,17 +161,21 @@ class Admin {
 	}
 
 	/**
-	 * echoes the content of the $errors array as formatted HTML
+	 * echoes the content of the $errors array as formatted HTML if it contains error messages
 	 *
 	 */
 	protected function display_errors() {
 
-		echo '<div class = "error notice is-dismissible"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';
 		$messages = $this->errors->get_error_messages();
-		foreach ( $messages as $error ) {
-			echo '<li>' . $error . '</li>';
+		if ( count( $messages ) > 0 ) {
+
+			echo '<div class = "error notice is-dismissible"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';
+
+			foreach ( $messages as $error ) {
+				echo '<li>' . $error . '</li>';
+			}
+			echo '</ul></div>';
 		}
-		echo '</ul></div>';
 	}
 
 }

@@ -60,12 +60,13 @@ class SqlExportAdmin extends Admin {
 			$replace = $_POST[ 'replace' ];
 
 			//replace field should not be empty
-			if ( $replace =='') {
+			if ( $replace == '' ) {
 				$this->errors->add( 'empty_replace', __( 'Replace Field should not be empty.', 'insr' ) );
 				$this->display_errors();
+
 				return;
 			}
-		//if change_url is not set we set $search and $replace to empty strings.
+			//if change_url is not set we set $search and $replace to empty strings.
 		} else {
 			$search  = '';
 			$replace = '';
