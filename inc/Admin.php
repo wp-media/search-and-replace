@@ -83,30 +83,34 @@ class Admin {
 		                $report[ 'changes_count' ] );
 
 		echo $msg;
+
+
 		//create modal window for detailed view of changes
-		add_thickbox(); ?>
-		<a href="#TB_inline?width=1000&height=550&inlineId=changes-modal" class="thickbox"><?php _e( 'View details', 'insr' ); ?></a>    <?php
-
-		echo '<div id = "changes-modal" style= "display:none">';
-
+		?>
+		<a href="#" id="changes-modal-button"><?php _e( 'View details', 'insr' ); ?></a>
+		<div id ="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
+		<div id = "changes-modal" class="search-replace-modal " style= "display: none;">
+		<button type="button" id ="changes-modal-close" class="notice-dismiss"></button>
+<?php
 		foreach ( $report[ 'changes' ] as $table_report ) {
 			$changes      = $table_report[ 'changes' ];
 			$changes_made = count( $changes );
 
 			if ( $changes_made > 0 ) {
 				$table = $table_report[ 'table_name' ];
+				$html ='<h2 class = "search-replace-modal-table-headline"><strong>'.__( 'Table', 'insr' ) . ': </strong>' . $table.' <strong>' . __( 'Changes', 'insr' ) . ': </strong> ' . $changes_made.'</h2>';
 
-				$html = '<table class="search-replace-modal-table"><tr><th colspan="8"><strong>' . __( 'Table', 'insr' ) . ': </strong>' . $table;
-				$html .= '&nbsp;  <strong> ' . __( 'Changes', 'insr' ) . ': </strong>' . $changes_made . '</th></tr>';
+				$html .= '<table class="search-replace-modal-table"><colgroup><col><col><col><col><col><col><col><col></colgroup>';
+
 				foreach ( $changes as $change ) {
 
 					$html .= '<tr>';
-					$html .= '<th>' . __( 'row', 'insr' ) . '</th>
-						<td>' . $change [ 'row' ] . '</td>
+					$html .= '<th class="search-replace-narrow">' . __( 'row', 'insr' ) . '</th>
+						<td class="search-replace-narrow">' . $change [ 'row' ] . '</td>
 				         <th> ' . __( 'column', 'insr' ) . '</th>
 				        <td>' . $change [ 'column' ] . '</td> ';
 					$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
-							<td>' . esc_html( $change [ 'from' ] ) . '</th><td>' . '</td>
+							<td>' . esc_html( $change [ 'from' ] ) .  '</td>
 						<th> ' . __( 'New value:', 'insr' ) . '</th><td>' . esc_html( $change[ 'to' ] ) . '</td>';
 					$html .= '</tr>';
 				}

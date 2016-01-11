@@ -26,12 +26,12 @@ class SqlExportAdmin extends Admin {
 	}
 
 	/**
-	 *displays the site url, strips http: or https: before display
+	 *displays the site url, strips http:// or https:// before display
 	 */
 	protected function show_site_url() {
 
 		$url          = get_site_url();
-		$stripped_url = substr( $url, strpos( $url, ':' ) + 1 );
+		$stripped_url = substr( $url, strpos( $url, '/' ) + 2 );
 		echo $stripped_url;
 
 	}
@@ -59,7 +59,7 @@ class SqlExportAdmin extends Admin {
 			$search  = $_POST[ 'search' ];
 			$replace = $_POST[ 'replace' ];
 
-			//replace field should not be empty
+			//search field should not be empty
 			if ( $replace == '' ) {
 				$this->errors->add( 'empty_replace', __( 'Replace Field should not be empty.', 'insr' ) );
 				$this->display_errors();

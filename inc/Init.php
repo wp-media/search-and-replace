@@ -66,8 +66,7 @@ class Init {
 	/**
 	 *registers admin pages
 	 */
-	public
-	function register_plugin_pages() {
+	public function register_plugin_pages() {
 
 		//this sets the capability needed to access the menu
 		//can be overridden by filter 'insr-capability'
@@ -90,8 +89,7 @@ class Init {
 	/**
 	 *removes the plugins submenu pages from admin menu
 	 */
-	public
-	function remove_submenu_pages() {
+	public function remove_submenu_pages() {
 
 		remove_submenu_page( 'tools.php', 'sql_export' );
 		remove_submenu_page( 'tools.php', 'sql_import' );
@@ -100,8 +98,7 @@ class Init {
 	/**
 	 *callback function for search and replace page
 	 */
-	public
-	function show_search_replace_page() {
+	public function show_search_replace_page() {
 
 		$search_replace_admin = new SearchReplaceAdmin();
 		$search_replace_admin->show_page();
@@ -110,8 +107,7 @@ class Init {
 	/**
 	 *callback function for export page
 	 */
-	public
-	function show_export_page() {
+	public function show_export_page() {
 
 		$export_admin = new SqlExportAdmin();
 		$export_admin->show_page();
@@ -120,8 +116,7 @@ class Init {
 	/**
 	 *callback function for import page
 	 */
-	public
-	function show_import_page() {
+	public function show_import_page() {
 
 		$import_admin = new SqlImportAdmin();
 		$import_admin->show_page();

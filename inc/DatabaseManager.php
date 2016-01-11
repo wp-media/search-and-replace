@@ -22,8 +22,7 @@ class DatabaseManager {
 	 * Returns an array of tables in the database.
 	 *
 	 * if multisite && mainsite: all tables of the site
-	 * if multisite && subsite: all tables of the subsite
-	 * if single site: all tables of the site "SHOW TABLES LIKE'". $this->wpdb->base_prefix."%'"
+	 * if multisite && subsite: all tables of current blog
 	 *
 	 * @access public
 	 * @return array
@@ -161,14 +160,39 @@ class DatabaseManager {
 		return $this->wpdb->base_prefix;
 	}
 
-	public function import_sql( $sql ) {
+	/**
+	 * imports a sql file via mysqli
+	 *
+	 * @param  string   $sql
+	 * @param \WP_Error $error
+	 *
+	 * @return int  Number of Sql queries made
+	 */
+	public function import_sql( $sql, $error ) {
 
 		//connect via mysqli for easier db import
-		$connection = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
-		$success    = mysqli_multi_query( $connection, $sql );
-		mysqli_close( $connection );
+		$mysqli = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
 
-		return $success;
+		// Run the SQL
+		$i = 0;
+		if ( $mysqli->multi_query( $sql ) ) {
+			do {
+				$mysqli->next_result();
+
+				$i ++;
+			} while ( $mysqli->more_results() );
+		}
+
+		if ( $mysqli->errno ) {
+			$error->add( 'sql_import_error', __( '<b>Mysqli Error:</b> ' . $mysqli->error, 'insr' ) );
+
+			return - 1;
+
+		}
+
+		mysqli_close( $mysqli );
+
+		return $i;
 
 	}
 
