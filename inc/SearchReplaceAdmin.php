@@ -43,8 +43,7 @@ class SearchReplaceAdmin extends Admin {
 	/**
 	 *prints a select with all the tables and their sizes
 	 *
-	 * @return null
-	 *
+	 * @return void     *
 	 */
 	protected function show_table_list() {
 
@@ -132,7 +131,7 @@ class SearchReplaceAdmin extends Admin {
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run ) {
 
-		$no_matches = TRUE;
+
 
 		echo '<div class = "updated notice is-dismissible">';
 		if ( $dry_run ) {
@@ -173,5 +172,26 @@ class SearchReplaceAdmin extends Admin {
 			$this->errors->add( 'empty_search', __( 'Search field is empty.', 'insr' ) );
 		}
 	}
+
+
+	private function get_search_value() {
+
+		$search = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : "";
+		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+		if ($dry_run){
+			echo $search;
+		}
+
+	}
+	private function get_replace_value() {
+
+		$replace = isset( $_POST[ 'replace' ] ) ? $_POST[ 'replace' ] : "";
+		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+		if ($dry_run){
+			echo $replace;
+		}
+
+	}
+
 
 }

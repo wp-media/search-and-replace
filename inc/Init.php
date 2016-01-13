@@ -32,7 +32,7 @@ class Init {
 
 	public function register_admin_css( $hook ) {
 
-		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_sql_export', 'tools_page_sql_import' );
+		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_db_backup', 'tools_page_sql_import' );
 
 		//register on plugin  pages only
 		if ( in_array( $hook, $plugin_pages ) ) {
@@ -51,7 +51,7 @@ class Init {
 	public function register_admin_js( $hook ) {
 
 		//register on plugin  pages only
-		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_sql_export', 'tools_page_sql_import' );
+		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_db_backup', 'tools_page_sql_import' );
 		{
 			if ( in_array( $hook, $plugin_pages ) ) {
 
@@ -72,16 +72,21 @@ class Init {
 		//can be overridden by filter 'insr-capability'
 		$cap = apply_filters( 'insr-capability', 'install_plugins' );
 
-		add_submenu_page( 'tools.php', __( 'SQL Export', 'insr' ),
-		                  __( 'SQL Upload', 'insr' ), $cap, 'sql_export',
-		                  array( $this, 'show_export_page' ) );
+		add_submenu_page( 'tools.php', __( 'Backup Database', 'insr' ),
+		                  __( 'Backup Database', 'insr' ), $cap, 'db_backup',
+		                  array( $this, 'show_db_backup_page' ) );
+
+		add_submenu_page( 'tools.php', __( 'Replace Domain URL', 'insr' ),
+		                  __( 'Replace Domain URL', 'insr' ), $cap, 'replace_domain',
+		                  array( $this, 'show_replace_domain_page' ) );
+
 
 		add_submenu_page( 'tools.php', __( 'Inpsyde Search & Replace', 'insr' ),
 		                  __( 'Inpsyde Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
 		                  array( $this, 'show_search_replace_page' ) );
 
 		add_submenu_page( 'tools.php', __( 'SQL Import', 'insr' ),
-		                  __( 'SQL Upload', 'insr' ), $cap, 'sql_import',
+		                  __( 'SQL Import', 'insr' ), $cap, 'sql_import',
 		                  array( $this, 'show_import_page' ) );
 
 	}
@@ -91,8 +96,9 @@ class Init {
 	 */
 	public function remove_submenu_pages() {
 
-		remove_submenu_page( 'tools.php', 'sql_export' );
+		remove_submenu_page( 'tools.php', 'db_backup' );
 		remove_submenu_page( 'tools.php', 'sql_import' );
+		remove_submenu_page( 'tools.php', 'replace_domain' );
 	}
 
 	/**
@@ -105,11 +111,21 @@ class Init {
 	}
 
 	/**
-	 *callback function for export page
+	 *callback function for db backup  page
 	 */
-	public function show_export_page() {
+	public function show_db_backup_page() {
 
-		$export_admin = new SqlExportAdmin();
+		$export_admin = new DbBackupAdmin();
+		$export_admin->show_page();
+	}
+
+
+	/**
+	 *callback function for replace domain page
+	 */
+	public function show_replace_domain_page() {
+
+		$export_admin = new ReplaceDomainAdmin();
 		$export_admin->show_page();
 	}
 

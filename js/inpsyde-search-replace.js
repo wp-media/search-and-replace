@@ -7,19 +7,38 @@ jQuery( document ).ready( function() {
 
 	(
 		function( $ ) {
-			//toggles "disabled" attribute on click on #change_url checkbox on sql-export-page
-			$( '#change_url' ).click( toggle_disabled_attribute );
+			//search-replace-tab:  greys out export/save to db option when dry run is selected
+			$( '#dry_run' ).click( toggle_disabled_attribute );
 
 			function toggle_disabled_attribute() {
 
-				var d;
-				d = $( '.maybe_disabled' ).attr( 'disabled' );
+				var grayed_out_areas = $( '.maybe_disabled' );
+				grayed_out_areas.toggleClass( 'disabled' );
+				var inputs = (
+					$( '.maybe_disabled input' )
+				);
 
-				if ( d == "disabled" ) {
-					$( '.maybe_disabled' ).attr( 'disabled', false )
+				if ( inputs.attr( 'disabled' ) ) {
+					inputs.removeAttr( 'disabled' );
+				}
+
+				else {
+					inputs.attr( 'disabled', true );
+				}
+
+			}
+
+			//click on checkbox selects all tables in table select on search and replace tab
+			var table_select_checkbox = $( '#select_all_tables' )
+			table_select_checkbox.change( toggle_select_all_tables );
+
+			function toggle_select_all_tables( e ) {
+				console.log( e );
+				if ( table_select_checkbox.is( ':checked' ) ) {
+					$( '#select_tables option' ).attr( 'selected', true );
 				}
 				else {
-					$( '.maybe_disabled' ).attr( 'disabled', true );
+					$( '#select_tables option' ).attr( 'selected', false );
 				}
 
 			}
@@ -46,7 +65,7 @@ jQuery( document ).ready( function() {
 			}
 		}
 	)( jQuery );
-	;
+
 } );
 
 

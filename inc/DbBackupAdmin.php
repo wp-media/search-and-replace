@@ -5,7 +5,7 @@
 
 namespace Inpsyde\SearchReplace\inc;
 
-class SqlExportAdmin extends Admin {
+class DbBackupAdmin extends Admin {
 
 	function construct() {
 
@@ -22,7 +22,7 @@ class SqlExportAdmin extends Admin {
 
 		}
 
-		require_once( 'templates/sql_export.php' );
+		require_once( 'templates/db_backup.php' );
 	}
 
 	/**

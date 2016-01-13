@@ -14,7 +14,7 @@ class ReplaceTest extends \PHPUnit_Framework_TestCase {
 
 		$args = "not an instance of Database Manager";
 		$this->setExpectedException( "InvalidArgumentException" );
-		$testee = new Replace( $args );
+
 
 	}
 
