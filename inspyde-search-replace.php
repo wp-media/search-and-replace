@@ -6,7 +6,7 @@
  * Author:        Inpsyde GmbH
  * Author URI:    http://inpsyde.com
  * Contributors:  s-hinse
- * Version:       0.0.1
+ * Version:       0.9.0
  * Text Domain:
  * Domain Path:   /languages
  * License:       GPLv2 or later

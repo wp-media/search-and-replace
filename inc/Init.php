@@ -3,7 +3,12 @@ namespace Inpsyde\SearchReplace\inc;
 
 class Init {
 
-	public $admin;
+	private $plugin_pages = array(
+		'tools_page_inpsyde_search_replace',
+		'tools_page_db_backup',
+		'tools_page_sql_import',
+		'tools_page_replace_domain'
+	);
 
 	/**
 	 * @param string $file : The path to the Plugin main file
@@ -14,7 +19,7 @@ class Init {
 		$plugin_dir_url = plugin_dir_url( $file );
 		define( 'INSR_DIR', $plugin_dir_url );
 
-		$this->admin = new Admin();
+		new Admin();
 
 		//add plugin menu & plugin css
 		add_action( 'admin_menu', array( $this, 'register_plugin_pages' ) );
@@ -32,10 +37,8 @@ class Init {
 
 	public function register_admin_css( $hook ) {
 
-		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_db_backup', 'tools_page_sql_import' );
-
 		//register on plugin  pages only
-		if ( in_array( $hook, $plugin_pages ) ) {
+		if ( in_array( $hook, $this->plugin_pages ) ) {
 
 			$url    = ( INSR_DIR . '/css/inpsyde-search-replace.css' );
 			$handle = "insr-styles";
@@ -51,9 +54,9 @@ class Init {
 	public function register_admin_js( $hook ) {
 
 		//register on plugin  pages only
-		$plugin_pages = array( 'tools_page_inpsyde_search_replace', 'tools_page_db_backup', 'tools_page_sql_import' );
+
 		{
-			if ( in_array( $hook, $plugin_pages ) ) {
+			if ( in_array( $hook, $this->plugin_pages ) ) {
 
 				$url    = ( INSR_DIR . '/js/inpsyde-search-replace.js' );
 				$handle = "insr-js";
@@ -79,7 +82,6 @@ class Init {
 		add_submenu_page( 'tools.php', __( 'Replace Domain URL', 'insr' ),
 		                  __( 'Replace Domain URL', 'insr' ), $cap, 'replace_domain',
 		                  array( $this, 'show_replace_domain_page' ) );
-
 
 		add_submenu_page( 'tools.php', __( 'Inpsyde Search & Replace', 'insr' ),
 		                  __( 'Inpsyde Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
@@ -118,7 +120,6 @@ class Init {
 		$export_admin = new DbBackupAdmin();
 		$export_admin->show_page();
 	}
-
 
 	/**
 	 *callback function for replace domain page

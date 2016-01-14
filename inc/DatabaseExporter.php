@@ -319,6 +319,8 @@ class DatabaseExporter {
 
 
 		//Begin new backup of MySql
+		//get charset. if not set assume utf8
+		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
 		$this->stow( "# " . __( 'WordPress MySQL database backup', 'insr' ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "# " . sprintf( __( 'Generated: %s', 'insr' ), date( "l j. F Y H:i T" ) ) . "\n" );
@@ -328,7 +330,7 @@ class DatabaseExporter {
 
 		//set charset to utf8
 		$this->stow( "# force utf8\n" );
-		$this->stow( "/*!40101 SET NAMES utf8mb4 */;\n" );
+		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 		foreach ( $tables as $table ) {
 			// Increase script execution time-limit to 15 min for every table.

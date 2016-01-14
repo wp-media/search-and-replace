@@ -54,11 +54,23 @@ class SearchReplaceAdmin extends Admin {
 		//adjust height of select according to table count, but max 20 rows
 		$select_rows = $table_count < 20 ? $table_count : 20;
 
+		//if we come from a dry run, we select the tables to the dry run again
+		if ( isset ( $_POST[ 'select_tables' ] ) ) {
+			$selected_tables = ( $_POST[ 'select_tables' ] );
+		}
+
 		echo '<select id="select_tables" name="select_tables[]" multiple="multiple"  size = "' . $select_rows . '">';
 		foreach ( $tables as $table ) {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 
-			echo "<option value='$table'>$table $table_size</option>";
+			//check if dry run. if rdy run && current table is in "selected" array add selected attribute
+			if ( isset ( $_POST [ 'dry_run' ] ) && in_array( $table, $selected_tables ) ) {
+				echo "<option value='$table' selected='selected'>$table $table_size </option>";
+
+				//if current table had not been selected echo option without "selected" attribute
+			} else {
+				echo "<option value='$table'>$table $table_size</option>";
+			}
 
 		}
 		echo( '</select>' );
@@ -131,8 +143,6 @@ class SearchReplaceAdmin extends Admin {
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run ) {
 
-
-
 		echo '<div class = "updated notice is-dismissible">';
 		if ( $dry_run ) {
 			echo '<p><strong>' . __( 'Dry run is selected. No changes were made to the database and no SQL file was written .',
@@ -170,28 +180,47 @@ class SearchReplaceAdmin extends Admin {
 		}
 		if ( ! isset ( $_POST[ 'search' ] ) || $_POST[ 'search' ] == "" ) {
 			$this->errors->add( 'empty_search', __( 'Search field is empty.', 'insr' ) );
+
+			return;
 		}
+		//check if the user tries to replace domain name into the db
+		if ( isset ( $_POST[ 'export_or_save' ] ) && $_POST [ 'export_or_save' ] == 'save_to_db' ) {
+			$search = $_POST[ 'search' ];
+			$contains_site_url = strpos( $search, $this->get_stripped_site_url() );
+			if ( $contains_site_url !== FALSE ) {
+				$this->errors->add( 'URL_in-search_expression',
+				                    __( 'Your search contains your current site url. Replacing your site url will most likely cause your site to break. If you want to change the URL (and you know what you doing), please use the export function and make sure you backup your database before reimporting the changed SQL.',
+				                        'insr' ) );
+			}
+
+		}
+
 	}
 
-
+	/**
+	 *shows the search value in template
+	 */
 	private function get_search_value() {
 
-		$search = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : "";
+		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : "";
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-		if ($dry_run){
+		if ( $dry_run ) {
 			echo $search;
 		}
 
 	}
+
+	/**
+	 *shows the replace value in template
+	 */
 	private function get_replace_value() {
 
 		$replace = isset( $_POST[ 'replace' ] ) ? $_POST[ 'replace' ] : "";
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-		if ($dry_run){
+		if ( $dry_run ) {
 			echo $replace;
 		}
 
 	}
-
 
 }

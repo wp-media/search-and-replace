@@ -77,6 +77,11 @@ class Admin {
 	 */
 
 	protected function show_changes( $report ) {
+		//get search & replace values in order to print them bold in the results
+		$search = $_POST ['search'];
+		$search_bold = '<b>'.$search.'</b>';
+		$replace = $_POST ['replace'];
+		$replace_bold = '<b>'.$replace.'</b>';
 
 		$msg = sprintf( __( '<p><strong>%d</strong> tables were processed, <strong>%d</strong> cells were found that need to be updated.</p>', 'insr' ),
 		                $report[ 'tables' ],
@@ -109,9 +114,17 @@ class Admin {
 						<td class="search-replace-narrow">' . $change [ 'row' ] . '</td>
 				         <th> ' . __( 'column', 'insr' ) . '</th>
 				        <td>' . $change [ 'column' ] . '</td> ';
+
+					//wrap results with <b>-tags
+					$old_value = esc_html( $change [ 'from' ] );
+					$old_value = str_replace($search, $search_bold, $old_value );
+
+					$new_value =  esc_html( $change[ 'to' ] );
+					$new_value = str_replace($replace, $replace_bold, $new_value);
+
 					$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
-							<td>' . esc_html( $change [ 'from' ] ) .  '</td>
-						<th> ' . __( 'New value:', 'insr' ) . '</th><td>' . esc_html( $change[ 'to' ] ) . '</td>';
+							<td>' . $old_value .  '</td>
+						<th> ' . __( 'New value:', 'insr' ) . '</th><td>' .$new_value . '</td>';
 					$html .= '</tr>';
 				}
 				$html .= '</table>';
@@ -180,6 +193,17 @@ class Admin {
 			}
 			echo '</ul></div>';
 		}
+	}
+
+	/**
+	 *returns the site url, strips http:// or https://
+	 */
+	protected function get_stripped_site_url() {
+
+		$url          = get_site_url();
+		$stripped_url = substr( $url, strpos( $url, '/' ) + 2 );
+		return  $stripped_url;
+
 	}
 
 }

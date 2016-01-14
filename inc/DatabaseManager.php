@@ -23,6 +23,7 @@ class DatabaseManager {
 	 *
 	 * if multisite && mainsite: all tables of the site
 	 * if multisite && subsite: all tables of current blog
+	 * if single site : all tabkes of the site
 	 *
 	 * @access public
 	 * @return array

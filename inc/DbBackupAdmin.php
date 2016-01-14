@@ -25,16 +25,7 @@ class DbBackupAdmin extends Admin {
 		require_once( 'templates/db_backup.php' );
 	}
 
-	/**
-	 *displays the site url, strips http:// or https:// before display
-	 */
-	protected function show_site_url() {
 
-		$url          = get_site_url();
-		$stripped_url = substr( $url, strpos( $url, '/' ) + 2 );
-		echo $stripped_url;
-
-	}
 
 	/**
 	 *displays the html for the submit button

@@ -40,9 +40,26 @@ class SqlImportAdmin extends Admin {
 	 */
 	private function handle_sql_import_event() {
 
+		//TODO: Better handling of large files, maybe like here: http://stackoverflow.com/questions/147821/loading-sql-files-from-within-php , answer 3
+
 		if ( $_FILES [ 'file_to_upload' ][ 'error' ] == 0 ) {
-			//read the file contents
-			$sql_source = file_get_contents( $_FILES [ 'file_to_upload' ][ 'tmp_name' ] );
+
+			//get file extension
+			$ext = strrchr( $_FILES [ 'file_to_upload' ][ 'name' ], '.' );
+			//parse file
+			$tempfile = $_FILES [ 'file_to_upload' ][ 'tmp_name' ];
+			switch ( $ext ) {
+				case '.sql':
+					$sql_source = file_get_contents( $tempfile );
+					break;
+				case '.gz':
+					$sql_source = $this->read_gzfile_into_string( $tempfile );
+					break;
+				default:
+					$this->errors->add( 'sql_import_error', __( 'The file has neither \'.gz\' nor \'.sql\' Extension.  Import not possible.', 'insr' ) );
+
+					return;
+			}
 
 			//call import function
 			$success = $this->dbm->import_sql( $sql_source, $this->errors );
@@ -59,6 +76,21 @@ class SqlImportAdmin extends Admin {
 			$this->errors->add( 'upload_error', __( 'Upload Error. Error Code: ' . $_FILES[ 'file_to_upload' ][ 'error' ], 'insr' ) );
 		}
 
+	}
+
+	/**
+	 * reads a gz file into a string
+	 * @param $filename String path ot file
+	 *
+	 * @return string The file contents
+	 */
+	private function read_gzfile_into_string( $filename ) {
+
+		$zd       = gzopen( $filename, "rb" );
+		$contents = gzread( $zd, 10000 );
+		gzclose( $zd );
+
+		return $contents;
 	}
 
 }

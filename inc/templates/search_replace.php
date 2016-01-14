@@ -45,10 +45,10 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			</tr>
 			<tr class="maybe_disabled disabled">
 				<th><?php _e( 'Export SQL file or write changes to DB?', 'insr' ) ?></th>
-				<td><input id="radio1" type="radio" name="export" value="true" checked disabled /><label for="radio1"><?php _e( 'Export SQL file with changes', 'insr' ) ?></label>
+				<td><input id="radio1" type="radio" name="export_or_save" value="export" checked disabled /><label for="radio1"><?php _e( 'Export SQL file with changes', 'insr' ) ?></label>
 
 
-					<br><input id="radio2" type="radio" name="export" value="false" disabled /><label for="radio2"><?php _e( 'Save changes to Database', 'insr' ) ?></label></td>
+					<br><input id="radio2" type="radio" name="export_or_save" value="save_to_db" disabled /><label for="radio2"><?php _e( 'Save changes to Database', 'insr' ) ?></label></td>
 			</tr>
 
 
@@ -66,6 +66,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 			</tbody>
 		</table>
+		</form>
 
 </div>
 
