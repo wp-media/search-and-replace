@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: j
- * Date: 03.11.2015
- * Time: 10:35
- */
+
 
 use Inpsyde\SearchReplace\inc\Autoloader;
 

@@ -21,9 +21,11 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		<table class="form-table">
 			<tbody>
 			<tr>
-				<th><strong><?php _e( 'Select SQL file to upload', 'insr' ); ?></strong></th>
+				<th><strong><?php _e( 'Select SQL file to upload. ', 'insr' ); ?></strong></th>
+
 				<td><input type="file" name="file_to_upload" id="file_to_upload"></td>
 			</tr>
+			<tr><th></th><td><?php _e( 'Maximum file size: ', 'insr' );echo $this->file_upload_max_size().'KB'; ?></td></tr>
 			</tbody>
 			<tr>
 				<td><?php $this->show_submit_button(); ?></td>

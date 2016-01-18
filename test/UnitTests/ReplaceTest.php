@@ -9,14 +9,6 @@ use Inpsyde\SearchReplace\inc\Replace;
  */
 class ReplaceTest extends \PHPUnit_Framework_TestCase {
 
-	//test if exception is thrown when no instance of DatabaseManager is provided
-	function test_setup_wrong_argument() {
-
-		$args = "not an instance of Database Manager";
-		$this->setExpectedException( "InvalidArgumentException" );
-
-
-	}
 
 
 

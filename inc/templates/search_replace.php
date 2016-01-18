@@ -14,7 +14,8 @@ if ( ! defined( 'INSR_DIR' ) ) {
 	<h2 class="nav-tab-wrapper">
 		<a class="nav-tab " href="<?php echo admin_url() ?>/tools.php?page=db_backup"><?php _e( 'Backup Database', 'insr' ); ?></a>
 		<a class="nav-tab " href="<?php echo admin_url() ?>/tools.php?page=replace_domain"><?php _e( 'Replace Domain URL', 'insr' ); ?></a>
-		<a class="nav-tab nav-tab-active" href="<?php echo admin_url() ?>/tools.php?page=inpsyde_search_replace"><?php _e( 'Search and replace', 'insr' ); ?></a>
+		<a class="nav-tab nav-tab-active" href="<?php echo admin_url() ?>/tools.php?page=inpsyde_search_replace">
+			<?php _e( 'Search and replace', 'insr' ); ?></a>
 		<a class="nav-tab" href="<?php echo admin_url() ?>/tools.php?page=sql_import"><?php _e( 'Import SQL file', 'insr' ); ?></a>
 	</h2>
 
@@ -34,7 +35,8 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 				<th><strong><?php _e( 'Select tables', 'insr' ); ?></strong></th>
 				<td><?php $this->show_table_list(); ?><br>
-					<br><input id="select_all_tables" type="checkbox" name="select_all" /><label for="select_all"><?php _e( 'Select all tables', 'insr' ) ?></label>
+					<br><input id="select_all_tables" type="checkbox" name="select_all" /><label for="select_all">
+						<?php _e( 'Select all tables', 'insr' ) ?></label>
 				</td>
 			</tr>
 
@@ -45,10 +47,12 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			</tr>
 			<tr class="maybe_disabled disabled">
 				<th><?php _e( 'Export SQL file or write changes to DB?', 'insr' ) ?></th>
-				<td><input id="radio1" type="radio" name="export_or_save" value="export" checked disabled /><label for="radio1"><?php _e( 'Export SQL file with changes', 'insr' ) ?></label>
+				<td><input id="radio1" type="radio" name="export_or_save" value="export" checked disabled />
+					<label for="radio1"><?php _e( 'Export SQL file with changes', 'insr' ) ?></label>
 
 
-					<br><input id="radio2" type="radio" name="export_or_save" value="save_to_db" disabled /><label for="radio2"><?php _e( 'Save changes to Database', 'insr' ) ?></label></td>
+					<br><input id="radio2" type="radio" name="export_or_save" value="save_to_db" disabled />
+					<label for="radio2"><?php _e( 'Save changes to Database', 'insr' ) ?></label></td>
 			</tr>
 
 
@@ -66,7 +70,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 			</tbody>
 		</table>
-		</form>
+	</form>
 
 </div>
 

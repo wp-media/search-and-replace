@@ -8,8 +8,11 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite name="Plugin php unit tests">
-			<directory suffix="Test.php">./test/PHPUnit</directory>
+		<testsuite name="unit tests">
+			<directory suffix="Test.php">./test/UnitTests</directory>
+		</testsuite>
+		<testsuite name="integration tests">
+			<directory suffix="Test.php">./test/IntegrationTests</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

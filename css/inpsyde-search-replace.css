@@ -43,7 +43,7 @@ input[name="search"], input[name="replace"], #select_tables {
 }
 
 .search-replace-modal-table col:nth-child(2) {
-	width: 30px;
+	width: 35px;
 }
 
 .search-replace-modal-table col:nth-child(3) {

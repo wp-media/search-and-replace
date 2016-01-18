@@ -140,7 +140,7 @@ class DatabaseManager {
 	}
 
 	/**
-	 * returns a SQL CREATE TABLE Steatment for the table provide in $table
+	 * returns a SQL CREATE TABLE Statement for the table provided in $table
 	 *
 	 * @param $table String The Name of the table we want to create the statement for.
 	 *
@@ -161,41 +161,7 @@ class DatabaseManager {
 		return $this->wpdb->base_prefix;
 	}
 
-	/**
-	 * imports a sql file via mysqli
-	 *
-	 * @param  string   $sql
-	 * @param \WP_Error $error
-	 *
-	 * @return int  Number of Sql queries made
-	 */
-	public function import_sql( $sql, $error ) {
 
-		//connect via mysqli for easier db import
-		$mysqli = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
-
-		// Run the SQL
-		$i = 0;
-		if ( $mysqli->multi_query( $sql ) ) {
-			do {
-				$mysqli->next_result();
-
-				$i ++;
-			} while ( $mysqli->more_results() );
-		}
-
-		if ( $mysqli->errno ) {
-			$error->add( 'sql_import_error', __( '<b>Mysqli Error:</b> ' . $mysqli->error, 'insr' ) );
-
-			return - 1;
-
-		}
-
-		mysqli_close( $mysqli );
-
-		return $i;
-
-	}
 
 }
 

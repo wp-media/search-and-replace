@@ -25,8 +25,6 @@ class DbBackupAdmin extends Admin {
 		require_once( 'templates/db_backup.php' );
 	}
 
-
-
 	/**
 	 *displays the html for the submit button
 	 */
@@ -46,22 +44,10 @@ class DbBackupAdmin extends Admin {
 	private function handle_sql_export_event() {
 
 		$tables = $this->dbm->get_tables();
-		if ( isset ( $_POST[ 'change_url' ] ) ) {
-			$search  = $_POST[ 'search' ];
-			$replace = $_POST[ 'replace' ];
 
-			//search field should not be empty
-			if ( $replace == '' ) {
-				$this->errors->add( 'empty_replace', __( 'Replace Field should not be empty.', 'insr' ) );
-				$this->display_errors();
+		$search  = '';
+		$replace = '';
 
-				return;
-			}
-			//if change_url is not set we set $search and $replace to empty strings.
-		} else {
-			$search  = '';
-			$replace = '';
-		}
 		$this->create_backup_file( $search, $replace, $tables );
 	}
 

@@ -97,17 +97,17 @@ class SearchReplaceAdmin extends Admin {
 
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 
+		//if dry run is checked we  run the  the replace function with dry run and return
+		if ( $dry_run == TRUE ) {
+			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
+
+			return;
+		}
+
 		//'export'-button was checked
-		if ( isset ( $_POST[ 'export' ] ) && $_POST [ 'export' ] == "true" ) {
-			//if dry run is checked we do not run the export function but the replace function with dry run
-			if ( $dry_run == TRUE ) {
-				$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
+		if ( isset ( $_POST[ 'export_or_save' ] ) && $_POST [ 'export_or_save' ] == "export" ) {
 
-			} else {
-
-				$this->create_backup_file( $_POST[ 'search' ], $_POST[ 'replace' ], $tables );
-			}
-
+			$this->create_backup_file( $_POST[ 'search' ], $_POST[ 'replace' ], $tables );
 		} else {
 
 			//"Save changes to database" was checked
@@ -178,14 +178,16 @@ class SearchReplaceAdmin extends Admin {
 			$this->errors->add( 'no_table_selected', __( 'No Tables were selected.', 'insr' ) );
 
 		}
-		if ( ! isset ( $_POST[ 'search' ] ) || $_POST[ 'search' ] == "" ) {
+
+		//if search field is empty and replace field is not empty quit. If both fields are empty, go on (useful for backup of single tables without changing)
+		if ( isset ( $_POST[ 'replace' ] ) && $_POST[ 'replace' ] != "" && ( ! isset ( $_POST[ 'search' ] ) || $_POST[ 'search' ] == "" ) ) {
 			$this->errors->add( 'empty_search', __( 'Search field is empty.', 'insr' ) );
 
 			return;
 		}
 		//check if the user tries to replace domain name into the db
 		if ( isset ( $_POST[ 'export_or_save' ] ) && $_POST [ 'export_or_save' ] == 'save_to_db' ) {
-			$search = $_POST[ 'search' ];
+			$search            = $_POST[ 'search' ];
 			$contains_site_url = strpos( $search, $this->get_stripped_site_url() );
 			if ( $contains_site_url !== FALSE ) {
 				$this->errors->add( 'URL_in-search_expression',
