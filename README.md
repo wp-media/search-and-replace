@@ -30,17 +30,15 @@ If you want to migrate your site to another domain, please enter here your new d
 
 
 
-Please enter the new domain name without "http://", as shown in the 'search' field.
-**Example:**
-Old domain: http://localhost/example-site
-New domain: http://www.example-site.org
+Please enter the new domain name including "http://" or "https://", as shown in the 'search' field.
 
-Search field content is: localhost/example-site
-You should enter in 'replace field': www.example-site.org
+
+
+
 Press *Replace Domain URL* button to download your SQL file for migration.
 
 **Multisite usage:**
-If you are running multisite and want to migrate the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only migrate the tables of this subsite.
+If you are running multisite and want to migrate the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only migrate the tables of this subsite. The plugin will also replace the domain names (without http(s)://) in the *wp_blogs* table. 
 
 
 ####*Search and Replace* Tab
@@ -53,10 +51,6 @@ If you are running multisite and want to search the tables of all sites, run the
 
 ####*Import SQL* tab
 Import a SQL file or a gzipped SQL file into your database here. This may delete or change existing tables in your database. Please backup your database before doing this! 
-
-
-###Known Issues
-gz-support on *Import SQL* is still beta. If you get errors importing .gz-files, decompress them on your computer and upload the uncompressed SQL.
 
 
 ###License
