@@ -23,7 +23,18 @@ input[name="search"], input[name="replace"], #select_tables {
 	bottom: 30px;
 	z-index: 160000;
 	background-color: #fff;
+	overflow: hidden;
+}
+
+.search-replace-modal-header .notice-dismiss {
+	padding: 5px 1px;
+}
+
+.search-replace-changes-modal-content {
+	position: absolute;
 	overflow: auto;
+	height: 100%;
+	top: 30px;
 }
 
 .search-replace-modal-table {
@@ -39,7 +50,7 @@ input[name="search"], input[name="replace"], #select_tables {
 }
 
 .search-replace-modal-table col:nth-child(1) {
-	width: 30px;
+	width: 50px;
 }
 
 .search-replace-modal-table col:nth-child(2) {
@@ -53,19 +64,35 @@ input[name="search"], input[name="replace"], #select_tables {
 .search-replace-modal-table col:nth-child(4) {
 	width: 150px;
 }
+
 .search-replace-modal-table col:nth-child(5) {
 	width: 100px;
 }
+
 .search-replace-modal-table col:nth-child(7) {
 	width: 100px;
 }
-.search-replace-modal-table tr:nth-child(odd){
+
+.search-replace-modal-table tr:nth-child(odd) {
 	background-color: #eee;
 }
 
 .search-replace-modal-table-headline {
 	margin-left: 10px;
 	font-weight: 300;
+}
+
+.search-replace-search-value {
+	color: #fff;
+	background-color: red;
+}
+
+
+.search-replace-replace-value {
+	color: #fff;
+	background-color: green;
+
+
 }
 .insr_sql_button_wrap .button {
 	margin: 5px;
@@ -76,13 +103,8 @@ input[name="search"], input[name="replace"], #select_tables {
 
 }
 
-
-
 /*width of file upload input on import page */
 #file_to_upload {
 	width: 100%;
 }
-
-
-
 

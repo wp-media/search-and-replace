@@ -7,7 +7,7 @@ namespace Inpsyde\SearchReplace\inc;
 
 class ReplaceDomainAdmin extends Admin {
 
-	function construct() {
+	public function construct() {
 
 		parent::__construct();
 	}
@@ -58,7 +58,7 @@ class ReplaceDomainAdmin extends Admin {
 				return;
 
 		}
-		$this->create_backup_file( $search, $replace, $tables );
+		$this->create_backup_file( $search, $replace, $tables, true );
 	}
 
 }

@@ -28,7 +28,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 			<tr>
 				<th><strong><?php _e( 'Search for: ', 'insr' ); ?></strong></th>
-				<td><input type="text" " name="search" value="<?php echo $this->get_stripped_site_url(); ?>" /></td>
+				<td><input type="text" " name="search" value="<?php echo get_site_url(); ?>" /></td>
 			</tr>
 			<tr>
 				<th><strong><?php _e( 'Replace with: ', 'insr' ); ?></strong></th>

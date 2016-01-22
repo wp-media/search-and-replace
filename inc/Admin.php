@@ -28,9 +28,9 @@ class Admin {
 	 *
 	 * @return null
 	 */
-	protected function create_backup_file( $search, $replace, $tables ) {
+	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE ) {
 
-		$report = $this->dbe->db_backup( $search, $replace, $tables );
+		$report = $this->dbe->db_backup( $search, $replace, $tables, $domain_replace );
 		if ( $search != '' ) {
 			echo '<div class = "updated notice is-dismissible">';
 			//show changes if there are any
@@ -76,11 +76,12 @@ class Admin {
 
 	protected function show_changes( $report ) {
 
-		//get search & replace values in order to print them bold in the results
-		$search       = $_POST [ 'search' ];
-		$search_bold  = '<b>' . $search . '</b>';
-		$replace      = $_POST [ 'replace' ];
-		$replace_bold = '<b>' . $replace . '</b>';
+		//get search & replace values in order to highlight them in the results
+		$search            = $_POST [ 'search' ];
+		$search_highlight  = '<span class="search-replace-search-value">' . $search . '</span>';
+		$replace           = $_POST [ 'replace' ];
+		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
+		$delimiter         = array( " ...", "...<br> " );
 
 		$msg = sprintf( __( '<p><strong>%d</strong> tables were processed, <strong>%d</strong> cells were found that need to be updated.</p>', 'insr' ),
 		                $report[ 'tables' ],
@@ -90,10 +91,14 @@ class Admin {
 
 		//create modal window for detailed view of changes
 		?>
+
 		<a href="#" id="changes-modal-button"><?php _e( 'View details', 'insr' ); ?></a>
 		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
 		<div id="changes-modal" class="search-replace-modal " style="display: none;">
-			<button type="button" id="changes-modal-close" class="notice-dismiss"></button>
+			<div class="search-replace-modal-header">
+				<button type="button" id="changes-modal-close" class="notice-dismiss"></button>
+			</div>
+			<div class="search-replace-changes-modal-content">
 		<?php
 		foreach ( $report[ 'changes' ] as $table_report ) {
 			$changes      = $table_report[ 'changes' ];
@@ -114,12 +119,14 @@ class Admin {
 				         <th> ' . __( 'column', 'insr' ) . '</th>
 				        <td>' . $change [ 'column' ] . '</td> ';
 
-					//wrap results with <b>-tags
+					//trim results and wrap with highlight class
 					$old_value = esc_html( $change [ 'from' ] );
-					$old_value = str_replace( $search, $search_bold, $old_value );
+					$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
+					$old_value = str_replace( $search, $search_highlight, $old_value );
 
 					$new_value = esc_html( $change[ 'to' ] );
-					$new_value = str_replace( $replace, $replace_bold, $new_value );
+					$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
+					$new_value = str_replace( $replace, $replace_highlight, $new_value );
 
 					$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
 							<td>' . $old_value . '</td>
@@ -132,7 +139,7 @@ class Admin {
 			}
 		}
 
-		echo '</div>';
+		echo '</div></div>';
 	}
 
 	/**
@@ -212,6 +219,53 @@ class Admin {
 
 		return $stripped_url;
 
+	}
+
+	/**
+	 * trims a given string to 50 chars before and after the search string, if the string is longer than 199 chars
+	 *
+	 * @param $needle    string
+	 * @param $haystack  string
+	 * @param $delimiter array  $delimiter[0]=start delimiter, $delimiter[1] = end delimiter
+	 *
+	 * @return string The trimmed $haystack
+	 */
+	protected function trim_search_results( $needle, $haystack, $delimiter ) {
+
+		//if result has <200 characters we return the whole string
+		if ( strlen( $haystack ) < 100 ) {
+			return $haystack;
+		}
+
+		$trimmed_results = NULL;
+		//get all ocurrences of $needle with up to 50 chars front & back
+		preg_match_all( "@.{0,50}" . $needle . ".{0,50}@", $haystack, $trimmed_results );
+		$return_value = "";
+		for ( $i = 0; $i < count( $trimmed_results ); $i ++ ) {
+			//reset delimiter, might have been changed
+			$local_delimiter = $delimiter;
+			//check if the first trimmmed result is the beginning of $haystack. if so remove leading delimiter
+			if ( $i == 0 ) {
+				$pos = strpos( $haystack, $trimmed_results[ 0 ][ $i ] );
+				if ( $pos === 0 ) {
+					$local_delimiter[ 0 ] = "";
+				}
+			}
+
+			//check if the last trimmed result is the end of $haystack. if so, remove trailing delimiter
+			$last_index = count( $trimmed_results ) - 1;
+			if ( $i == $last_index ) {
+				$trimmed_result_length = strlen( $trimmed_results[ 0 ][ $i ] );
+				$substring             = substr( $haystack, - $trimmed_result_length );
+				if ( $substring == $trimmed_results[ 0 ][ $i ] ) {
+					$local_delimiter[ 1 ] = "";
+				}
+
+			}
+			$return_value .= $local_delimiter[ 0 ] . $trimmed_results[ 0 ][ $i ] . $local_delimiter[ 1 ];
+		}
+
+		return $return_value;
 	}
 
 }

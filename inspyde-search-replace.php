@@ -7,7 +7,7 @@
  * Author URI:    http://inpsyde.com
  * Contributors:  s-hinse
  * Version:       0.9.0
- * Text Domain:
+ * Text Domain:    insr
  * Domain Path:   /languages
  * License:       GPLv2 or later
  * License URI:   http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,9 +16,23 @@
 namespace Inpsyde\SearchReplace;
 
 register_activation_hook( __FILE__, __NAMESPACE__ . '\insr_activate' );
+
+add_action('plugins_loaded',__NAMESPACE__. '\load_textdomain');
 add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
 
+//register textdomain
+
+function load_textdomain() {
+	$lang_dir = plugin_basename( dirname( __FILE__ ) ) . '/languages/';
+
+	 load_plugin_textdomain( 'insr', false, $lang_dir );
+}
+
+
+
 function insr_activate() {
+
+	load_textdomain();
 
 	$correct_php_version = version_compare( phpversion(), '5.3', '>=' );
 

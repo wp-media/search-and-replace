@@ -7,7 +7,7 @@ namespace Inpsyde\SearchReplace\inc;
 
 class DbBackupAdmin extends Admin {
 
-	function construct() {
+	public function construct() {
 
 		parent::__construct();
 	}

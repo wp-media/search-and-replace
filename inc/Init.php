@@ -11,6 +11,13 @@ class Init {
 	);
 
 	/**
+	 * @var String  contains 'min'-suffix for css and js files in live mode
+	 */
+	private $suffix;
+
+
+
+	/**
 	 * @param string $file : The path to the Plugin main file
 	 */
 	public function run( $file ) {
@@ -21,7 +28,11 @@ class Init {
 
 		new Admin();
 
+
+
 		//add plugin menu & plugin css
+		//check for debug mode
+		$this->suffix = $this->get_script_debug();
 		add_action( 'admin_menu', array( $this, 'register_plugin_pages' ) );
 		//hide subpages in admin tools menu
 		add_action( 'admin_head', array( $this, 'remove_submenu_pages' ), 110 );
@@ -40,7 +51,7 @@ class Init {
 		//register on plugin  pages only
 		if ( in_array( $hook, $this->plugin_pages ) ) {
 
-			$url    = ( INSR_DIR . '/css/inpsyde-search-replace.css' );
+			$url    = ( INSR_DIR . '/assets/css/inpsyde-search-replace'.$this->suffix.'.css' );
 			$handle = "insr-styles";
 			wp_register_script( $handle, $url );
 			wp_enqueue_style( $handle, $url, array(), FALSE, FALSE );
@@ -58,7 +69,8 @@ class Init {
 		{
 			if ( in_array( $hook, $this->plugin_pages ) ) {
 
-				$url    = ( INSR_DIR . '/js/inpsyde-search-replace.js' );
+
+				$url    = ( INSR_DIR . '/assets/js/inpsyde-search-replace'.$this->suffix.'.js' );
 				$handle = "insr-js";
 				wp_register_script( $handle, $url );
 				wp_enqueue_script( $handle, $url, array(), FALSE, FALSE );
@@ -138,5 +150,16 @@ class Init {
 		$import_admin = new SqlImportAdmin();
 		$import_admin->show_page();
 	}
+
+	/**
+	 * checks for script debug mode
+	 * @return string suffix for css and js files
+	 */
+	public function get_script_debug() {
+
+	$script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+	$suffix       = $script_debug ? '' : '.min';
+	return $suffix;
+}
 
 }

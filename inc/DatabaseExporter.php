@@ -40,15 +40,117 @@ class DatabaseExporter {
 	 */
 	protected $backup_filename;
 
-	//TODO: make a common value for exporter and replacer
-
-	public function  __construct( Replace $replace, DatabaseManager $dbm ) {
+	public function __construct( Replace $replace, DatabaseManager $dbm ) {
 
 		$this->errors = new \WP_Error();
 
 		$this->backup_dir = get_temp_dir();
 		$this->replace    = $replace;
 		$this->dbm        = $dbm;
+
+	}
+
+	/**
+	 * Write to the backup file
+	 *
+	 * @param string $search
+	 * @param string $replace
+	 * @param array  $tables         The array of table names that should be exported.
+	 * @param bool   $domain_replace If set, exporter will change the domain name without leading http:// in table wp_blogs if we are on a
+	 *                               multisite
+	 *
+	 *
+	 * @return array $report    $report [ 'filename'] : Name of Backup file,
+	 *                          $report[ 'errors'] : WP_Error_object,
+	 *                          $report ['changes'] : Array with replacements in tables
+	 *
+	 *
+	 */
+	public function db_backup( $search, $replace, $tables, $domain_replace= false ) {
+
+		$report = array(
+			'errors'        => NULL,
+			'changes'       => array(),
+			'tables'        => '0',
+			'changes_count' => '0',
+			'filename'      => ''
+		);
+
+		$table_prefix = $this->dbm->get_base_prefix();
+
+		$wp_blogs_table = $table_prefix . 'blogs';
+
+		$datum                 = date( "Ymd_B" );
+		$this->backup_filename = DB_NAME . "_$table_prefix$datum.sql";
+
+		if ( is_writable( $this->backup_dir ) ) {
+			$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
+			if ( ! $this->fp ) {
+				$this->errors->add( 8, __( 'Could not open the backup file for writing!', 'insr' ) );
+
+				return $report;
+			}
+		} else {
+			$this->errors->add( 9, __( 'The backup directory is not writeable!', 'insr' ) );
+
+			return $report;
+		}
+
+		//Begin new backup of MySql
+		//get charset. if not set assume utf8
+		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
+		$this->stow( "# " . __( 'WordPress MySQL database backup', 'insr' ) . "\n" );
+		$this->stow( "#\n" );
+		$this->stow( "# " . sprintf( __( 'Generated: %s', 'insr' ), date( "l j. F Y H:i T" ) ) . "\n" );
+		$this->stow( "# " . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
+		$this->stow( "# " . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
+		$this->stow( "# --------------------------------------------------------\n" );
+
+		//set charset to utf8
+		$this->stow( "# force utf8\n" );
+		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
+		$this->stow( "# --------------------------------------------------------\n" );
+		foreach ( $tables as $table ) {
+			// Increase script execution time-limit to 15 min for every table.
+			if ( ! ini_get( 'safe_mode' ) ) {
+				@set_time_limit( 15 * 60 );
+			}
+			// Create the SQL statements
+			$this->stow( "# --------------------------------------------------------\n" );
+			$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $table ) ) . "\n" );
+
+			//count tables
+			$report [ 'tables' ] ++;
+
+			/*check if we are replacing the domain in a multisite. if so, we replace in wp_blogs the stripped url without http(s), because the domains
+			are stored without http:// */
+
+			if ( $domain_replace && is_multisite() && $table == $wp_blogs_table ) {
+
+				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
+				$stripped_url_replace = substr( $replace, strpos( $replace, '/' ) + 2 );
+				$table_report         = $this->backup_table( $stripped_url_search, $stripped_url_replace, $table );
+
+			} else {
+				$table_report = $this->backup_table( $search, $replace, $table );
+			}
+			//log changes if any
+
+			if ( $table_report[ 'change' ] != 0 ) {
+				$report[ 'changes' ][ $table ] = $table_report;
+
+				$report [ 'changes_count' ] += $table_report[ 'change' ];
+			}
+		}
+
+		$this->close( $this->fp );
+		//return errors if any
+		if ( count( $this->errors->get_error_codes() ) ) {
+			$report[ 'errors' ] = $this->errors;
+		}
+		$report [ 'filename' ] = $this->backup_filename;
+
+		return $report;
 
 	}
 
@@ -280,99 +382,12 @@ class DatabaseExporter {
 	}
 
 	/**
-	 * Write to the backup file
-	 *
-	 * @param string $query_line the line to write
-	 *
-	 * @return array $report    $report [ 'filename'] : Name of Backup file,
-	 *                          $report[ 'errors'] : WP_Error_object,
-	 *                          $report ['changes'] : Array with replacements in tables
-	 *
-	 *
-	 */
-	function db_backup( $search, $replace, $tables ) {
-
-		$report = array(
-			'errors'  => NULL,
-			'changes' => array(),
-			'tables' => '0',
-			'changes_count'=>'0',
-			'filename'=>''
-		);
-
-		$table_prefix          = $this->dbm->get_base_prefix();
-		$datum                 = date( "Ymd_B" );
-		$this->backup_filename = DB_NAME . "_$table_prefix$datum.sql";
-
-		if ( is_writable( $this->backup_dir ) ) {
-			$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
-			if ( ! $this->fp ) {
-				$this->errors->add( 8, __( 'Could not open the backup file for writing!', 'insr' ) );
-
-				return $report;
-			}
-		} else {
-			$this->errors->add( 9, __( 'The backup directory is not writeable!', 'insr' ) );
-
-			return $report;
-		}
-
-
-		//Begin new backup of MySql
-		//get charset. if not set assume utf8
-		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
-		$this->stow( "# " . __( 'WordPress MySQL database backup', 'insr' ) . "\n" );
-		$this->stow( "#\n" );
-		$this->stow( "# " . sprintf( __( 'Generated: %s', 'insr' ), date( "l j. F Y H:i T" ) ) . "\n" );
-		$this->stow( "# " . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
-		$this->stow( "# " . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
-		$this->stow( "# --------------------------------------------------------\n" );
-
-		//set charset to utf8
-		$this->stow( "# force utf8\n" );
-		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
-		$this->stow( "# --------------------------------------------------------\n" );
-		foreach ( $tables as $table ) {
-			// Increase script execution time-limit to 15 min for every table.
-			if ( ! ini_get( 'safe_mode' ) ) {
-				@set_time_limit( 15 * 60 );
-			}
-			// Create the SQL statements
-			$this->stow( "# --------------------------------------------------------\n" );
-			$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $table ) ) . "\n" );
-
-
-
-			//count tables
-			$report ['tables']++;
-			$table_report = $this->backup_table( $search, $replace, $table );
-			//log changes if any
-
-			if ( $table_report[ 'change' ] != 0 ) {
-				$report[ 'changes' ][ $table ] = $table_report;
-
-				$report ['changes_count'] += $table_report['change'];
-			}
-		}
-
-		$this->close( $this->fp );
-		//return errors if any
-		if ( count( $this->errors->get_error_codes() ) ) {
-			$report[ 'errors' ] = $this->errors;
-		}
-		$report [ 'filename' ] = $this->backup_filename;
-
-		return $report;
-
-	}
-
-	/**
 	 * @param string $filename The name of the file to be downloaded
 	 * @param bool   $compress If TRUE, gz compression is used
 	 *
 	 * @return bool TRUE if delivery was successful
 	 */
-	function deliver_backup( $filename = '', $compress = FALSE ) {
+	public function deliver_backup( $filename = '', $compress = FALSE ) {
 
 		if ( $filename == '' ) {
 			return FALSE;
