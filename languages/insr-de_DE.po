@@ -95,7 +95,7 @@ msgstr "Fehler bei SHOW CREATE TABLE für %s."
 #: inc/DatabaseExporter.php:112
 #, php-format
 msgid "Error getting table structure of %s"
-msgstr ""
+msgstr "Fehler beim Erstellen der Tabellenstruktur von %s"
 
 #: inc/DatabaseExporter.php:120
 #, php-format

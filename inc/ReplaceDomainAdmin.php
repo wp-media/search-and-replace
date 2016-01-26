@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ *admin class for the "replace domain" tab in inpsyde serch-and-replace plugin
  */
 
 namespace Inpsyde\SearchReplace\inc;
@@ -47,8 +47,10 @@ class ReplaceDomainAdmin extends Admin {
 
 		$tables = $this->dbm->get_tables();
 
-			$search  = $_POST[ 'search' ];
-			$replace = $_POST[ 'replace' ];
+			$search  =esc_url_raw( $_POST[ 'search' ]);
+			$replace =esc_url_raw( $_POST[ 'replace' ]);
+		$new_db_prefix = (isset ($_POST['new_db_prefix']))? esc_attr($_POST['new_db_prefix']):"";
+
 
 			//search field should not be empty
 			if ( $replace == '' ) {
@@ -58,7 +60,7 @@ class ReplaceDomainAdmin extends Admin {
 				return;
 
 		}
-		$this->create_backup_file( $search, $replace, $tables, true );
+		$this->create_backup_file( $search, $replace, $tables, true, $new_db_prefix );
 	}
 
 }

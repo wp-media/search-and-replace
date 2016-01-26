@@ -28,11 +28,23 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 			<tr>
 				<th><strong><?php _e( 'Search for: ', 'insr' ); ?></strong></th>
-				<td><input type="text" " name="search" value="<?php echo get_site_url(); ?>" /></td>
+				<td><input type="text"  name="search" value="<?php echo get_site_url(); ?>" /></td>
 			</tr>
 			<tr>
 				<th><strong><?php _e( 'Replace with: ', 'insr' ); ?></strong></th>
-				<td><input type="text"  name="replace"  placeholder="<?php _e( 'New URL' ) ?>" /></td>
+				<td><input type="url"  name="replace"  placeholder="<?php _e( 'New URL' ) ?>" /></td>
+			</tr>
+			<tr >
+				<th><label for="change_db_prefix"><strong><?php esc_html_e( 'Change database prefix', 'insr' ); ?></strong></label></th>
+				<td><input id ="change_db_prefix" type="checkbox" name="change_db_prefix"  /></td>
+			</tr>
+			<tr class="maybe_disabled disabled">
+				<th><strong><?php esc_html_e( 'Current prefix: ', 'insr' ); ?></strong></th>
+				<td><?php echo $this->dbm->get_base_prefix(); ?> </td>
+			</tr>
+			<tr class="maybe_disabled disabled">
+				<th><strong><?php _e( 'New prefix: ', 'insr' ); ?></strong></th>
+				<td><input type="text"  name="new_db_prefix"  disabled placeholder="<?php esc_html_e( 'New database prefix', 'insr' ) ?>" /></td>
 			</tr>
 			</tbody>
 		</table><?php $this->show_submit_button(); ?></form>

@@ -50,7 +50,7 @@ class DatabaseManager {
 	 * Returns an array containing the size of each database table.
 	 *
 	 * @access public
-	 * @return array
+	 * @return array  Table => Table Size in KB
 	 */
 	public function get_sizes() {
 

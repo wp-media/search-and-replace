@@ -35,7 +35,7 @@ class SqlImportAdmin extends Admin {
 
 		$html = '	<input type="hidden" name="action" value="sql_import" />';
 		echo $html;
-		submit_button( __( 'Import SQL file', 'insr' ) );
+		submit_button( esc_html__( 'Import SQL file', 'insr' ) );
 
 	}
 
@@ -74,7 +74,8 @@ class SqlImportAdmin extends Admin {
 			} else {
 				echo '<div class = "updated notice is-dismissible">';
 				echo '<p>';
-				printf( __( 'The SQL file was successfully imported. %s SQL queries were performed.', 'insr' ), $success );
+				$msg =printf( __( 'The SQL file was successfully imported. %s SQL queries were performed.', 'insr' ), $success );
+				echo esc_html($msg);
 				echo '</p></div>';
 			}
 		} else {

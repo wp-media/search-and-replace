@@ -5,10 +5,14 @@
 
 jQuery( document ).ready( function() {
 
+
 	(
 		function( $ ) {
 			//search-replace-tab:  greys out export/save to db option when dry run is selected
 			$( '#dry_run' ).click( toggle_disabled_attribute );
+
+			//replace-domain-tab: greys out replace db_prefix option
+			$ ('#change_db_prefix' ).click (toggle_disabled_attribute);
 
 			function toggle_disabled_attribute() {
 

@@ -19,7 +19,7 @@ require_once $base_dir . './inc/DatabaseImporter.php';
 
 
 
-//set path to your wp-tests path here
+//set path to your wp-tests directory here
 $tests_dir = 'D:\web\wp-tests\wordpress-dev\tests\phpunit';
 define( 'WP_TESTS_DIR',$tests_dir);
 define ('TEST_PLUGIN_FILE',$base_dir . './inspyde-search-replace.php');

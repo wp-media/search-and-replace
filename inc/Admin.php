@@ -28,9 +28,9 @@ class Admin {
 	 *
 	 * @return null
 	 */
-	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE ) {
+	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix = "" ) {
 
-		$report = $this->dbe->db_backup( $search, $replace, $tables, $domain_replace );
+		$report = $this->dbe->db_backup( $search, $replace, $tables, $domain_replace, $new_table_prefix );
 		if ( $search != '' ) {
 			echo '<div class = "updated notice is-dismissible">';
 			//show changes if there are any
@@ -77,22 +77,24 @@ class Admin {
 	protected function show_changes( $report ) {
 
 		//get search & replace values in order to highlight them in the results
-		$search            = $_POST [ 'search' ];
+		$search            = esc_html( $_POST [ 'search' ] );
 		$search_highlight  = '<span class="search-replace-search-value">' . $search . '</span>';
-		$replace           = $_POST [ 'replace' ];
+		$replace           = esc_html( $_POST [ 'replace' ] );
 		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
 		$delimiter         = array( " ...", "...<br> " );
 
-		$msg = sprintf( __( '<p><strong>%d</strong> tables were processed, <strong>%d</strong> cells were found that need to be updated.</p>', 'insr' ),
-		                $report[ 'tables' ],
-		                $report[ 'changes_count' ] );
+		$msg = sprintf( _n( '%s table was processed.', '%s tables were processed. ',$report[ 'tables' ], 'insr' ),$report[ 'tables' ]);
 
-		echo $msg;
+
+		$msg .= sprintf( _n( '%s cell needs to be updated. ', '%s cells need to be updated. ',$report[ 'changes_count' ], 'insr' ),$report[ 'changes_count' ]);
+
+
+		echo esc_html( $msg );
 
 		//create modal window for detailed view of changes
 		?>
 
-		<a href="#" id="changes-modal-button"><?php _e( 'View details', 'insr' ); ?></a>
+		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'insr' ); ?></a></p>
 		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
 		<div id="changes-modal" class="search-replace-modal " style="display: none;">
 			<div class="search-replace-modal-header">
@@ -158,7 +160,12 @@ class Admin {
 			if ( isset ( $_POST[ 'compress' ] ) ) {
 				$compress = $_POST[ 'compress' ];
 			}
-			//TODO: Make this safer
+			//if file name contains path or does not end with '.sql' exit
+			$ext = strrchr( $sql_file, '.' );
+			if (strpos ($sql_file, "/") !== false || $ext !=".sql")
+			{
+				die;
+			}
 			$this->dbe->deliver_backup( $sql_file, $compress );
 		}
 
@@ -178,7 +185,7 @@ class Admin {
 		wp_nonce_field( 'download_sql', 'insr_nonce' );
 		$value = translate( "Download SQL File", "insr" );
 
-		$html = '<input type="hidden" name="action" value="download_file" /><input type ="hidden" name="sql_file" value="' . $file . '"><input type ="hidden" name="compress" value="' . $compress . '"><input id ="insr_submit"type="submit" value="' . $value . ' "class="button" /></form></div>';
+		$html = '<input type="hidden" name="action" value="download_file" /><input type ="hidden" name="sql_file" value="' . esc_attr( $file ) . '"><input type ="hidden" name="compress" value="' . esc_attr( $compress ) . '"><input id ="insr_submit"type="submit" value="' . esc_attr( $value ) . ' "class="button" /></form></div>';
 		echo $html;
 
 	}
@@ -195,7 +202,7 @@ class Admin {
 			echo '<div class = "error notice is-dismissible"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';
 
 			foreach ( $messages as $error ) {
-				echo '<li>' . $error . '</li>';
+				echo '<li>' . esc_html( $error ) . '</li>';
 			}
 			echo '</ul></div>';
 		}

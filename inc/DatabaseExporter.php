@@ -66,7 +66,7 @@ class DatabaseExporter {
 	 *
 	 *
 	 */
-	public function db_backup( $search, $replace, $tables, $domain_replace= false ) {
+	public function db_backup( $search, $replace, $tables, $domain_replace= false, $new_table_prefix ) {
 
 		$report = array(
 			'errors'        => NULL,
@@ -81,7 +81,7 @@ class DatabaseExporter {
 		$wp_blogs_table = $table_prefix . 'blogs';
 
 		$datum                 = date( "Ymd_B" );
-		$this->backup_filename = DB_NAME . "_$table_prefix$datum.sql";
+		$this->backup_filename = $new_table_prefix =="" ?DB_NAME . "_$table_prefix.sql": DB_NAME . "_$new_table_prefix.sql";
 
 		if ( is_writable( $this->backup_dir ) ) {
 			$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
@@ -104,20 +104,15 @@ class DatabaseExporter {
 		$this->stow( "# " . sprintf( __( 'Generated: %s', 'insr' ), date( "l j. F Y H:i T" ) ) . "\n" );
 		$this->stow( "# " . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
 		$this->stow( "# " . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
-		$this->stow( "# --------------------------------------------------------\n" );
+		if ($new_table_prefix !=""){
+			$this->stow( "# " . sprintf( __( 'Changed table prefix: From %s to %s ', 'insr' ), $table_prefix, $new_table_prefix ) . "\n" );
+		}
+ 		$this->stow( "# --------------------------------------------------------\n" );
 
-		//set charset to utf8
-		$this->stow( "# force utf8\n" );
+
 		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 		foreach ( $tables as $table ) {
-			// Increase script execution time-limit to 15 min for every table.
-			if ( ! ini_get( 'safe_mode' ) ) {
-				@set_time_limit( 15 * 60 );
-			}
-			// Create the SQL statements
-			$this->stow( "# --------------------------------------------------------\n" );
-			$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $table ) ) . "\n" );
 
 			//count tables
 			$report [ 'tables' ] ++;
@@ -129,10 +124,10 @@ class DatabaseExporter {
 
 				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
 				$stripped_url_replace = substr( $replace, strpos( $replace, '/' ) + 2 );
-				$table_report         = $this->backup_table( $stripped_url_search, $stripped_url_replace, $table );
+				$table_report         = $this->backup_table( $stripped_url_search, $stripped_url_replace, $table, $new_table_prefix );
 
 			} else {
-				$table_report = $this->backup_table( $search, $replace, $table );
+				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix );
 			}
 			//log changes if any
 
@@ -168,7 +163,8 @@ class DatabaseExporter {
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
-	public function backup_table( $search = '', $replace = '', $table ) {
+	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix ="") {
+
 
 		$table_report = array(
 			'table_name' => $table,
@@ -177,6 +173,23 @@ class DatabaseExporter {
 			'changes'    => array()
 
 		);
+		//do we need to replace the prefix?
+		$table_prefix = $this->dbm->get_base_prefix();
+		$new_table = $table;
+		if ($new_table_prefix != "")
+		{
+			$new_table = $this->get_new_table_name( $table, $new_table_prefix );
+
+		}
+		// Increase script execution time-limit to 15 min for every table.
+		if ( ! ini_get( 'safe_mode' ) ) {
+			@set_time_limit( 15 * 60 );
+		}
+		// Create the SQL statements
+		$this->stow( "# --------------------------------------------------------\n" );
+		$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $new_table ) ) . "\n" );
+
+
 
 		$table_structure = $this->dbm->get_table_structure( $table );
 		if ( ! $table_structure ) {
@@ -188,17 +201,17 @@ class DatabaseExporter {
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
 		$this->stow( "# " . sprintf( __( 'Delete any existing table %s', 'insr' ),
-		                             $this->backquote( $table ) ) . "\n" );
+		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
-		$this->stow( "DROP TABLE IF EXISTS " . $this->backquote( $table ) . ";\n" );
+		$this->stow( "DROP TABLE IF EXISTS " . $this->backquote( $new_table ) . ";\n" );
 
 		// Table structure
 		// Comment in SQL-file
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
 		$this->stow( "# " . sprintf( __( 'Table structure of table %s', 'insr' ),
-		                             $this->backquote( $table ) ) . "\n" );
+		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
 
@@ -207,6 +220,12 @@ class DatabaseExporter {
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'insr' ), $table );
 			$this->errors->add( 2, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
+		}
+		//replace prefix if necessary
+		if ($new_table_prefix !=""){
+
+				$create_table[0][1] = str_replace($table, $new_table, $create_table[0][1]);
+
 		}
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
 
@@ -220,7 +239,7 @@ class DatabaseExporter {
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
 		$this->stow( '# ' . sprintf( __( 'Data contents of table %s', 'insr' ),
-		                             $this->backquote( $table ) ) . "\n" );
+		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 
 		$defs = array();
@@ -251,7 +270,7 @@ class DatabaseExporter {
 
 			$table_data = $this->dbm->get_table_content( $table, $start, $page_size );
 
-			$entries = 'INSERT INTO ' . $this->backquote( $table ) . ' VALUES (';
+			$entries = 'INSERT INTO ' . $this->backquote( $new_table ) . ' VALUES (';
 			//    \x08\\x09, not required
 			$hex_search  = array( "\x00", "\x0a", "\x0d", "\x1a" );
 			$hex_replace = array( '\0', '\n', '\r', '\Z' );
@@ -261,6 +280,10 @@ class DatabaseExporter {
 					$table_report[ 'rows' ] ++;
 
 					foreach ( $row as $column => $value ) {
+						//if "change database prefix" is set we have to look for ocurrencies of the old prefix in the db entries and change them
+						if ($new_table != $table) {
+							$value = $this->replace->recursive_unserialize_replace( $table_prefix, $new_table_prefix, $value );
+						}
 						//skip replace if no search pattern
 						if ( $search != '' ) {
 
@@ -284,8 +307,12 @@ class DatabaseExporter {
 										'to'     => ( $edited_data )
 									);
 									$value                       = $edited_data;
+
+
+
 								}
 							}
+
 						}
 						if ( isset ( $ints[ strtolower( $column ) ] ) ) {
 							// make sure there are no blank spots in the insert syntax,
@@ -307,7 +334,7 @@ class DatabaseExporter {
 		$this->stow( "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "# " . sprintf( __( 'End of data contents of table %s', 'insr' ),
-		                             $this->backquote( $table ) ) . "\n" );
+		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 		$this->stow( "\n" );
 
@@ -478,6 +505,26 @@ class DatabaseExporter {
 	public function set_backup_dir( $backup_dir ) {
 
 		$this->backup_dir = $backup_dir;
+	}
+
+	/**
+	 * strips the current table prefix and adds a new one provided in $new_table_prefix
+	 * @param $table
+	 * @param $new_table_prefix
+	 *
+	 * @return string  The table name with new prefix
+	 */
+	protected function get_new_table_name( $table, $new_table_prefix ) {
+
+		//get length of base_prefix
+		$prefix        = $this->dbm->get_base_prefix();
+		$prefix_length = strlen( $prefix );
+		//strip old prefix
+		$part_after_prefix = substr( $table, $prefix_length );
+		#//build new table name
+		$new_table = $new_table_prefix . $part_after_prefix;
+
+		return $new_table;
 	}
 
 }
