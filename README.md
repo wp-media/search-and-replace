@@ -32,6 +32,7 @@ If you want to migrate your site to another domain, please enter here your new d
 
 Please enter the new domain name including "http://" or "https://", as shown in the 'search' field.
 
+If you want to replace the database-prefix, check the checkbox "replace database prefix" and enter your new prefix in the filed below. Don't forget to set the new prefix in the wp-config.php of your new installation!
 
 
 
