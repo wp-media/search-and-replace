@@ -7,7 +7,8 @@ class Init {
 		'tools_page_inpsyde_search_replace',
 		'tools_page_db_backup',
 		'tools_page_sql_import',
-		'tools_page_replace_domain'
+		'tools_page_replace_domain',
+		'tools_page_credits'
 	);
 
 	/**
@@ -95,13 +96,17 @@ class Init {
 		                  __( 'Replace Domain URL', 'insr' ), $cap, 'replace_domain',
 		                  array( $this, 'show_replace_domain_page' ) );
 
-		add_submenu_page( 'tools.php', __( 'Inpsyde Search & Replace', 'insr' ),
-		                  __( 'Inpsyde Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
+		add_submenu_page( 'tools.php', __( 'Search & Replace', 'insr' ),
+		                  __( 'Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
 		                  array( $this, 'show_search_replace_page' ) );
 
 		add_submenu_page( 'tools.php', __( 'SQL Import', 'insr' ),
 		                  __( 'SQL Import', 'insr' ), $cap, 'sql_import',
 		                  array( $this, 'show_import_page' ) );
+
+		add_submenu_page( 'tools.php', __( 'Credits', 'insr' ),
+		                  __( 'Credits', 'insr' ), $cap, 'credits',
+		                  array( $this, 'show_credits_page' ) );
 
 	}
 
@@ -113,6 +118,7 @@ class Init {
 		remove_submenu_page( 'tools.php', 'db_backup' );
 		remove_submenu_page( 'tools.php', 'sql_import' );
 		remove_submenu_page( 'tools.php', 'replace_domain' );
+		remove_submenu_page( 'tools.php', 'credits' );
 	}
 
 	/**
@@ -148,6 +154,15 @@ class Init {
 	public function show_import_page() {
 
 		$import_admin = new SqlImportAdmin();
+		$import_admin->show_page();
+	}
+
+	/**
+	 *callback function for import page
+	 */
+	public function show_credits_page() {
+
+		$import_admin = new CreditsAdmin();
 		$import_admin->show_page();
 	}
 
