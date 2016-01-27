@@ -3,6 +3,29 @@ input[name="search"], input[name="replace"], #select_tables {
 	max-width: 400px;
 }
 
+.search-replace-search-value {
+	color: #fff;
+	background-color: red;
+}
+
+.search-replace-replace-value {
+	color: #fff;
+	background-color: green;
+
+}
+
+.disabled, .form-table .disabled th {
+	color: grey;
+
+}
+
+
+/*width of file upload input on import page */
+#file_to_upload {
+	width: 100%;
+}
+
+/*styles for "detailed view" modal */
 .search-replace-modal-background {
 	position: fixed;
 	top: 0;
@@ -34,7 +57,7 @@ input[name="search"], input[name="replace"], #select_tables {
 	position: absolute;
 	overflow: auto;
 	height: 100%;
-	top: 30px;
+	top: 50px;
 }
 
 .search-replace-modal-table {
@@ -82,29 +105,21 @@ input[name="search"], input[name="replace"], #select_tables {
 	font-weight: 300;
 }
 
-.search-replace-search-value {
-	color: #fff;
-	background-color: red;
+.search-replace-modal-close-button {
+	float: right;
+	background: #fff;
+	border: none;
+	padding: 15px;
 }
 
-
-.search-replace-replace-value {
-	color: #fff;
-	background-color: green;
-
-
-}
-.insr_sql_button_wrap .button {
-	margin: 5px;
-}
-
-.disabled, .form-table .disabled th {
-	color: grey;
+.search-replace-modal-close-button:before {
+	content: "\f158";
+	font: 400 20px/1 dashicons;
+	vertical-align: middle;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #666;
 
 }
 
-/*width of file upload input on import page */
-#file_to_upload {
-	width: 100%;
-}
 

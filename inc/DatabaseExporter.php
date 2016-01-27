@@ -78,9 +78,9 @@ class DatabaseExporter {
 
 		$table_prefix = $this->dbm->get_base_prefix();
 
+		//wp_blogs needs special treatment in multisite domain replace, we need to check later if we are working on it
 		$wp_blogs_table = $table_prefix . 'blogs';
 
-		$datum                 = date( "Ymd_B" );
 		$this->backup_filename = $new_table_prefix =="" ?DB_NAME . "_$table_prefix.sql": DB_NAME . "_$new_table_prefix.sql";
 
 		if ( is_writable( $this->backup_dir ) ) {
@@ -412,7 +412,7 @@ class DatabaseExporter {
 	 * @param string $filename The name of the file to be downloaded
 	 * @param bool   $compress If TRUE, gz compression is used
 	 *
-	 * @return bool TRUE if delivery was successful
+	 * @return bool FALSE if error , has to DIE when file is delivered
 	 */
 	public function deliver_backup( $filename = '', $compress = FALSE ) {
 
@@ -432,7 +432,7 @@ class DatabaseExporter {
 				@ini_set( 'memory_limit', '64M' );
 			}
 
-			if ( file_exists( $diskfile ) && empty( $_GET[ 'download-retry' ] ) ) {
+			if ( file_exists( $diskfile )  ) {
 				/**
 				 * Try gzipping with an external application
 				 */
@@ -470,7 +470,7 @@ class DatabaseExporter {
 				/*
 				 *
 				 */
-			} elseif ( file_exists( $gz_diskfile ) && empty( $_GET[ 'download-retry' ] ) ) {
+			} elseif ( file_exists( $gz_diskfile )  ) {
 				$diskfile = $gz_diskfile;
 				$filename = "{$filename}.gz";
 			}

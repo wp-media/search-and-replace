@@ -40,7 +40,7 @@ class Admin {
 
 			//if no changes found report that
 			if ( count( $report [ 'changes' ] ) == 0 ) {
-				echo '<p>' . __( 'Search pattern not found.', 'insr' ) . '</p>';
+				echo '<p>' .esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
 			}
 
 			echo '</div>';
@@ -98,7 +98,7 @@ class Admin {
 		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
 		<div id="changes-modal" class="search-replace-modal " style="display: none;">
 			<div class="search-replace-modal-header">
-				<button type="button" id="changes-modal-close" class="notice-dismiss"></button>
+				<button type="button" id="changes-modal-close" class="search-replace-modal-close-button"></button>
 			</div>
 			<div class="search-replace-changes-modal-content">
 		<?php
