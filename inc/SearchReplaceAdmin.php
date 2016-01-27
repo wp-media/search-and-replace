@@ -145,12 +145,12 @@ class SearchReplaceAdmin extends Admin {
 
 		echo '<div class = "updated notice is-dismissible">';
 		if ( $dry_run ) {
-			echo '<p><strong>' .esc_html__( 'Dry run is selected. No changes were made to the database and no SQL file was written .',
-			                         'insr' ) . '</strong></p>';
+			echo '<p><strong>' . esc_html__( 'Dry run is selected. No changes were made to the database and no SQL file was written .',
+			                                 'insr' ) . '</strong></p>';
 
 		} else {
-			echo '<p><strong>' .esc_html__( 'The following changes were made to the database: ',
-			                         'insr' ) . '</strong></p>';
+			echo '<p><strong>' . esc_html__( 'The following changes were made to the database: ',
+			                                 'insr' ) . '</strong></p>';
 		}
 		$this->replace->set_dry_run( $dry_run );
 

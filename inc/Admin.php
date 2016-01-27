@@ -40,7 +40,7 @@ class Admin {
 
 			//if no changes found report that
 			if ( count( $report [ 'changes' ] ) == 0 ) {
-				echo '<p>' .esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
+				echo '<p>' . esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
 			}
 
 			echo '</div>';
@@ -83,11 +83,9 @@ class Admin {
 		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
 		$delimiter         = array( " ...", "...<br> " );
 
-		$msg = sprintf( _n( '%s table was processed.', '%s tables were processed. ',$report[ 'tables' ], 'insr' ),$report[ 'tables' ]);
+		$msg = sprintf( _n( '%s table was processed.', '%s tables were processed. ', $report[ 'tables' ], 'insr' ), $report[ 'tables' ] );
 
-
-		$msg .= sprintf( _n( '%s cell needs to be updated. ', '%s cells need to be updated. ',$report[ 'changes_count' ], 'insr' ),$report[ 'changes_count' ]);
-
+		$msg .= sprintf( _n( '%s cell needs to be updated. ', '%s cells need to be updated. ', $report[ 'changes_count' ], 'insr' ), $report[ 'changes_count' ] );
 
 		echo esc_html( $msg );
 
@@ -162,8 +160,7 @@ class Admin {
 			}
 			//if file name contains path or does not end with '.sql' exit
 			$ext = strrchr( $sql_file, '.' );
-			if (strpos ($sql_file, "/") !== false || $ext !=".sql")
-			{
+			if ( strpos( $sql_file, "/" ) !== FALSE || $ext != ".sql" ) {
 				die;
 			}
 			$this->dbe->deliver_backup( $sql_file, $compress );

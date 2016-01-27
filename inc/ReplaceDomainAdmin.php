@@ -25,8 +25,6 @@ class ReplaceDomainAdmin extends Admin {
 		require_once( 'templates/replace_domain.php' );
 	}
 
-
-
 	/**
 	 *displays the html for the submit button
 	 */
@@ -47,20 +45,19 @@ class ReplaceDomainAdmin extends Admin {
 
 		$tables = $this->dbm->get_tables();
 
-			$search  =esc_url_raw( $_POST[ 'search' ]);
-			$replace =esc_url_raw( $_POST[ 'replace' ]);
-		$new_db_prefix = (isset ($_POST['new_db_prefix']))? esc_attr($_POST['new_db_prefix']):"";
+		$search        = esc_url_raw( $_POST[ 'search' ] );
+		$replace       = esc_url_raw( $_POST[ 'replace' ] );
+		$new_db_prefix = ( isset ( $_POST[ 'new_db_prefix' ] ) ) ? esc_attr( $_POST[ 'new_db_prefix' ] ) : "";
 
+		//search field should not be empty
+		if ( $replace == '' ) {
+			$this->errors->add( 'empty_replace', __( 'Replace Field should not be empty.', 'insr' ) );
+			$this->display_errors();
 
-			//search field should not be empty
-			if ( $replace == '' ) {
-				$this->errors->add( 'empty_replace', __( 'Replace Field should not be empty.', 'insr' ) );
-				$this->display_errors();
-
-				return;
+			return;
 
 		}
-		$this->create_backup_file( $search, $replace, $tables, true, $new_db_prefix );
+		$this->create_backup_file( $search, $replace, $tables, TRUE, $new_db_prefix );
 	}
 
 }
