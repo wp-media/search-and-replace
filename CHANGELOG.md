@@ -1,6 +1,7 @@
 # Changelog
 
 ## v3.0.1 (2016-01-27)
+- -Thanks to [Sven Hinse](https://github.com/s-hinse/) for help to maintain the plugin-
 - Changeable table prefix on replace Site URL tab enhancement
 - Implement database backup & import tab
 - Implement Dry Run: Keep for Search and Replace
