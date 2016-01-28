@@ -40,35 +40,37 @@ class Init {
 	}
 
 	/**
-	 *registers the Plugin stylesheet
+	 * Registers the Plugin stylesheet.
+	 *
+	 * @param $hook
 	 */
 
 	public function register_admin_css( $hook ) {
 
 		//register on plugin  pages only
-		if ( in_array( $hook, $this->plugin_pages ) ) {
+		if ( in_array( $hook, self::$plugin_pages, FALSE ) ) {
 
-			$url    = ( INSR_DIR . '/assets/css/inpsyde-search-replace'.$this->suffix.'.css' );
-			$handle = "insr-styles";
+			$url    = ( INSR_DIR . '/assets/css/inpsyde-search-replace' . $this->suffix . '.css' );
+			$handle = 'insr-styles';
 			wp_register_script( $handle, $url );
 			wp_enqueue_style( $handle, $url, array(), FALSE, FALSE );
 		}
 	}
 
 	/**
-	 *registers the Plugin javascript
+	 * Registers the Plugin javascript.
+	 *
+	 * @param $hook
 	 */
 
 	public function register_admin_js( $hook ) {
 
 		//register on plugin pages only
-
 		{
-			if ( in_array( $hook, $this->plugin_pages ) ) {
+			if ( in_array( $hook, self::$plugin_pages, FALSE ) ) {
 
-
-				$url    = ( INSR_DIR . '/assets/js/inpsyde-search-replace'.$this->suffix.'.js' );
-				$handle = "insr-js";
+				$url    = ( INSR_DIR . '/assets/js/inpsyde-search-replace' . $this->suffix . '.js' );
+				$handle = 'insr-js';
 				wp_register_script( $handle, $url );
 				wp_enqueue_script( $handle, $url, array(), FALSE, FALSE );
 			}
@@ -107,7 +109,7 @@ class Init {
 	}
 
 	/**
-	 *removes the plugins submenu pages from admin menu
+	 * Removes the plugins submenu pages from admin menu.
 	 */
 	public function remove_submenu_pages() {
 
@@ -118,7 +120,7 @@ class Init {
 	}
 
 	/**
-	 *callback function for search and replace page
+	 * Callback function for search and replace page
 	 */
 	public function show_search_replace_page() {
 
@@ -127,7 +129,7 @@ class Init {
 	}
 
 	/**
-	 *callback function for db backup  page
+	 * Callback function for db backup  page
 	 */
 	public function show_db_backup_page() {
 
@@ -136,7 +138,7 @@ class Init {
 	}
 
 	/**
-	 *callback function for replace domain page
+	 * Callback function for replace domain page
 	 */
 	public function show_replace_domain_page() {
 
@@ -145,7 +147,7 @@ class Init {
 	}
 
 	/**
-	 *callback function for import page
+	 * Callback function for import page
 	 */
 	public function show_import_page() {
 
@@ -154,7 +156,7 @@ class Init {
 	}
 
 	/**
-	 *callback function for import page
+	 * Callback function for import page.
 	 */
 	public function show_credits_page() {
 
@@ -163,14 +165,14 @@ class Init {
 	}
 
 	/**
-	 * checks for script debug mode
+	 * Checks for script debug mode.
+	 *
 	 * @return string suffix for css and js files
 	 */
 	public function get_script_debug() {
 
-	$script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
-	$suffix       = $script_debug ? '' : '.min';
-	return $suffix;
-}
+		$script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+		return $script_debug ? '' : '.min';
+	}
 
 }
