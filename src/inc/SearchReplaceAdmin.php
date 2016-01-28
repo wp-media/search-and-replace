@@ -33,7 +33,7 @@ class SearchReplaceAdmin extends Admin {
 
 		//check if "search replace"-button was clicked
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "search_replace" ) {
+		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "search_replace" && check_admin_referer(  'do_search_replace', 'insr_nonce')) {
 			$this->handle_search_replace_event();
 
 		}

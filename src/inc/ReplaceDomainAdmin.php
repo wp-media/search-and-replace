@@ -17,7 +17,7 @@ class ReplaceDomainAdmin extends Admin {
 	 */
 	public function show_page() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "replace_domain" ) {
+		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "replace_domain"  && check_admin_referer( 'replace_domain', 'insr_nonce' )   ) {
 			$this->handle_replace_domain_event();
 
 		}

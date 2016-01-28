@@ -31,7 +31,7 @@ class Admin {
 	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix = "" ) {
 
 		$report = $this->dbe->db_backup( $search, $replace, $tables, $domain_replace, $new_table_prefix );
-		if ( $search != '' ) {
+		if ( $search != ''  && $search != $replace) {
 			echo '<div class = "updated notice is-dismissible">';
 			//show changes if there are any
 			if ( count( $report[ 'changes' ] ) > 0 ) {
@@ -39,7 +39,7 @@ class Admin {
 			}
 
 			//if no changes found report that
-			if ( count( $report [ 'changes' ] ) == 0 ) {
+			if ( count( $report [ 'changes' ] ) == 0) {
 				echo '<p>' .esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
 			}
 
