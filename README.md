@@ -7,7 +7,7 @@
 - Imports a SQL file into your database.
 
 ##Requirements:
-PHP 5.3. +
+PHP 5.4. +
 WordPress 4.x (might work with 3.x, but not tested yet)
 
 ##Installation

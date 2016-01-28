@@ -39,7 +39,7 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress s
 
 = Requirements =
 - WordPress Multisite 4.0+.
-- PHP 5.2.4, newer PHP versions will work faster.
+- PHP 5.4+, newer PHP versions will work faster.
 
 
 == Screenshots ==

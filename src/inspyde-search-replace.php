@@ -32,7 +32,7 @@ function insr_activate() {
 
 	load_textdomain();
 
-	$correct_php_version = version_compare( phpversion(), '5.3', '>=' );
+	$correct_php_version = version_compare( phpversion(), '5.4', '>=' );
 
 	if ( ! $correct_php_version ) {
 		deactivate_plugins( basename( __FILE__ ) );
@@ -41,7 +41,7 @@ function insr_activate() {
 			'<p>' .
 			sprintf(
 				__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'insr' ),
-				5.3
+				5.4
 			)
 			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'back', 'insr' ) . '</a>'
 		);
