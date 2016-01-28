@@ -2,15 +2,14 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Inpsyde search and replace\n"
-"Report-Msgid-Bugs-To: Sven Hinse<webdev@svenhinse.de>\n"
-"POT-Creation-Date: 2012-10-05 10:50+0100\n"
-"POT-Revision-Date: Wed Jan 27 2016 09:53:24 GMT+0100 (Mitteleuropäische "
-"Zeit)\n"
+"Project-Id-Version: Inpsyde Search & Replace\n"
+"Report-Msgid-Bugs-To: Inpsyde Gmbh<hello@inpsyde.com>\n"
+"POT-Creation-Date: 2016-01-28 10:42+0100\n"
+"POT-Revision-Date: Wed Jan 27 2016 09:53:24 GMT+0100 (Mitteleuropäische Zeit)\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Sven Hinse<webdev@svenhinse.de>\n"
-"Language-Team: <>\n"
-"Language: \n"
+"Last-Translator: Inpsyde GmbH <hello@inpsyde.com>\n"
+"Language-Team: Inpsyde GmbH <hello@inpsyde.com>\n"
+"Language: en_US\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,12 +21,9 @@ msgstr ""
 "_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
 "esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
 "esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SearchPath-0: .\n"
-"X-Poedit-Language: English\n"
-"X-Poedit-Country: UNITED STATES\n"
-"X-Poedit-Bookmarks: \n"
-"X-Generator: Loco - https://localise.biz/"
 
 #. Name of the plugin
 msgid "Inpsyde Search & Replace"
@@ -195,13 +191,13 @@ msgid "Create SQL File"
 msgstr ""
 
 #: ../inc/Init.php:90 ../inc/Init.php:91 ../inc/templates/db_backup.php:15 ..
-#: /inc/templates/replace_domain.php:15 ../inc/templates/search_replace.php:15 ..
+#: /inc/templates/replace_domain.php:15 ../inc/templates/search_replace.php:15
 #: /inc/templates/sql_import.php:15
 msgid "Backup Database"
 msgstr ""
 
 #: ../inc/Init.php:94 ../inc/Init.php:95 ../inc/templates/db_backup.php:16 ..
-#: /inc/templates/replace_domain.php:16 ../inc/templates/search_replace.php:16 ..
+#: /inc/templates/replace_domain.php:16 ../inc/templates/search_replace.php:16
 #: /inc/templates/sql_import.php:16
 msgid "Replace Domain URL"
 msgstr ""
@@ -225,8 +221,8 @@ msgstr ""
 
 #: ../inc/SearchReplaceAdmin.php:148
 msgid ""
-"Dry run is selected. No changes were made to the database and no SQL file "
-"was written ."
+"Dry run is selected. No changes were made to the database and no SQL file was "
+"written ."
 msgstr ""
 
 #: ../inc/SearchReplaceAdmin.php:152
@@ -243,14 +239,14 @@ msgstr ""
 
 #: ../inc/SearchReplaceAdmin.php:194
 msgid ""
-"Your search contains your current site url. Replacing your site url will "
-"most likely cause your site to break. If you want to change the URL (and you "
-"know what you doing), please use the export function and make sure you "
-"backup your database before reimporting the changed SQL."
+"Your search contains your current site url. Replacing your site url will most "
+"likely cause your site to break. If you want to change the URL (and you know "
+"what you doing), please use the export function and make sure you backup your "
+"database before reimporting the changed SQL."
 msgstr ""
 
 #: ../inc/SqlImportAdmin.php:38 ../inc/templates/db_backup.php:18 ..
-#: /inc/templates/replace_domain.php:18 ../inc/templates/search_replace.php:19 ..
+#: /inc/templates/replace_domain.php:18 ../inc/templates/search_replace.php:19
 #: /inc/templates/sql_import.php:17
 msgid "Import SQL file"
 msgstr ""

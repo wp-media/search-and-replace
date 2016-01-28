@@ -3,12 +3,12 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Inpsyde search and replace\n"
-"Report-Msgid-Bugs-To: Sven Hinse<webdev@svenhinse.de>\n"
+"Project-Id-Version: Inpsyde Search & Replace\n"
+"Report-Msgid-Bugs-To: Inpsyde Gmbh<hello@inpsyde.com>\n"
 "POT-Creation-Date: 2016-01-27 09:57+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: <>\n"
+"Last-Translator: Guido Brand <g.brand@inpsyde.com>\n"
+"Language-Team: Inpsyde GmbH <hello@inpsyde.com>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #. Name of the plugin
 msgid "Inpsyde Search & Replace"
-msgstr "Inpsyde Search & Replace"
+msgstr "Suchen & Ersetzen"
 
 #. URI of the plugin
 msgid "${Plugin_Uri}"

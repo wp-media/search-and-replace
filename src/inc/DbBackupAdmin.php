@@ -26,7 +26,7 @@ class DbBackupAdmin extends Admin {
 	}
 
 	/**
-	 *displays the html for the submit button
+	 * displays the html for the submit button
 	 */
 	protected function show_submit_button() {
 

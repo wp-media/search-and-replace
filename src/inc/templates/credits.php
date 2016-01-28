@@ -40,3 +40,4 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 	</ol>
 	<p><?php _e( "If you love open source and especially WordPress, if you love to organize your working days by yourself and want to use your pragmatic problem-solving skills and result-oriented work methods: <a href='mailto:jobs@inpsyde.com'>join our team</a>!", 'insr' ); ?> </p>
+

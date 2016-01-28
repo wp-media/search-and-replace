@@ -63,7 +63,7 @@ class SearchReplaceAdmin extends Admin {
 		foreach ( $tables as $table ) {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 
-			//check if dry run. if rdy run && current table is in "selected" array add selected attribute
+			//check if dry run. if dry run && current table is in "selected" array add selected attribute
 			if ( isset ( $_POST [ 'dry_run' ] ) && in_array( $table, $selected_tables ) ) {
 				echo "<option value='$table' selected='selected'>$table $table_size </option>";
 
@@ -97,7 +97,7 @@ class SearchReplaceAdmin extends Admin {
 
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 
-		//if dry run is checked we  run the  the replace function with dry run and return
+		//if dry run is checked we run the replace function with dry run and return
 		if ( $dry_run == TRUE ) {
 			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
 
@@ -185,7 +185,7 @@ class SearchReplaceAdmin extends Admin {
 
 			return;
 		}
-		//check if the user tries to replace domain name into the db
+		//check if the user tries to replace domain name into the database
 		if ( isset ( $_POST[ 'export_or_save' ] ) && $_POST [ 'export_or_save' ] == 'save_to_db' ) {
 			$search            = $_POST[ 'search' ];
 			$contains_site_url = strpos( $search, $this->get_stripped_site_url() );

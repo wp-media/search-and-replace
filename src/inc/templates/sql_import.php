@@ -33,5 +33,3 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			</tr>
 		</table>
 	</form>
-
-

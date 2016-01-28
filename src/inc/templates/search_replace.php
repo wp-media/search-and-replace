@@ -20,7 +20,6 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		<a class="nav-tab" href="<?php echo admin_url() ?>tools.php?page=credits"><?php esc_html_e( 'Credits', 'insr' ); ?></a>
 	</h2>
 
-
 	<form action="" method="post">
 		<table class="form-table">
 			<tbody>
@@ -74,5 +73,3 @@ if ( ! defined( 'INSR_DIR' ) ) {
 	</form>
 
 </div>
-
-

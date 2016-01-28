@@ -5,7 +5,6 @@
 
 jQuery( document ).ready( function() {
 
-
 	(
 		function( $ ) {
 			//search-replace-tab:  greys out export/save to db option when dry run is selected
@@ -71,6 +70,3 @@ jQuery( document ).ready( function() {
 	)( jQuery );
 
 } );
-
-
-

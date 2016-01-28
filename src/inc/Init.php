@@ -16,8 +16,6 @@ class Init {
 	 */
 	private $suffix;
 
-
-
 	/**
 	 * @param string $file : The path to the Plugin main file
 	 */
@@ -28,8 +26,6 @@ class Init {
 		define( 'INSR_DIR', $plugin_dir_url );
 
 		new Admin();
-
-
 
 		//add plugin menu & plugin css
 		//check for debug mode
@@ -65,7 +61,7 @@ class Init {
 
 	public function register_admin_js( $hook ) {
 
-		//register on plugin  pages only
+		//register on plugin pages only
 
 		{
 			if ( in_array( $hook, $this->plugin_pages ) ) {

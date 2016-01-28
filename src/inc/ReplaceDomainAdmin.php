@@ -25,8 +25,6 @@ class ReplaceDomainAdmin extends Admin {
 		require_once( 'templates/replace_domain.php' );
 	}
 
-
-
 	/**
 	 *displays the html for the submit button
 	 */
