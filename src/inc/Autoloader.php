@@ -4,11 +4,9 @@ namespace Inpsyde\searchReplace\inc;
 
 /**
  * PSR-4 Autoloader Implementation
- *
  * Usage:
  * $autoloader = new \Inpsyde\[Core | inc | YourClassDirectory ]\Autoloader( __NAMESPACE__, __DIR__ );
  * $autoloader->register();
- *
  * To function Classes and Files need to share the exact same name,
  * e.g. The file for the class "FooBar" must be named "FooBar.php"
  *
@@ -56,8 +54,6 @@ class Autoloader {
 		$this->_namespace = trim( $namespace, '\\' ) . '\\';
 		$this->_basepath  = rtrim( $path, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
 		$this->_extension = $extension;
-
-		return $this;
 	}
 
 	/**
