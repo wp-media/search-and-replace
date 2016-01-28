@@ -7,7 +7,6 @@ use InvalidArgumentException;
  * Class Replace
  * runs search & replace on a database
  * adapted from: https://github.com/interconnectit/Search-Replace-DB/blob/master/srdb.class.php
-
  */
 //TODO: Use WP_Error for error reporting
 class Replace {
@@ -159,7 +158,7 @@ class Replace {
 
 					$data_to_fix = $row[ $column ];
 
-					if ( $column == $primary_key ) {
+					if ( $column === $primary_key ) {
 						$where_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $data_to_fix ) . '"';
 						continue;
 					}
@@ -175,7 +174,7 @@ class Replace {
 					$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
 
 					// Something was changed
-					if ( $edited_data != $data_to_fix ) {
+					if ( $edited_data !== $data_to_fix ) {
 
 						$table_report[ 'change' ] ++;
 
@@ -184,8 +183,8 @@ class Replace {
 						$table_report[ 'changes' ][] = array(
 							'row'    => $table_report[ 'rows' ],
 							'column' => $column,
-							'from'   => ( $data_to_fix ),
-							'to'     => ( $edited_data ),
+							'from'   => $data_to_fix,
+							'to'     => $edited_data,
 						);
 
 						$update_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $edited_data ) . '"';
@@ -196,7 +195,7 @@ class Replace {
 				}
 
 				// Determine what to do with updates.
-				if ( $this->dry_run === TRUE ) {
+				if ( TRUE === $this->dry_run ) {
 					// Don't do anything if a dry run
 				} elseif ( $update && ! empty( $where_sql ) ) {
 					// If there are changes to make, run the query.
@@ -204,8 +203,9 @@ class Replace {
 					$result = $this->dbm->update( $table, $update_sql, $where_sql );
 
 					if ( ! $result ) {
-						$table_report[ 'errors' ][] = sprintf( __( 'Error updating row: %d.', 'insr' ),
-						                                       $row );
+						$table_report[ 'errors' ][] = sprintf(
+							__( 'Error updating row: %d.', 'insr' ),
+							$row );
 					} else {
 						$table_report[ 'updates' ] ++;
 					}
@@ -222,19 +222,19 @@ class Replace {
 	}
 
 	/**
-	 * Take a serialised array and unserialise it replacing elements as needed and
-	 * unserialising any subordinate arrays and performing the replace on those too.
+	 * Take a serialised array and unserialize it replacing elements as needed and
+	 * unserializing any subordinate arrays and performing the replace on those too.
 	 *
-	 * @param string $from       String we're looking to replace.
-	 * @param string $to         What we want it to be replaced with
-	 * @param array  $data       Used to pass any subordinate arrays back to in.
-	 * @param bool   $serialised Does the array passed via $data need serialising.
+	 * @param string              $from       String we're looking to replace.
+	 * @param string              $to         What we want it to be replaced with
+	 * @param array|string|object $data       Used to pass any subordinate arrays back to in.
+	 * @param bool                $serialised Does the array passed via $data need serialising.
 	 *
-	 * @return array    The original array with all elements replaced as needed.
+	 * @return array The original array with all elements replaced as needed.
 	 */
 	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = FALSE ) {
 
-		// some unserialised data cannot be re-serialised eg. SimpleXMLElements
+		// some unserialized data cannot be re-serialised eg. SimpleXMLElements
 		try {
 
 			if ( is_string( $data ) && ( $unserialized = @unserialize( $data ) ) !== FALSE ) {
@@ -291,11 +291,11 @@ class Replace {
 	protected function is_json( $string, $strict = FALSE ) {
 
 		$json = @json_decode( $string, TRUE );
-		if ( $strict == TRUE && ! is_array( $json ) ) {
+		if ( $strict === TRUE && ! is_array( $json ) ) {
 			return FALSE;
 		}
 
-		return ! ( $json == NULL || $json == FALSE );
+		return ! ( $json === NULL || $json === FALSE );
 	}
 
 	/**
@@ -304,7 +304,7 @@ class Replace {
 	 * @link   http://php.net/manual/en/function.mysql-real-escape-string.php#101248
 	 * @access public
 	 *
-	 * @param  string $input The string to escape.
+	 * @param  array|string $input The string to escape.
 	 *
 	 * @return string
 	 */
@@ -315,17 +315,22 @@ class Replace {
 			return array_map( __METHOD__, $input );
 		}
 		if ( ! empty( $input ) && is_string( $input ) ) {
-			return str_replace( array( '\\', "\0", "\n", "\r", "'", '"', "\x1a" ),
-			                    array( '\\\\', '\\0', '\\n', '\\r', "\\'", '\\"', '\\Z' ), $input );
+			return str_replace(
+				array( '\\', "\0", "\n", "\r", "'", '"', "\x1a" ),
+				array( '\\\\', '\\0', '\\n', '\\r', "\\'", '\\"', '\\Z' ),
+				$input
+			);
 		}
 
 		return $input;
 	}
 
 	/**
-	 * Sets the dry run option
+	 * Sets the dry run option.
 	 *
 	 * @param bool $state : TRUE for dry run, FALSE for writing changes to DB
+	 *
+	 * @return bool
 	 */
 	public function set_dry_run( $state ) {
 
