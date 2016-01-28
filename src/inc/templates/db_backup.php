@@ -4,7 +4,8 @@
  */
 // Prevent direct access.
 if ( ! defined( 'INSR_DIR' ) ) {
-	//exit;
+	echo "Hi there!  I'm just a part of plugin, not much I can do when called directly.";
+	exit;
 }
 ?>
 <div class="wrap">
