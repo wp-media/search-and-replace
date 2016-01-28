@@ -1,4 +1,4 @@
-=== MultilingualPress ===
+=== Search & replace ===
 Contributors: inpsyde, Bueltge, s-hinse, rene_reimann
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0

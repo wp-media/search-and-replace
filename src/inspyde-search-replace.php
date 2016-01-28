@@ -1,6 +1,6 @@
 <?php # -*- coding: utf-8 -*-
 /**
- * Plugin Name:   Inpsyde Search & Replace
+ * Plugin Name:   Search & Replace
  * Plugin URI:    https://wordpress.org/plugins/search-and-replace/
  * Description:	  Search & Replace data in your WordPress. Backup & import your database. Change tableprefix. Change your domain
  * Author:        Inpsyde GmbH
