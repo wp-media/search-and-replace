@@ -187,10 +187,7 @@ class DatabaseExporter {
 			$new_table = $this->get_new_table_name( $table, $new_table_prefix );
 
 		}
-		// Increase script execution time-limit to 15 min for every table.
-		if ( ! ini_get( 'safe_mode' ) ) {
-			@set_time_limit( 15 * 60 );
-		}
+
 		// Create the SQL statements
 		$this->stow( "# --------------------------------------------------------\n" );
 		$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $new_table ) ) . "\n" );
