@@ -5,10 +5,9 @@ use InvalidArgumentException;
 
 /**
  * Class Replace
- *
  * runs search & replace on a database
  * adapted from: https://github.com/interconnectit/Search-Replace-DB/blob/master/srdb.class.php
- *
+
  */
 //TODO: Use WP_Error for error reporting
 class Replace {
@@ -49,7 +48,7 @@ class Replace {
 	public function __construct( $dbm ) {
 
 		if ( ! $dbm instanceof DatabaseManager ) {
-			throw new \InvalidArgumentException ( "Class Replace needs Object of Type DatabaseManager as Parameter" );
+			throw new \InvalidArgumentException ( 'Class Replace needs Object of Type DatabaseManager as Parameter' );
 
 		}
 
@@ -60,7 +59,7 @@ class Replace {
 	/**
 	 * The main loop triggered in step 5. Up here to keep it out of the way of the
 	 * HTML. This walks every table in the db that was selected in step 3 and then
-	 * walks every row and column replacing all occurences of a string with another.
+	 * walks every row and column replacing all occurrences of a string with another.
 	 * We split large tables into  blocks (size is set via $page_size)when dealing with them to save
 	 * on memory consumption.
 	 *
@@ -69,46 +68,45 @@ class Replace {
 	 * @param string $tables  The name of the table we want to look at.
 	 *
 	 * @return array    Collection of information gathered during the run.
-	 *
-	 *
 	 */
 
 	public function run_search_replace( $search, $replace, $tables ) {
 
 		$report = array(
-			'errors'  => NULL,
-			'changes' => array(),
-			'tables' => '0',
-			'changes_count'=>'0'
+			'errors'        => NULL,
+			'changes'       => array(),
+			'tables'        => '0',
+			'changes_count' => '0',
 		);
 
-		foreach ( $tables as $table ) {
+		foreach ( (array) $tables as $table ) {
 			//count tables
-			$report ['tables']++;
+			$report [ 'tables' ] ++;
 			$table_report = $this->replace_values( $search, $replace, $table );
 			//log changes if any
 
-			if ( $table_report[ 'change' ] != 0 ) {
+			if ( 0 !== $table_report[ 'change' ] ) {
 				$report[ 'changes' ][ $table ] = $table_report;
 
-				$report ['changes_count'] += $table_report['change'];
+				$report [ 'changes_count' ] += $table_report[ 'change' ];
 			}
 
 		}
+
 		return $report;
 	}
 
 	public function replace_values( $search = '', $replace = '', $table ) {
 
 		$table_report = array(
-			'table_name'=>$table,
-			'rows'    => 0,
-			'change'  => 0,
-			'changes' => array(),
-			'updates' => 0,
-			'start'   => microtime(),
-			'end'     => microtime(),
-			'errors'  => array(),
+			'table_name' => $table,
+			'rows'       => 0,
+			'change'     => 0,
+			'changes'    => array(),
+			'updates'    => 0,
+			'start'      => microtime(),
+			'end'        => microtime(),
+			'errors'     => array(),
 		);
 
 		// check we have a search string, bail if not
@@ -187,7 +185,7 @@ class Replace {
 							'row'    => $table_report[ 'rows' ],
 							'column' => $column,
 							'from'   => ( $data_to_fix ),
-							'to'     => ( $edited_data )
+							'to'     => ( $edited_data ),
 						);
 
 						$update_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $edited_data ) . '"';
