@@ -36,7 +36,8 @@ function activate() {
 
 	load_textdomain();
 
-	$correct_php_version = version_compare( phpversion(), '5.4', '>=' );
+	$required_php_version = '5.4.0';
+	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
 
 	if ( ! $correct_php_version ) {
 		deactivate_plugins( basename( __FILE__ ) );
@@ -45,9 +46,9 @@ function activate() {
 			'<p>' .
 			sprintf(
 				esc_attr__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'insr' ),
-				5.4
+				$required_php_version
 			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'back', 'insr' ) . '</a>'
+			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . esc_attr__( 'back', 'insr' ) . '</a>'
 		);
 
 	}
