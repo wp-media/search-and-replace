@@ -27,7 +27,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 	<h2><?php _e( "We are Inpsyde", 'insr' ); ?></h2>
 	<p><?php _e( "Inpsyde has developed enterprise solutions with the world's most popular open-source CMS since it was a kitten. Still do, inconvincibly convinced.", 'insr' ); ?> </p>
-	<p><?php _e( "Inpsyde is a WordPress <a href='https://vip.wordpress.com/partner/inpsyde/'>VIP Service Partner</a> and <a href='https://www.woothemes.com/experts/inpsyde-gmbh/'>WooCommerce Experten</a>.", 'insr' ); ?> </p>
+	<p><?php _e( "Inpsyde is a WordPress <a href='https://vip.wordpress.com/partner/inpsyde/'>VIP Service Partner</a> and <a href='https://www.woothemes.com/experts/inpsyde-gmbh/'>WooCommerce Expert</a>.", 'insr' ); ?> </p>
 	<p><?php _e( "<a href='https://profiles.wordpress.org/inpsyde/#content-plugins'>Look at our other WordPress plugins</a>", 'insr' ); ?> </p>
 
 
