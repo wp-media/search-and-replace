@@ -73,14 +73,15 @@ class DatabaseManager {
 	 * Returns the number of rows in a table.
 	 *
 	 * @access public
+	 *
+	 * @param $table
+	 *
 	 * @return int
 	 */
 	public function get_rows( $table ) {
 
 		$table = esc_sql( $table );
-		$rows  = $this->wpdb->get_var( "SELECT COUNT(*) FROM $table" );
-
-		return $rows;
+		return $this->wpdb->get_var( "SELECT COUNT(*) FROM $table" );
 	}
 
 	/**
@@ -101,7 +102,7 @@ class DatabaseManager {
 		if ( is_array( $fields ) ) {
 			foreach ( $fields as $column ) {
 				$columns[] = $column->Field;
-				if ( $column->Key == 'PRI' ) {
+				if ( 'PRI' === $column->Key ) {
 					$primary_key = $column->Field;
 				}
 			}
@@ -124,16 +125,29 @@ class DatabaseManager {
 		return $data;
 	}
 
+	/**
+	 * Update table.
+	 *
+	 * @param $table
+	 * @param $update_sql
+	 * @param $where_sql
+	 *
+	 * @return false|int
+	 */
 	public function update( $table, $update_sql, $where_sql ) {
 
 		$sql    = 'UPDATE ' . $table . ' SET ' . implode( ', ', $update_sql ) .
 		          ' WHERE ' . implode( ' AND ', array_filter( $where_sql ) );
-		$result = $this->wpdb->query( $sql );
-
-		return $result;
-
+		return $this->wpdb->query( $sql );
 	}
 
+	/**
+	 * Get table structure.
+	 *
+	 * @param $table
+	 *
+	 * @return array|null|object
+	 */
 	public function get_table_structure( $table ) {
 
 		return $this->wpdb->get_results( "DESCRIBE $table" );
@@ -151,11 +165,19 @@ class DatabaseManager {
 		return $this->wpdb->get_results( "SHOW CREATE TABLE $table", ARRAY_N );
 	}
 
+	/**
+	 * Flush table.
+	 */
 	public function flush() {
 
 		$this->wpdb->flush();
 	}
 
+	/**
+	 * Get base prefix.
+	 *
+	 * @return string
+	 */
 	public function get_base_prefix() {
 
 		return $this->wpdb->base_prefix;

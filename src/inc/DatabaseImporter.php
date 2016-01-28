@@ -1,15 +1,13 @@
 <?php
 /**
- *Database Importer for inpsyde search and replace plugin
+ * Database Importer for inpsyde search and replace plugin.
  */
 
 namespace Inpsyde\SearchReplace\inc;
 
 class DatabaseImporter {
 
-	public function __construct() {
-
-	}
+	public function __construct() {}
 
 	/**
 	 * imports a sql file via mysqli
