@@ -29,9 +29,6 @@ class Admin {
 	 * @param        $tables
 	 * @param bool   $domain_replace
 	 * @param string $new_table_prefix
-	 *
-	 * @return null
-	 * @internal param $void
 	 */
 	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix = '' ) {
 

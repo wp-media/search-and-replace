@@ -1,15 +1,10 @@
 <?php
-/**
- *
- */
 
 namespace Inpsyde\SearchReplace\inc;
 
 class DbBackupAdmin extends Admin {
 
 	public function construct() {
-
-		parent::__construct();
 	}
 
 	/**
@@ -17,9 +12,11 @@ class DbBackupAdmin extends Admin {
 	 */
 	public function show_page() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_export"  && check_admin_referer( 'sql_export', 'insr_nonce' ) ) {
+		if ( array_key_exists( 'action', $_POST )
+		     && 'sql_export' === $_POST[ 'action' ]
+		     && check_admin_referer( 'sql_export', 'insr_nonce' )
+		) {
 			$this->handle_sql_export_event();
-
 		}
 
 		require_once( 'templates/db_backup.php' );
