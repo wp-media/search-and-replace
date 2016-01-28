@@ -26,7 +26,7 @@ msgstr ""
 
 #. Name of the plugin
 msgid "Inpsyde Search & Replace"
-msgstr "Inpsyde Suchen & Ersetzen"
+msgstr "Suchen & Ersetzen"
 
 #. URI of the plugin
 msgid "${Plugin_Uri}"
