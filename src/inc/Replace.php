@@ -111,7 +111,7 @@ class Replace {
 
 		// check we have a search string, bail if not
 		if ( empty( $search ) ) {
-			array_push( $table_report[ 'errors' ], 'Search string is empty' );
+			$table_report[ 'errors' ][] = 'Search string is empty';
 
 			return $table_report;
 		}
