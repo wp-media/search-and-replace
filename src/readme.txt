@@ -3,7 +3,7 @@ Contributors: inpsyde, Bueltge, s-hinse, rene_reimann, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 4.4
-Stable tag: 4.0
+Stable tag: 3.0.0
 
 Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
 
