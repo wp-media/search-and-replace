@@ -17,7 +17,7 @@ class DbBackupAdmin extends Admin {
 	 */
 	public function show_page() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_export" ) {
+		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_export"  && check_admin_referer( 'sql_export', 'insr_nonce' ) ) {
 			$this->handle_sql_export_event();
 
 		}
