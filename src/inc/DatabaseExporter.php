@@ -40,6 +40,11 @@ class DatabaseExporter {
 	 */
 	protected $backup_filename;
 
+	/**
+	 * @var Store file path.
+	 */
+	protected $fp;
+
 	public function __construct( Replace $replace, DatabaseManager $dbm ) {
 
 		$this->errors = new \WP_Error();
