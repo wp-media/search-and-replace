@@ -18,7 +18,7 @@ class SqlImportAdmin extends Admin {
 	 */
 	public function show_page() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_import" ) {
+		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_import"  && check_admin_referer( 'sql_import', 'insr_nonce')) {
 			$this->handle_sql_import_event();
 
 		}
