@@ -32,7 +32,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 
 	<h2><?php _e( "Working at Inpsyde", 'insr' ); ?></h2>
-	<p><?php _e( "s the biggest WordPress enterprise in Europe we’re dynamically growing and constantly looking for new employees. So do you want to shape WordPress in an interesting and exciting working environment? Here we are!", 'insr' ); ?> </p>
+	<p><?php _e( "The biggest WordPress enterprise in Europe we’re dynamically growing and constantly looking for new employees. So do you want to shape WordPress in an interesting and exciting working environment? Here we are!", 'insr' ); ?> </p>
 	<p><?php _e( "At the moment we’re looking for developers for WordPress based products and services. If you’re not a developer and want to be part of us, we’d be happy to recieve your unsolicited application. At Inpsyde you can expect an open, modern and lively company culture:", 'insr' ); ?> </p>
 	<ol>
 		<li><?php _e( "challenging and exciting projects", 'insr' ); ?></li>
@@ -42,5 +42,5 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		<li><?php _e( "freedom for personal development and responsible, self-reliant action", 'insr' ); ?></li>
 
 	</ol>
-	<p><?php _e( "If you love open source and especially WordPress, if you love to organize your working days by yourself and want to use your pragmatic problem-solving skills and result-oriented work methods: <a href='mailto:jobs@inpsyde.com'>join our team</a>!", 'insr' ); ?> </p>
+	<p><?php _e( "If you love open source and especially WordPress, if you love to organize your working days by yourself and want to use your pragmatic problem-solving skills and result-oriented work methods: <a href='http://inpsyde.com/#jobs'>join our team</a>!", 'insr' ); ?> </p>
 
