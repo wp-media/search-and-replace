@@ -13,18 +13,18 @@ WordPress 4.x (might work with 3.x, but not tested yet)
 ##Installation
 1. Unpack the download package.
 2. Upload the files to the /wp-content/plugins/ directory.
-3. Activate the plugin in WordPress Backend.
+3. Activate the plugin in WordPress backend.
 
 ##Usage
 Go to `Tools -> Search & Replace` to view the plugins user interface.
 ![screenshot-6](https://raw.githubusercontent.com/inpsyde/search-and-replace/3.0.1/assets/screenshot-6.png)
 
 ####*Backup Database* tab
-**Do backup your Database!**
+**Urgent: Backup your database!**
 Please **always** backup your database before performing search/replace operations.
 
 **Multisite usage:**
-If you are running multisite and want to export the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only backup the tables of this subsite.
+If you are running a WordPress multisite and want to export the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only backup the tables of this subsite.
 
 ![screenshot-4](https://raw.githubusercontent.com/inpsyde/search-and-replace/3.0.1/assets/screenshot-4.png)
 
