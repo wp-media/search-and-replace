@@ -22,31 +22,36 @@ class Admin {
 	}
 
 	/**
-	 *checks input, creates a sql backup file, shows changes and download button
+	 * Checks input, creates a sql backup file, shows changes and download button.
 	 *
-	 * @param void
+	 * @param        $search
+	 * @param        $replace
+	 * @param        $tables
+	 * @param bool   $domain_replace
+	 * @param string $new_table_prefix
 	 *
 	 * @return null
+	 * @internal param $void
 	 */
-	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix = "" ) {
+	protected function create_backup_file( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix = '' ) {
 
 		$report = $this->dbe->db_backup( $search, $replace, $tables, $domain_replace, $new_table_prefix );
-		if ( $search != ''  && $search != $replace) {
-			echo '<div class = "updated notice is-dismissible">';
+		if ( $search !== '' && $search !== $replace ) {
+			echo '<div class="updated notice is-dismissible">';
 			//show changes if there are any
 			if ( count( $report[ 'changes' ] ) > 0 ) {
 				$this->show_changes( $report );
 			}
 
 			//if no changes found report that
-			if ( count( $report [ 'changes' ] ) == 0) {
-				echo '<p>' .esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
+			if ( 0 === count( $report [ 'changes' ] ) ) {
+				echo '<p>' . esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
 			}
 
 			echo '</div>';
 		}
 
-		$compress = ( isset ( $_POST[ 'compress' ] ) && $_POST [ 'compress' ] == 'on' ) ? TRUE : FALSE;
+		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
 
 		$this->show_download_button( $report[ 'filename' ], $compress );
 
@@ -56,22 +61,18 @@ class Admin {
 	 * displays the changes made to the db
 	 * echoes the changes in formatted html
 	 *
-	 *
-	 * @param $report           array 'errors' : WP-Error Object if Errors
-	 *
-	 * 'tables' : Number of tables processed
-	 * 'changes_count' : Number of changes made
+	 * @param $report                 array 'errors' : WP-Error Object if Errors
+	 *                                'tables' : Number of tables processed
+	 *                                'changes_count' : Number of changes made
 	 *                                'changes'
-	 *                          Array  with at least these elements:
-	 *                          'table_name'=>$[name of current table],
-	 *                          'changes' => array('row'    => [row that has been changed ],
-	 *                          'column' => [column that has been changed],
-	 *                          'from'   => ( old value ),
-	 *                          'to'     => ( $new value ),
+	 *                                Array  with at least these elements:
+	 *                                'table_name'=>$[name of current table],
+	 *                                'changes' => array('row'    => [row that has been changed ],
+	 *                                'column' => [column that has been changed],
+	 *                                'from'   => ( old value ),
+	 *                                'to'     => ( $new value ),
 	 *
 	 * @return string
-	 *
-	 *
 	 */
 
 	protected function show_changes( $report ) {
@@ -81,19 +82,31 @@ class Admin {
 		$search_highlight  = '<span class="search-replace-search-value">' . $search . '</span>';
 		$replace           = esc_html( $_POST [ 'replace' ] );
 		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
-		$delimiter         = array( " ...", "...<br> " );
+		$delimiter         = array( ' ...', '...<br>' );
 
-		$msg = sprintf( _n( '%s table was processed.', '%s tables were processed. ',$report[ 'tables' ], 'insr' ),$report[ 'tables' ]);
+		$msg = sprintf(
+			_n(
+				'%s table was processed.',
+				'%s tables were processed.',
+				$report[ 'tables' ],
+				'insr'
+			),
+			$report[ 'tables' ]
+		);
 
-
-		$msg .= sprintf( _n( '%s cell needs to be updated. ', '%s cells need to be updated. ',$report[ 'changes_count' ], 'insr' ),$report[ 'changes_count' ]);
-
-
+		$msg .= sprintf(
+			_n(
+				'%s cell needs to be updated.',
+				'%s cells need to be updated.',
+				$report[ 'changes_count' ],
+				'insr'
+			),
+			$report[ 'changes_count' ]
+		);
 		echo esc_html( $msg );
 
 		//create modal window for detailed view of changes
 		?>
-
 		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'insr' ); ?></a></p>
 		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
 		<div id="changes-modal" class="search-replace-modal " style="display: none;">
@@ -108,8 +121,10 @@ class Admin {
 
 			if ( $changes_made > 0 ) {
 				$table = $table_report[ 'table_name' ];
-				$html  = '<h2 class = "search-replace-modal-table-headline"><strong>' . __( 'Table', 'insr' ) . ': </strong>' . $table . ' <strong>' . __( 'Changes',
-				                                                                                                                                           'insr' ) . ': </strong> ' . $changes_made . '</h2>';
+				$html  = '<h2 class = "search-replace-modal-table-headline">';
+				$html .= '<strong>' . esc_attr__( 'Table:', 'insr' ) . '</strong> ' . $table;
+				$html .= '<strong>' . esc_attr__( 'Changes:', 'insr' ) . '</strong> ' . $changes_made;
+				$html .= '</h2>';
 
 				$html .= '<table class="search-replace-modal-table"><colgroup><col><col><col><col><col><col><col><col></colgroup>';
 
@@ -152,18 +167,21 @@ class Admin {
 	 */
 	public function deliver_backup_file() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "download_file" ) {
-			if ( isset ( $_POST[ 'sql_file' ] ) ) {
+		if ( isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === "download_file" ) {
+
+			$sql_file = '';
+			if ( isset( $_POST[ 'sql_file' ] ) ) {
 				$sql_file = $_POST[ 'sql_file' ];
 			}
 
-			if ( isset ( $_POST[ 'compress' ] ) ) {
+			$compress = FALSE;
+			if ( isset( $_POST[ 'compress' ] ) ) {
 				$compress = $_POST[ 'compress' ];
 			}
-			//if file name contains path or does not end with '.sql' exit
+
+			// If file name contains path or does not end with '.sql' exit.
 			$ext = strrchr( $sql_file, '.' );
-			if (strpos ($sql_file, "/") !== false || $ext !=".sql")
-			{
+			if ( FALSE !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
 				die;
 			}
 			$this->dbe->deliver_backup( $sql_file, $compress );
@@ -179,27 +197,30 @@ class Admin {
 	 */
 	protected function show_download_button( $file, $compress ) {
 
-		echo( '<div class="updated notice is-dismissible insr_sql_button_wrap">	<p>' );
-		echo __( 'Your SQL file was created!' );
-		echo( '</p><form action method="post">' );
+		echo '<div class="updated notice is-dismissible insr_sql_button_wrap"><p>';
+		esc_attr_e( 'Your SQL file was created!', 'insr' );
+		echo '</p><form action method="post">';
 		wp_nonce_field( 'download_sql', 'insr_nonce' );
-		$value = translate( "Download SQL File", "insr" );
+		$value = translate( 'Download SQL File', 'insr' );
 
-		$html = '<input type="hidden" name="action" value="download_file" /><input type ="hidden" name="sql_file" value="' . esc_attr( $file ) . '"><input type ="hidden" name="compress" value="' . esc_attr( $compress ) . '"><input id ="insr_submit"type="submit" value="' . esc_attr( $value ) . ' "class="button" /></form></div>';
+		$html = '<input type="hidden" name="action" value="download_file" />';
+		$html .= '<input type ="hidden" name="sql_file" value="' . esc_attr( $file ) . '">';
+		$html .= '<input type ="hidden" name="compress" value="' . esc_attr( $compress ) . '">';
+		$html .= '<input id ="insr_submit"type="submit" value="' . esc_attr( $value ) . ' "class="button" />';
+		$html .= '</form></div>';
 		echo $html;
-
 	}
 
 	/**
-	 * echoes the content of the $errors array as formatted HTML if it contains error messages
-	 *
+	 * Echoes the content of the $errors array as formatted HTML if it contains error messages.
 	 */
 	protected function display_errors() {
 
 		$messages = $this->errors->get_error_messages();
 		if ( count( $messages ) > 0 ) {
 
-			echo '<div class = "error notice is-dismissible"><strong>' . __( 'Errors:', 'insr' ) . '</strong><ul>';
+			echo '<div class="error notice is-dismissible"><strong>' . esc_html__( 'Errors:',
+			                                                                       'insr' ) . '</strong><ul>';
 
 			foreach ( $messages as $error ) {
 				echo '<li>' . esc_html( $error ) . '</li>';
@@ -209,7 +230,7 @@ class Admin {
 	}
 
 	/**
-	 *adds the action to "deliver backup file" on "init" to prevent "header already sent" error
+	 * Adds the action to "deliver backup file" on "init" to prevent "header already sent" error.
 	 */
 	private function add_file_download_action() {
 
@@ -217,19 +238,17 @@ class Admin {
 	}
 
 	/**
-	 *returns the site url, strips http:// or https://
+	 * Returns the site url, strips http:// or https://
 	 */
 	protected function get_stripped_site_url() {
 
-		$url          = get_site_url();
-		$stripped_url = substr( $url, strpos( $url, '/' ) + 2 );
+		$url = get_site_url();
 
-		return $stripped_url;
-
+		return substr( $url, strpos( $url, '/' ) + 2 );
 	}
 
 	/**
-	 * trims a given string to 50 chars before and after the search string, if the string is longer than 199 chars
+	 * Trims a given string to 50 chars before and after the search string, if the string is longer than 199 chars.
 	 *
 	 * @param $needle    string
 	 * @param $haystack  string
@@ -245,26 +264,28 @@ class Admin {
 		}
 
 		$trimmed_results = NULL;
-		//get all ocurrences of $needle with up to 50 chars front & back
+		// Get all occurrences of $needle with up to 50 chars front & back.
 		preg_match_all( "@.{0,50}" . $needle . ".{0,50}@", $haystack, $trimmed_results );
-		$return_value = "";
-		for ( $i = 0; $i < count( $trimmed_results ); $i ++ ) {
+		$return_value = '';
+		/** @var array $trimmed_results */
+		$imax = count( $trimmed_results );
+		for ( $i = 0; $i < $imax; $i ++ ) {
 			//reset delimiter, might have been changed
 			$local_delimiter = $delimiter;
 			//check if the first trimmmed result is the beginning of $haystack. if so remove leading delimiter
-			if ( $i == 0 ) {
+			if ( $i === 0 ) {
 				$pos = strpos( $haystack, $trimmed_results[ 0 ][ $i ] );
 				if ( $pos === 0 ) {
-					$local_delimiter[ 0 ] = "";
+					$local_delimiter[ 0 ] = '';
 				}
 			}
 
 			//check if the last trimmed result is the end of $haystack. if so, remove trailing delimiter
 			$last_index = count( $trimmed_results ) - 1;
-			if ( $i == $last_index ) {
+			if ( $i === $last_index ) {
 				$trimmed_result_length = strlen( $trimmed_results[ 0 ][ $i ] );
 				$substring             = substr( $haystack, - $trimmed_result_length );
-				if ( $substring == $trimmed_results[ 0 ][ $i ] ) {
+				if ( $substring === $trimmed_results[ 0 ][ $i ] ) {
 					$local_delimiter[ 1 ] = "";
 				}
 
