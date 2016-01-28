@@ -8,6 +8,8 @@
 - Prevent self destroy
 - Multisite basic support - Show only tables of current site
 - Add spectial tab for replace the url
+- Supports serialized data
+- Refaktor the whole codebase
 
 ## v2.7.1 (2015-05-28)
 - Fix for changes on database collate since WordPress version 4.2
