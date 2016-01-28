@@ -76,7 +76,7 @@ class DatabaseExporter {
 
 		$table_prefix = $this->dbm->get_base_prefix();
 
-		//wp_blogs needs special treatment in multisite domain replace, we need to check later if we are working on it
+		// wp_blogs needs special treatment in multisite domain replace, we need to check later if we are working on it.
 		$wp_blogs_table = $table_prefix . 'blogs';
 
 		$this->backup_filename = $new_table_prefix === '' ? DB_NAME . "_$table_prefix.sql"
@@ -167,11 +167,12 @@ class DatabaseExporter {
 	 * @param string $search
 	 * @param string $replace
 	 * @param string $table
+	 * @param string $new_table_prefix
 	 *
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
-	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = "" ) {
+	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '' ) {
 
 		$table_report = array(
 			'table_name' => $table,
@@ -183,14 +184,14 @@ class DatabaseExporter {
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
 		$new_table    = $table;
-		if ( $new_table_prefix != "" ) {
+		if ( "" !== $new_table_prefix ) {
 			$new_table = $this->get_new_table_name( $table, $new_table_prefix );
 
 		}
 
 		// Create the SQL statements
-		$this->stow( "# --------------------------------------------------------\n" );
-		$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $new_table ) ) . "\n" );
+		$this->stow( '# --------------------------------------------------------' . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $new_table ) ) . "\n" );
 
 		$table_structure = $this->dbm->get_table_structure( $table );
 		if ( ! $table_structure ) {
@@ -201,21 +202,22 @@ class DatabaseExporter {
 
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
-		$this->stow( "# " . sprintf( __( 'Delete any existing table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'Delete any existing table %s', 'insr' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
-		$this->stow( "DROP TABLE IF EXISTS " . $this->backquote( $new_table ) . ";\n" );
+		$this->stow( 'DROP TABLE IF EXISTS ' . $this->backquote( $new_table ) . ';' . "\n" );
 
 		// Table structure
 		// Comment in SQL-file
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
-		$this->stow( "# " . sprintf( __( 'Table structure of table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'Table structure of table %s', 'insr' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
 
+		/** @var array $create_table */
 		$create_table = $this->dbm->get_create_table_statement( $table );
 		if ( $create_table === FALSE ) {
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'insr' ), $table );
@@ -223,7 +225,7 @@ class DatabaseExporter {
 			$this->stow( "#\n# $err_msg\n#\n" );
 		}
 		//replace prefix if necessary
-		if ( $new_table_prefix != "" ) {
+		if ( '' !== $new_table_prefix ) {
 
 			$create_table[ 0 ][ 1 ] = str_replace( $table, $new_table, $create_table[ 0 ][ 1 ] );
 
@@ -253,7 +255,7 @@ class DatabaseExporter {
 			     || ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
-				$ints[ strtolower( $struct->Field ) ] = "1";
+				$ints[ strtolower( $struct->Field ) ] = '1';
 			}
 		}
 
@@ -281,41 +283,38 @@ class DatabaseExporter {
 					$table_report[ 'rows' ] ++;
 
 					foreach ( $row as $column => $value ) {
-						//if "change database prefix" is set we have to look for ocurrencies of the old prefix in the db entries and change them
-						if ( $new_table != $table ) {
+						//if "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them
+						if ( $new_table !== $table ) {
 							$value = $this->replace->recursive_unserialize_replace( $table_prefix, $new_table_prefix,
 							                                                        $value );
 						}
 						//skip replace if no search pattern
-						if ( $search != '' ) {
+						//check if we need to replace something
+						//skip primary_key
+						if ( $search !== '' && $column !== $primary_key ) {
 
-							//check if we need to replace something
-							//skip primary_key
-							if ( $column != $primary_key ) {
+							$edited_data = $this->replace->recursive_unserialize_replace( $search, $replace,
+							                                                              $value );
 
-								$edited_data = $this->replace->recursive_unserialize_replace( $search, $replace,
-								                                                              $value );
+							// Something was changed
+							if ( $edited_data !== $value ) {
 
-								// Something was changed
-								if ( $edited_data != $value ) {
+								$table_report[ 'change' ] ++;
 
-									$table_report[ 'change' ] ++;
+								// log changes
 
-									// log changes
+								$table_report[ 'changes' ][] = array(
+									'row'    => $table_report[ 'rows' ],
+									'column' => $column,
+									'from'   => $value,
+									'to'     => $edited_data,
+								);
+								$value                       = $edited_data;
 
-									$table_report[ 'changes' ][] = array(
-										'row'    => $table_report[ 'rows' ],
-										'column' => $column,
-										'from'   => ( $value ),
-										'to'     => ( $edited_data ),
-									);
-									$value                       = $edited_data;
-
-								}
 							}
 
 						}
-						if ( isset ( $ints[ strtolower( $column ) ] ) ) {
+						if ( isset( $ints[ strtolower( $column ) ] ) ) {
 							// make sure there are no blank spots in the insert syntax,
 							// yet try to avoid quotation marks around integers
 							$value    = ( NULL === $value || '' === $value ) ? $defs[ strtolower( $column ) ] : $value;
@@ -334,7 +333,7 @@ class DatabaseExporter {
 		// Create footer/closing comment in SQL-file
 		$this->stow( "\n" );
 		$this->stow( "#\n" );
-		$this->stow( "# " . sprintf( __( 'End of data contents of table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'End of data contents of table %s', 'insr' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 		$this->stow( "\n" );
@@ -346,6 +345,11 @@ class DatabaseExporter {
 	/**
 	 * Better addslashes for SQL queries.
 	 * Taken from phpMyAdmin.
+	 *
+	 * @param string $a_string
+	 * @param bool   $is_like
+	 *
+	 * @return mixed
 	 */
 	protected function sql_addslashes( $a_string = '', $is_like = FALSE ) {
 
@@ -361,10 +365,14 @@ class DatabaseExporter {
 	/**
 	 * Add backquotes to tables and db-names in
 	 * SQL queries. Taken from phpMyAdmin.
+	 *
+	 * @param $a_name
+	 *
+	 * @return array|string
 	 */
 	protected function backquote( $a_name ) {
 
-		if ( ! empty( $a_name ) && $a_name != '*' ) {
+		if ( ! empty( $a_name ) && $a_name !== '*' ) {
 			if ( is_array( $a_name ) ) {
 				$result = array();
 				reset( $a_name );
