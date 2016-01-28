@@ -25,7 +25,7 @@ class Autoloader {
 	 * @access private
 	 * @var string
 	 */
-	private $_namespace = NULL;
+	private $_namespace;
 
 	/**
 	 * location to load classes from
@@ -33,7 +33,7 @@ class Autoloader {
 	 * @access private
 	 * @var string
 	 */
-	private $_basepath = NULL;
+	private $_basepath;
 
 	/**
 	 * the file extension to load
@@ -41,10 +41,10 @@ class Autoloader {
 	 * @access private
 	 * @var string
 	 */
-	private $_extension = NULL;
+	private $_extension;
 
 	/**
-	 * Creates a new Autoloader Instance
+	 * Creates a new Autoloader Instance.
 	 *
 	 * @param string $namespace basenamespace
 	 * @param string $path      basepath
