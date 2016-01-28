@@ -3,12 +3,12 @@ namespace Inpsyde\SearchReplace\inc;
 
 class Init {
 
-	private $plugin_pages = array(
+	private static $plugin_pages = array(
 		'tools_page_inpsyde_search_replace',
 		'tools_page_db_backup',
 		'tools_page_sql_import',
 		'tools_page_replace_domain',
-		'tools_page_credits'
+		'tools_page_credits',
 	);
 
 	/**
