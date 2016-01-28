@@ -442,14 +442,14 @@ class DatabaseExporter {
 				/**
 				 * Try gzipping with an external application
 				 */
-				if ( file_exists( $diskfile ) && ! file_exists( $gz_diskfile ) ) {
+				if ( ! file_exists( $gz_diskfile ) ) {
 					@exec( "gzip $diskfile" );
 				}
 
 				if ( file_exists( $gz_diskfile ) ) {
-					if ( file_exists( $diskfile ) ) {
-						unlink( $diskfile );
-					}
+
+					unlink( $diskfile );
+
 					$diskfile = $gz_diskfile;
 					$filename = "{$filename}.gz";
 
