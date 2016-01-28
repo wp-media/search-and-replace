@@ -1,34 +1,38 @@
 <?php # -*- coding: utf-8 -*-
 /**
- * Plugin Name:   Search & Replace
- * Plugin URI:    https://wordpress.org/plugins/search-and-replace/
- * Description:	  Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.
- * Author:        Inpsyde GmbH
- * Author URI:    http://inpsyde.com
- * Contributors:  s-hinse @derpixler
- * Version:       3.0.1
- * Text Domain:   insr
- * Domain Path:   /languages
- * License:       GPLv2 or later
- * License URI:   http://www.gnu.org/licenses/gpl-2.0.html
+ * Plugin Name:  Search & Replace
+ * Plugin URI:   https://wordpress.org/plugins/search-and-replace/
+ * Description:  Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.
+ * Author:       Inpsyde GmbH
+ * Author URI:   http://inpsyde.com
+ * Contributors: s-hinse, derpixler
+ * Version:      3.0.0
+ * Text Domain:  insr
+ * Domain Path:  /languages
+ * License:      GPLv3+
+ * License URI:  license.txt
  */
 
 namespace Inpsyde\SearchReplace;
 
-register_activation_hook( __FILE__, __NAMESPACE__ . '\insr_activate' );
+register_activation_hook( __FILE__, __NAMESPACE__ . '\activate' );
 
-add_action('plugins_loaded',__NAMESPACE__. '\load_textdomain');
 add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
 
-//register textdomain
-
+/**
+ * Register textdomain.
+ */
 function load_textdomain() {
-	$lang_dir = plugin_basename( dirname( __FILE__ ) ) . '/languages/';
 
-	 load_plugin_textdomain( 'insr', false, $lang_dir );
+	$lang_dir = plugin_basename( __DIR__ ) . '/languages/';
+
+	load_plugin_textdomain( 'insr', FALSE, $lang_dir );
 }
 
-function insr_activate() {
+/**
+ * Run on plugin activation, checks requirements.
+ */
+function activate() {
 
 	load_textdomain();
 
@@ -49,19 +53,23 @@ function insr_activate() {
 	}
 }
 
+/**
+ * Load and init in WP Environment.
+ */
 function init() {
 
-	//this sets the capability needed to run the plugin
-	$cap = 'manage_options';
+	// This sets the capability needed to run the plugin.
+	if ( current_user_can( 'manage_options' ) ) {
 
-	if ( current_user_can( $cap ) ) {
-		//set up the autoloader
+		load_textdomain();
+
+		// Set up the autoloader.
 		require_once( 'inc/Autoloader.php' );
 
 		$autoloader = new inc\Autoloader( __NAMESPACE__, __DIR__ );
 		$autoloader->register();
 
-		//start the plugin
+		// Start the plugin.
 		$plugin = new inc\Init();
 		$plugin->run( __FILE__ );
 
