@@ -120,7 +120,7 @@ class Replace {
 		$primary_key = $columns[ 0 ];
 		$columns     = $columns[ 1 ];
 
-		if ( $primary_key === NULL ) {
+		if ( NULL === $primary_key ) {
 			array_push( $table_report[ 'errors' ],
 			            "The table \"{$table}\" has no primary key. Changes will have to be made manually.",
 			            'results' );
@@ -144,7 +144,7 @@ class Replace {
 			$data = $this->dbm->get_table_content( $table, $start, $page_size );
 
 			if ( ! $data ) {
-				array_push( $table_report[ 'errors' ], 'no data in table ' . $table );
+				$table_report[ 'errors' ][] = 'no data in table ' . $table;
 			}
 
 			foreach ( $data as $row ) {
