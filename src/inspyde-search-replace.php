@@ -44,7 +44,7 @@ function activate() {
 		wp_die(
 			'<p>' .
 			sprintf(
-				__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'insr' ),
+				esc_attr__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'insr' ),
 				5.4
 			)
 			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . __( 'back', 'insr' ) . '</a>'
