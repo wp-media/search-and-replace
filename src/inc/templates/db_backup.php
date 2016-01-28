@@ -19,7 +19,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		<a class="nav-tab" href="<?php echo admin_url() ?>/tools.php?page=credits"><?php esc_html_e( 'Credits', 'insr' ); ?></a>
 	</h2>
 
-	<p><?php esc_html_e( 'Create a backup of your Database by clicking "Create SQL File".',
+	<p><?php esc_html_e( 'Create a backup of your database by clicking "Create SQL File".',
 	             'insr' ); ?> </p>
 
 	<form action="" method="post">

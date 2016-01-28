@@ -49,9 +49,4 @@ class DatabaseImporter {
 
 	}
 
-
-
-
-
-
 }

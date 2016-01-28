@@ -49,4 +49,3 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			</tr>
 			</tbody>
 		</table><?php $this->show_submit_button(); ?></form>
-

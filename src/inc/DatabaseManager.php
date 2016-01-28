@@ -161,8 +161,4 @@ class DatabaseManager {
 		return $this->wpdb->base_prefix;
 	}
 
-
-
 }
-
-

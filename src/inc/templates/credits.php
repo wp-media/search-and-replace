@@ -20,4 +20,3 @@ if ( ! defined( 'INSR_DIR' ) ) {
 	</h2>
 
 	<p><?php esc_html_e( 'The Inpsyde Credits.', 'insr' ); ?> </p>
-
