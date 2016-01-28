@@ -20,7 +20,7 @@ Go to `Tools -> Search & Replace` to view the plugins user interface.
 ![screenshot-6](https://raw.githubusercontent.com/inpsyde/search-and-replace/3.0.1/assets/screenshot-6.png)
 
 ####*Backup Database* tab
-**At fisrt do backup your Database!**
+**Do backup your Database!**
 Please **always** backup your database before performing search/replace operations.
 
 **Multisite usage:**
