@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles export of DB
+ * Handles export of DB.
  * adapted from https://github.com/matzko/wp-db-backup
  */
 
@@ -56,24 +56,22 @@ class DatabaseExporter {
 	 * @param string $search
 	 * @param string $replace
 	 * @param array  $tables         The array of table names that should be exported.
-	 * @param bool   $domain_replace If set, exporter will change the domain name without leading http:// in table wp_blogs if we are on a
-	 *                               multisite
-	 *
+	 * @param bool   $domain_replace If set, exporter will change the domain name without leading http:// in table
+	 *                               wp_blogs if we are on a multisite
+	 * @param        $new_table_prefix
 	 *
 	 * @return array $report    $report [ 'filename'] : Name of Backup file,
 	 *                          $report[ 'errors'] : WP_Error_object,
-	 *                          $report ['changes'] : Array with replacements in tables
-	 *
-	 *
+	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search, $replace, $tables, $domain_replace= false, $new_table_prefix ) {
+	public function db_backup( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix ) {
 
 		$report = array(
 			'errors'        => NULL,
 			'changes'       => array(),
 			'tables'        => '0',
 			'changes_count' => '0',
-			'filename'      => ''
+			'filename'      => '',
 		);
 
 		$table_prefix = $this->dbm->get_base_prefix();
@@ -81,17 +79,18 @@ class DatabaseExporter {
 		//wp_blogs needs special treatment in multisite domain replace, we need to check later if we are working on it
 		$wp_blogs_table = $table_prefix . 'blogs';
 
-		$this->backup_filename = $new_table_prefix =="" ?DB_NAME . "_$table_prefix.sql": DB_NAME . "_$new_table_prefix.sql";
+		$this->backup_filename = $new_table_prefix === '' ? DB_NAME . "_$table_prefix.sql"
+			: DB_NAME . "_$new_table_prefix.sql";
 
 		if ( is_writable( $this->backup_dir ) ) {
 			$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
 			if ( ! $this->fp ) {
-				$this->errors->add( 8, __( 'Could not open the backup file for writing!', 'insr' ) );
+				$this->errors->add( 8, esc_attr__( 'Could not open the backup file for writing!', 'insr' ) );
 
 				return $report;
 			}
 		} else {
-			$this->errors->add( 9, __( 'The backup directory is not writeable!', 'insr' ) );
+			$this->errors->add( 9, esc_attr__( 'The backup directory is not writable!', 'insr' ) );
 
 			return $report;
 		}
@@ -99,16 +98,20 @@ class DatabaseExporter {
 		//Begin new backup of MySql
 		//get charset. if not set assume utf8
 		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
-		$this->stow( "# " . __( 'WordPress MySQL database backup', 'insr' ) . "\n" );
-		$this->stow( "#\n" );
-		$this->stow( "# " . sprintf( __( 'Generated: %s', 'insr' ), date( "l j. F Y H:i T" ) ) . "\n" );
-		$this->stow( "# " . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
-		$this->stow( "# " . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
-		if ($new_table_prefix !=""){
-			$this->stow( "# " . sprintf( __( 'Changed table prefix: From %s to %s ', 'insr' ), $table_prefix, $new_table_prefix ) . "\n" );
+		$this->stow( '# ' . esc_attr__( 'WordPress MySQL database backup', 'insr' ) . "\n" );
+		$this->stow( '"#\n" );
+		$this->stow( '# ' . sprintf( __( 'Generated: %s', 'insr' ), date( 'l j. F Y H:i T' ) ) . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
+		if ( '' !== $new_table_prefix ) {
+			$this->stow( '# ' . sprintf(
+				             __( 'Changed table prefix: From %s to %s ', 'insr' ),
+				             $table_prefix,
+				             $new_table_prefix
+			             )
+			             . "\n" );
 		}
- 		$this->stow( "# --------------------------------------------------------\n" );
-
+		$this->stow( "# --------------------------------------------------------\n" );
 
 		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
@@ -120,18 +123,23 @@ class DatabaseExporter {
 			/*check if we are replacing the domain in a multisite. if so, we replace in wp_blogs the stripped url without http(s), because the domains
 			are stored without http:// */
 
-			if ( $domain_replace && is_multisite() && $table == $wp_blogs_table ) {
+			if ( $domain_replace && is_multisite() && $table === $wp_blogs_table ) {
 
 				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
 				$stripped_url_replace = substr( $replace, strpos( $replace, '/' ) + 2 );
-				$table_report         = $this->backup_table( $stripped_url_search, $stripped_url_replace, $table, $new_table_prefix );
+				$table_report         = $this->backup_table(
+					$stripped_url_search,
+					$stripped_url_replace,
+					$table,
+					$new_table_prefix
+				);
 
 			} else {
 				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix );
 			}
 			//log changes if any
 
-			if ( $table_report[ 'change' ] != 0 ) {
+			if ( 0 !== $table_report[ 'change' ] ) {
 				$report[ 'changes' ][ $table ] = $table_report;
 
 				$report [ 'changes_count' ] += $table_report[ 'change' ];
@@ -163,21 +171,19 @@ class DatabaseExporter {
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
-	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix ="") {
-
+	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = "" ) {
 
 		$table_report = array(
 			'table_name' => $table,
 			'rows'       => 0,
 			'change'     => 0,
-			'changes'    => array()
+			'changes'    => array(),
 
 		);
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
-		$new_table = $table;
-		if ($new_table_prefix != "")
-		{
+		$new_table    = $table;
+		if ( $new_table_prefix != "" ) {
 			$new_table = $this->get_new_table_name( $table, $new_table_prefix );
 
 		}
@@ -188,8 +194,6 @@ class DatabaseExporter {
 		// Create the SQL statements
 		$this->stow( "# --------------------------------------------------------\n" );
 		$this->stow( "# " . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $new_table ) ) . "\n" );
-
-
 
 		$table_structure = $this->dbm->get_table_structure( $table );
 		if ( ! $table_structure ) {
@@ -222,9 +226,9 @@ class DatabaseExporter {
 			$this->stow( "#\n# $err_msg\n#\n" );
 		}
 		//replace prefix if necessary
-		if ($new_table_prefix !=""){
+		if ( $new_table_prefix != "" ) {
 
-				$create_table[0][1] = str_replace($table, $new_table, $create_table[0][1]);
+			$create_table[ 0 ][ 1 ] = str_replace( $table, $new_table, $create_table[ 0 ][ 1 ] );
 
 		}
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
@@ -281,8 +285,9 @@ class DatabaseExporter {
 
 					foreach ( $row as $column => $value ) {
 						//if "change database prefix" is set we have to look for ocurrencies of the old prefix in the db entries and change them
-						if ($new_table != $table) {
-							$value = $this->replace->recursive_unserialize_replace( $table_prefix, $new_table_prefix, $value );
+						if ( $new_table != $table ) {
+							$value = $this->replace->recursive_unserialize_replace( $table_prefix, $new_table_prefix,
+							                                                        $value );
 						}
 						//skip replace if no search pattern
 						if ( $search != '' ) {
@@ -291,7 +296,8 @@ class DatabaseExporter {
 							//skip primary_key
 							if ( $column != $primary_key ) {
 
-								$edited_data = $this->replace->recursive_unserialize_replace( $search, $replace, $value );
+								$edited_data = $this->replace->recursive_unserialize_replace( $search, $replace,
+								                                                              $value );
 
 								// Something was changed
 								if ( $edited_data != $value ) {
@@ -304,11 +310,9 @@ class DatabaseExporter {
 										'row'    => $table_report[ 'rows' ],
 										'column' => $column,
 										'from'   => ( $value ),
-										'to'     => ( $edited_data )
+										'to'     => ( $edited_data ),
 									);
 									$value                       = $edited_data;
-
-
 
 								}
 							}
@@ -382,12 +386,11 @@ class DatabaseExporter {
 
 	protected function open( $filename = '', $mode = 'w' ) {
 
-		if ( $filename == '' ) {
+		if ( '' === $filename ) {
 			return FALSE;
 		}
-		$fp = @fopen( $filename, $mode );
 
-		return $fp;
+		return @fopen( $filename, $mode );
 	}
 
 	protected function close( $fp ) {
@@ -403,8 +406,11 @@ class DatabaseExporter {
 	protected function stow( $query_line ) {
 
 		if ( @fwrite( $this->fp, $query_line ) === FALSE ) {
-			$this->errors->add( 4, __( 'There was an error writing a line to the backup script:',
-			                           'insr' ) . '  ' . $query_line . '  ' . $php_errormsg );
+			$this->errors->add(
+				4,
+				esc_attr__( 'There was an error writing a line to the backup script:', 'insr' )
+				. ' ' . $query_line . ' ' . $php_errormsg
+			);
 		}
 	}
 
@@ -416,7 +422,7 @@ class DatabaseExporter {
 	 */
 	public function deliver_backup( $filename = '', $compress = FALSE ) {
 
-		if ( $filename == '' ) {
+		if ( '' === $filename ) {
 			return FALSE;
 		}
 
@@ -432,7 +438,7 @@ class DatabaseExporter {
 				@ini_set( 'memory_limit', '64M' );
 			}
 
-			if ( file_exists( $diskfile )  ) {
+			if ( file_exists( $diskfile ) ) {
 				/**
 				 * Try gzipping with an external application
 				 */
@@ -470,7 +476,7 @@ class DatabaseExporter {
 				/*
 				 *
 				 */
-			} elseif ( file_exists( $gz_diskfile )  ) {
+			} elseif ( file_exists( $gz_diskfile ) ) {
 				$diskfile = $gz_diskfile;
 				$filename = "{$filename}.gz";
 			}
@@ -509,6 +515,7 @@ class DatabaseExporter {
 
 	/**
 	 * strips the current table prefix and adds a new one provided in $new_table_prefix
+	 *
 	 * @param $table
 	 * @param $new_table_prefix
 	 *
