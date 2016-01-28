@@ -5,10 +5,29 @@ namespace Inpsyde\SearchReplace\inc;
 class Admin {
 
 	/**
+	 * @var DatabaseManager
+	 * stores instance of DatabaseManager
+	 */
+	protected $dbm;
+
+	/**
+	 * @var DatabaseExporter
+	 */
+	protected $dbe;
+
+	/**
+	 * @var Replace
+	 */
+	protected $replace;
+
+	/**
 	 * @var \WP_Error
 	 */
 	protected $errors;
 
+	/**
+	 * Admin constructor.
+	 */
 	public function __construct() {
 
 		$this->dbm     = new DatabaseManager();
