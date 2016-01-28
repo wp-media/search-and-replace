@@ -14,7 +14,7 @@ class SqlImportAdmin extends Admin {
 
 		$this->dbi    = new DatabaseImporter();
 		$this->errors = new \WP_Error();
-
+		parent::__construct();
 	}
 
 	/**
