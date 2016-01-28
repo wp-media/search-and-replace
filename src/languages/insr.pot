@@ -301,7 +301,7 @@ msgstr ""
 
 #: ../inc/templates/db_backup.php:17 ../inc/templates/replace_domain.php:17 ..
 #: /inc/templates/search_replace.php:18 ../inc/templates/sql_import.php:16
-msgid "Search and replace"
+msgid "Search and Replace"
 msgstr ""
 
 #: ../inc/templates/db_backup.php:21
