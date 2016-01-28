@@ -26,4 +26,3 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 
 		</table><?php $this->show_submit_button(); ?></form>
-

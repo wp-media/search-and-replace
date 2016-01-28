@@ -28,8 +28,6 @@ function load_textdomain() {
 	 load_plugin_textdomain( 'insr', false, $lang_dir );
 }
 
-
-
 function insr_activate() {
 
 	load_textdomain();
