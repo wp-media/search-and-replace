@@ -11,7 +11,7 @@ namespace Inpsyde\searchReplace\inc;
  * e.g. The file for the class "FooBar" must be named "FooBar.php"
  *
  * @author  Andre Peiffer, Sven Hinse
- * @version 0.2
+ * @version 2016-01-28
  * @package inc
  */
 
@@ -57,34 +57,32 @@ class Autoloader {
 	}
 
 	/**
-	 * registers the autoloader
+	 * Registers the autoloader.
 	 *
-	 * @return this instance
+	 * @return $this
 	 */
 	public function register() {
 
 		spl_autoload_register( array( $this, 'autoload' ) );
-
 		return $this;
 	}
 
 	/**
-	 * unregisters the autoloader
+	 * Unregisters the autoloader.
 	 *
-	 * @return this instance
+	 * @return $this instance
 	 */
 	public function unregister() {
 
 		spl_autoload_unregister( array( $this, 'autoload' ) );
-
 		return $this;
 	}
 
 	/**
 	 * @param $class
 	 *
-	 * @return path to class on success, false on failure
-	 * @throws \Exception , if Class does not exist in Namespace
+	 * @return bool|string Path to class on success, false on failure
+	 * @throws \Exception  if Class does not exist in Namespace
 	 */
 	public function autoload( $class ) {
 
