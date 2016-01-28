@@ -22,6 +22,9 @@ if ( ! defined( 'INSR_DIR' ) ) {
 	<h2><?php _e( "Hey nice to have you here!", 'insr' ); ?></h2>
 	<p><?php _e( 'Search and Replace is refactored by <a href="http://inpsyde.com/en/">Inpsyde GmbH</a> and based on the original from <a href="http://thedeadone.net">Mark Cunningham</a> ', 'insr' ); ?> </p>
 
+	<h2><?php _e( "You rock! contribute the plugin.", 'insr' ); ?></h2>
+	<p><?php _e( 'You can contribute the Plugin go to the git repo <a href="https://github.com/inpsyde/search-and-replace/"></a> making changes, create issues or submitting changes.', 'insr' ); ?> </p>
+
 	<h2><?php _e( "We are Inpsyde", 'insr' ); ?></h2>
 	<p><?php _e( "Inpsyde has developed enterprise solutions with the world's most popular open-source CMS since it was a kitten. Still do, inconvincibly convinced.", 'insr' ); ?> </p>
 	<p><?php _e( "Inpsyde is a WordPress <a href='https://vip.wordpress.com/partner/inpsyde/'>VIP Service Partner</a> and <a href='https://www.woothemes.com/experts/inpsyde-gmbh/'>WooCommerce Experten</a>.", 'insr' ); ?> </p>
