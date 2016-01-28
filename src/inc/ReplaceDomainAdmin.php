@@ -1,6 +1,6 @@
 <?php
 /**
- *admin class for the "replace domain" tab in inpsyde serch-and-replace plugin
+ * Admin class for the "replace domain" tab in inpsyde search-and-replace plugin.
  */
 
 namespace Inpsyde\SearchReplace\inc;
@@ -8,8 +8,6 @@ namespace Inpsyde\SearchReplace\inc;
 class ReplaceDomainAdmin extends Admin {
 
 	public function construct() {
-
-		parent::__construct();
 	}
 
 	/**
@@ -17,7 +15,10 @@ class ReplaceDomainAdmin extends Admin {
 	 */
 	public function show_page() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "replace_domain"  && check_admin_referer( 'replace_domain', 'insr_nonce' )   ) {
+		if ( array_key_exists( 'action', $_POST )
+		     && 'replace_domain' === $_POST[ 'action' ]
+		     && check_admin_referer( 'replace_domain', 'insr_nonce' )
+		) {
 			$this->handle_replace_domain_event();
 
 		}
@@ -32,9 +33,9 @@ class ReplaceDomainAdmin extends Admin {
 
 		wp_nonce_field( 'replace_domain', 'insr_nonce' );
 
-		$html = '	<input type="hidden" name="action" value="replace_domain" />';
+		$html = '<input type="hidden" name="action" value="replace_domain" />';
 		echo $html;
-		submit_button( __( 'Create SQL File', 'insr' ) );
+		submit_button( esc_attr__( 'Create SQL File', 'insr' ) );
 
 	}
 
@@ -45,20 +46,18 @@ class ReplaceDomainAdmin extends Admin {
 
 		$tables = $this->dbm->get_tables();
 
-			$search  =esc_url_raw( $_POST[ 'search' ]);
-			$replace =esc_url_raw( $_POST[ 'replace' ]);
-		$new_db_prefix = (isset ($_POST['new_db_prefix']))? esc_attr($_POST['new_db_prefix']):"";
+		$search        = esc_url_raw( $_POST[ 'search' ] );
+		$replace       = esc_url_raw( $_POST[ 'replace' ] );
+		$new_db_prefix = array_key_exists( 'new_db_prefix', $_POST ) ? esc_attr( $_POST[ 'new_db_prefix' ] ) : '';
 
-
-			//search field should not be empty
-			if ( $replace == '' ) {
-				$this->errors->add( 'empty_replace', __( 'Replace Field should not be empty.', 'insr' ) );
-				$this->display_errors();
-
-				return;
-
+		//search field should not be empty
+		if ( '' === $replace ) {
+			$this->errors->add( 'empty_replace', esc_attr__( 'Replace Field should not be empty.', 'insr' ) );
+			$this->display_errors();
+			return;
 		}
-		$this->create_backup_file( $search, $replace, $tables, true, $new_db_prefix );
+
+		$this->create_backup_file( $search, $replace, $tables, TRUE, $new_db_prefix );
 	}
 
 }
