@@ -6,7 +6,7 @@
  * Author:       Inpsyde GmbH
  * Author URI:   http://inpsyde.com
  * Contributors: s-hinse, derpixler
- * Version:      3.0.0
+ * Version:      3.0.1
  * Text Domain:  insr
  * Domain Path:  /languages
  * License:      GPLv3+
@@ -58,21 +58,23 @@ function activate() {
  */
 function init() {
 
+	if ( ! is_admin() ) {
+		return;
+	}
 	// This sets the capability needed to run the plugin.
-	if ( current_user_can( 'manage_options' ) ) {
-
-		load_textdomain();
-
-		// Set up the autoloader.
-		require_once( 'inc/Autoloader.php' );
-
-		$autoloader = new inc\Autoloader( __NAMESPACE__, __DIR__ );
-		$autoloader->register();
-
-		// Start the plugin.
-		$plugin = new inc\Init();
-		$plugin->run( __FILE__ );
-
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
 	}
 
+	load_textdomain();
+
+	// Set up the autoloader.
+	require_once( 'inc/Autoloader.php' );
+
+	$autoloader = new inc\Autoloader( __NAMESPACE__, __DIR__ );
+	$autoloader->register();
+
+	// Start the plugin.
+	$plugin = new inc\Init();
+	$plugin->run( __FILE__ );
 }
