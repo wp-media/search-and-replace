@@ -26,7 +26,7 @@ msgstr ""
 
 #. Name of the plugin
 msgid "Inpsyde Search & Replace"
-msgstr ""
+msgstr "Inpsyde Search & Replace"
 
 #. URI of the plugin
 msgid "${Plugin_Uri}"
@@ -34,11 +34,11 @@ msgstr ""
 
 #. Author of the plugin
 msgid "Inpsyde GmbH"
-msgstr ""
+msgstr "Inpsyde GmbH"
 
 #. Author URI of the plugin
 msgid "http://inpsyde.com"
-msgstr ""
+msgstr "http://inpsyde.com"
 
 #: ../inspyde-search-replace.php:45
 #, php-format
@@ -109,40 +109,40 @@ msgstr "Fehler:"
 
 #: ../inc/DatabaseExporter.php:89
 msgid "Could not open the backup file for writing!"
-msgstr ""
+msgstr "Konnte die Backup Datei für Import nicht öffnen!"
 
 #: ../inc/DatabaseExporter.php:94
 msgid "The backup directory is not writeable!"
-msgstr ""
+msgstr "Das Sicherungsverzeichnis ist nicht beschreibbar!"
 
 #: ../inc/DatabaseExporter.php:102
 msgid "WordPress MySQL database backup"
-msgstr ""
+msgstr "Wordpress MySQL Datenbank-Backup"
 
 #: ../inc/DatabaseExporter.php:104
 #, php-format
 msgid "Generated: %s"
-msgstr ""
+msgstr "Generiert: %s"
 
 #: ../inc/DatabaseExporter.php:105
 #, php-format
 msgid "Hostname: %s"
-msgstr ""
+msgstr "Hostname: %s"
 
 #: ../inc/DatabaseExporter.php:106
 #, php-format
 msgid "Database: %s"
-msgstr ""
+msgstr "Datenbank: %s"
 
 #: ../inc/DatabaseExporter.php:108
 #, php-format
 msgid "Changed table prefix: From %s to %s "
-msgstr ""
+msgstr "Ändere Tabellen-Präfix: von %s zu %s"
 
 #: ../inc/DatabaseExporter.php:190
 #, php-format
 msgid "Table: %s"
-msgstr ""
+msgstr "Tabelle: %s"
 
 #: ../inc/DatabaseExporter.php:196
 msgid "Error getting table details"
@@ -166,26 +166,27 @@ msgstr "Fehler bei SHOW CREATE TABLE für %s."
 #: ../inc/DatabaseExporter.php:233
 #, php-format
 msgid "Error getting table structure of %s"
-msgstr ""
+msgstr "Fehler beim Auslesen der Tabellenstruktur von %s"
 
 #: ../inc/DatabaseExporter.php:241
 #, php-format
 msgid "Data contents of table %s"
-msgstr ""
+msgstr "Daten von Tabelle %s"
 
 #: ../inc/DatabaseExporter.php:336
 #, php-format
 msgid "End of data contents of table %s"
-msgstr ""
+msgstr "Ende der Daten von Tabelle %s"
 
 #: ../inc/DatabaseExporter.php:406
 msgid "There was an error writing a line to the backup script:"
 msgstr ""
+"Es ist ein Fehler in einer Zeile beim Erstellen des Backups aufgetreten:"
 
 #: ../inc/DatabaseManager.php:64
 #, php-format
 msgid "(%s KB)"
-msgstr ""
+msgstr "(%s KB)"
 
 #: ../inc/DbBackupAdmin.php:37 ../inc/ReplaceDomainAdmin.php:39
 msgid "Create SQL File"
@@ -205,12 +206,12 @@ msgstr "Domain URL ersetzen"
 
 #: ../inc/Init.php:102 ../inc/Init.php:103
 msgid "SQL Import"
-msgstr ""
+msgstr "SQL Import"
 
 #: ../inc/Replace.php:209
 #, php-format
 msgid "Error updating row: %d."
-msgstr ""
+msgstr "Importieren für Zeile fehlgeschlagen: %d."
 
 #: ../inc/ReplaceDomainAdmin.php:57
 msgid "Replace Field should not be empty."
@@ -286,10 +287,12 @@ msgid ""
 "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in "
 "the HTML form"
 msgstr ""
+"Die hochgeladene Datei übersteigt die MAX_FILE_SIZE Vorgabe, welches im "
+"Formular angegeben wurde."
 
 #: ../inc/SqlImportAdmin.php:87
 msgid "The uploaded file was only partially uploaded"
-msgstr ""
+msgstr "Die Datei wurde leider nur teilweise hochgeladen."
 
 #: ../inc/SqlImportAdmin.php:88
 msgid "No file was uploaded."
@@ -297,20 +300,20 @@ msgstr "Es wurde keine Datei hochgeladen."
 
 #: ../inc/SqlImportAdmin.php:89
 msgid "Missing a temporary folder."
-msgstr ""
+msgstr "Temporärer Ordner fehlt."
 
 #: ../inc/SqlImportAdmin.php:90
 msgid "Failed to write file to disk."
-msgstr ""
+msgstr "Fehler beim Schreiben der Datei."
 
 #: ../inc/SqlImportAdmin.php:91
 msgid "A PHP extension stopped the file upload."
-msgstr ""
+msgstr "Eine PHP Erweiterung hat den Dateiupload blockiert."
 
 #: ../inc/templates/db_backup.php:12 ../inc/templates/replace_domain.php:12 ..
 #: /inc/templates/search_replace.php:12 ../inc/templates/sql_import.php:12
 msgid "Inpsyde Search Replace"
-msgstr ""
+msgstr "Inpsyde Search Replace"
 
 #: ../inc/templates/db_backup.php:17 ../inc/templates/replace_domain.php:17 ..
 #: /inc/templates/search_replace.php:18 ../inc/templates/sql_import.php:16

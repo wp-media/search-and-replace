@@ -1,37 +1,39 @@
-=== Search & replace ===
-Contributors: inpsyde, Bueltge, s-hinse, rene_reimann
+=== Search & Replace ===
+Contributors: inpsyde, Bueltge, s-hinse, rene_reimann, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 4.4
 Stable tag: 4.0
 
-Search & Replace data in your databse via WordPress admin, Replace domains/url of your WordPress instalation.
+Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
+
 
 == Description ==
-Backs up your database.
-Searches for strings in your WordPress database and replaces them, also in serialized objects.
-Generates a backup of database with changed site url for site migration.
-Imports a SQL file into your database.
+- Backs up your database.
+- Searches for strings in your WordPress database and replaces them, also in serialized objects.
+- Generates a backup of database with changed site URL for site migration.
+- Imports a SQL file into your database.
 
 = Features =
 
-- Search & replace dada in your WordPress database
-- Change domain/url of WordPress installation
+- Search & replace data in your WordPress database
+- Change domain/URL of WordPress installation
 - Handle serialized data
-- Chose dry run or download sql file
-- Change tableprefix
+- Choose dry run or download SQL file
+- Change table prefix
 - Backup & restore your database
-- Multisite support
-- localized
+- WordPress Multisite support
+- localized and ready for your own language
 
 = Premium Support =
 
 We also offer [premium support](https://marketpress.de/service/) to save your time.
-You get direct help from the developers of the plugin-and support the development.
+You get direct help from the developers of the plugin.
 
 = Crafted by Inpsyde =
-The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And yes, we also run that
+The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress since 2006. And yes, we also run that
 [marketplace for premium WordPress plugins and themes](https://marketpress.com).
+
 
 == Installation ==
 
@@ -51,16 +53,15 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And
 == Changelog ==
 
 = v3.0.1 (2016-01-27) =
-* -Thanks to [Sven Hinse](https://github.com/s-hinse/) for help to maintain the plugin-
-* Changeable table prefix on replace Site URL tab enhancement
+* *Thanks to [Sven Hinse](https://github.com/s-hinse/) for help to maintain the plugin*
+* Changeable table prefix on replace site URL tab enhancement
 * Implement database backup & import tab
-* Implement Dry Run: Keep for Search and Replace
+* Implement dry Run: Keep for search and replace
 * Prevent self destroy
-* Multisite basic support - Show only tables of current site
-* Add spectial tab for replace the url
+* Multisite basic support - show only tables of current site
+* Add special tab for replace the URL
 * Supports serialized data
-* Refaktor the whole codebase
-
+* Refactor the whole codebase
 
 = v2.7.1 (2015-05-28) =
 * Fix for changes on database collate since WordPress version 4.2
@@ -104,5 +105,3 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the Web since 2006. And
 = v2.5.1 (07/07/2010) =
 * small changes for use in WP 3.0
 Status API Training Shop Blog About Pricing
-
-

@@ -2,11 +2,11 @@
 /**
  * Plugin Name:   Search & Replace
  * Plugin URI:    https://wordpress.org/plugins/search-and-replace/
- * Description:	  Search & Replace data in your WordPress. Backup & import your database. Change tableprefix. Change your domain
+ * Description:	  Search & Replace data in your whole WordPress setup. Backup & import your database. Change table prefix. Migrate your domain.
  * Author:        Inpsyde GmbH
  * Author URI:    http://inpsyde.com
  * Contributors:  s-hinse @derpixler
- * Version:       3.0.0
+ * Version:       3.0.1
  * Text Domain:   insr
  * Domain Path:   /languages
  * License:       GPLv2 or later

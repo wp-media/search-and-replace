@@ -1,10 +1,10 @@
 # Search & Replace
 
 ##Description:
-Backs up your database.
-Searches for strings in your WordPress database and replaces them, also in serialized objects.
-Generates a backup of database with changed site url for site migration.
-Imports a SQL file into your database.
+- Backs up your database.
+- Searches for strings in your WordPress database and replaces them, also in serialized objects.
+- Generates a backup of database with changed site URL for site migration.
+- Imports a SQL file into your database.
 
 ##Requirements:
 PHP 5.3. +
@@ -14,7 +14,6 @@ WordPress 4.x (might work with 3.x, but not tested yet)
 1. Unpack the download package.
 2. Upload the files to the /wp-content/plugins/ directory.
 3. Activate the plugin in WordPress Backend.
-
 
 ##Usage
 Go to `Tools -> Search & Replace` to view the plugins user interface.
@@ -32,13 +31,9 @@ If you are running multisite and want to export the tables of all sites, run the
 ####*Replace Domain/URL* Tab
 If you want to migrate your site to another domain, please enter here your new domain URL and download a sql file with replaced URLs. Import this file into the database of your WordPress installation on your new domain.
 
-
-
 Please enter the new domain name including "http://" or "https://", as shown in the 'search' field.
 
 If you want to replace the database-prefix, check the checkbox "replace database prefix" and enter your new prefix in the filed below. Don't forget to set the new prefix in the wp-config.php of your new installation!
-
-
 
 Press *Replace Domain URL* button to download your SQL file for migration.
 
@@ -64,9 +59,3 @@ Import a SQL file or a gzipped SQL file into your database here. This may delete
 
 ###License
 Good news, this plugin is free for everyone! Since it's released under the GPL, you can use it free of charge on your personal or commercial blog.
-
-
-
-
-
-
