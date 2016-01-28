@@ -3,10 +3,9 @@ Contributors: inpsyde, Bueltge, s-hinse, rene_reimann, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 4.4
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 
 Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
-
 
 == Description ==
 - Backs up your database.
@@ -15,7 +14,6 @@ Search & Replace data in your database with WordPress admin, replace domains/URL
 - Imports a SQL file into your database.
 
 = Features =
-
 - Search & replace data in your WordPress database
 - Change domain/URL of WordPress installation
 - Handle serialized data
@@ -25,33 +23,23 @@ Search & Replace data in your database with WordPress admin, replace domains/URL
 - WordPress Multisite support
 - localized and ready for your own language
 
-= Premium Support =
-
-We also offer [premium support](https://marketpress.de/service/) to save your time.
-You get direct help from the developers of the plugin.
-
 = Crafted by Inpsyde =
 The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress since 2006. And yes, we also run that
 [marketplace for premium WordPress plugins and themes](https://marketpress.com).
 
-
 == Installation ==
-
 = Requirements =
-- WordPress Multisite 4.0+.
-- PHP 5.4+, newer PHP versions will work faster.
-
+- WordPress 4.0 (Single and Multisite)
+- PHP 5.4, newer PHP versions will work faster.
 
 == Screenshots ==
-
-3. Search and Replace `/tags/3.0.1/screenshot-1.png`
-3. Replace Domain/URL `/tags/3.0.1/screenshot-2.png`
-3. Backup Database `/tags/3.0.1/screenshot-4.png`
-4. Restore Database `/tags/3.0.1/screenshot-3.png`
-
+1. Search and Replace
+2. Replace Domain/URL
+3. Restore Database
+4. Backup Database
+5. Result screen after search or search and replace
 
 == Changelog ==
-
 = v3.0.1 (2016-01-27) =
 * *Thanks to [Sven Hinse](https://github.com/s-hinse/) for help to maintain the plugin*
 * Changeable table prefix on replace site URL tab enhancement
