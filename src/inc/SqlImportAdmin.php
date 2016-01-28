@@ -7,10 +7,14 @@ namespace Inpsyde\SearchReplace\inc;
 
 class SqlImportAdmin extends Admin {
 
+	/**
+	 * SqlImportAdmin constructor.
+	 */
 	public function __construct() {
 
 		$this->dbi    = new DatabaseImporter();
 		$this->errors = new \WP_Error();
+
 	}
 
 	/**
@@ -18,7 +22,9 @@ class SqlImportAdmin extends Admin {
 	 */
 	public function show_page() {
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_import"  && check_admin_referer( 'sql_import', 'insr_nonce')) {
+		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] == "sql_import"
+		     && check_admin_referer( 'sql_import', 'insr_nonce' )
+		) {
 			$this->handle_sql_import_event();
 
 		}
@@ -47,8 +53,8 @@ class SqlImportAdmin extends Admin {
 	private function handle_sql_import_event() {
 
 		//TODO: Better handling of large files, maybe like here: http://stackoverflow.com/questions/147821/loading-sql-files-from-within-php , answer by user 'gromo'
-			$php_upload_error_code = $_FILES[ 'file_to_upload' ][ 'error' ];
-		if ($php_upload_error_code == 0 ) {
+		$php_upload_error_code = $_FILES[ 'file_to_upload' ][ 'error' ];
+		if ( $php_upload_error_code == 0 ) {
 
 			//get file extension
 			$ext = strrchr( $_FILES [ 'file_to_upload' ][ 'name' ], '.' );
@@ -62,7 +68,9 @@ class SqlImportAdmin extends Admin {
 					$sql_source = $this->read_gzfile_into_string( $tempfile );
 					break;
 				default:
-					$this->errors->add( 'sql_import_error', __( 'The file has neither \'.gz\' nor \'.sql\' Extension.  Import not possible.', 'insr' ) );
+					$this->errors->add( 'sql_import_error',
+					                    __( 'The file has neither \'.gz\' nor \'.sql\' Extension.  Import not possible.',
+					                        'insr' ) );
 
 					return;
 			}
@@ -70,12 +78,15 @@ class SqlImportAdmin extends Admin {
 			//call import function
 			$success = $this->dbi->import_sql( $sql_source, $this->errors );
 			if ( $success == - 1 ) {
-				$this->errors->add( 'sql_import_error', __( 'The file does not seem to be a valid SQL file. Import not possible.', 'insr' ) );
+				$this->errors->add( 'sql_import_error',
+				                    __( 'The file does not seem to be a valid SQL file. Import not possible.',
+				                        'insr' ) );
 			} else {
 				echo '<div class = "updated notice is-dismissible">';
 				echo '<p>';
-				$msg =printf( __( 'The SQL file was successfully imported. %s SQL queries were performed.', 'insr' ), $success );
-				echo esc_html($msg);
+				$msg = printf( __( 'The SQL file was successfully imported. %s SQL queries were performed.', 'insr' ),
+				               $success );
+				echo esc_html( $msg );
 				echo '</p></div>';
 			}
 		} else {
@@ -83,16 +94,17 @@ class SqlImportAdmin extends Admin {
 			$php_upload_errors = array(
 				0 => 'There is no error, the file uploaded with success',
 				1 => __( 'The uploaded file exceeds the upload_max_filesize directive in php.ini', 'insr' ),
-				2 => __( 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form', 'insr' ),
+				2 => __( 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
+				         'insr' ),
 				3 => __( 'The uploaded file was only partially uploaded', 'insr' ),
 				4 => __( 'No file was uploaded.', 'insr' ),
 				6 => __( 'Missing a temporary folder.', 'insr' ),
 				7 => __( 'Failed to write file to disk.', 'insr' ),
-				8 => __( 'A PHP extension stopped the file upload.', 'insr' )
+				8 => __( 'A PHP extension stopped the file upload.', 'insr' ),
 			);
 
-
-			$this->errors->add( 'upload_error', __( 'Upload Error: ' . $php_upload_errors[$php_upload_error_code], 'insr' ) );
+			$this->errors->add( 'upload_error',
+			                    __( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'insr' ) );
 		}
 
 	}
@@ -117,31 +129,33 @@ class SqlImportAdmin extends Admin {
 	// and post_max_size
 	//http://stackoverflow.com/questions/13076480/php-get-actual-maximum-upload-size
 	public function file_upload_max_size() {
-		$max_size = -1;
 
-		if ($max_size < 0) {
+		$max_size = - 1;
+
+		if ( $max_size < 0 ) {
 			// Start with post_max_size.
-			$max_size = $this->parse_size(ini_get('post_max_size'));
+			$max_size = $this->parse_size( ini_get( 'post_max_size' ) );
 
 			// If upload_max_size is less, then reduce. Except if upload_max_size is
 			// zero, which indicates no limit.
-			$upload_max = $this->parse_size(ini_get('upload_max_filesize'));
-			if ($upload_max > 0 && $upload_max < $max_size) {
+			$upload_max = $this->parse_size( ini_get( 'upload_max_filesize' ) );
+			if ( $upload_max > 0 && $upload_max < $max_size ) {
 				$max_size = $upload_max;
 			}
 		}
-		return $max_size/1024;
+
+		return $max_size / 1024;
 	}
 
-	private function parse_size($size) {
-		$unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
-		$size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
-		if ($unit) {
+	private function parse_size( $size ) {
+
+		$unit = preg_replace( '/[^bkmgtpezy]/i', '', $size ); // Remove the non-unit characters from the size.
+		$size = preg_replace( '/[^0-9\.]/', '', $size ); // Remove the non-numeric characters from the size.
+		if ( $unit ) {
 			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-			return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
-		}
-		else {
-			return round($size);
+			return round( $size * pow( 1024, stripos( 'bkmgtpezy', $unit[ 0 ] ) ) );
+		} else {
+			return round( $size );
 		}
 	}
 
