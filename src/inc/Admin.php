@@ -16,6 +16,11 @@ class Admin {
 	protected $dbe;
 
 	/**
+	 * @var DatabaseImporter
+	 */
+	protected $dbi;
+
+	/**
 	 * @var Replace
 	 */
 	protected $replace;
@@ -33,6 +38,7 @@ class Admin {
 		$this->dbm     = new DatabaseManager();
 		$this->replace = new Replace( $this->dbm );
 		$this->dbe     = new DatabaseExporter( $this->replace, $this->dbm );
+		$this->dbi     = new DatabaseImporter();
 		$this->errors  = new \WP_Error();
 
 		//if "download" was selected we have to check that early to prevent "headers already sent" error

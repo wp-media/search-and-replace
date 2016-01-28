@@ -1,5 +1,5 @@
 /**
- * javascript for inspyde search and replace plugin
+ * javascript for inpsyde search and replace plugin
  */
 "use strict";
 
@@ -32,7 +32,7 @@ jQuery( document ).ready( function() {
 			}
 
 			//click on checkbox selects all tables in table select on search and replace tab
-			var table_select_checkbox = $( '#select_all_tables' )
+			var table_select_checkbox = $( '#select_all_tables' );
 			table_select_checkbox.change( toggle_select_all_tables );
 
 			function toggle_select_all_tables( e ) {

@@ -48,11 +48,9 @@ class Replace {
 
 		if ( ! $dbm instanceof DatabaseManager ) {
 			throw new \InvalidArgumentException ( 'Class Replace needs Object of Type DatabaseManager as Parameter' );
-
 		}
 
 		$this->dbm = $dbm;
-
 	}
 
 	/**

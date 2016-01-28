@@ -29,8 +29,6 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			</tr>
 			<tr><th></th><td><?php esc_html_e( 'Maximum file size: ', 'insr' );echo $this->file_upload_max_size().'KB'; ?></td></tr>
 			</tbody>
-			<tr>
-				<td><?php $this->show_submit_button(); ?></td>
-			</tr>
 		</table>
+		<?php $this->show_submit_button(); ?>
 	</form>

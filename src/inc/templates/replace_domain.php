@@ -29,24 +29,26 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			<tbody>
 
 			<tr>
-				<th><strong><?php esc_html_e( 'Search for: ', 'insr' ); ?></strong></th>
-				<td><input type="text"  name="search" value="<?php echo get_site_url(); ?>" /></td>
+				<th><label for="search"><strong><?php esc_html_e( 'Search for: ', 'insr' ); ?></strong></label></th>
+				<td><input id="search" type="text" name="search" value="<?php echo get_site_url(); ?>" /></td>
 			</tr>
 			<tr>
-				<th><strong><?php esc_html_e( 'Replace with: ', 'insr' ); ?></strong></th>
-				<td><input type="url"  name="replace"  placeholder="<?php esc_attr_e( 'New URL' ) ?>" /></td>
+				<th><label for="replace"><strong><?php esc_html_e( 'Replace with: ', 'insr' ); ?></strong></label></th>
+				<td><input id="replace" type="url" name="replace" placeholder="<?php esc_attr_e( 'New URL' ) ?>" /></td>
 			</tr>
 			<tr>
 				<th><label for="change_db_prefix"><strong><?php esc_html_e( 'Change database prefix', 'insr' ); ?></strong></label></th>
 				<td><input id ="change_db_prefix" type="checkbox" name="change_db_prefix"  /></td>
 			</tr>
-			<tr class="maybe_disabled disabled">
-				<th><strong><?php esc_html_e( 'Current prefix: ', 'insr' ); ?></strong></th>
-				<td><?php echo $this->dbm->get_base_prefix(); ?> </td>
+			<tr class="disabled">
+				<th><label for="current_db_prefix"><strong><?php esc_html_e( 'Current prefix: ', 'insr' ); ?></strong></label></th>
+				<td><input class="disabled" id="current_db_prefix" type="text" name="current_db_prefix" value="<?php echo $this->dbm->get_base_prefix(); ?>" disabled /></td>
 			</tr>
 			<tr class="maybe_disabled disabled">
-				<th><strong><?php esc_html_e( 'New prefix: ', 'insr' ); ?></strong></th>
-				<td><input type="text"  name="new_db_prefix"  disabled placeholder="<?php esc_attr_e( 'New database prefix', 'insr' ) ?>" /></td>
+				<th><label for="new_db_prefix"><strong><?php esc_html_e( 'New prefix: ', 'insr' ); ?></strong></label></th>
+				<td><input id="new_db_prefix" type="text" name="new_db_prefix" disabled placeholder="<?php esc_attr_e( 'New database prefix', 'insr' ) ?>" /></td>
 			</tr>
 			</tbody>
-		</table><?php $this->show_submit_button(); ?></form>
+		</table>
+		<?php $this->show_submit_button(); ?>
+	</form>
