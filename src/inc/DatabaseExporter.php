@@ -99,7 +99,7 @@ class DatabaseExporter {
 		//get charset. if not set assume utf8
 		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
 		$this->stow( '# ' . esc_attr__( 'WordPress MySQL database backup', 'insr' ) . "\n" );
-		$this->stow( '"#\n" );
+		$this->stow( "#\n" );
 		$this->stow( '# ' . sprintf( __( 'Generated: %s', 'insr' ), date( 'l j. F Y H:i T' ) ) . "\n" );
 		$this->stow( '# ' . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
 		$this->stow( '# ' . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
@@ -484,10 +484,10 @@ class DatabaseExporter {
 
 		//provide file for download
 		if ( file_exists( $diskfile ) ) {
-			header( "Content-Type: application/force-download" );
+			header( 'Content-Type: application/force-download' );
 			header( 'Content-Type: application/octet-stream' );
 			header( 'Content-Length: ' . filesize( $diskfile ) );
-			header( "Content-Disposition: attachment; filename=$filename" );
+			header( 'Content-Disposition: attachment; filename=' . $filename );
 			$success = readfile( $diskfile );
 			if ( $success ) {
 				unlink( $diskfile );
@@ -507,6 +507,7 @@ class DatabaseExporter {
 
 	/**
 	 * @string  $backup_dir
+	 * @param $backup_dir
 	 */
 	public function set_backup_dir( $backup_dir ) {
 
@@ -528,10 +529,9 @@ class DatabaseExporter {
 		$prefix_length = strlen( $prefix );
 		//strip old prefix
 		$part_after_prefix = substr( $table, $prefix_length );
-		#//build new table name
-		$new_table = $new_table_prefix . $part_after_prefix;
 
-		return $new_table;
+		#//build new table name
+		return $new_table_prefix . $part_after_prefix;
 	}
 
 }
