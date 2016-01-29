@@ -14,6 +14,7 @@
     },
     {
       "name": "Rene Reimann",
+      "homepage": "http://rene-reimann.de",
       "email": "r.reimann@inpsyde.com",
       "role": "Developer"
     },
@@ -21,6 +22,11 @@
       "name": "Frank Bültge",
       "homepage": "http://bueltge.de",
       "email": "f.bueltge@inpsyde.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Guido Brand",
+      "email": "g.brand@inpsyde.com",
       "role": "Developer"
     }
   ],
