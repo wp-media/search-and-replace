@@ -1,5 +1,5 @@
 === Search & Replace ===
-Contributors: inpsyde, Bueltge, s-hinse, rene_reimann, Giede
+Contributors: inpsyde, Bueltge, s-hinse, derpixler, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 4.4
