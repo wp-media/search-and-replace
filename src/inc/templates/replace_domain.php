@@ -42,7 +42,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 			</tr>
 			<tr class="disabled">
 				<th><label for="current_db_prefix"><strong><?php esc_html_e( 'Current prefix: ', 'insr' ); ?></strong></label></th>
-				<td><input class="disabled" id="current_db_prefix" type="text" name="current_db_prefix" value="<?php echo $this->dbm->get_base_prefix(); ?>" disabled /></td>
+				<td><?php echo $this->dbm->get_base_prefix(); ?></td>
 			</tr>
 			<tr class="maybe_disabled disabled">
 				<th><label for="new_db_prefix"><strong><?php esc_html_e( 'New prefix: ', 'insr' ); ?></strong></label></th>
