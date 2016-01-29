@@ -39,7 +39,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		); ?></p>
 
 	<h2><?php esc_html_e( 'We are Inpsyde', 'insr' ); ?></h2>
-	<p><?php esc_html_e( 'Inpsyde has developed enterprise solutions with the world’s most popular open-source CMS since it was a kitten. Still do, inconvincibly convinced.', 'insr' ); ?></p>
+	<p><?php esc_html_e( 'Inpsyde has developed enterprise solutions with the world’s most popular open-source CMS since it was a kitten. Still do, inconvincible convinced.', 'insr' ); ?></p>
 	<p><?php printf(
 			__( 'Inpsyde is a WordPress <a href="%1$s">VIP Service Partner</a> and <a href="%2$s">WooCommerce Expert</a>.', 'insr' ),
 			'https://vip.wordpress.com/partner/inpsyde/',
