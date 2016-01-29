@@ -1,8 +1,5 @@
-node_modules/
-npm*
 vendor/
 tests/tmp/
 phpunit*.xml
 .DS_Store
 ._*
-*.psd
