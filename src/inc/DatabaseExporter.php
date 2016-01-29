@@ -41,7 +41,9 @@ class DatabaseExporter {
 	protected $backup_filename;
 
 	/**
-	 * @var Store file path.
+	 * Store file path.
+	 *
+	 * @var $fp
 	 */
 	protected $fp;
 
@@ -189,7 +191,7 @@ class DatabaseExporter {
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
 		$new_table    = $table;
-		if ( "" !== $new_table_prefix ) {
+		if ( '' !== $new_table_prefix ) {
 			$new_table = $this->get_new_table_name( $table, $new_table_prefix );
 
 		}
@@ -471,10 +473,10 @@ class DatabaseExporter {
 						if ( function_exists( 'file_get_contents' ) ) {
 							$text = file_get_contents( $diskfile );
 						} else {
-							$text = implode( "", file( $diskfile ) );
+							$text = implode( '', file( $diskfile ) );
 						}
 						$gz_text = gzencode( $text, 9 );
-						$fp      = fopen( $gz_diskfile, "w" );
+						$fp      = fopen( $gz_diskfile, 'w' );
 						fwrite( $fp, $gz_text );
 						if ( fclose( $fp ) ) {
 							unlink( $diskfile );

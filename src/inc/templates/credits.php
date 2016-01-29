@@ -27,7 +27,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 
 	<h2><?php esc_html_e( 'Hey nice to have you here!', 'insr' ); ?></h2>
 	<p><?php printf(
-			__( 'Search and Replace is refactored by <a href="%1$s">Inpsyde GmbH</a> and based on the original from <a href="%2$s">Mark Cunningham</a> ', 'insr' ),
+			__( 'Search and Replace is refactored in 2015 by <a href="%1$s">Inpsyde GmbH</a>, maintained since 2006 and based on the original from <a href="%2$s">Mark Cunningham</a>.', 'insr' ),
 			'http://inpsyde.com/',
 			'http://thedeadone.net'
 		); ?></p>

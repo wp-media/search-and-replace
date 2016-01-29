@@ -11,7 +11,7 @@ class SearchReplaceAdmin extends Admin {
 
 		//check if "search replace"-button was clicked
 
-		if ( isset ( $_POST[ 'action' ] ) && $_POST[ 'action' ] === "search_replace"
+		if ( isset ( $_POST[ 'action' ] ) && 'search_replace' === $_POST[ 'action' ]
 		     && check_admin_referer( 'do_search_replace', 'insr_nonce' )
 		) {
 			$this->handle_search_replace_event();
@@ -35,6 +35,7 @@ class SearchReplaceAdmin extends Admin {
 		$select_rows = $table_count < 20 ? $table_count : 20;
 
 		//if we come from a dry run, we select the tables to the dry run again
+		/** @var bool | string $selected_tables */
 		$selected_tables = FALSE;
 		if ( isset( $_POST[ 'select_tables' ] ) ) {
 			$selected_tables = $_POST[ 'select_tables' ];

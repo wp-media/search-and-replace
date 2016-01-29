@@ -1,6 +1,7 @@
 # Changelog
 
-## v3.0.1 (2016-01-27)
+## v3.0.0 (2016-01-27)
+- Refactor the plugin, new requirements, goal and result.
 - -Thanks to [Sven Hinse](https://github.com/s-hinse/) for help to maintain the plugin-
 - Changeable table prefix on replace Site URL tab enhancement
 - Implement database backup & import tab
@@ -9,7 +10,7 @@
 - Multisite basic support - Show only tables of current site
 - Add spectial tab for replace the url
 - Supports serialized data
-- Refaktor the whole codebase
+- Refactor the whole codebase
 
 ## v2.7.1 (2015-05-28)
 - Fix for changes on database collate since WordPress version 4.2

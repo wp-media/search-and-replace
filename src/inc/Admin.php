@@ -189,7 +189,7 @@ class Admin {
 	 */
 	public function deliver_backup_file() {
 
-		if ( isset( $_POST[ 'action' ] ) && $_POST[ 'action' ] === "download_file" ) {
+		if ( isset( $_POST[ 'action' ] ) && 'download_file' === $_POST[ 'action' ] ) {
 
 			$sql_file = '';
 			if ( isset( $_POST[ 'sql_file' ] ) ) {
@@ -228,7 +228,7 @@ class Admin {
 		$html = '<input type="hidden" name="action" value="download_file" />';
 		$html .= '<input type ="hidden" name="sql_file" value="' . esc_attr( $file ) . '">';
 		$html .= '<input type ="hidden" name="compress" value="' . esc_attr( $compress ) . '">';
-		$html .= '<input id ="insr_submit"type="submit" value="' . esc_attr( $value ) . ' "class="button" />';
+		$html .= '<input id ="insr_submit" type="submit" value="' . esc_attr( $value ) . '" class="button" />';
 		$html .= '</form></div>';
 		echo $html;
 	}
@@ -287,7 +287,7 @@ class Admin {
 
 		$trimmed_results = NULL;
 		// Get all occurrences of $needle with up to 50 chars front & back.
-		preg_match_all( "@.{0,50}" . $needle . ".{0,50}@", $haystack, $trimmed_results );
+		preg_match_all( '@.{0,50}' . $needle . '.{0,50}@', $haystack, $trimmed_results );
 		$return_value = '';
 		/** @var array $trimmed_results */
 		$imax = count( $trimmed_results );
@@ -308,7 +308,7 @@ class Admin {
 				$trimmed_result_length = strlen( $trimmed_results[ 0 ][ $i ] );
 				$substring             = substr( $haystack, - $trimmed_result_length );
 				if ( $substring === $trimmed_results[ 0 ][ $i ] ) {
-					$local_delimiter[ 1 ] = "";
+					$local_delimiter[ 1 ] = '';
 				}
 
 			}
