@@ -121,3 +121,7 @@ input[name="search"], input[name="replace"], #select_tables {
 	color: #666;
 
 }
+
+#insr_submit{
+    margin-bottom: 10px;
+}
