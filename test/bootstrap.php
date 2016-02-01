@@ -8,10 +8,12 @@ $composer_file = $base_dir . '/vendor/autoload.php';
 if ( file_exists( $composer_file ) )
 	require_once $composer_file;
 
+$src_dir =$base_dir.'/src/';
+
 //set up autoloader
 
-require_once $base_dir . './src/inc/Autoloader.php';
-$autoloader = new inc\Autoloader( __NAMESPACE__, $base_dir.'./src/' );
+require_once $src_dir . 'inc/Autoloader.php';
+$autoloader = new inc\Autoloader( __NAMESPACE__, $src_dir );
 $autoloader->register();
 
 
