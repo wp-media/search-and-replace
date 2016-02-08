@@ -97,9 +97,13 @@ class SearchReplaceAdmin extends Admin {
 
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 
+		//remove wp_magic_quotes
+		$search =  stripslashes($_POST[ 'search' ]);
+		$replace =  stripslashes($_POST[ 'replace' ]);
+
 		//if dry run is checked we run the replace function with dry run and return
 		if ( $dry_run == TRUE ) {
-			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
+			$this->run_replace( $search, $replace, $tables, $dry_run );
 
 			return;
 		}
@@ -107,12 +111,12 @@ class SearchReplaceAdmin extends Admin {
 		//'export'-button was checked
 		if ( isset ( $_POST[ 'export_or_save' ] ) && $_POST [ 'export_or_save' ] == "export" ) {
 
-			$this->create_backup_file( $_POST[ 'search' ], $_POST[ 'replace' ], $tables );
+			$this->create_backup_file( $search, $replace, $tables );
 		} else {
 
 			//"Save changes to database" was checked
 
-			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
+			$this->run_replace( $search, $replace, $tables, $dry_run );
 
 		}
 	}
@@ -206,7 +210,10 @@ class SearchReplaceAdmin extends Admin {
 
 		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : "";
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+
 		if ( $dry_run ) {
+			$search = stripslashes($search);
+			$search = htmlentities ($search);
 			echo $search;
 		}
 
@@ -220,6 +227,8 @@ class SearchReplaceAdmin extends Admin {
 		$replace = isset( $_POST[ 'replace' ] ) ? $_POST[ 'replace' ] : "";
 		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 		if ( $dry_run ) {
+			$replace = stripslashes($replace);
+			$replace = htmlentities ($replace);
 			echo $replace;
 		}
 

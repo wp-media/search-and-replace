@@ -5,10 +5,11 @@ $base_dir = dirname( __DIR__ );
 
 $composer_file = $base_dir . '/vendor/autoload.php';
 
-if ( file_exists( $composer_file ) )
+if ( file_exists( $composer_file ) ) {
 	require_once $composer_file;
+}
 
-$src_dir =$base_dir.'/src/';
+$src_dir = $base_dir . '/src/';
 
 //set up autoloader
 
