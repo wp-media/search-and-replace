@@ -86,14 +86,8 @@ class SearchReplaceAdmin extends Admin {
 		$replace =  stripslashes($_POST[ 'replace' ]);
 
 		//if dry run is checked we run the replace function with dry run and return
-<<<<<<< HEAD
-		if ( TRUE === $dry_run ) {
-			$this->run_replace( $_POST[ 'search' ], $_POST[ 'replace' ], $tables, $dry_run );
-=======
 		if ( $dry_run == TRUE ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run );
->>>>>>> 3fe982700c1c3bdbd995ab4d79cb8c77df6a3218
-
 			return;
 		}
 
@@ -205,14 +199,9 @@ class SearchReplaceAdmin extends Admin {
 	 */
 	private function get_search_value() {
 
-<<<<<<< HEAD
 		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : '';
 		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-=======
-		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : "";
-		$dry_run = isset ( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 
->>>>>>> 3fe982700c1c3bdbd995ab4d79cb8c77df6a3218
 		if ( $dry_run ) {
 			$search = stripslashes($search);
 			$search = htmlentities ($search);
