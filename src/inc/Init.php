@@ -87,7 +87,7 @@ class Init {
 		$cap = apply_filters( 'insr-capability', 'install_plugins' );
 
 		add_submenu_page( 'tools.php', __( 'Backup Database', 'insr' ),
-		                  __( 'Backup Database', 'insr' ), $cap, 'db_backup',
+		                  __( 'Search & Replace', 'insr' ), $cap, 'db_backup',
 		                  array( $this, 'show_db_backup_page' ) );
 
 		add_submenu_page( 'tools.php', __( 'Replace Domain URL', 'insr' ),
@@ -95,7 +95,7 @@ class Init {
 		                  array( $this, 'show_replace_domain_page' ) );
 
 		add_submenu_page( 'tools.php', __( 'Search & Replace', 'insr' ),
-		                  __( 'Search & Replace', 'insr' ), $cap, 'inpsyde_search_replace',
+		                  __( 'Search & Replace Page', 'insr' ), $cap, 'inpsyde_search_replace',
 		                  array( $this, 'show_search_replace_page' ) );
 
 		add_submenu_page( 'tools.php', __( 'SQL Import', 'insr' ),
@@ -113,7 +113,7 @@ class Init {
 	 */
 	public function remove_submenu_pages() {
 
-		remove_submenu_page( 'tools.php', 'db_backup' );
+		remove_submenu_page( 'tools.php', 'inpsyde_search_replace' );
 		remove_submenu_page( 'tools.php', 'sql_import' );
 		remove_submenu_page( 'tools.php', 'replace_domain' );
 		remove_submenu_page( 'tools.php', 'credits' );
