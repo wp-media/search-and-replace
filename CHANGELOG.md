@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.0.1 (2016-02-09)
+- Add support for Searchpattern with quotes. [#40](https://github.com/inpsyde/search-and-replace/issues/40)
+- Basic travis support for travis was added. [#38](https://github.com/inpsyde/search-and-replace/issues/38)
+- Fix Unittest [#37](https://github.com/inpsyde/search-and-replace/issues/37)
+
 ## v3.0.0 (2016-01-27)
 - Refactor the plugin, new requirements, goal and result.
 - -Thanks to [Sven Hinse](https://github.com/s-hinse/) for help to maintain the plugin-
