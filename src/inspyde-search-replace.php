@@ -6,7 +6,7 @@
  * Author:       Inpsyde GmbH
  * Author URI:   http://inpsyde.com
  * Contributors: s-hinse, derpixler
- * Version:      3.0.0
+ * Version:      3.0.1
  * Text Domain:  insr
  * Domain Path:  /languages
  * License:      GPLv3+
