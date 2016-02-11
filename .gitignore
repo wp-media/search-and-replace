@@ -6,3 +6,5 @@ phpunit*.xml
 *.psd
 node_modules/
 npm*
+.svn/
+
