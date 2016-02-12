@@ -35,7 +35,7 @@ class DatabaseImporter {
 		}
 
 		if ( $mysqli->errno ) {
-			$error->add( 'sql_import_error', __( '<b>Mysqli Error:</b> ' . $mysqli->error, 'insr' ) );
+			$error->add( 'sql_import_error', __( '<b>Mysqli Error:</b> ' . $mysqli->error, 'search-and-replace' ) );
 
 			return - 1;
 

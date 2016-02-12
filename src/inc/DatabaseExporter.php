@@ -92,12 +92,12 @@ class DatabaseExporter {
 		if ( is_writable( $this->backup_dir ) ) {
 			$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
 			if ( ! $this->fp ) {
-				$this->errors->add( 8, esc_attr__( 'Could not open the backup file for writing!', 'insr' ) );
+				$this->errors->add( 8, esc_attr__( 'Could not open the backup file for writing!', 'search-and-replace' ) );
 
 				return $report;
 			}
 		} else {
-			$this->errors->add( 9, esc_attr__( 'The backup directory is not writable!', 'insr' ) );
+			$this->errors->add( 9, esc_attr__( 'The backup directory is not writable!', 'search-and-replace' ) );
 
 			return $report;
 		}
@@ -105,14 +105,14 @@ class DatabaseExporter {
 		//Begin new backup of MySql
 		//get charset. if not set assume utf8
 		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
-		$this->stow( '# ' . esc_attr__( 'WordPress MySQL database backup', 'insr' ) . "\n" );
+		$this->stow( '# ' . esc_attr__( 'WordPress MySQL database backup', 'search-and-replace' ) . "\n" );
 		$this->stow( "#\n" );
-		$this->stow( '# ' . sprintf( __( 'Generated: %s', 'insr' ), date( 'l j. F Y H:i T' ) ) . "\n" );
-		$this->stow( '# ' . sprintf( __( 'Hostname: %s', 'insr' ), DB_HOST ) . "\n" );
-		$this->stow( '# ' . sprintf( __( 'Database: %s', 'insr' ), $this->backquote( DB_NAME ) ) . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Generated: %s', 'search-and-replace' ), date( 'l j. F Y H:i T' ) ) . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Hostname: %s', 'search-and-replace' ), DB_HOST ) . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Database: %s', 'search-and-replace' ), $this->backquote( DB_NAME ) ) . "\n" );
 		if ( '' !== $new_table_prefix ) {
 			$this->stow( '# ' . sprintf(
-				             __( 'Changed table prefix: From %s to %s ', 'insr' ),
+				             __( 'Changed table prefix: From %s to %s ', 'search-and-replace' ),
 				             $table_prefix,
 				             $new_table_prefix
 			             )
@@ -198,18 +198,18 @@ class DatabaseExporter {
 
 		// Create the SQL statements
 		$this->stow( '# --------------------------------------------------------' . "\n" );
-		$this->stow( '# ' . sprintf( __( 'Table: %s', 'insr' ), $this->backquote( $new_table ) ) . "\n" );
+		$this->stow( '# ' . sprintf( __( 'Table: %s', 'search-and-replace' ), $this->backquote( $new_table ) ) . "\n" );
 
 		$table_structure = $this->dbm->get_table_structure( $table );
 		if ( ! $table_structure ) {
-			$this->errors->add( 1, __( 'Error getting table details', 'insr' ) . ": $table" );
+			$this->errors->add( 1, __( 'Error getting table details', 'search-and-replace' ) . ": $table" );
 
 			return $table_report;
 		}
 
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
-		$this->stow( '# ' . sprintf( __( 'Delete any existing table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'Delete any existing table %s', 'search-and-replace' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
@@ -219,7 +219,7 @@ class DatabaseExporter {
 		// Comment in SQL-file
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
-		$this->stow( '# ' . sprintf( __( 'Table structure of table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'Table structure of table %s', 'search-and-replace' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( "\n" );
@@ -227,7 +227,7 @@ class DatabaseExporter {
 		/** @var array $create_table */
 		$create_table = $this->dbm->get_create_table_statement( $table );
 		if ( $create_table === FALSE ) {
-			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'insr' ), $table );
+			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'search-and-replace' ), $table );
 			$this->errors->add( 2, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
 		}
@@ -240,7 +240,7 @@ class DatabaseExporter {
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
 
 		if ( $table_structure === FALSE ) {
-			$err_msg = sprintf( __( 'Error getting table structure of %s', 'insr' ), $table );
+			$err_msg = sprintf( __( 'Error getting table structure of %s', 'search-and-replace' ), $table );
 			$this->errors->add( 3, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
 		}
@@ -248,7 +248,7 @@ class DatabaseExporter {
 		// Comment in SQL-file
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
-		$this->stow( '# ' . sprintf( __( 'Data contents of table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'Data contents of table %s', 'search-and-replace' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "#\n" );
 
@@ -340,7 +340,7 @@ class DatabaseExporter {
 		// Create footer/closing comment in SQL-file
 		$this->stow( "\n" );
 		$this->stow( "#\n" );
-		$this->stow( '# ' . sprintf( __( 'End of data contents of table %s', 'insr' ),
+		$this->stow( '# ' . sprintf( __( 'End of data contents of table %s', 'search-and-replace' ),
 		                             $this->backquote( $new_table ) ) . "\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 		$this->stow( "\n" );
@@ -420,7 +420,7 @@ class DatabaseExporter {
 		if ( @fwrite( $this->fp, $query_line ) === FALSE ) {
 			$this->errors->add(
 				4,
-				esc_attr__( 'There was an error writing a line to the backup script:', 'insr' )
+				esc_attr__( 'There was an error writing a line to the backup script:', 'search-and-replace' )
 				. ' ' . $query_line . ' ' . $php_errormsg
 			);
 		}

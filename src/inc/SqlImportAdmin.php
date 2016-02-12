@@ -38,7 +38,7 @@ class SqlImportAdmin extends Admin {
 
 		$html = '	<input type="hidden" name="action" value="sql_import" />';
 		echo $html;
-		submit_button( esc_html__( 'Import SQL file', 'insr' ) );
+		submit_button( esc_html__( 'Import SQL file', 'search-and-replace' ) );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class SqlImportAdmin extends Admin {
 						'sql_import_error',
 						esc_html__(
 							'The file has neither \'.gz\' nor \'.sql\' Extension.  Import not possible.',
-							'insr'
+							'search-and-replace'
 						)
 					);
 
@@ -83,14 +83,14 @@ class SqlImportAdmin extends Admin {
 					'sql_import_error',
 					esc_html__(
 						'The file does not seem to be a valid SQL file. Import not possible.',
-						'insr'
+						'search-and-replace'
 					)
 				);
 			} else {
 				echo '<div class="updated notice is-dismissible">';
 				echo '<p>';
 				$msg = printf(
-					__( 'The SQL file was successfully imported. %s SQL queries were performed.', 'insr' ),
+					__( 'The SQL file was successfully imported. %s SQL queries were performed.', 'search-and-replace' ),
 					$success );
 				echo esc_html( $msg );
 				echo '</p></div>';
@@ -99,19 +99,19 @@ class SqlImportAdmin extends Admin {
 			//show error
 			$php_upload_errors = array(
 				0 => 'There is no error, the file uploaded with success',
-				1 => esc_html__( 'The uploaded file exceeds the upload_max_filesize directive in php.ini', 'insr' ),
+				1 => esc_html__( 'The uploaded file exceeds the upload_max_filesize directive in php.ini', 'search-and-replace' ),
 				2 => esc_html__( 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
-				                 'insr' ),
-				3 => esc_html__( 'The uploaded file was only partially uploaded', 'insr' ),
-				4 => esc_html__( 'No file was uploaded.', 'insr' ),
-				6 => esc_html__( 'Missing a temporary folder.', 'insr' ),
-				7 => esc_html__( 'Failed to write file to disk.', 'insr' ),
-				8 => esc_html__( 'A PHP extension stopped the file upload.', 'insr' ),
+				                 'search-and-replace' ),
+				3 => esc_html__( 'The uploaded file was only partially uploaded', 'search-and-replace' ),
+				4 => esc_html__( 'No file was uploaded.', 'search-and-replace' ),
+				6 => esc_html__( 'Missing a temporary folder.', 'search-and-replace' ),
+				7 => esc_html__( 'Failed to write file to disk.', 'search-and-replace' ),
+				8 => esc_html__( 'A PHP extension stopped the file upload.', 'search-and-replace' ),
 			);
 
 			$this->errors->add(
 				'upload_error',
-				__( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'insr' )
+				__( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'search-and-replace' )
 			);
 		}
 

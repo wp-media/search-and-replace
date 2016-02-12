@@ -67,7 +67,7 @@ class Admin {
 
 			//if no changes found report that
 			if ( 0 === count( $report [ 'changes' ] ) ) {
-				echo '<p>' . esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
+				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 			}
 
 			echo '</div>';
@@ -111,7 +111,7 @@ class Admin {
 				'%s table was processed.',
 				'%s tables were processed.',
 				$report[ 'tables' ],
-				'insr'
+				'search-and-replace'
 			),
 			$report[ 'tables' ]
 		);
@@ -121,7 +121,7 @@ class Admin {
 				'%s cell needs to be updated.',
 				'%s cells need to be updated.',
 				$report[ 'changes_count' ],
-				'insr'
+				'search-and-replace'
 			),
 			$report[ 'changes_count' ]
 		);
@@ -129,7 +129,7 @@ class Admin {
 
 		//create modal window for detailed view of changes
 		?>
-		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'insr' ); ?></a></p>
+		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'search-and-replace' ); ?></a></p>
 		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
 		<div id="changes-modal" class="search-replace-modal " style="display: none;">
 			<div class="search-replace-modal-header">
@@ -144,8 +144,8 @@ class Admin {
 			if ( $changes_made > 0 ) {
 				$table = $table_report[ 'table_name' ];
 				$html  = '<h2 class = "search-replace-modal-table-headline">';
-				$html .= '<strong>' . esc_attr__( 'Table:', 'insr' ) . '</strong> ' . $table;
-				$html .= '<strong>' . esc_attr__( 'Changes:', 'insr' ) . '</strong> ' . $changes_made;
+				$html .= '<strong>' . esc_attr__( 'Table:', 'search-and-replace' ) . '</strong> ' . $table;
+				$html .= '<strong>' . esc_attr__( 'Changes:', 'search-and-replace' ) . '</strong> ' . $changes_made;
 				$html .= '</h2>';
 
 				$html .= '<table class="search-replace-modal-table"><colgroup><col><col><col><col><col><col><col><col></colgroup>';
@@ -153,9 +153,9 @@ class Admin {
 				foreach ( $changes as $change ) {
 
 					$html .= '<tr>';
-					$html .= '<th class="search-replace-narrow">' . __( 'row', 'insr' ) . '</th>
+					$html .= '<th class="search-replace-narrow">' . __( 'row', 'search-and-replace' ) . '</th>
 						<td class="search-replace-narrow">' . $change [ 'row' ] . '</td>
-				         <th> ' . __( 'column', 'insr' ) . '</th>
+				         <th> ' . __( 'column', 'search-and-replace' ) . '</th>
 				        <td>' . $change [ 'column' ] . '</td> ';
 
 					//trim results and wrap with highlight class
@@ -167,9 +167,9 @@ class Admin {
 					$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
 					$new_value = str_replace( $replace, $replace_highlight, $new_value );
 
-					$html .= '<th>' . __( 'Old value:', 'insr' ) . '</th>
+					$html .= '<th>' . __( 'Old value:', 'search-and-replace' ) . '</th>
 							<td>' . $old_value . '</td>
-						<th> ' . __( 'New value:', 'insr' ) . '</th><td>' . $new_value . '</td>';
+						<th> ' . __( 'New value:', 'search-and-replace' ) . '</th><td>' . $new_value . '</td>';
 					$html .= '</tr>';
 				}
 				$html .= '</table>';
@@ -220,10 +220,10 @@ class Admin {
 	protected function show_download_button( $file, $compress ) {
 
 		echo '<div class="updated notice is-dismissible insr_sql_button_wrap"><p>';
-		esc_attr_e( 'Your SQL file was created!', 'insr' );
+		esc_attr_e( 'Your SQL file was created!', 'search-and-replace' );
 		echo '</p><form action method="post">';
 		wp_nonce_field( 'download_sql', 'insr_nonce' );
-		$value = translate( 'Download SQL File', 'insr' );
+		$value = translate( 'Download SQL File', 'search-and-replace' );
 
 		$html = '<input type="hidden" name="action" value="download_file" />';
 		$html .= '<input type ="hidden" name="sql_file" value="' . esc_attr( $file ) . '">';
@@ -242,7 +242,7 @@ class Admin {
 		if ( count( $messages ) > 0 ) {
 
 			echo '<div class="error notice is-dismissible"><strong>' . esc_html__( 'Errors:',
-			                                                                       'insr' ) . '</strong><ul>';
+			                                                                       'search-and-replace' ) . '</strong><ul>';
 
 			foreach ( $messages as $error ) {
 				echo '<li>' . esc_html( $error ) . '</li>';

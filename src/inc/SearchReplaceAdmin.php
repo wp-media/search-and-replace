@@ -113,7 +113,7 @@ class SearchReplaceAdmin extends Admin {
 
 		$html = '<input type="hidden" name="action" value="search_replace" />';
 		echo $html;
-		submit_button( esc_attr__( 'Do Search & Replace', 'insr' ) );
+		submit_button( esc_attr__( 'Do Search & Replace', 'search-and-replace' ) );
 
 	}
 
@@ -134,14 +134,14 @@ class SearchReplaceAdmin extends Admin {
 			echo '<p><strong>'
 			     . esc_html__(
 				     'Dry run is selected. No changes were made to the database and no SQL file was written .',
-				     'insr' )
+				     'search-and-replace' )
 			     . '</strong></p>';
 
 		} else {
 			echo '<p><strong>'
 			     . esc_html__(
 				     'The following changes were made to the database: ',
-				     'insr' )
+				     'search-and-replace' )
 			     . '</strong></p>';
 		}
 		$this->replace->set_dry_run( $dry_run );
@@ -154,7 +154,7 @@ class SearchReplaceAdmin extends Admin {
 
 		//if no changes found report that
 		if ( 0 === count( $report [ 'changes' ] ) ) {
-			echo '<p>' . esc_html__( 'Search pattern not found.', 'insr' ) . '</p>';
+			echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 		}
 		echo '</div>';
 
@@ -167,7 +167,7 @@ class SearchReplaceAdmin extends Admin {
 
 		if ( ! isset( $_POST[ 'select_tables' ] ) ) {
 
-			$this->errors->add( 'no_table_selected', esc_attr__( 'No Tables were selected.', 'insr' ) );
+			$this->errors->add( 'no_table_selected', esc_attr__( 'No Tables were selected.', 'search-and-replace' ) );
 
 		}
 
@@ -175,7 +175,7 @@ class SearchReplaceAdmin extends Admin {
 		if ( isset( $_POST[ 'replace' ] ) && '' !== $_POST[ 'replace' ]
 		     && ( ! isset ( $_POST[ 'search' ] ) || '' === $_POST[ 'search' ] )
 		) {
-			$this->errors->add( 'empty_search', esc_attr__( 'Search field is empty.', 'insr' ) );
+			$this->errors->add( 'empty_search', esc_attr__( 'Search field is empty.', 'search-and-replace' ) );
 
 			return;
 		}
@@ -187,7 +187,7 @@ class SearchReplaceAdmin extends Admin {
 				$this->errors->add(
 					'URL_in-search_expression',
 					esc_attr__( 'Your search contains your current site url. Replacing your site url will most likely cause your site to break. If you want to change the URL (and you know what you doing), please use the export function and make sure you backup your database before reimporting the changed SQL.',
-					            'insr' ) );
+					            'search-and-replace' ) );
 			}
 
 		}

@@ -35,7 +35,7 @@ class ReplaceDomainAdmin extends Admin {
 
 		$html = '<input type="hidden" name="action" value="replace_domain" />';
 		echo $html;
-		submit_button( esc_attr__( 'Do Search & Replace', 'insr' ) );
+		submit_button( esc_attr__( 'Do Search & Replace', 'search-and-replace' ) );
 
 	}
 
@@ -52,7 +52,7 @@ class ReplaceDomainAdmin extends Admin {
 
 		//search field should not be empty
 		if ( '' === $replace ) {
-			$this->errors->add( 'empty_replace', esc_attr__( 'Replace Field should not be empty.', 'insr' ) );
+			$this->errors->add( 'empty_replace', esc_attr__( 'Replace Field should not be empty.', 'search-and-replace' ) );
 			$this->display_errors();
 			return;
 		}

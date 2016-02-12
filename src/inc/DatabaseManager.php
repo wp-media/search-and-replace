@@ -61,7 +61,7 @@ class DatabaseManager {
 
 			foreach ( $tables as $table ) {
 				$size                      = round( $table[ 'Data_length' ] / 1024, 2 );
-				$sizes[ $table[ 'Name' ] ] = sprintf( __( '(%s KB)', 'insr' ), $size );
+				$sizes[ $table[ 'Name' ] ] = sprintf( __( '(%s KB)', 'search-and-replace' ), $size );
 			}
 
 		}

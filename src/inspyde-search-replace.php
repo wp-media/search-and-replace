@@ -26,7 +26,7 @@ function load_textdomain() {
 
 	$lang_dir = plugin_basename( __DIR__ ) . '/languages/';
 
-	load_plugin_textdomain( 'insr', FALSE, $lang_dir );
+	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
 }
 
 /**
@@ -45,10 +45,10 @@ function activate() {
 		wp_die(
 			'<p>' .
 			sprintf(
-				esc_attr__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'insr' ),
+				esc_attr__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'search-and-replace' ),
 				$required_php_version
 			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . esc_attr__( 'back', 'insr' ) . '</a>'
+			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . esc_attr__( 'back', 'search-and-replace' ) . '</a>'
 		);
 
 	}

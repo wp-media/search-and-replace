@@ -202,7 +202,7 @@ class Replace {
 
 					if ( ! $result ) {
 						$table_report[ 'errors' ][] = sprintf(
-							__( 'Error updating row: %d.', 'insr' ),
+							__( 'Error updating row: %d.', 'search-and-replace' ),
 							$row );
 					} else {
 						$table_report[ 'updates' ] ++;

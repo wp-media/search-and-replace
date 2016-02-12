@@ -31,7 +31,7 @@ class DbBackupAdmin extends Admin {
 
 		$html = '	<input type="hidden" name="action" value="sql_export" />';
 		echo $html;
-		submit_button( esc_html__( 'Create SQL File', 'insr' ) );
+		submit_button( esc_html__( 'Create SQL File', 'search-and-replace' ) );
 
 	}
 

@@ -86,24 +86,24 @@ class Init {
 		//can be overridden by filter 'insr-capability'
 		$cap = apply_filters( 'insr-capability', 'install_plugins' );
 
-		add_submenu_page( 'tools.php', __( 'Backup Database', 'insr' ),
-		                  __( 'Search & Replace', 'insr' ), $cap, 'db_backup',
+		add_submenu_page( 'tools.php', __( 'Backup Database', 'search-and-replace' ),
+		                  __( 'Search & Replace', 'search-and-replace' ), $cap, 'db_backup',
 		                  array( $this, 'show_db_backup_page' ) );
 
-		add_submenu_page( 'tools.php', __( 'Replace Domain URL', 'insr' ),
-		                  __( 'Replace Domain URL', 'insr' ), $cap, 'replace_domain',
+		add_submenu_page( 'tools.php', __( 'Replace Domain URL', 'search-and-replace' ),
+		                  __( 'Replace Domain URL', 'search-and-replace' ), $cap, 'replace_domain',
 		                  array( $this, 'show_replace_domain_page' ) );
 
-		add_submenu_page( 'tools.php', __( 'Search & Replace', 'insr' ),
-		                  __( 'Search & Replace Page', 'insr' ), $cap, 'inpsyde_search_replace',
+		add_submenu_page( 'tools.php', __( 'Search & Replace', 'search-and-replace' ),
+		                  __( 'Search & Replace Page', 'search-and-replace' ), $cap, 'inpsyde_search_replace',
 		                  array( $this, 'show_search_replace_page' ) );
 
-		add_submenu_page( 'tools.php', __( 'SQL Import', 'insr' ),
-		                  __( 'SQL Import', 'insr' ), $cap, 'sql_import',
+		add_submenu_page( 'tools.php', __( 'SQL Import', 'search-and-replace' ),
+		                  __( 'SQL Import', 'search-and-replace' ), $cap, 'sql_import',
 		                  array( $this, 'show_import_page' ) );
 
-		add_submenu_page( 'tools.php', __( 'Credits', 'insr' ),
-		                  __( 'Credits', 'insr' ), $cap, 'credits',
+		add_submenu_page( 'tools.php', __( 'Credits', 'search-and-replace' ),
+		                  __( 'Credits', 'search-and-replace' ), $cap, 'credits',
 		                  array( $this, 'show_credits_page' ) );
 
 	}
