@@ -40,10 +40,6 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress s
 5. Result screen after search or search and replace
 
 == Changelog ==
-= v3.0.2 (2016-02-XX) =
-* Prepare this plugin for localization, change Text-Domain [#47](https://github.com/inpsyde/search-and-replace/issues/47)
-* Fix difference in wordings and descriptions [#46](https://github.com/inpsyde/search-and-replace/issues/46)
-
 = v3.0.1 (2016-02-09) =
 * Add support for Searchpattern with quotes. [#40](https://github.com/inpsyde/search-and-replace/issues/40)
 * Basic travis support for travis was added. [#38](https://github.com/inpsyde/search-and-replace/issues/38)

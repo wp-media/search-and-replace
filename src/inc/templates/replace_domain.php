@@ -20,7 +20,7 @@ if ( ! defined( 'INSR_DIR' ) ) {
 		<a class="nav-tab" href="<?php echo admin_url() ?>tools.php?page=credits"><?php esc_html_e( 'Credits', 'search-and-replace' ); ?></a>
 	</h2>
 
-	<p><?php esc_html_e( 'If you want to migrate your site to another domain, enter the new URL in the field "Replace with" and create a backup of your database by clicking "Do Replace Domain/Url".',
+	<p><?php esc_html_e( 'If you want to migrate your site to another domain, enter the new URL in the field "Replace with" and create a backup of your database by clicking "Create SQL File".',
 	             'search-and-replace' ); ?> </p>
 
 	<form action="" method="post">
