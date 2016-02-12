@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Inpsyde Search & Replace\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/inspyde-search-"
 "replace\n"
-"POT-Creation-Date: 2016-02-12 14:56+0100\n"
+"POT-Creation-Date: 2016-02-12 15:20+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Inpsyde GmbH <hello@inpsyde.com>\n"
@@ -204,13 +204,17 @@ msgstr "Herausgeber"
 msgid "Error updating row: %d."
 msgstr "Importieren für Zeile fehlgeschlagen: %d."
 
-#: inc/ReplaceDomainAdmin.php:38 inc/SearchReplaceAdmin.php:116
-msgid "Do Search & Replace"
-msgstr "Suche und Ersetze"
+#: inc/ReplaceDomainAdmin.php:38
+msgid "Do Replace Domain/Url"
+msgstr "Jetzt Domain/URL ersetzen"
 
 #: inc/ReplaceDomainAdmin.php:55
 msgid "Replace Field should not be empty."
 msgstr "Das Feld \"Ersetze mit\" sollte nicht leer sein."
+
+#: inc/SearchReplaceAdmin.php:116
+msgid "Do Search & Replace"
+msgstr "Suche und Ersetze"
 
 #: inc/SearchReplaceAdmin.php:136
 msgid ""
@@ -440,12 +444,12 @@ msgstr ""
 #: inc/templates/replace_domain.php:23
 msgid ""
 "If you want to migrate your site to another domain, enter the new URL in the "
-"field \"Replace with\" and create a backup of your database by clicking "
-"\"Create SQL File\"."
+"field \"Replace with\" and create a backup of your database by clicking \"Do "
+"Replace Domain/Url\"."
 msgstr ""
 "Wenn du deine Website zu einer anderen Domain umziehen willst, gib die neue "
 "URL in das Feld \"Ersetzen durch\" ein und erstelle ein Backup deiner "
-"Datenbank durch Klick auf \"SQL-Datei erzeugen\"."
+"Datenbank durch Klick auf \"Jetzt Domain/URL ersetzen\"."
 
 #: inc/templates/replace_domain.php:32 inc/templates/search_replace.php:28
 msgid "Search for: "

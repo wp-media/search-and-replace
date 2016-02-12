@@ -35,7 +35,7 @@ class ReplaceDomainAdmin extends Admin {
 
 		$html = '<input type="hidden" name="action" value="replace_domain" />';
 		echo $html;
-		submit_button( esc_attr__( 'Do Search & Replace', 'search-and-replace' ) );
+		submit_button( esc_attr__( 'Do Replace Domain/Url', 'search-and-replace' ) );
 
 	}
 
