@@ -3,7 +3,6 @@
   "description": "Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.",
   "keywords"   : ["wordpress", "multisite", "plugin", "database"],
   "license": "GPL-2.0+",
-  "version": "1.3.3",
   "type": "wordpress-plugin",
   "homepage": "https://github.com/inpsyde/search-and-replace/",
   "authors": [
