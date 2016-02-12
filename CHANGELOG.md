@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.0.2 (2016-02-xx)
+- Prepare the Plugin for localization, change Text-Domain.[#47](https://github.com/inpsyde/search-and-replace/issues/47)
+- Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
+
+
 ## v3.0.1 (2016-02-09)
 - Add support for Searchpattern with quotes. [#40](https://github.com/inpsyde/search-and-replace/issues/40)
 - Basic travis support for travis was added. [#38](https://github.com/inpsyde/search-and-replace/issues/38)
