@@ -3,7 +3,6 @@ tests/tmp/
 phpunit*.xml
 .DS_Store
 ._*
-*.psd
 node_modules/
 npm*
 .svn/
