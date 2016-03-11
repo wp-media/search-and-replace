@@ -76,9 +76,8 @@ class SqlImport extends AbstractPage implements PageInterface {
 					$sql_source = $this->read_gzfile_into_string( $tempfile );
 					break;
 				default:
-					$this->errors->add(
-						'sql_import_error',
-						esc_html__(
+					$this->add_error(
+						__(
 							'The file has neither \'.gz\' nor \'.sql\' Extension.  Import not possible.',
 							'search-and-replace'
 						)
@@ -88,11 +87,10 @@ class SqlImport extends AbstractPage implements PageInterface {
 			}
 
 			//call import function
-			$success = $this->dbi->import_sql( $sql_source, $this->errors );
+			$success = $this->dbi->import_sql( $sql_source );
 			if ( - 1 === $success ) {
-				$this->errors->add(
-					'sql_import_error',
-					esc_html__(
+				$this->add_error(
+					__(
 						'The file does not seem to be a valid SQL file. Import not possible.',
 						'search-and-replace'
 					)
@@ -127,10 +125,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 				8 => esc_html__( 'A PHP extension stopped the file upload.', 'search-and-replace' ),
 			);
 
-			$this->errors->add(
-				'upload_error',
-				__( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'search-and-replace' )
-			);
+			$$this->add_error( __( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'search-and-replace' ) );
 		}
 
 	}

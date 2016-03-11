@@ -12,11 +12,10 @@ class Importer {
 	 * imports a sql file via mysqli
 	 *
 	 * @param  string   $sql
-	 * @param \WP_Error $error
 	 *
 	 * @return int  Number of Sql queries made, -1 if error
 	 */
-	public function import_sql( $sql, $error ) {
+	public function import_sql( $sql ) {
 
 		//connect via mysqli for easier db import
 		$mysqli = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
@@ -34,8 +33,6 @@ class Importer {
 		}
 
 		if ( $mysqli->errno ) {
-			$error->add( 'sql_import_error', __( '<b>Mysqli Error:</b> ' . $mysqli->error, 'search-and-replace' ) );
-
 			return - 1;
 
 		}

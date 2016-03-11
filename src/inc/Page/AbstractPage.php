@@ -10,24 +10,30 @@ namespace Inpsyde\SearchReplace\Page;
 abstract class AbstractPage {
 
 	/**
-	 * @var \WP_Error
+	 * @var array
 	 */
-	protected $errors;
+	protected $errors = array();
+
+	/**
+	 * @param string $msg
+	 */
+	protected function add_error( $msg ) {
+		$this->errors[] = (string) $msg;
+	}
 
 	/**
 	 * Echoes the content of the $errors array as formatted HTML if it contains error messages.
 	 */
 	protected function display_errors() {
 
-		$messages = $this->errors->get_error_messages();
-		if ( count( $messages ) < 1 ) {
+		if ( count( $this->errors ) < 1 ) {
 			return;
 		}
 
 		$html = '<div class="error notice is-dismissible">';
 		$html .= sprintf( '<strong>%s</strong>', esc_html__( 'Errors:', 'search-and-replace' ) );
 		$html .= '<ul>';
-		foreach ( $messages as $error ) :
+		foreach ( $this->errors as $error ) :
 			$html .= '<li>' . esc_html( $error ) . '</li>';
 		endforeach;
 		$html .= '</ul>';

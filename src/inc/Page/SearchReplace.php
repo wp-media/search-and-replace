@@ -200,7 +200,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		$select_tables = filter_input( INPUT_POST, 'select_tables' );
 		if ( $select_tables === '' ) {
-			$this->errors->add( 'no_table_selected', esc_attr__( 'No Tables were selected.', 'search-and-replace' ) );
+			$this->add_error( __( 'No Tables were selected.', 'search-and-replace' ) );
 
 			return FALSE;
 		}
@@ -210,7 +210,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		//if search field is empty and replace field is not empty quit. If both fields are empty, go on (useful for backup of single tables without changing)
 		if ( $search === '' && $replace === '' ) {
-			$this->errors->add( 'empty_search', esc_attr__( 'Search field is empty.', 'search-and-replace' ) );
+			$this->add_error( esc_attr__( 'Search field is empty.', 'search-and-replace' ) );
 
 			return FALSE;
 		}
@@ -220,9 +220,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		if ( $export_or_save === '' || 'save_to_db' === $export_or_save ) {
 			$contains_site_url = strpos( $search, $this->get_stripped_site_url() );
 			if ( $contains_site_url !== FALSE ) {
-				$this->errors->add(
-					'URL_in-search_expression',
-					esc_attr__(
+				$this->add_error(
+					__(
 						'Your search contains your current site url. Replacing your site url will most likely cause your site to break. If you want to change the URL (and you know what you doing), please use the export function and make sure you backup your database before reimporting the changed SQL.',
 						'search-and-replace'
 					)

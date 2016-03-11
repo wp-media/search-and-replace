@@ -41,11 +41,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 
 		//search field should not be empty
 		if ( '' === $replace ) {
-			$this->errors->add(
-				'empty_replace', esc_attr__( 'Replace Field should not be empty.', 'search-and-replace' )
-			);
-			$this->display_errors();
-
+			$this->add_error( __( 'Replace Field should not be empty.', 'search-and-replace' ) );
 			return;
 		}
 

@@ -115,6 +115,7 @@ class Manager {
 		echo $output;
 		echo '<div class="tab__content">';
 		$this->save();
+		$page->display_errors();
 		$page = $this->pages[ $current_page ];
 		$page->render();
 		echo '</div>';
