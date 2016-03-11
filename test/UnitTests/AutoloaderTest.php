@@ -1,7 +1,6 @@
 <?php
 
-
-use Inpsyde\SearchReplace\inc\Autoloader;
+use Inpsyde\SearchReplace\Autoloader;
 
 class AutoloaderTest extends \PHPUnit_Framework_TestCase {
 

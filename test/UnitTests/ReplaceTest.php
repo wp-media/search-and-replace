@@ -1,7 +1,6 @@
 <?php
 
-
-use Inpsyde\SearchReplace\inc\Replace;
+use Inpsyde\SearchReplace\Replace;
 
 /**
  * Class ReplaceTest
@@ -9,13 +8,10 @@ use Inpsyde\SearchReplace\inc\Replace;
  */
 class ReplaceTest extends \PHPUnit_Framework_TestCase {
 
-
-
-
 	function test_empty_search_string() {
 
 		$dbm = $this->getMock( '\Inpsyde\searchReplace\inc\DatabaseManager' );
-		$this->assertTrue( $dbm instanceof \Inpsyde\searchReplace\inc\DatabaseManager );
+		$this->assertTrue( $dbm instanceof \Inpsyde\searchReplace\DatabaseManager );
 		$testee = new Replace( $dbm );
 
 		$result = $testee->replace_values( '', '', '' );
@@ -45,23 +41,25 @@ class ReplaceTest extends \PHPUnit_Framework_TestCase {
 				),
 		);
 
-		$dbm_mock = $this->getMock( '\Inpsyde\searchReplace\inc\DatabaseManager',
-		                            array( 'get_columns', 'get_rows', 'get_table_content', 'flush' ) );
+		$dbm_mock = $this->getMock(
+			'\Inpsyde\searchReplace\inc\DatabaseManager',
+			array( 'get_columns', 'get_rows', 'get_table_content', 'flush' )
+		);
 
 		$dbm_mock->expects( $this->any() )
-		         ->method( 'get_columns' )
-		         ->will( $this->returnValue( $columns ) );
+			->method( 'get_columns' )
+			->will( $this->returnValue( $columns ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_rows' )
-		         ->will( $this->returnValue( 1 ) );
+			->method( 'get_rows' )
+			->will( $this->returnValue( 1 ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_table_content' )
-		         ->will( $this->returnValue( $table_content ) );
+			->method( 'get_table_content' )
+			->will( $this->returnValue( $table_content ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'flush' );
+			->method( 'flush' );
 
 		$testee = new Replace( $dbm_mock );
 		$result = $testee->replace_values( 'Mr Wordpress', 'Mr. Drupal', 'wp_plugin_test_comments' );
@@ -90,23 +88,25 @@ class ReplaceTest extends \PHPUnit_Framework_TestCase {
 				),
 		);
 
-		$dbm_mock = $this->getMock( '\Inpsyde\searchReplace\inc\DatabaseManager',
-		                            array( 'get_columns', 'get_rows', 'get_table_content', 'flush' ) );
+		$dbm_mock = $this->getMock(
+			'\Inpsyde\searchReplace\inc\DatabaseManager',
+			array( 'get_columns', 'get_rows', 'get_table_content', 'flush' )
+		);
 
 		$dbm_mock->expects( $this->any() )
-		         ->method( 'get_columns' )
-		         ->will( $this->returnValue( $columns ) );
+			->method( 'get_columns' )
+			->will( $this->returnValue( $columns ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_rows' )
-		         ->will( $this->returnValue( 1 ) );
+			->method( 'get_rows' )
+			->will( $this->returnValue( 1 ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_table_content' )
-		         ->will( $this->returnValue( $table_content ) );
+			->method( 'get_table_content' )
+			->will( $this->returnValue( $table_content ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'flush' );
+			->method( 'flush' );
 
 		$testee = new Replace( $dbm_mock );
 		$result = $testee->replace_values( 'Mr', 'Mrs', 'wp_plugin_test_comments' );
@@ -135,29 +135,30 @@ class ReplaceTest extends \PHPUnit_Framework_TestCase {
 				),
 		);
 
-		$dbm_mock = $this->getMock( '\Inpsyde\searchReplace\inc\DatabaseManager',
-		                            array( 'get_columns', 'get_rows', 'get_table_content', 'flush' ) );
+		$dbm_mock = $this->getMock(
+			'\Inpsyde\searchReplace\inc\DatabaseManager',
+			array( 'get_columns', 'get_rows', 'get_table_content', 'flush' )
+		);
 
 		$dbm_mock->expects( $this->any() )
-		         ->method( 'get_columns' )
-		         ->will( $this->returnValue( $columns ) );
+			->method( 'get_columns' )
+			->will( $this->returnValue( $columns ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_rows' )
-		         ->will( $this->returnValue( 1 ) );
+			->method( 'get_rows' )
+			->will( $this->returnValue( 1 ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_table_content' )
-		         ->will( $this->returnValue( $table_content ) );
+			->method( 'get_table_content' )
+			->will( $this->returnValue( $table_content ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'flush' );
+			->method( 'flush' );
 
 		$testee = new Replace( $dbm_mock );
 		$result = $testee->replace_values( 'Mr Wordpress', 'Mr Drupal', 'wp_plugin_test_comments' );
 		$this->assertEquals( $result[ 'changes' ][ 0 ][ 'to' ], 'a:1:{s:4:"Test";s:9:"Mr Drupal";}' );
 	}
-
 
 	function test_umlaut_replace() {
 
@@ -181,23 +182,25 @@ class ReplaceTest extends \PHPUnit_Framework_TestCase {
 				),
 		);
 
-		$dbm_mock = $this->getMock( '\Inpsyde\searchReplace\inc\DatabaseManager',
-		                            array( 'get_columns', 'get_rows', 'get_table_content', 'flush' ) );
+		$dbm_mock = $this->getMock(
+			'\Inpsyde\searchReplace\inc\DatabaseManager',
+			array( 'get_columns', 'get_rows', 'get_table_content', 'flush' )
+		);
 
 		$dbm_mock->expects( $this->any() )
-		         ->method( 'get_columns' )
-		         ->will( $this->returnValue( $columns ) );
+			->method( 'get_columns' )
+			->will( $this->returnValue( $columns ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_rows' )
-		         ->will( $this->returnValue( 1 ) );
+			->method( 'get_rows' )
+			->will( $this->returnValue( 1 ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'get_table_content' )
-		         ->will( $this->returnValue( $table_content ) );
+			->method( 'get_table_content' )
+			->will( $this->returnValue( $table_content ) );
 
 		$dbm_mock->expects( $this->once() )
-		         ->method( 'flush' );
+			->method( 'flush' );
 
 		$testee = new Replace( $dbm_mock );
 		$result = $testee->replace_values( 'Mr Wordpress', 'Mr. Drüpal', 'wp_plugin_test_comments' );

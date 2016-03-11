@@ -14,7 +14,7 @@ $src_dir = $base_dir . '/src/';
 //set up autoloader
 
 require_once $src_dir . 'inc/Autoloader.php';
-$autoloader = new inc\Autoloader( __NAMESPACE__, $src_dir );
+$autoloader = new Autoloader( __NAMESPACE__, $src_dir );
 $autoloader->register();
 
 
