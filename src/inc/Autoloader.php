@@ -1,6 +1,6 @@
 <?php
 
-namespace Inpsyde\searchReplace\inc;
+namespace Inpsyde\SearchReplace;
 
 /**
  * PSR-4 Autoloader Implementation

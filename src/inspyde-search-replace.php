@@ -72,10 +72,10 @@ function init() {
 	// Set up the autoloader.
 	require_once( 'inc/Autoloader.php' );
 
-	$autoloader = new inc\Autoloader( __NAMESPACE__, __DIR__ );
+	$autoloader = new Autoloader( __NAMESPACE__, __DIR__ . '/inc' );
 	$autoloader->register();
 
 	// Start the plugin.
-	$plugin = new inc\Init();
+	$plugin = new Plugin();
 	$plugin->run( __FILE__ );
 }
