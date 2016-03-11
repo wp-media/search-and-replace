@@ -1,0 +1,48 @@
+<?php
+namespace Inpsyde\SearchReplace;
+
+/**
+ * Class Plugin
+ *
+ * @package Inpsyde\SearchReplace\inc
+ */
+class Plugin {
+
+	/**
+	 * @param string $file : The path to the Plugin main file
+	 */
+	public function run( $file ) {
+
+		global $wpdb;
+
+		//Defines the path to the main plugin directory.
+		$plugin_dir_url = plugin_dir_url( $file );
+		define( 'INSR_DIR', $plugin_dir_url );
+
+		if ( is_admin() ) {
+
+			$dbm     = new Database\Manager( $wpdb );
+			$replace = new Database\Replace( $dbm );
+			$dbe     = new Database\Exporter( $replace, $dbm );
+			$dbi     = new Database\Importer();
+
+			$file_downloader = new FileDownloader( $dbe );
+			add_action( 'init', array( $file_downloader, 'deliver_backup_file' ) );
+
+			$page_manager = new Page\Manager();
+			$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe ) );
+			$page_manager->add_page( new Page\BackupDatabase( $dbe ) );
+			$page_manager->add_page( new Page\ReplaceDomain( $dbm, $dbe ) );
+			$page_manager->add_page( new Page\SqlImport( $dbi ) );
+			$page_manager->add_page( new Page\Credits() );
+
+			add_action( 'admin_menu', array( $page_manager, 'register_pages' ) );
+			add_action( 'admin_head', array( $page_manager, 'remove_submenu_pages' ) );
+
+			add_action( 'admin_enqueue_scripts', array( $page_manager, 'register_css' ) );
+			add_action( 'admin_enqueue_scripts', array( $page_manager, 'register_js' ) );
+		}
+
+	}
+
+}
