@@ -1,0 +1,17 @@
+# Export the same files as the wordpress.org plugin repository
+# Based on https://plugins.trac.wordpress.org/browser/search-and-replace/trunk
+
+.git            export-ignore
+.gitignore      export-ignore
+.gitattributes  export-ignore
+assets/         export-ignore
+test/           export-ignore
+CHANGELOG.md    export-ignore
+CONTRIBUTING.md export-ignore
+Gruntfile.js    export-ignore
+LICENSE         export-ignore
+README.md       export-ignore
+assets          export-ignore
+composer.json   export-ignore
+package.json    export-ignore
+phpunit.xml.dis export-ignorec
