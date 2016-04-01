@@ -17,14 +17,14 @@ abstract class AbstractPage {
 	/**
 	 * @param string $msg
 	 */
-	protected function add_error( $msg ) {
+	public function add_error( $msg ) {
 		$this->errors[] = (string) $msg;
 	}
 
 	/**
 	 * Echoes the content of the $errors array as formatted HTML if it contains error messages.
 	 */
-	protected function display_errors() {
+	public function display_errors() {
 
 		if ( count( $this->errors ) < 1 ) {
 			return;
