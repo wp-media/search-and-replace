@@ -1,5 +1,5 @@
 === Search & Replace ===
-Contributors: inpsyde, Bueltge, s-hinse, derpixler, Giede
+Contributors: inpsyde, Bueltge, s-hinse, derpixler, Giede, ChriCo
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 4.4
@@ -41,6 +41,7 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress s
 
 == Changelog ==
 = v3.0.2 (2016-02-xx) =
+* Implement better tab and adminpage handling [#33](https://github.com/inpsyde/search-and-replace/issues/33)
 * Prepare the Plugin for localization, change Text-Domain.[#47](https://github.com/inpsyde/search-and-replace/issues/47)
 * Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
 

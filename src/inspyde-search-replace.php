@@ -5,7 +5,7 @@
  * Description:  Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.
  * Author:       Inpsyde GmbH
  * Author URI:   http://inpsyde.com
- * Contributors: s-hinse, derpixler
+ * Contributors: s-hinse, derpixler, ChriCo, inpsyde, Bueltge
  * Version:      3.0.1
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
