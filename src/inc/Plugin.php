@@ -30,8 +30,8 @@ class Plugin {
 			add_action( 'init', array( $file_downloader, 'deliver_backup_file' ) );
 
 			$page_manager = new Page\Manager();
-			$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe ) );
 			$page_manager->add_page( new Page\BackupDatabase( $dbe ) );
+			$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe ) );
 			$page_manager->add_page( new Page\ReplaceDomain( $dbm, $dbe ) );
 			$page_manager->add_page( new Page\SqlImport( $dbi ) );
 			$page_manager->add_page( new Page\Credits() );

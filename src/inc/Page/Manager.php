@@ -57,6 +57,13 @@ class Manager {
 
 		foreach ( $this->pages as $slug => $page ) {
 
+			$menu_title = $page->get_menu_title();
+
+			# set the right menüname
+			if( $slug == 'backup-database' ){
+				$menu_title = $this->pages[ "search-replace" ]->get_menu_title();
+			}
+
 			/**
 			 * @param string        $cap
 			 * @param PageInterface $page
@@ -66,7 +73,7 @@ class Manager {
 			add_submenu_page(
 				'tools.php',
 				$page->get_page_title(),
-				$page->get_menu_title(),
+				$menu_title,
 				$cap,
 				$slug,
 				array( $this, 'render' )
