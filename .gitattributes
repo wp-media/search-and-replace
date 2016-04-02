@@ -4,7 +4,7 @@
 .git                export-ignore
 .gitignore          export-ignore
 .gitattributes      export-ignore
-assets/             export-ignore
+assets/wporg-assets export-ignore
 test/               export-ignore
 CHANGELOG.md        export-ignore
 CONTRIBUTING.md     export-ignore
