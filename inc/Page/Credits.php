@@ -1,0 +1,42 @@
+<?php
+namespace Inpsyde\SearchReplace\Page;
+
+/**
+ * Class Credits
+ *
+ * @package Inpsyde\SearchReplace\Page
+ */
+class Credits extends AbstractPage implements PageInterface {
+
+	/**
+	 * Callback function for credits content.
+	 */
+	public function render() {
+
+		require_once(  __DIR__ . '/../templates/credits.php' );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_menu_title() {
+
+		return __( 'Credits', 'search-and-replace' );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_page_title() {
+
+		return __( 'Credits', 'search-and-replace' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function save() {
+
+		return;
+	}
+}
