@@ -737,4 +737,48 @@ class Exporter {
 		return $new_table_prefix . $part_after_prefix;
 	}
 
+	/**
+	 * Trims a given string to 50 chars before and after the search string, if the string is longer than 199 chars.
+	 *
+	 * @param $needle    string
+	 * @param $haystack  string
+	 * @param $delimiter array  $delimiter[0]=start delimiter, $delimiter[1] = end delimiter
+	 *
+	 * @return string The trimmed $haystack
+	 */
+	protected function trim_search_results( $needle, $haystack, $delimiter ) {
+		//if result has <200 characters we return the whole string
+		if ( strlen( $haystack ) < 100 ) {
+			return $haystack;
+		}
+		$trimmed_results = NULL;
+		// Get all occurrences of $needle with up to 50 chars front & back.
+		preg_match_all( '@.{0,50}' . $needle . '.{0,50}@', $haystack, $trimmed_results );
+		$return_value = '';
+		/** @var array $trimmed_results */
+		$imax = count( $trimmed_results );
+		for ( $i = 0; $i < $imax; $i ++ ) {
+			//reset delimiter, might have been changed
+			$local_delimiter = $delimiter;
+			//check if the first trimmmed result is the beginning of $haystack. if so remove leading delimiter
+			if ( $i === 0 ) {
+				$pos = strpos( $haystack, $trimmed_results[ 0 ][ $i ] );
+				if ( $pos === 0 ) {
+					$local_delimiter[ 0 ] = '';
+				}
+			}
+			//check if the last trimmed result is the end of $haystack. if so, remove trailing delimiter
+			$last_index = count( $trimmed_results ) - 1;
+			if ( $i === $last_index ) {
+				$trimmed_result_length = strlen( $trimmed_results[ 0 ][ $i ] );
+				$substring             = substr( $haystack, - $trimmed_result_length );
+				if ( $substring === $trimmed_results[ 0 ][ $i ] ) {
+					$local_delimiter[ 1 ] = '';
+				}
+			}
+			$return_value .= $local_delimiter[ 0 ] . $trimmed_results[ 0 ][ $i ] . $local_delimiter[ 1 ];
+		}
+		return $return_value;
+	}
+
 }
