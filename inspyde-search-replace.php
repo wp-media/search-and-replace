@@ -24,7 +24,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
  */
 function load_textdomain() {
 
-	$lang_dir = plugin_basename( __DIR__ ) . '/languages/';
+	$lang_dir = plugin_basename( __DIR__ ) . '/l10n/';
 
 	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
 }
@@ -54,6 +54,8 @@ function activate() {
 	}
 }
 
+
+
 /**
  * Load and init in WP Environment.
  */
@@ -68,6 +70,15 @@ function init() {
 	}
 
 	load_textdomain();
+
+
+	$autoload = __DIR__ . '/vendor/autoload.php';
+	if ( file_exists( $autoload ) )
+		require_once $autoload;
+
+	#print_r( get_included_files() );
+	#die();
+
 
 	// Set up the autoloader.
 	require_once( 'inc/Autoloader.php' );
