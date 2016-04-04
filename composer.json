@@ -32,20 +32,6 @@
   "support": {
     "issues": "https://github.com/inpsyde/search-and-replace/issues"
   },
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "dnaber-de/requisite-autoloader",
-        "version": "1.0",
-        "source": {
-          "url": "https://github.com/dnaber-de/Requisite.git",
-          "type": "git",
-          "reference": "1.0"
-        }
-      }
-    }
-  ],
   "require": {
     "php": ">=5.3",
     "composer/installers": "~1.0",
