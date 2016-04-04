@@ -1,4 +1,4 @@
-vendor/
+
 tests/tmp/
 phpunit*.xml
 .DS_Store
@@ -7,3 +7,6 @@ node_modules/
 npm*
 .svn/
 composer.lock
+
+vendor
+
