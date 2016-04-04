@@ -71,20 +71,21 @@ function init() {
 
 	load_textdomain();
 
+	/**
+	 * Load the Requisite library. Alternatively you can use composer's
+	 */
+	require_once 'inc/requisite/src/Requisite/Requisite.php';
+	\Requisite\Requisite::init();
 
-	$autoload = __DIR__ . '/vendor/autoload.php';
-	if ( file_exists( $autoload ) )
-		require_once $autoload;
+	$autoloader = new \Requisite\SPLAutoLoader;
 
-	#print_r( get_included_files() );
-	#die();
+	$autoloader->addRule(
+		new \Requisite\Rule\Psr4(
+			__DIR__ . '/inc', // base directory
+			'Inpsyde\SearchReplace'      // base namespace
+		)
+	);
 
-
-	// Set up the autoloader.
-	require_once( 'inc/Autoloader.php' );
-
-	$autoloader = new Autoloader( __NAMESPACE__, __DIR__ . '/inc' );
-	$autoloader->register();
 
 	// Start the plugin.
 	$plugin = new Plugin();
