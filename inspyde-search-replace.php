@@ -81,8 +81,8 @@ function init() {
 
 	$autoloader->addRule(
 		new \Requisite\Rule\Psr4(
-			__DIR__ . '/inc', // base directory
-			'Inpsyde\SearchReplace'      // base namespace
+			__DIR__ . '/inc',       // base directory
+			'Inpsyde\SearchReplace' // base namespace
 		)
 	);
 
