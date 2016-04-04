@@ -158,6 +158,9 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run ) {
 
+
+
+
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
 			echo '<p><strong>'
