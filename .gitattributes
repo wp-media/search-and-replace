@@ -14,3 +14,4 @@ composer.json       export-ignore
 package.json        export-ignore
 phpunit.xml.dist    export-ignore
 .travis.yml         export-ignore
+wporg-assets        export-ignore
