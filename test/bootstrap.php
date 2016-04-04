@@ -1,10 +1,16 @@
 <?php # -*- coding: utf-8 -*-
 namespace Inpsyde\SearchReplace;
 
-$base_dir = dirname( __DIR__ );
+/**
+ * Load the Requisite library. Alternatively you can use composer's
+ */
+require_once 'inc/requisite/src/Requisite/Requisite.php';
+\Requisite\Requisite::init();
 
-$composer_file = $base_dir . '/vendor/autoload.php';
-
-if ( file_exists( $composer_file ) ) {
-	require_once $composer_file;
-}
+$autoloader = new \Requisite\SPLAutoLoader;
+$autoloader->addRule(
+	new \Requisite\Rule\Psr4(
+		__DIR__ . '/../inc',       // base directory
+		'Inpsyde\SearchReplace' // base namespace
+	)
+);
