@@ -21,8 +21,6 @@ class Plugin {
 
 		if ( is_admin() ) {
 
-			set_time_limit(0);
-
 			$dbm     = new Database\Manager( $wpdb );
 			$replace = new Database\Replace( $dbm );
 			$dbe     = new Database\Exporter( $replace, $dbm );
