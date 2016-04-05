@@ -7,9 +7,9 @@ module.exports = function(grunt) {
 			all: {
 				files: [{
 					expand: true,
-					cwd: 'src/assets/js/',
+					cwd: 'assets/js/',
 					src: ['*.js', '!*.min.js'],
-					dest: 'src/assets/js/',
+					dest: 'assets/js/',
 					ext: '.min.js'
 				}]
 			}
@@ -18,9 +18,9 @@ module.exports = function(grunt) {
 			all: {
 				files: [{
 					expand: true,
-					cwd: 'src/assets/css/',
+					cwd: 'assets/css/',
 					src: ['*.css', '!*.min.css'],
-					dest: 'src/assets/css/',
+					dest: 'assets/css/',
 					ext: '.min.css'
 				}]
 			}
@@ -29,9 +29,9 @@ module.exports = function(grunt) {
 			target: {
 				options: {
 					cwd: '',                                // Directory of files to internationalize.
-					domainPath: 'src/languages/',           // Where to save the POT file.
+					domainPath: 'l10n/',           // Where to save the POT file.
 					exclude: [],                            // List of files or directories to ignore.
-					include: ['src/.*'],                    // List of files or directories to include.
+					include: ['.*'],                    // List of files or directories to include.
 					mainFile: 'inspyde-search-replace.php', // Main project file.
 					potComments: '',                        // The copyright at the beginning of the POT file.
 					potFilename: 'search-and-replace.pot',  // Name of the POT file.
