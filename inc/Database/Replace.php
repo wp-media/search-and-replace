@@ -1,7 +1,8 @@
 <?php
 namespace Inpsyde\SearchReplace\Database;
 
-use InvalidArgumentException;
+use InvalidArgumentException,
+	Inpsyde\SearchReplace\Service;
 
 /**
  * Class Replace
@@ -72,6 +73,9 @@ class Replace {
 
 	public function run_search_replace( $search, $replace, $tables ) {
 
+		$execution_time = new Service\MaxExecutionTime();
+		$execution_time->set();
+
 		$report = array(
 			'errors'        => NULL,
 			'changes'       => array(),
@@ -92,6 +96,8 @@ class Replace {
 			}
 
 		}
+
+		$execution_time->restore();
 
 		return $report;
 	}
