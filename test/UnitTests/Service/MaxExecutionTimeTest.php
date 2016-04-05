@@ -1,42 +1,53 @@
 <?php
 namespace Inpsyde\SearchReplace\Tests\Service;
 
-use Inpsyde\SearchReplace\Service;
+use Inpsyde\SearchReplace\Service,
+	Brain,
+	MonkeryTestCase;
 
 /**
  * Class ExecutionTime - set the service time out up to 0
  *
  * @package Inpsyde\SearchReplace\Service
  */
-class MaxExecutionTimeTest extends \PHPUnit_Framework_TestCase{
+class MaxExecutionTimeTest extends MonkeryTestCase\TestCase{
 
 	public $testee;
 
-	public function setUp() {
+	/**
+	 * @dataProvider default_test_data
+	 */
+	public function test_set( $time, $max_execution_time ){
 
-		parent::setUp();
+		// set set_time_limit up default_test_data - phpUnit will set it ever to 0
+		\set_time_limit( $max_execution_time );
 
-	}
+		$this->assertSame( $max_execution_time, ini_get( 'max_execution_time' ) );
 
-	public function test_set(){
-
-		$mock = $this->getMockBuilder('Service\MaxExecutionTime')
-			 ->setMethods(array('set_time_limit'))
-		     ->getMock();
-
-		$mock->expects( $this->once() )
-			->method('set_time_limit')
-			->with()
-			->with( $this->equalTo( NULL ) );
+		$this->assertInternalType( 'int', (int) $time );
 
 		$testee = new Service\MaxExecutionTime;
-		$testee->set( $mock );
+		$testee->set( $time );
 
+		$this->assertSame( $time, ini_get( 'max_execution_time' ) );
 
 	}
 
-	public function test_restore(){
 
-    }
+	/**
+	 * @return array
+	 */
+	public function default_test_data() {
+
+		$data = [ ];
+
+		# 1. Set timeout to 0
+		$data[ 'test_1' ] = [ (string) 0, (string) 40 ];
+
+		# 2. restore timeout
+		$data[ 'test_2' ] = [ (string) 40, (string) 0 ];
+
+		return $data;
+	}
 
 }

@@ -13,23 +13,36 @@ class MaxExecutionTime {
 	 */
 	private $met;
 
-	public function __construct(){
-
-		$this->store();
-
-	}
-
+	/**
+	 * Store current timelimit and set a limit
+	 *
+	 * @param int $time
+	 */
 	public function set( $time = 0 ){
+
+		if( $time == 0 ){
+			$this->store();
+		}
+
 	    set_time_limit( $time );
+
 	}
 
+	/**
+	 * Restor timelimit
+	 */
 	public function restore(){
+
+		$this->set( $this->met );
 
     }
 
+	/**
+	 *
+	 */
 	public function store(){
 
-		$this->met = ini_get('max_execution_time');
+		$this->met = (int) ini_get('max_execution_time');
 
 	}
 
