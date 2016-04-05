@@ -43,6 +43,11 @@
     "brain/monkey": "^1.3",
     "mockery/mockery": "*"
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Inpsyde\\SearchReplace\\Tests": "tests/UnitTests/"
+    }
+  },
   "extra":
   {
     "installer-paths": {
