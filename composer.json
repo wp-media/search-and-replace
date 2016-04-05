@@ -43,11 +43,6 @@
     "brain/monkey": "^1.3",
     "mockery/mockery": "*"
   },
-  "autoload-dev": {
-    "psr-4": {
-      "Inpsyde\\SearchReplace\\Test\\Helper\\": "tests/phpunit/Helper/"
-    }
-  },
   "extra":
   {
     "installer-paths": {
