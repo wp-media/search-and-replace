@@ -1,6 +1,8 @@
 <?php # -*- coding: utf-8 -*-
 namespace Inpsyde\SearchReplace;
 
+require_once 'vendor/autoload.php';
+
 /**
  * Load the Requisite library. Alternatively you can use composer's
  */

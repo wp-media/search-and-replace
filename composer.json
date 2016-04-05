@@ -41,12 +41,8 @@
   },
   "require-dev": {
     "brain/monkey": "^1.3",
-    "mockery/mockery": "*"
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Inpsyde\\SearchReplace\\Tests\\": "tests/UnitTests/"
-    }
+    "mockery/mockery": "*",
+    "inpsyde/monkery-test-case": "dev-master"
   },
   "extra":
   {
