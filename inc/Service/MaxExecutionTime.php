@@ -33,7 +33,7 @@ class MaxExecutionTime {
 	 */
 	public function restore(){
 
-		#$this->set( $this->met );
+		$this->set( $this->met );
 
     }
 
