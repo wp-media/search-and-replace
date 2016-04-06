@@ -1,9 +1,9 @@
 <?php
 namespace Inpsyde\SearchReplace\Tests\Service;
 
-use Inpsyde\SearchReplace\Service,
-	Brain,
-	MonkeryTestCase;
+use Brain;
+use Inpsyde\SearchReplace\Service;
+use MonkeryTestCase;
 
 /**
  * Class ExecutionTime - set the service time out up to 0
@@ -33,6 +33,22 @@ class MaxExecutionTimeTest extends MonkeryTestCase\TestCase{
 
 	}
 
+	public function test_restore(){
+
+		$stub = $this->getMockBuilder('Inpsyde\SearchReplace\Service\MaxExecutionTime')
+					 ->disableOriginalConstructor()
+		             ->getMock();
+
+		$stub->expects( $this->once() )
+			 ->method('set')
+		     ->willReturn('foo');
+
+		$testee = new Service\MaxExecutionTime;
+		$testee->restore();
+
+		$this->markTestIncomplete( 'This test has to add.' );
+
+	}
 
 	/**
 	 * @return array
