@@ -5,10 +5,25 @@
 
 
 ##Description:
-- Backs up your database.
-- Searches for strings in your WordPress database and replaces them, also in serialized objects.
-- Generates a backup of database with changed site URL for site migration.
-- Imports a SQL file into your database.
+With Search & Replace you can search for everything and replace this with everything **but before** you do this you can easily **create** a simple **database backup** and restore it.
+
+**We have implements special features!** 
+The first one is "Replace a Domain / Url" that is useful for a quick and simple transfer or a migration of an WordPress. 
+The second is a full support for serialized data but there are a lot more features - find them!
+
+Our goal with this plugin is to give you a good solution for both Developers and Users of WordPress.
+
+> **Note:** This plugin requires PHP 5.4 or higher to be activated.
+
+####Features
+- Search & replace data in your WordPress database
+- Change domain/URL of WordPress installation
+- Handle serialized data
+- Choose dry run or download SQL file
+- Change table prefix
+- Backup & restore your database
+- WordPress Multisite support
+- localized and ready for your own language
 
 ##Requirements:
 PHP 5.4. +

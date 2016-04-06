@@ -1,5 +1,5 @@
 === Search & Replace ===
-Contributors: inpsyde, Bueltge, s-hinse, derpixler, Giede, ChriCo
+Contributors: inpsyde, Bueltge, derpixler, ChriCo, s-hinse, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 4.4
@@ -8,10 +8,17 @@ Stable tag: 3.0.1
 Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
 
 == Description ==
-- Backs up your database.
-- Searches for strings in your WordPress database and replaces them, also in serialized objects.
-- Generates a backup of database with changed site URL for site migration.
-- Imports a SQL file into your database.
+With Search & Replace you can search for everything and replace this with everything **but before** you do this you can easily **create** a simple **database backup** and restore it.
+
+**We have implements special features!**
+The first one is "Replace a Domain / Url" that is useful for a quick and simple transfer or a migration of an WordPress.
+The second is a full support for serialized data but there are a lot more features - find them!
+
+Our goal with this plugin is to give you a good solution for both Developers and Users of WordPress.
+
+> **Note:** This plugin requires PHP 5.4 or higher to be activated.
+
+[**Checkout our GitHub Repository**](https://github.com/inpsyde/search-and-replace)
 
 = Features =
 - Search & replace data in your WordPress database
