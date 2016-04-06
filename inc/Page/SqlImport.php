@@ -2,7 +2,7 @@
 
 namespace Inpsyde\SearchReplace\Page;
 
-use Inpsyde\SearchReplace\Database\Importer;
+use Inpsyde\SearchReplace\Database;
 
 /**
  * Class SqlImport
@@ -21,7 +21,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	 *
 	 * @param Importer $dbi
 	 */
-	public function __construct( Importer $dbi ) {
+	public function __construct( Database\Importer $dbi ) {
 		$this->dbi = $dbi;
 	}
 

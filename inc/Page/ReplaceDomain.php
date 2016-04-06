@@ -2,8 +2,7 @@
 
 namespace Inpsyde\SearchReplace\Page;
 
-use Inpsyde\SearchReplace\Database\Exporter;
-use Inpsyde\searchReplace\Database\Manager;
+use Inpsyde\SearchReplace\Database;
 
 /**
  * Class ReplaceDomain
@@ -28,7 +27,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 * @param Manager  $dbm
 	 * @param Exporter $dbe
 	 */
-	public function __construct( Manager $dbm, Exporter $dbe ) {
+	public function __construct( Database\Manager $dbm, Database\Exporter $dbe ) {
 
 		$this->dbm = $dbm;
 		$this->dbe = $dbe;

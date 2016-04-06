@@ -1,7 +1,7 @@
 <?php
 namespace Inpsyde\SearchReplace\Page;
 
-use Inpsyde\SearchReplace\Database\Exporter;
+use Inpsyde\SearchReplace\Database;
 
 /**
  * Class BackupDatabase
@@ -20,7 +20,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 *
 	 * @param Exporter $dbe
 	 */
-	public function __construct( Exporter $dbe ) {
+	public function __construct( Database\Exporter $dbe ) {
 
 		$this->dbe = $dbe;
 	}
