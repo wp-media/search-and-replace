@@ -5,202 +5,198 @@ msgstr ""
 "Project-Id-Version: Search & Replace 3.0.1\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/inspyde-search-replace\n"
-"POT-Creation-Date: 2016-02-12 13:35:41+00:00\n"
+"POT-Creation-Date: 2016-04-06 06:29:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n 0.5.3\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
 "X-Poedit-KeywordsList: "
 "__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
 "attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "Poedit: \n"
 
-#: src/inc/Admin.php:70 src/inc/SearchReplaceAdmin.php:157
+#: inc/Database/Exporter.php:87 inc/Page/SearchReplace.php:189
 msgid "Search pattern not found."
 msgstr ""
 
-#: src/inc/Admin.php:110
+#: inc/Database/Exporter.php:129
 msgid "%s table was processed."
 msgid_plural "%s tables were processed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/inc/Admin.php:120
+#: inc/Database/Exporter.php:139
 msgid "%s cell needs to be updated."
 msgid_plural "%s cells need to be updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/inc/Admin.php:132
+#: inc/Database/Exporter.php:151
 msgid "View details"
 msgstr ""
 
-#: src/inc/Admin.php:147
+#: inc/Database/Exporter.php:166
 msgid "Table:"
 msgstr ""
 
-#: src/inc/Admin.php:148
+#: inc/Database/Exporter.php:167
 msgid "Changes:"
 msgstr ""
 
-#: src/inc/Admin.php:156
+#: inc/Database/Exporter.php:175
 msgid "row"
 msgstr ""
 
-#: src/inc/Admin.php:158
+#: inc/Database/Exporter.php:177
 msgid "column"
 msgstr ""
 
-#: src/inc/Admin.php:170
+#: inc/Database/Exporter.php:189
 msgid "Old value:"
 msgstr ""
 
-#: src/inc/Admin.php:172
+#: inc/Database/Exporter.php:191
 msgid "New value:"
 msgstr ""
 
-#: src/inc/Admin.php:223
+#: inc/Database/Exporter.php:212
 msgid "Your SQL file was created!"
 msgstr ""
 
-#: src/inc/Admin.php:244
-msgid "Errors:"
-msgstr ""
-
-#: src/inc/DatabaseExporter.php:95
+#: inc/Database/Exporter.php:261
 msgid "Could not open the backup file for writing!"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:100
+#: inc/Database/Exporter.php:267
 msgid "The backup directory is not writable!"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:108
+#: inc/Database/Exporter.php:275
 msgid "WordPress MySQL database backup"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:110
+#: inc/Database/Exporter.php:277
 msgid "Generated: %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:111
+#: inc/Database/Exporter.php:278
 msgid "Hostname: %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:112
+#: inc/Database/Exporter.php:279
 msgid "Database: %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:115
+#: inc/Database/Exporter.php:283
 msgid "Changed table prefix: From %s to %s "
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:201
+#: inc/Database/Exporter.php:370
 msgid "Table: %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:205
+#: inc/Database/Exporter.php:374
 msgid "Error getting table details"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:212
+#: inc/Database/Exporter.php:383
 msgid "Delete any existing table %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:222
+#: inc/Database/Exporter.php:397
 msgid "Table structure of table %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:230
+#: inc/Database/Exporter.php:407
 msgid "Error with SHOW CREATE TABLE for %s."
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:243
+#: inc/Database/Exporter.php:420
 msgid "Error getting table structure of %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:251
+#: inc/Database/Exporter.php:430
 msgid "Data contents of table %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:343
+#: inc/Database/Exporter.php:532
 msgid "End of data contents of table %s"
 msgstr ""
 
-#: src/inc/DatabaseExporter.php:423
+#: inc/Database/Exporter.php:614
 msgid "There was an error writing a line to the backup script:"
 msgstr ""
 
-#: src/inc/DatabaseManager.php:64
+#: inc/Database/Manager.php:70
 msgid "(%s KB)"
 msgstr ""
 
-#: src/inc/DbBackupAdmin.php:34
+#: inc/Database/Replace.php:216
+msgid "Error updating row: %d."
+msgstr ""
+
+#: inc/Page/AbstractPage.php:34
+msgid "Errors:"
+msgstr ""
+
+#: inc/Page/AbstractPage.php:59
+msgid "Submit"
+msgstr ""
+
+#: inc/Page/BackupDatabase.php:33 inc/Page/BackupDatabase.php:41
+msgid "Backup Database"
+msgstr ""
+
+#: inc/Page/BackupDatabase.php:57
 msgid "Create SQL File"
 msgstr ""
 
-#: src/inc/Init.php:89 src/inc/templates/credits.php:17
-#: src/inc/templates/db_backup.php:18 src/inc/templates/replace_domain.php:16
-#: src/inc/templates/search_replace.php:16 src/inc/templates/sql_import.php:16
-msgid "Backup Database"
+#: inc/Page/Credits.php:24 inc/Page/Credits.php:32
+msgid "Credits"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "Search & Replace"
 msgstr ""
 
-#: src/inc/Init.php:93 src/inc/Init.php:94
-msgid "Replace Domain URL"
-msgstr ""
-
-#: src/inc/Init.php:98
-msgid "Search & Replace Page"
-msgstr ""
-
-#: src/inc/Init.php:101 src/inc/Init.php:102
-msgid "SQL Import"
-msgstr ""
-
-#: src/inc/Init.php:105 src/inc/Init.php:106 src/inc/templates/credits.php:25
-#: src/inc/templates/db_backup.php:34 src/inc/templates/replace_domain.php:20
-#: src/inc/templates/search_replace.php:21 src/inc/templates/sql_import.php:19
-msgid "Credits"
-msgstr ""
-
-#: src/inc/Replace.php:205
-msgid "Error updating row: %d."
-msgstr ""
-
-#: src/inc/ReplaceDomainAdmin.php:38 src/inc/SearchReplaceAdmin.php:116
-msgid "Do Search & Replace"
-msgstr ""
-
-#: src/inc/ReplaceDomainAdmin.php:55
+#: inc/Page/ReplaceDomain.php:44
 msgid "Replace Field should not be empty."
 msgstr ""
 
-#: src/inc/SearchReplaceAdmin.php:135
+#: inc/Page/ReplaceDomain.php:64
+msgid "Do Replace Domain/Url"
+msgstr ""
+
+#: inc/Page/ReplaceDomain.php:72 inc/Page/ReplaceDomain.php:80
+msgid "Replace Domain URL"
+msgstr ""
+
+#: inc/Page/SearchReplace.php:144
+msgid "Do Search & Replace"
+msgstr ""
+
+#: inc/Page/SearchReplace.php:165
 msgid ""
 "Dry run is selected. No changes were made to the database and no SQL file "
 "was written ."
 msgstr ""
 
-#: src/inc/SearchReplaceAdmin.php:142
+#: inc/Page/SearchReplace.php:173
 msgid "The following changes were made to the database: "
 msgstr ""
 
-#: src/inc/SearchReplaceAdmin.php:170
+#: inc/Page/SearchReplace.php:204
 msgid "No Tables were selected."
 msgstr ""
 
-#: src/inc/SearchReplaceAdmin.php:178
+#: inc/Page/SearchReplace.php:214
 msgid "Search field is empty."
 msgstr ""
 
-#: src/inc/SearchReplaceAdmin.php:189
+#: inc/Page/SearchReplace.php:225
 msgid ""
 "Your search contains your current site url. Replacing your site url will "
 "most likely cause your site to break. If you want to change the URL (and "
@@ -208,119 +204,109 @@ msgid ""
 "backup your database before reimporting the changed SQL."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:41 src/inc/templates/credits.php:23
-#: src/inc/templates/db_backup.php:30 src/inc/templates/replace_domain.php:19
-#: src/inc/templates/search_replace.php:20 src/inc/templates/sql_import.php:18
+#: inc/Page/SqlImport.php:33 inc/Page/SqlImport.php:41
+msgid "SQL Import"
+msgstr ""
+
+#: inc/Page/SqlImport.php:57
 msgid "Import SQL file"
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:70
+#: inc/Page/SqlImport.php:80
 msgid "The file has neither '.gz' nor '.sql' Extension.  Import not possible."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:84
+#: inc/Page/SqlImport.php:93
 msgid "The file does not seem to be a valid SQL file. Import not possible."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:93
+#: inc/Page/SqlImport.php:102
 msgid "The SQL file was successfully imported. %s SQL queries were performed."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:102
+#: inc/Page/SqlImport.php:114
 msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini"
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:103
+#: inc/Page/SqlImport.php:117
 msgid ""
 "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in "
 "the HTML form"
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:105
+#: inc/Page/SqlImport.php:121
 msgid "The uploaded file was only partially uploaded"
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:106
+#: inc/Page/SqlImport.php:122
 msgid "No file was uploaded."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:107
+#: inc/Page/SqlImport.php:123
 msgid "Missing a temporary folder."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:108
+#: inc/Page/SqlImport.php:124
 msgid "Failed to write file to disk."
 msgstr ""
 
-#: src/inc/SqlImportAdmin.php:109
+#: inc/Page/SqlImport.php:125
 msgid "A PHP extension stopped the file upload."
 msgstr ""
 
-#: src/inc/templates/credits.php:19 src/inc/templates/db_backup.php:22
-#: src/inc/templates/replace_domain.php:17
-#: src/inc/templates/search_replace.php:17 src/inc/templates/sql_import.php:17
-msgid "Replace Domain/URL"
-msgstr ""
-
-#: src/inc/templates/credits.php:21 src/inc/templates/db_backup.php:26
-#: src/inc/templates/replace_domain.php:18
-#: src/inc/templates/search_replace.php:19 src/inc/templates/sql_import.php:17
-msgid "Search and Replace"
-msgstr ""
-
-#: src/inc/templates/credits.php:28
+#: inc/templates/credits.php:12
 msgid "Hey nice to have you here!"
 msgstr ""
 
-#: src/inc/templates/credits.php:30
+#: inc/templates/credits.php:14
 msgid ""
 "Search and Replace is refactored in 2015 by <a href=\"%1$s\">Inpsyde "
 "GmbH</a>, maintained since 2006 and based on the original from <a "
 "href=\"%2$s\">Mark Cunningham</a>."
 msgstr ""
 
-#: src/inc/templates/credits.php:35
+#: inc/templates/credits.php:19
 msgid "You rock! contribute the plugin."
 msgstr ""
 
-#: src/inc/templates/credits.php:37
+#: inc/templates/credits.php:21
 msgid ""
 "You can contribute the Plugin go to the repository on <a "
 "href=\"%s\">github</a> making changes, create issues or submitting changes."
 msgstr ""
 
-#: src/inc/templates/credits.php:41
+#: inc/templates/credits.php:25
 msgid "We are Inpsyde"
 msgstr ""
 
-#: src/inc/templates/credits.php:42
+#: inc/templates/credits.php:26
 msgid ""
 "Inpsyde has developed enterprise solutions with the world’s most popular "
 "open-source CMS since it was a kitten. Still do, inconvincible convinced."
 msgstr ""
 
-#: src/inc/templates/credits.php:44
+#: inc/templates/credits.php:28
 msgid ""
 "Inpsyde is a WordPress <a href=\"%1$s\">VIP Service Partner</a> and <a "
 "href=\"%2$s\">WooCommerce Expert</a>."
 msgstr ""
 
-#: src/inc/templates/credits.php:49
+#: inc/templates/credits.php:33
 msgid "Look at our other <a href=\"%s\">free WordPress plugins</a>."
 msgstr ""
 
-#: src/inc/templates/credits.php:54
+#: inc/templates/credits.php:38
 msgid "Working at Inpsyde"
 msgstr ""
 
-#: src/inc/templates/credits.php:55
+#: inc/templates/credits.php:39
 msgid ""
 "The biggest WordPress enterprise in Europe we’re dynamically growing and "
 "constantly looking for new employees. So do you want to shape WordPress in "
 "an interesting and exciting working environment? Here we are!"
 msgstr ""
 
-#: src/inc/templates/credits.php:56
+#: inc/templates/credits.php:40
 msgid ""
 "At the moment we’re looking for developers for WordPress based products and "
 "services. If you’re not a developer and want to be part of us, we’d be "
@@ -328,27 +314,27 @@ msgid ""
 "open, modern and lively company culture:"
 msgstr ""
 
-#: src/inc/templates/credits.php:58
+#: inc/templates/credits.php:42
 msgid "challenging and exciting projects"
 msgstr ""
 
-#: src/inc/templates/credits.php:59
+#: inc/templates/credits.php:43
 msgid "flexible working hours in remote office"
 msgstr ""
 
-#: src/inc/templates/credits.php:60
+#: inc/templates/credits.php:44
 msgid "deliberately flat hierarchies and short decision paths"
 msgstr ""
 
-#: src/inc/templates/credits.php:61
+#: inc/templates/credits.php:45
 msgid "a wide variety of tasks"
 msgstr ""
 
-#: src/inc/templates/credits.php:62
+#: inc/templates/credits.php:46
 msgid "freedom for personal development and responsible, self-reliant action"
 msgstr ""
 
-#: src/inc/templates/credits.php:66
+#: inc/templates/credits.php:50
 msgid ""
 "If you love open source and especially WordPress, if you love to organize "
 "your working days by yourself and want to use your pragmatic "
@@ -356,90 +342,88 @@ msgid ""
 "href=\"%s\">join our team</a>!"
 msgstr ""
 
-#: src/inc/templates/db_backup.php:38
+#: inc/templates/db_backup.php:12
 msgid "Create a backup of your database by clicking \"Create SQL File\"."
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:23
+#: inc/templates/replace_domain.php:11
 msgid ""
 "If you want to migrate your site to another domain, enter the new URL in "
 "the field \"Replace with\" and create a backup of your database by clicking "
-"\"Create SQL File\"."
+"\"Do Replace Domain/Url\"."
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:32
-#: src/inc/templates/search_replace.php:28
+#: inc/templates/replace_domain.php:20 inc/templates/search_replace.php:15
 msgid "Search for: "
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:36
-#: src/inc/templates/search_replace.php:32
+#: inc/templates/replace_domain.php:24 inc/templates/search_replace.php:19
 msgid "Replace with: "
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:37
+#: inc/templates/replace_domain.php:25
 msgid "New URL"
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:40
+#: inc/templates/replace_domain.php:28
 msgid "Change database prefix"
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:44
+#: inc/templates/replace_domain.php:32
 msgid "Current prefix: "
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:48
+#: inc/templates/replace_domain.php:36
 msgid "New prefix: "
 msgstr ""
 
-#: src/inc/templates/replace_domain.php:49
+#: inc/templates/replace_domain.php:37
 msgid "New database prefix"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:36
+#: inc/templates/search_replace.php:23
 msgid "Select tables"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:40
+#: inc/templates/search_replace.php:27
 msgid "Select all tables"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:46
+#: inc/templates/search_replace.php:33
 msgid "Dry Run"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:50
+#: inc/templates/search_replace.php:37
 msgid "Export SQL file or write changes to DB?"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:52
+#: inc/templates/search_replace.php:39
 msgid "Export SQL file with changes"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:54
+#: inc/templates/search_replace.php:41
 msgid "Save changes to Database"
 msgstr ""
 
-#: src/inc/templates/search_replace.php:58
+#: inc/templates/search_replace.php:45
 msgid "Use GZ compression"
 msgstr ""
 
-#: src/inc/templates/sql_import.php:26
+#: inc/templates/sql_import.php:16
 msgid "Select SQL file to upload. "
 msgstr ""
 
-#: src/inc/templates/sql_import.php:30
+#: inc/templates/sql_import.php:20
 msgid "Maximum file size: "
 msgstr ""
 
-#: src/inspyde-search-replace.php:48
+#: inspyde-search-replace.php:48
 msgid ""
 "This plugin can not be activated because it requires at least PHP version "
 "%1$s. "
 msgstr ""
 
-#: src/inspyde-search-replace.php:51
+#: inspyde-search-replace.php:51
 msgid "back"
 msgstr ""
 
