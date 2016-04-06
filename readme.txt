@@ -30,6 +30,11 @@ Our goal with this plugin is to give you a good solution for both Developers and
 - WordPress Multisite support
 - localized and ready for your own language
 
+= Available languages =
+- English
+- German
+- Chinese (Hong Kong SAR)
+
 = Crafted by Inpsyde =
 The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress since 2006. And yes, we also run that
 [marketplace for premium WordPress plugins and themes](https://marketpress.com).

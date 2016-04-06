@@ -25,6 +25,11 @@ Our goal with this plugin is to give you a good solution for both Developers and
 - WordPress Multisite support
 - localized and ready for your own language
 
+####Available languages
+- English
+- German
+- Chinese (Hong Kong SAR)
+
 ##Requirements:
 PHP 5.4. +
 WordPress 4.x (might work with 3.x, but not tested yet)
