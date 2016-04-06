@@ -51,12 +51,10 @@ class Exporter {
 
 	public function __construct( Replace $replace, Manager $dbm ) {
 
-		$this->errors = new \WP_Error();
-
+		$this->errors     = new \WP_Error();
 		$this->backup_dir = get_temp_dir();
 		$this->replace    = $replace;
 		$this->dbm        = $dbm;
-
 	}
 
 	/**
@@ -95,9 +93,6 @@ class Exporter {
 		$this->show_download_button( $report[ 'filename' ], $compress );
 
 	}
-
-
-
 
 	/**
 	 * displays the changes made to the db
@@ -296,9 +291,11 @@ class Exporter {
 			//count tables
 			$report [ 'tables' ] ++;
 
-			/*check if we are replacing the domain in a multisite. if so, we replace in wp_blogs the stripped url without http(s), because the domains
-			are stored without http:// */
-
+			/**
+			 * Check if we are replacing the domain in a multisite.
+			 * If so, we replace in wp_blogs the stripped url without http(s), because the domains
+			 * are stored without http://
+			 */
 			if ( $domain_replace && is_multisite() && $table === $wp_blogs_table ) {
 
 				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
@@ -354,8 +351,7 @@ class Exporter {
 			'table_name' => $table,
 			'rows'       => 0,
 			'change'     => 0,
-			'changes'    => array(),
-
+			'changes'    => [],
 		);
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
@@ -403,7 +399,7 @@ class Exporter {
 
 		/** @var array $create_table */
 		$create_table = $this->dbm->get_create_table_statement( $table );
-		if ( $create_table === FALSE ) {
+		if ( FALSE === $create_table ) {
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'search-and-replace' ), $table );
 			$this->errors->add( 2, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
@@ -416,7 +412,7 @@ class Exporter {
 		}
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
 
-		if ( $table_structure === FALSE ) {
+		if ( FALSE === $table_structure ) {
 			$err_msg = sprintf( __( 'Error getting table structure of %s', 'search-and-replace' ), $table );
 			$this->errors->add( 3, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
@@ -437,10 +433,10 @@ class Exporter {
 		$ints = array();
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
@@ -747,6 +743,7 @@ class Exporter {
 	 * @return string The trimmed $haystack
 	 */
 	protected function trim_search_results( $needle, $haystack, $delimiter ) {
+
 		//if result has <200 characters we return the whole string
 		if ( strlen( $haystack ) < 100 ) {
 			return $haystack;
@@ -778,6 +775,7 @@ class Exporter {
 			}
 			$return_value .= $local_delimiter[ 0 ] . $trimmed_results[ 0 ][ $i ] . $local_delimiter[ 1 ];
 		}
+
 		return $return_value;
 	}
 
