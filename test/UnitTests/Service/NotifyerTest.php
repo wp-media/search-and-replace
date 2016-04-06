@@ -1,9 +1,8 @@
 <?php
 namespace Inpsyde\SearchReplace\Service;
 
-use Brain;
-use Inpsyde\SearchReplace\Service;
-use MonkeryTestCase;
+use Brain,
+	MonkeryTestCase;
 
 /**
  * Class RunTime - set the service time out up to 0
