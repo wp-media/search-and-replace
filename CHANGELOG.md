@@ -6,7 +6,7 @@
 - Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
 
 
-## v3.1 (2016-04-07)
+## v3.1.0-RC1 (2016-04-07)
 - Improve codquality
 - Prepared for localization (GlotPress)
 - Prevent doing idle prozesses if search & replace pattern the same
