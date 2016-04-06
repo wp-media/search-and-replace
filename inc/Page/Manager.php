@@ -15,6 +15,8 @@ class Manager {
 	private $pages = array();
 
 	/**
+	 * Add page.
+	 *
 	 * @param PageInterface $page
 	 */
 	public function add_page( PageInterface $page ) {
@@ -59,7 +61,7 @@ class Manager {
 
 			$menu_title = $page->get_menu_title();
 
-			# set the right menuname
+			// set the right menu-name
 			if( $slug === 'backup-database' ){
 				$menu_title = $this->pages[ 'search-replace' ]->get_menu_title();
 			}
@@ -73,7 +75,7 @@ class Manager {
 			add_submenu_page(
 				'tools.php',
 				$page->get_page_title(),
-				$menu_title,
+				esc_html__( 'Search & Replace', 'search-and-replace' ),
 				$cap,
 				$slug,
 				array( $this, 'render' )
@@ -82,7 +84,7 @@ class Manager {
 	}
 
 	/**
-	 * Removes the plugins submenu pages from admin menu.
+	 * Removes the plugins sub-menu pages from admin menu.
 	 *
 	 * @wp-hook admin_head
 	 */
@@ -98,7 +100,7 @@ class Manager {
 	}
 
 	/**
-	 * render all pages and handling save.
+	 * Render all pages and handling save.
 	 */
 	public function render() {
 
@@ -108,6 +110,7 @@ class Manager {
 		$output = '<div class="wrap">';
 		$output .= '<h1 id="title">' . esc_html__( 'Search & Replace', 'search-and-replace' ) . '</h1>';
 		$output .= '<h2 class="nav-tab-wrapper">';
+		$page = '';
 		foreach ( $this->pages as $slug => $page ) :
 			$class = $current_page === $slug ? 'nav-tab-active' : '';
 			$output .= sprintf(
@@ -171,6 +174,8 @@ class Manager {
 	}
 
 	/**
+	 * Get script suffix to difference between live and debug files.
+	 *
 	 * @return string
 	 */
 	private function get_script_suffix() {

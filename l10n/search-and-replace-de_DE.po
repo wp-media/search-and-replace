@@ -8,7 +8,7 @@ msgstr ""
 "replace\n"
 "POT-Creation-Date: 2016-02-12 15:20+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Frank Bültge <frank@bueltge.de>\n"
 "Language-Team: Inpsyde GmbH <hello@inpsyde.com>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;"
 "_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SearchPath-0: inc\n"
 "X-Poedit-SearchPath-1: inspyde-search-replace.php\n"
 
@@ -178,7 +178,7 @@ msgstr "Datenbank-Backup"
 #: inc/templates/db_backup.php:13 inc/templates/replace_domain.php:13
 #: inc/templates/search_replace.php:13 inc/templates/sql_import.php:13
 msgid "Search & Replace"
-msgstr "Suchen und Ersetzen"
+msgstr "Suchen & Ersetzen"
 
 #: inc/Init.php:93 inc/Init.php:94
 msgid "Replace Domain URL"
