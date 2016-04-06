@@ -53,10 +53,10 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress s
 
 == Changelog ==
 = v3.1.0-RC1 (2016-02-07) =
-- Improve codquality
-- Prepared for localization (GlotPress)
-- Prevent doing idle prozesses if search & replace pattern the same
-- Implement better BigData handling.
+* Improve codquality
+* Prepared for localization (GlotPress)
+* Prevent doing idle prozesses if search & replace pattern the same
+* Implement better BigData handling.
 * Implement better tab and adminpage handling [#33](https://github.com/inpsyde/search-and-replace/issues/33)
 * Prepare the Plugin for localization, change Text-Domain.[#47](https://github.com/inpsyde/search-and-replace/issues/47)
 * Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
