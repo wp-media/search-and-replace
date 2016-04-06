@@ -11,7 +11,7 @@ class Importer {
 	/**
 	 * imports a sql file via mysqli
 	 *
-	 * @param  string   $sql
+	 * @param  string $sql
 	 *
 	 * @return int  Number of Sql queries made, -1 if error
 	 */
@@ -34,13 +34,11 @@ class Importer {
 
 		if ( $mysqli->errno ) {
 			return - 1;
-
 		}
 
 		mysqli_close( $mysqli );
 
 		return $i;
-
 	}
 
 }
