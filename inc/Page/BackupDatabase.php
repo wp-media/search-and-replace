@@ -30,7 +30,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return __( 'Backup Database', 'search-and-replace' );
+		return esc_html__( 'Backup Database', 'search-and-replace' );
 	}
 
 	/**
@@ -38,7 +38,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 */
 	public function get_page_title() {
 
-		return __( 'Backup Database', 'search-and-replace' );
+		return esc_html__( 'Backup Database', 'search-and-replace' );
 	}
 
 	/**
@@ -54,7 +54,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 */
 	protected function get_submit_button_title() {
 
-		return __( 'Create SQL File', 'search-and-replace' );
+		return esc_html__( 'Create SQL File', 'search-and-replace' );
 	}
 
 	/**
