@@ -6,7 +6,11 @@
 - Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
 
 
-## v3.0.1 (2016-02-09)
+## v3.1 (2016-04-07)
+- Improve codquality
+- Prepared for localization (GlotPress)
+- Prevent doing idle prozesses if search & replace pattern the same
+- Implement better BigData handling.
 - Add support for Searchpattern with quotes. [#40](https://github.com/inpsyde/search-and-replace/issues/40)
 - Basic travis support for travis was added. [#38](https://github.com/inpsyde/search-and-replace/issues/38)
 - Fix Unittest [#37](https://github.com/inpsyde/search-and-replace/issues/37)

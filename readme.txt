@@ -40,7 +40,11 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress s
 5. Result screen after search or search and replace
 
 == Changelog ==
-= v3.0.2 (2016-02-xx) =
+= v3.1 (2016-02-07) =
+- Improve codquality
+- Prepared for localization (GlotPress)
+- Prevent doing idle prozesses if search & replace pattern the same
+- Implement better BigData handling.
 * Implement better tab and adminpage handling [#33](https://github.com/inpsyde/search-and-replace/issues/33)
 * Prepare the Plugin for localization, change Text-Domain.[#47](https://github.com/inpsyde/search-and-replace/issues/47)
 * Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
