@@ -1,8 +1,7 @@
 <?php
 namespace Inpsyde\SearchReplace\Database;
 
-use InvalidArgumentException,
-	Inpsyde\SearchReplace\Service;
+use Inpsyde\SearchReplace\Service;
 
 /**
  * Class Replace
@@ -127,8 +126,7 @@ class Replace {
 		}
 		//split columns array in primary key string and columns array
 		$columns     = $this->dbm->get_columns( $table );
-		$primary_key = $columns[ 0 ];
-		$columns     = $columns[ 1 ];
+		list( $primary_key, $columns ) = $columns;
 
 		if ( NULL === $primary_key ) {
 			array_push(
