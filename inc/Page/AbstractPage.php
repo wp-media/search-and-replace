@@ -9,7 +9,10 @@ namespace Inpsyde\SearchReplace\Page;
  */
 abstract class AbstractPage {
 
-	/**
+	// Must use in all derived classes.
+	abstract public function get_menu_title();
+
+		/**
 	 * @var array
 	 */
 	protected $errors = array();
@@ -18,6 +21,7 @@ abstract class AbstractPage {
 	 * @param string $msg
 	 */
 	public function add_error( $msg ) {
+
 		$this->errors[] = (string) $msg;
 	}
 
