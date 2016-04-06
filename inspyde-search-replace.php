@@ -15,6 +15,10 @@
 
 namespace Inpsyde\SearchReplace;
 
+use Requisite\Requisite;
+use Requisite\Rule\Psr4;
+use Requisite\SPLAutoLoader;
+
 register_activation_hook( __FILE__, __NAMESPACE__ . '\activate' );
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
@@ -74,13 +78,13 @@ function init() {
 	/**
 	 * Load the Requisite library. Alternatively you can use composer's
 	 */
-	require_once 'inc/requisite/src/Requisite/Requisite.php';
-	\Requisite\Requisite::init();
+	require_once __DIR__ . '/inc/requisite/src/Requisite/Requisite.php';
+	Requisite::init();
 
-	$autoloader = new \Requisite\SPLAutoLoader;
+	$autoloader = new SPLAutoLoader;
 
 	$autoloader->addRule(
-		new \Requisite\Rule\Psr4(
+		new Psr4(
 			__DIR__ . '/inc',       // base directory
 			'Inpsyde\SearchReplace' // base namespace
 		)
