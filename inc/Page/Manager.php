@@ -59,13 +59,6 @@ class Manager {
 
 		foreach ( $this->pages as $slug => $page ) {
 
-			$menu_title = $page->get_menu_title();
-
-			// set the right menu-name
-			if( $slug === 'backup-database' ){
-				$menu_title = $this->pages[ 'search-replace' ]->get_menu_title();
-			}
-
 			/**
 			 * @param string        $cap
 			 * @param PageInterface $page
