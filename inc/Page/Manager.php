@@ -34,7 +34,7 @@ class Manager {
 		}
 
 		$page = filter_input( INPUT_POST, 'action' );
-		if ( $page === '' ) {
+		if ( '' === $page ) {
 			return;
 		}
 
