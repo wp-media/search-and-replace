@@ -1,8 +1,7 @@
 <?php
 namespace Inpsyde\SearchReplace\Database;
 
-use InvalidArgumentException,
-	Inpsyde\SearchReplace\Service;
+use Inpsyde\SearchReplace\Service;
 
 /**
  * Class Replace
