@@ -21,7 +21,7 @@ class Credits extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return esc_html__( 'Credits', 'search-and-replace' );
+		return esc_html( 'Credits' );
 	}
 
 	/**

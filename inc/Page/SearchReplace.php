@@ -53,7 +53,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return esc_html__( 'Search & Replace', 'search-and-replace' );
+		return esc_html( 'Search & Replace' );
 	}
 
 	/**

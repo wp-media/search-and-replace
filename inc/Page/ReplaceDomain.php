@@ -70,7 +70,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return esc_html__( 'Replace Domain URL', 'search-and-replace' );
+		return esc_html( 'Replace Domain URL' );
 	}
 
 	/**

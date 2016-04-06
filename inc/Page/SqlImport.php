@@ -30,7 +30,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return __( 'SQL Import', 'search-and-replace' );
+		return esc_html( 'SQL Import' );
 	}
 
 	/**
@@ -38,7 +38,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	 */
 	public function get_page_title() {
 
-		return __( 'SQL Import', 'search-and-replace' );
+		return esc_html__( 'SQL Import', 'search-and-replace' );
 	}
 
 	/**

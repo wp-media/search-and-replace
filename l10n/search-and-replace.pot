@@ -5,144 +5,148 @@ msgstr ""
 "Project-Id-Version: Search & Replace 3.1.0-RC1\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/inspyde-search-replace\n"
-"POT-Creation-Date: 2016-04-06 11:00:45+00:00\n"
+"POT-Creation-Date: 2016-04-06 19:51:11+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n 0.5.3\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
 "X-Poedit-KeywordsList: "
 "__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
 "attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
 "Poedit: \n"
 
-#: inc/Database/Exporter.php:87 inc/Page/SearchReplace.php:189
+#: inc/Database/Exporter.php:85 inc/Page/SearchReplace.php:191
 msgid "Search pattern not found."
 msgstr ""
 
-#: inc/Database/Exporter.php:129
+#: inc/Database/Exporter.php:124
 msgid "%s table was processed."
 msgid_plural "%s tables were processed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/Database/Exporter.php:139
+#: inc/Database/Exporter.php:134
 msgid "%s cell needs to be updated."
 msgid_plural "%s cells need to be updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/Database/Exporter.php:151
+#: inc/Database/Exporter.php:146
 msgid "View details"
 msgstr ""
 
-#: inc/Database/Exporter.php:166
+#: inc/Database/Exporter.php:161
 msgid "Table:"
 msgstr ""
 
-#: inc/Database/Exporter.php:167
+#: inc/Database/Exporter.php:162
 msgid "Changes:"
 msgstr ""
 
-#: inc/Database/Exporter.php:175
+#: inc/Database/Exporter.php:170
 msgid "row"
 msgstr ""
 
-#: inc/Database/Exporter.php:177
+#: inc/Database/Exporter.php:172
 msgid "column"
 msgstr ""
 
-#: inc/Database/Exporter.php:189
+#: inc/Database/Exporter.php:184
 msgid "Old value:"
 msgstr ""
 
-#: inc/Database/Exporter.php:191
+#: inc/Database/Exporter.php:186
 msgid "New value:"
 msgstr ""
 
-#: inc/Database/Exporter.php:212
+#: inc/Database/Exporter.php:207
 msgid "Your SQL file was created!"
 msgstr ""
 
-#: inc/Database/Exporter.php:261
+#: inc/Database/Exporter.php:256
 msgid "Could not open the backup file for writing!"
 msgstr ""
 
-#: inc/Database/Exporter.php:267
+#: inc/Database/Exporter.php:262
 msgid "The backup directory is not writable!"
 msgstr ""
 
-#: inc/Database/Exporter.php:275
+#: inc/Database/Exporter.php:270
 msgid "WordPress MySQL database backup"
 msgstr ""
 
-#: inc/Database/Exporter.php:277
+#: inc/Database/Exporter.php:272
 msgid "Generated: %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:278
+#: inc/Database/Exporter.php:273
 msgid "Hostname: %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:279
+#: inc/Database/Exporter.php:274
 msgid "Database: %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:283
+#: inc/Database/Exporter.php:278
 msgid "Changed table prefix: From %s to %s "
 msgstr ""
 
-#: inc/Database/Exporter.php:370
+#: inc/Database/Exporter.php:366
 msgid "Table: %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:374
+#: inc/Database/Exporter.php:370
 msgid "Error getting table details"
 msgstr ""
 
-#: inc/Database/Exporter.php:383
+#: inc/Database/Exporter.php:379
 msgid "Delete any existing table %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:397
+#: inc/Database/Exporter.php:393
 msgid "Table structure of table %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:407
+#: inc/Database/Exporter.php:403
 msgid "Error with SHOW CREATE TABLE for %s."
 msgstr ""
 
-#: inc/Database/Exporter.php:420
+#: inc/Database/Exporter.php:416
 msgid "Error getting table structure of %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:430
+#: inc/Database/Exporter.php:426
 msgid "Data contents of table %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:532
+#: inc/Database/Exporter.php:528
 msgid "End of data contents of table %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:614
+#: inc/Database/Exporter.php:610
 msgid "There was an error writing a line to the backup script:"
 msgstr ""
 
-#: inc/Database/Manager.php:70
+#: inc/Database/Manager.php:71
 msgid "(%s KB)"
 msgstr ""
 
-#: inc/Database/Replace.php:216
+#: inc/Database/Replace.php:76
+msgid "Search and replace pattern can't be the same!"
+msgstr ""
+
+#: inc/Database/Replace.php:218
 msgid "Error updating row: %d."
 msgstr ""
 
-#: inc/Page/AbstractPage.php:34
+#: inc/Page/AbstractPage.php:38
 msgid "Errors:"
 msgstr ""
 
-#: inc/Page/AbstractPage.php:59
+#: inc/Page/AbstractPage.php:64
 msgid "Submit"
 msgstr ""
 
@@ -166,11 +170,11 @@ msgstr ""
 msgid "Replace Field should not be empty."
 msgstr ""
 
-#: inc/Page/ReplaceDomain.php:64
+#: inc/Page/ReplaceDomain.php:65
 msgid "Do Replace Domain/Url"
 msgstr ""
 
-#: inc/Page/ReplaceDomain.php:72 inc/Page/ReplaceDomain.php:80
+#: inc/Page/ReplaceDomain.php:73 inc/Page/ReplaceDomain.php:81
 msgid "Replace Domain URL"
 msgstr ""
 
@@ -178,25 +182,25 @@ msgstr ""
 msgid "Do Search & Replace"
 msgstr ""
 
-#: inc/Page/SearchReplace.php:165
+#: inc/Page/SearchReplace.php:162
 msgid ""
 "Dry run is selected. No changes were made to the database and no SQL file "
 "was written ."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:173
+#: inc/Page/SearchReplace.php:170
 msgid "The following changes were made to the database: "
 msgstr ""
 
-#: inc/Page/SearchReplace.php:204
+#: inc/Page/SearchReplace.php:211
 msgid "No Tables were selected."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:214
+#: inc/Page/SearchReplace.php:221
 msgid "Search field is empty."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:225
+#: inc/Page/SearchReplace.php:232
 msgid ""
 "Your search contains your current site url. Replacing your site url will "
 "most likely cause your site to break. If you want to change the URL (and "

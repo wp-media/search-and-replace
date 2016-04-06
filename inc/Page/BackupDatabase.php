@@ -30,7 +30,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return esc_html__( 'Backup Database', 'search-and-replace' );
+		return esc_html( 'Backup Database' );
 	}
 
 	/**
