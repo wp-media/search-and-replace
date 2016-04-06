@@ -179,17 +179,23 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		if( is_wp_error( $report )){
 			$this->add_error( __(  $report->get_error_message(), 'search-and-replace' ) );
+			$this->display_errors();
+		}else {
+
+			if ( count( $report[ 'changes' ] ) > 0 ) {
+				$this->dbe->show_changes( $report );
+			}
+
+			//if no changes found report that
+			if ( 0 === count( $report [ 'changes' ] ) ) {
+				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
+			}
 		}
 
-		if ( count( $report[ 'changes' ] ) > 0 ) {
-			$this->dbe->show_changes( $report );
-		}
-
-		//if no changes found report that
-		if ( 0 === count( $report [ 'changes' ] ) ) {
-			echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
-		}
 		echo '</div>';
+
+
+
 
 	}
 
