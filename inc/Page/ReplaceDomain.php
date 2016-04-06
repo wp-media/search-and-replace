@@ -12,7 +12,7 @@ use Inpsyde\SearchReplace\Database;
 class ReplaceDomain extends AbstractPage implements PageInterface {
 
 	/**
-	 * @var Exporter
+	 * @var \Inpsyde\SearchReplace\Database\Exporter
 	 */
 	private $dbe;
 
@@ -24,8 +24,8 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	/**
 	 * ReplaceDomain constructor.
 	 *
-	 * @param Manager  $dbm
-	 * @param Exporter $dbe
+	 * @param \Inpsyde\SearchReplace\Database\Manager|\Inpsyde\SearchReplace\Page\Manager $dbm
+	 * @param \Inpsyde\SearchReplace\Database\Exporter                                    $dbe
 	 */
 	public function __construct( Database\Manager $dbm, Database\Exporter $dbe ) {
 
@@ -42,6 +42,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 		//search field should not be empty
 		if ( '' === $replace ) {
 			$this->add_error( esc_html__( 'Replace Field should not be empty.', 'search-and-replace' ) );
+
 			return;
 		}
 
@@ -53,7 +54,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 */
 	public function render() {
 
-		require_once(  __DIR__ . '/../templates/replace_domain.php' );
+		require_once( __DIR__ . '/../templates/replace_domain.php' );
 	}
 
 	/**
