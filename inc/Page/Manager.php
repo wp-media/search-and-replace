@@ -59,9 +59,9 @@ class Manager {
 
 			$menu_title = $page->get_menu_title();
 
-			# set the right menüname
-			if( $slug == 'backup-database' ){
-				$menu_title = $this->pages[ "search-replace" ]->get_menu_title();
+			# set the right menuname
+			if( $slug === 'backup-database' ){
+				$menu_title = $this->pages[ 'search-replace' ]->get_menu_title();
 			}
 
 			/**
