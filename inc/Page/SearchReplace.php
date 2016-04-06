@@ -110,7 +110,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			return;
 		}
 
-		$tables  = $_POST[ 'select_tables' ];
+		$tables  = isset( $_POST[ 'select_tables' ] ) ? $_POST[ 'select_tables' ] : '';
 		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 
 		//remove wp_magic_quotes
