@@ -29,6 +29,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 * @param Exporter $dbe
 	 */
 	public function __construct( Manager $dbm, Exporter $dbe ) {
+
 		$this->dbm = $dbm;
 		$this->dbe = $dbe;
 	}
@@ -41,7 +42,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 
 		//search field should not be empty
 		if ( '' === $replace ) {
-			$this->add_error( __( 'Replace Field should not be empty.', 'search-and-replace' ) );
+			$this->add_error( esc_html__( 'Replace Field should not be empty.', 'search-and-replace' ) );
 			return;
 		}
 
@@ -61,7 +62,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 */
 	protected function get_submit_button_title() {
 
-		return __( 'Do Replace Domain/Url', 'search-and-replace' );
+		return esc_html__( 'Do Replace Domain/Url', 'search-and-replace' );
 	}
 
 	/**
@@ -69,7 +70,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 */
 	public function get_menu_title() {
 
-		return __( 'Replace Domain URL', 'search-and-replace' );
+		return esc_html__( 'Replace Domain URL', 'search-and-replace' );
 	}
 
 	/**
@@ -77,7 +78,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 */
 	public function get_page_title() {
 
-		return __( 'Replace Domain URL', 'search-and-replace' );
+		return esc_html__( 'Replace Domain URL', 'search-and-replace' );
 	}
 
 }
