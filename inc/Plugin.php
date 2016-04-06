@@ -21,7 +21,9 @@ class Plugin {
 
 		if ( is_admin() ) {
 
-			set_time_limit(0);
+			// set max_execution_time to 0
+			$RunTime = new Service\MaxExecutionTime();
+			$RunTime->set();
 
 			$dbm     = new Database\Manager( $wpdb );
 			$replace = new Database\Replace( $dbm );

@@ -1,9 +1,7 @@
 <?php
 namespace Inpsyde\SearchReplace\Page;
 
-use Inpsyde\SearchReplace\Database\Exporter;
-use Inpsyde\searchReplace\Database\Manager;
-use Inpsyde\SearchReplace\Database\Replace;
+use Inpsyde\SearchReplace\Database;
 
 /**
  * Class SearchReplace
@@ -34,7 +32,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 * @param Replace  $replace
 	 * @param Exporter $dbe
 	 */
-	public function __construct( Manager $dbm, Replace $replace, Exporter $dbe ) {
+	public function __construct( Database\Manager $dbm, Database\Replace $replace, Database\Exporter $dbe ) {
 
 		$this->dbm     = $dbm;
 		$this->replace = $replace;
@@ -157,6 +155,9 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 * @return null
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run ) {
+
+
+
 
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
