@@ -72,7 +72,7 @@ class Replace {
 
 	public function run_search_replace( $search, $replace, $tables ) {
 
-		if( $search == $replace ){
+		if ( $search === $replace ){
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
 		}
 

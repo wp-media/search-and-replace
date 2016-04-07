@@ -199,7 +199,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		} else {
 
 			if ( count( $report[ 'changes' ] ) > 0 ) {
-				$this->dbe->show_changes( $report );
+				$this->downloader->show_changes( $report );
 			}
 
 			//if no changes found report that

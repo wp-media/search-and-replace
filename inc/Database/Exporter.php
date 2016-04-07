@@ -77,7 +77,7 @@ class Exporter {
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search, $replace, $tables = array(), $domain_replace = FALSE, $new_table_prefix ) {
+	public function db_backup( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '' ) {
 
 		if ( count( $tables ) < 1 ) {
 			$tables = $this->dbm->get_tables();
@@ -137,6 +137,10 @@ class Exporter {
 		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
 		foreach ( $tables as $table ) {
+
+			// Set default values for backup run.
+			$search  = '';
+			$replace = '';
 
 			//count tables
 			$report [ 'tables' ] ++;

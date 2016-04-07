@@ -97,7 +97,7 @@ class FileDownloader {
 	 *
 	 * @return string
 	 */
-	private function show_changes( $report ) {
+	public function show_changes( $report ) {
 
 		//get search & replace values in order to highlight them in the results
 		$search            = esc_html( $_POST [ 'search' ] );
