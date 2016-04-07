@@ -11,12 +11,10 @@ input[name="search"], input[name="replace"], #select_tables {
 .search-replace-replace-value {
 	color: #fff;
 	background-color: green;
-
 }
 
 .disabled, .form-table .disabled th {
 	color: grey;
-
 }
 
 
@@ -64,7 +62,6 @@ input[name="search"], input[name="replace"], #select_tables {
 	width: 100%;
 	table-layout: fixed;
 	margin-bottom: 30px;
-
 }
 
 .search-replace-modal-table * {
@@ -119,7 +116,6 @@ input[name="search"], input[name="replace"], #select_tables {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	color: #666;
-
 }
 
 #insr_submit{
