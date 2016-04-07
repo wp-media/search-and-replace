@@ -28,12 +28,7 @@ Our goal with this plugin is to give you a good solution for both Developers and
 - Change table prefix
 - Backup & restore your database
 - WordPress Multisite support
-- localized and ready for your own language
-
-= Available languages =
-- English
-- German
-- Chinese (Hong Kong SAR)
+- Localized and ready for your own language
 
 = Crafted by Inpsyde =
 The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress since 2006. And yes, we also run that
