@@ -47,7 +47,7 @@ The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress s
 5. Result screen after search or search and replace
 
 == Changelog ==
-= v3.1.0-RC1 (2016-02-07) =
+= v3.1.0 (2016-02-07) =
 * Improve codquality
 * Prepared for localization (GlotPress)
 * Prevent doing idle prozesses if search & replace pattern the same
