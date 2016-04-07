@@ -65,6 +65,16 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	}
 
 	/**
+	 * Return the static slug string.
+	 *
+	 * @return string
+	 */
+	public function get_slug() {
+
+		return 'search-replace';
+	}
+
+	/**
 	 *prints a select with all the tables and their sizes
 	 *
 	 * @return void 

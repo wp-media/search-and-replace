@@ -87,4 +87,13 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 		return esc_html__( 'Replace Domain URL', 'search-and-replace' );
 	}
 
+	/**
+	 * Return the static slug string.
+	 *
+	 * @return string
+	 */
+	public function get_slug() {
+
+		return 'replace-domain-url';
+	}
 }

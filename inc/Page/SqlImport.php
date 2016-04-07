@@ -35,6 +35,16 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
+	 * Return the static slug string.
+	 *
+	 * @return string
+	 */
+	public function get_slug() {
+
+		return 'sql-import';
+	}
+
+	/**
 	 * callback function for menu item
 	 */
 	public function render() {

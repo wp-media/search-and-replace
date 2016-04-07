@@ -25,6 +25,16 @@ class Credits extends AbstractPage implements PageInterface {
 	}
 
 	/**
+	 * Return the static slug string.
+	 *
+	 * @return string
+	 */
+	public function get_slug() {
+
+		return 'credits';
+	}
+
+	/**
 	 * @return boolean
 	 */
 	public function save() {
