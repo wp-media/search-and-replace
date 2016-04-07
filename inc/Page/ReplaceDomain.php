@@ -3,6 +3,7 @@
 namespace Inpsyde\SearchReplace\Page;
 
 use Inpsyde\SearchReplace\Database;
+use Inpsyde\SearchReplace\FileDownloader;
 
 /**
  * Class ReplaceDomain
@@ -22,17 +23,27 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	private $dbm;
 
 	/**
+	 * @var FileDownloader
+	 */
+	private $downloader;
+
+	/**
 	 * ReplaceDomain constructor.
 	 *
-	 * @param \Inpsyde\SearchReplace\Database\Manager|\Inpsyde\SearchReplace\Page\Manager $dbm
-	 * @param \Inpsyde\SearchReplace\Database\Exporter                                    $dbe
+	 * @param Database\Manager  $dbm
+	 * @param Database\Exporter $dbe
+	 * @param FileDownloader    $downloader
 	 */
-	public function __construct( Database\Manager $dbm, Database\Exporter $dbe ) {
+	public function __construct( Database\Manager $dbm, Database\Exporter $dbe, FileDownloader $downloader ) {
 
-		$this->dbm = $dbm;
-		$this->dbe = $dbe;
+		$this->dbm        = $dbm;
+		$this->dbe        = $dbe;
+		$this->downloader = $downloader;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function save() {
 
 		$search        = esc_url_raw( filter_input( INPUT_POST, 'search' ) );
@@ -43,10 +54,13 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 		if ( '' === $replace ) {
 			$this->add_error( esc_html__( 'Replace Field should not be empty.', 'search-and-replace' ) );
 
-			return;
+			return FALSE;
 		}
 
-		$this->dbe->create_backup_file( $search, $replace, array(), TRUE, $new_db_prefix );
+		$report = $this->dbe->db_backup( $search, $replace, array(), TRUE, $new_db_prefix );
+		$this->downloader->show_download_modal( $report );
+
+		return TRUE;
 	}
 
 	/**
@@ -63,14 +77,6 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	protected function get_submit_button_title() {
 
 		return esc_html__( 'Do Replace Domain/Url', 'search-and-replace' );
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_menu_title() {
-
-		return esc_html( 'Replace Domain URL' );
 	}
 
 	/**

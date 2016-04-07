@@ -9,10 +9,24 @@ namespace Inpsyde\SearchReplace\Page;
  */
 abstract class AbstractPage {
 
-	// Must use in all derived classes.
-	abstract public function get_menu_title();
+	/**
+	 * Returns the translated title for the page.
+	 *
+	 * @return string
+	 */
+	abstract public function get_page_title();
 
-		/**
+	/**
+	 * By default "Search & Replace". Can be overwritten in child-classes.
+	 * 
+	 * @return string
+	 */
+	public function get_menu_title() {
+
+		return esc_html( 'Search & Replace', 'search-and-replace' );
+	}
+
+	/**
 	 * @var array
 	 */
 	protected $errors = array();
@@ -69,6 +83,6 @@ abstract class AbstractPage {
 	 */
 	public function get_slug() {
 
-		return sanitize_title_with_dashes( $this->get_menu_title() );
+		return sanitize_title_with_dashes( $this->get_page_title() );
 	}
 }

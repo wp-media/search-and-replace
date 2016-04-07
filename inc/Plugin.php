@@ -30,13 +30,13 @@ class Plugin {
 			$dbe     = new Database\Exporter( $replace, $dbm );
 			$dbi     = new Database\Importer();
 
-			$file_downloader = new FileDownloader( $dbe );
-			add_action( 'init', array( $file_downloader, 'deliver_backup_file' ) );
+			$downloader = new FileDownloader( $dbe );
+			add_action( 'init', array( $downloader, 'deliver_backup_file' ) );
 
 			$page_manager = new Page\Manager();
-			$page_manager->add_page( new Page\BackupDatabase( $dbe ) );
-			$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe ) );
-			$page_manager->add_page( new Page\ReplaceDomain( $dbm, $dbe ) );
+			$page_manager->add_page( new Page\BackupDatabase( $dbe, $downloader ) );
+			$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe, $downloader ) );
+			$page_manager->add_page( new Page\ReplaceDomain( $dbm, $dbe, $downloader ) );
 			$page_manager->add_page( new Page\SqlImport( $dbi ) );
 			$page_manager->add_page( new Page\Credits() );
 

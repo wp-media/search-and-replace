@@ -2,6 +2,7 @@
 namespace Inpsyde\SearchReplace\Page;
 
 use Inpsyde\SearchReplace\Database;
+use Inpsyde\SearchReplace\FileDownloader;
 
 /**
  * Class BackupDatabase
@@ -11,26 +12,25 @@ use Inpsyde\SearchReplace\Database;
 class BackupDatabase extends AbstractPage implements PageInterface {
 
 	/**
-	 * @var Exporter
+	 * @var Database\Exporter
 	 */
 	private $dbe;
 
 	/**
-	 * BackupDatabase constructor.
-	 *
-	 * @param Exporter $dbe
+	 * @var FileDownloader
 	 */
-	public function __construct( Database\Exporter $dbe ) {
-
-		$this->dbe = $dbe;
-	}
+	private $downloader;
 
 	/**
-	 * @return string
+	 * BackupDatabase constructor.
+	 *
+	 * @param Database\Exporter $dbe
+	 * @param FileDownloader    $downloader
 	 */
-	public function get_menu_title() {
+	public function __construct( Database\Exporter $dbe, FileDownloader $downloader ) {
 
-		return esc_html( 'Backup Database' );
+		$this->dbe        = $dbe;
+		$this->downloader = $downloader;
 	}
 
 	/**
@@ -46,7 +46,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 */
 	public function render() {
 
-		require_once(  __DIR__ . '/../templates/db_backup.php' );
+		require_once( __DIR__ . '/../templates/db_backup.php' );
 	}
 
 	/**
@@ -60,9 +60,12 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	/**
 	 * event handler for click on export sql button
 	 */
-	public function save( ) {
+	public function save() {
 
-		$this->dbe->create_backup_file( );
+		$report = $this->dbe->db_backup();
+		$this->downloader->show_download_modal( $report );
+
+		return TRUE;
 	}
 
 }

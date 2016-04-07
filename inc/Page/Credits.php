@@ -13,15 +13,7 @@ class Credits extends AbstractPage implements PageInterface {
 	 */
 	public function render() {
 
-		require_once(  __DIR__ . '/../templates/credits.php' );
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_menu_title() {
-
-		return esc_html( 'Credits' );
+		require_once( __DIR__ . '/../templates/credits.php' );
 	}
 
 	/**
@@ -33,7 +25,10 @@ class Credits extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * @return void
+	 * @return boolean
 	 */
-	public function save() {}
+	public function save() {
+
+		return TRUE;
+	}
 }

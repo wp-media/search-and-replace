@@ -12,25 +12,18 @@ use Inpsyde\SearchReplace\Database;
 class SqlImport extends AbstractPage implements PageInterface {
 
 	/**
-	 * @var Importer
+	 * @var Database\Importer
 	 */
 	private $dbi;
 
 	/**
 	 * SqlImport constructor.
 	 *
-	 * @param Importer $dbi
+	 * @param Database\Importer $dbi
 	 */
 	public function __construct( Database\Importer $dbi ) {
+
 		$this->dbi = $dbi;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_menu_title() {
-
-		return esc_html( 'SQL Import' );
 	}
 
 	/**
@@ -125,7 +118,9 @@ class SqlImport extends AbstractPage implements PageInterface {
 				8 => esc_html__( 'A PHP extension stopped the file upload.', 'search-and-replace' ),
 			);
 
-			$$this->add_error( __( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'search-and-replace' ) );
+			$$this->add_error(
+				__( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'search-and-replace' )
+			);
 		}
 
 	}
@@ -148,6 +143,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 
 	/**
 	 * Returns a file size limit in kilobytes based on the PHP upload_max_filesize and post_max_size.
+	 *
 	 * @link http://stackoverflow.com/questions/13076480/php-get-actual-maximum-upload-size
 	 *
 	 * @return float

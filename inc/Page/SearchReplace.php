@@ -3,6 +3,7 @@ namespace Inpsyde\SearchReplace\Page;
 
 use Inpsyde\SearchReplace\Database,
 	Inpsyde\SearchReplace\Service;
+use Inpsyde\SearchReplace\FileDownloader;
 
 /**
  * Class SearchReplace
@@ -27,17 +28,24 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	private $dbe;
 
 	/**
+	 * @var FileDownloader
+	 */
+	private $downloader;
+
+	/**
 	 * BackupDatabase constructor.
 	 *
-	 * @param \Inpsyde\SearchReplace\Database\Manager|\Inpsyde\SearchReplace\Page\Manager $dbm
-	 * @param \Inpsyde\SearchReplace\Database\Replace                                     $replace
-	 * @param \Inpsyde\SearchReplace\Database\Exporter                                    $dbe
+	 * @param Database\Manager  $dbm
+	 * @param Database\Replace  $replace
+	 * @param Database\Exporter $dbe
+	 * @param FileDownloader    $downloader
 	 */
-	public function __construct( Database\Manager $dbm, Database\Replace $replace, Database\Exporter $dbe ) {
+	public function __construct( Database\Manager $dbm, Database\Replace $replace, Database\Exporter $dbe, FileDownloader $downloader ) {
 
-		$this->dbm     = $dbm;
-		$this->replace = $replace;
-		$this->dbe     = $dbe;
+		$this->dbm        = $dbm;
+		$this->replace    = $replace;
+		$this->dbe        = $dbe;
+		$this->downloader = $downloader;
 	}
 
 	/**
@@ -51,14 +59,6 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	/**
 	 * @return string
 	 */
-	public function get_menu_title() {
-
-		return esc_html( 'Search & Replace' );
-	}
-
-	/**
-	 * @return string
-	 */
 	public function get_page_title() {
 
 		return esc_html__( 'Search & Replace', 'search-and-replace' );
@@ -67,7 +67,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	/**
 	 *prints a select with all the tables and their sizes
 	 *
-	 * @return void     *
+	 * @return void 
 	 */
 	protected function show_table_list() {
 
@@ -90,8 +90,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 			//check if dry run. if dry run && current table is in "selected" array add selected attribute
 			if ( isset( $_POST[ 'dry_run' ] )
-			     && $selected_tables
-			     && in_array( $table, $selected_tables, FALSE )
+				&& $selected_tables
+				&& in_array( $table, $selected_tables, FALSE )
 			) {
 				echo "<option value='$table' selected='selected'>$table .  $table_size </option>";
 
@@ -104,11 +104,14 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		echo( '</select>' );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function save() {
 
 		//check for errors in form
 		if ( ! $this->is_request_valid() ) {
-			return;
+			return FALSE;
 		}
 
 		$tables  = isset( $_POST[ 'select_tables' ] ) ? $_POST[ 'select_tables' ] : '';
@@ -122,18 +125,21 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		if ( TRUE === $dry_run ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run );
 
-			return;
+			return FALSE;
 		}
 
 		$export_or_save = filter_input( INPUT_POST, 'export_or_save' );
 
 		if ( 'export' === $export_or_save ) {
 			//'export'-button was checked
-			$this->dbe->create_backup_file( $search, $replace, $tables );
+			$report = $this->dbe->db_backup( $search, $replace, $tables );
+			$this->downloader->show_download_modal( $report );
 		} else {
 			//"Save changes to database" was checked
 			$this->run_replace( $search, $replace, $tables, $dry_run );
 		}
+		
+		return TRUE;
 	}
 
 	/**
@@ -159,28 +165,28 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
 			echo '<p><strong>'
-			     . esc_html__(
-				     'Dry run is selected. No changes were made to the database and no SQL file was written .',
-				     'search-and-replace'
-			     )
-			     . '</strong></p>';
+				. esc_html__(
+					'Dry run is selected. No changes were made to the database and no SQL file was written .',
+					'search-and-replace'
+				)
+				. '</strong></p>';
 
 		} else {
 			echo '<p><strong>'
-			     . esc_html__(
-				     'The following changes were made to the database: ',
-				     'search-and-replace'
-			     )
-			     . '</strong></p>';
+				. esc_html__(
+					'The following changes were made to the database: ',
+					'search-and-replace'
+				)
+				. '</strong></p>';
 		}
 		$this->replace->set_dry_run( $dry_run );
 
 		$report = $this->replace->run_search_replace( $search, $replace, $tables );
 
-		if( is_wp_error( $report )){
-			$this->add_error( __(  $report->get_error_message(), 'search-and-replace' ) );
+		if ( is_wp_error( $report ) ) {
+			$this->add_error( __( $report->get_error_message(), 'search-and-replace' ) );
 			$this->display_errors();
-		}else {
+		} else {
 
 			if ( count( $report[ 'changes' ] ) > 0 ) {
 				$this->dbe->show_changes( $report );
@@ -193,9 +199,6 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		}
 
 		echo '</div>';
-
-
-
 
 	}
 

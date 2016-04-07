@@ -49,172 +49,18 @@ class Exporter {
 	 */
 	protected $fp;
 
+	/**
+	 * Exporter constructor.
+	 *
+	 * @param Replace $replace
+	 * @param Manager $dbm
+	 */
 	public function __construct( Replace $replace, Manager $dbm ) {
 
 		$this->errors     = new \WP_Error();
 		$this->backup_dir = get_temp_dir();
 		$this->replace    = $replace;
 		$this->dbm        = $dbm;
-	}
-
-	/**
-	 * Checks input, creates a sql backup file, shows changes and download button.
-	 *
-	 * @param string $search
-	 * @param string $replace
-	 * @param array  $tables
-	 * @param bool   $domain_replace
-	 * @param string $new_table_prefix
-	 */
-	public function create_backup_file( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '' ) {
-
-		if ( count( $tables ) < 1 ) {
-			$tables = $this->dbm->get_tables();
-		}
-
-		$report = $this->db_backup( $search, $replace, $tables, $domain_replace, $new_table_prefix );
-		if ( $search !== '' && $search !== $replace ) {
-			echo '<div class="updated notice is-dismissible">';
-			//show changes if there are any
-			if ( count( $report[ 'changes' ] ) > 0 ) {
-				$this->show_changes( $report );
-			}
-
-			//if no changes found report that
-			if ( 0 === count( $report [ 'changes' ] ) ) {
-				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
-			}
-
-			echo '</div>';
-		}
-
-		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
-
-		$this->show_download_button( $report[ 'filename' ], $compress );
-
-	}
-
-	/**
-	 * displays the changes made to the db
-	 * echoes the changes in formatted html
-	 *
-	 * @param $report                 array 'errors' : WP-Error Object if Errors
-	 *                                'tables' : Number of tables processed
-	 *                                'changes_count' : Number of changes made
-	 *                                'changes'
-	 *                                Array  with at least these elements:
-	 *                                'table_name'=>$[name of current table],
-	 *                                'changes' => array('row'    => [row that has been changed ],
-	 *                                'column' => [column that has been changed],
-	 *                                'from'   => ( old value ),
-	 *                                'to'     => ( $new value ),
-	 *
-	 * @return string
-	 */
-	public function show_changes( $report ) {
-
-		//get search & replace values in order to highlight them in the results
-		$search            = esc_html( $_POST [ 'search' ] );
-		$search_highlight  = '<span class="search-replace-search-value">' . $search . '</span>';
-		$replace           = esc_html( $_POST [ 'replace' ] );
-		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
-		$delimiter         = array( ' ...', '...<br>' );
-
-		$msg = sprintf(
-			_n(
-				'%s table was processed.',
-				'%s tables were processed.',
-				$report[ 'tables' ],
-				'search-and-replace'
-			),
-			$report[ 'tables' ]
-		);
-
-		$msg .= sprintf(
-			_n(
-				'%s cell needs to be updated.',
-				'%s cells need to be updated.',
-				$report[ 'changes_count' ],
-				'search-and-replace'
-			),
-			$report[ 'changes_count' ]
-		);
-		echo esc_html( $msg );
-
-		//create modal window for detailed view of changes
-		?>
-		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'search-and-replace' ); ?></a></p>
-		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
-		<div id="changes-modal" class="search-replace-modal " style="display: none;">
-			<div class="search-replace-modal-header">
-				<button type="button" id="changes-modal-close" class="search-replace-modal-close-button"></button>
-			</div>
-			<div class="search-replace-changes-modal-content">
-		<?php
-		foreach ( $report[ 'changes' ] as $table_report ) {
-			$changes      = $table_report[ 'changes' ];
-			$changes_made = count( $changes );
-
-			if ( $changes_made > 0 ) {
-				$table = $table_report[ 'table_name' ];
-				$html  = '<h2 class = "search-replace-modal-table-headline">';
-				$html .= '<strong>' . esc_attr__( 'Table:', 'search-and-replace' ) . '</strong> ' . $table;
-				$html .= '<strong>' . esc_attr__( 'Changes:', 'search-and-replace' ) . '</strong> ' . $changes_made;
-				$html .= '</h2>';
-
-				$html .= '<table class="search-replace-modal-table"><colgroup><col><col><col><col><col><col><col><col></colgroup>';
-
-				foreach ( $changes as $change ) {
-
-					$html .= '<tr>';
-					$html .= '<th class="search-replace-narrow">' . __( 'row', 'search-and-replace' ) . '</th>
-						<td class="search-replace-narrow">' . $change [ 'row' ] . '</td>
-				         <th> ' . __( 'column', 'search-and-replace' ) . '</th>
-				        <td>' . $change [ 'column' ] . '</td> ';
-
-					//trim results and wrap with highlight class
-					$old_value = esc_html( $change [ 'from' ] );
-					$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
-					$old_value = str_replace( $search, $search_highlight, $old_value );
-
-					$new_value = esc_html( $change[ 'to' ] );
-					$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
-					$new_value = str_replace( $replace, $replace_highlight, $new_value );
-
-					$html .= '<th>' . __( 'Old value:', 'search-and-replace' ) . '</th>
-							<td>' . $old_value . '</td>
-						<th> ' . __( 'New value:', 'search-and-replace' ) . '</th><td>' . $new_value . '</td>';
-					$html .= '</tr>';
-				}
-				$html .= '</table>';
-
-				echo $html;
-			}
-		}
-
-		echo '</div></div>';
-	}
-
-	/**
-	 * creates an input element to start the download of the sql file
-	 *
-	 * @param $file     String The name of the file to be downloaded
-	 * @param $compress Boolean Set true if gz compression should be used
-	 */
-	protected function show_download_button( $file, $compress ) {
-
-		echo '<div class="updated notice is-dismissible insr_sql_button_wrap"><p>';
-		esc_attr_e( 'Your SQL file was created!', 'search-and-replace' );
-		echo '</p><form action method="post">';
-		wp_nonce_field( 'download_sql', 'insr_nonce' );
-		$value = translate( 'Download SQL File', 'search-and-replace' );
-
-		$html = '<input type="hidden" name="action" value="download_file" />';
-		$html .= '<input type ="hidden" name="sql_file" value="' . esc_attr( $file ) . '">';
-		$html .= '<input type ="hidden" name="compress" value="' . esc_attr( $compress ) . '">';
-		$html .= '<input id ="insr_submit" type="submit" value="' . esc_attr( $value ) . '" class="button" />';
-		$html .= '</form></div>';
-		echo $html;
 	}
 
 	/**
@@ -231,7 +77,11 @@ class Exporter {
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search, $replace, $tables, $domain_replace = FALSE, $new_table_prefix ) {
+	public function db_backup( $search, $replace, $tables = array(), $domain_replace = FALSE, $new_table_prefix ) {
+
+		if ( count( $tables ) < 1 ) {
+			$tables = $this->dbm->get_tables();
+		}
 
 		$report = array(
 			'errors'        => NULL,
@@ -351,7 +201,7 @@ class Exporter {
 			'table_name' => $table,
 			'rows'       => 0,
 			'change'     => 0,
-			'changes'    => [],
+			'changes'    => [ ],
 		);
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
@@ -433,10 +283,10 @@ class Exporter {
 		$ints = array();
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';

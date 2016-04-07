@@ -68,7 +68,7 @@ class Manager {
 			add_submenu_page(
 				'tools.php',
 				$page->get_page_title(),
-				esc_html__( 'Search & Replace', 'search-and-replace' ),
+				$page->get_menu_title(),
 				$cap,
 				$slug,
 				array( $this, 'render' )
