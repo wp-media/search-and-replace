@@ -12,4 +12,4 @@ composer.lock
 vendor
 inc/requisite/*
 !inc/requisite/src
-
+*.zip
