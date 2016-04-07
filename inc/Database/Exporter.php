@@ -139,8 +139,12 @@ class Exporter {
 		foreach ( $tables as $table ) {
 
 			// Set default values for backup run.
-			$search  = '';
-			$replace = '';
+			if ( ! isset( $search ) ) {
+				$search = '';
+			}
+			if ( ! isset( $replace ) ) {
+				$replace = '';
+			}
 
 			//count tables
 			$report [ 'tables' ] ++;
