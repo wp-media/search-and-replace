@@ -58,7 +58,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 		}
 
 		$report = $this->dbe->db_backup( $search, $replace, array(), TRUE, $new_db_prefix );
-		$this->downloader->show_download_modal( $report );
+		$this->downloader->show_modal( $report );
 
 		return TRUE;
 	}
