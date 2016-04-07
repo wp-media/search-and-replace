@@ -25,7 +25,7 @@ Our goal with this plugin is to give you a good solution in manipulating your da
 - WordPress Multisite support
 - localized and ready for your own language
 
-####Available languages - feel free to contribute your own language
+####Available languages - [feel free to contribute your own language](https://translate.wordpress.org/projects/wp-plugins/search-and-replace)
 - English
 - German
 - Chinese (Hong Kong SAR)
