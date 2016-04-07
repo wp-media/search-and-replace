@@ -133,7 +133,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		if ( 'export' === $export_or_save ) {
 			//'export'-button was checked
 			$report = $this->dbe->db_backup( $search, $replace, $tables );
-			$this->downloader->show_download_modal( $report );
+			$this->downloader->show_modal( $report );
 		} else {
 			//"Save changes to database" was checked
 			$this->run_replace( $search, $replace, $tables, $dry_run );

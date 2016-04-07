@@ -63,7 +63,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	public function save() {
 
 		$report = $this->dbe->db_backup();
-		$this->downloader->show_download_modal( $report );
+		$this->downloader->show_modal( $report );
 
 		return TRUE;
 	}

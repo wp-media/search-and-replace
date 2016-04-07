@@ -10,8 +10,14 @@ use Inpsyde\SearchReplace\Database\Exporter;
  */
 class FileDownloader {
 
+	/**
+	 * @var string
+	 */
 	private $nonce_action = 'download_sql';
 
+	/**
+	 * @var string
+	 */
 	private $nonce_name = 'insr_nonce';
 
 	/**
@@ -34,10 +40,11 @@ class FileDownloader {
 	 *
 	 * @param array $report
 	 */
-	public function show_download_modal( $report ) {
+	public function show_modal( $report ) {
 
 		if ( ! isset( $report[ 'changes' ] ) ) {
 			echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
+
 			return;
 		}
 		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
@@ -50,7 +57,7 @@ class FileDownloader {
 			if ( count( $report[ 'changes' ] ) > 0 ) {
 				$this->show_changes( $report );
 			}
-	
+
 			//if no changes found report that
 			if ( 0 === count( $report [ 'changes' ] ) ) {
 				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
@@ -59,18 +66,19 @@ class FileDownloader {
 		</div>
 
 		<div class="updated notice is-dismissible insr_sql_button_wrap">
-			<p><?php esc_html_e('Your SQL file was created!', 'search-and-replace');?> </p>
+			<p><?php esc_html_e( 'Your SQL file was created!', 'search-and-replace' ); ?> </p>
 			<form action method="post">
 				<?php wp_nonce_field( $this->nonce_action, $this->nonce_name ); ?>
 				<input type="hidden" name="action" value="download_file" />
-				<input type ="hidden" name="sql_file" value="<?php echo esc_attr( $report[ 'filename' ] ); ?>">
-				<input type ="hidden" name="compress" value="<?php echo esc_attr( $compress ); ?>">
-				<input id ="insr_submit" type="submit" value="<?php esc_attr_e( 'Download SQL File', 'search-and-replace' ) ?>" class="button" />
+				<input type="hidden" name="sql_file" value="<?php echo esc_attr( $report[ 'filename' ] ); ?>">
+				<input type="hidden" name="compress" value="<?php echo esc_attr( $compress ); ?>">
+				<input id="insr_submit" type="submit" value="<?php esc_attr_e(
+					'Download SQL File', 'search-and-replace'
+				) ?>" class="button" />
 			</form>
 		</div>
 		<?php
 	}
-
 
 	/**
 	 * displays the changes made to the db
@@ -128,51 +136,61 @@ class FileDownloader {
 				<button type="button" id="changes-modal-close" class="search-replace-modal-close-button"></button>
 			</div>
 			<div class="search-replace-changes-modal-content">
+				<?php
+				foreach ( $report[ 'changes' ] as $table_report ) :
+					$changes = $table_report[ 'changes' ];
+					$changes_made = count( $changes );
+
+					if ( $changes_made < 1 ) :
+						continue;
+					endif;
+
+					$table = $table_report[ 'table_name' ];
+					?>
+					<h2 class="search-replace-modal-table-headline">
+						<strong><?php esc_html_e( 'Table:', 'search-and-replace' ); ?></strong>
+						<?php echo $table; ?>
+						<strong><?php esc_html_e( 'Changes:', 'search-and-replace' ); ?></strong>
+						<?php echo $changes_made; ?>
+					</h2>
+
+					<table class="search-replace-modal-table">
+
+						<?php foreach ( $changes as $change ) : ?>
+
+							<tr>
+								<th class="search-replace-narrow">
+									<?php esc_html_e( 'row', 'search-and-replace' ); ?>
+								</th>
+								<td class="search-replace-narrow"><?php echo esc_html( $change [ 'row' ] ); ?></td>
+								<th><?php esc_html_e( 'column', 'search-and-replace' ); ?></th>
+								<td><?php echo esc_html( $change [ 'column' ] ); ?></td>
+								<?php
+								//trim results and wrap with highlight class
+								$old_value = esc_html( $change [ 'from' ] );
+								$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
+								$old_value = str_replace( $search, $search_highlight, $old_value );
+
+								$new_value = esc_html( $change[ 'to' ] );
+								$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
+								$new_value = str_replace( $replace, $replace_highlight, $new_value );
+								?>
+								<th><?php esc_html_e( 'Old value:', 'search-and-replace' ); ?></th>
+								<td><?php echo esc_html( $old_value ); ?></td>
+								<th><?php esc_html_e( 'New value:', 'search-and-replace' ); ?></th>
+								<td><?php echo esc_html( $new_value ); ?></td>
+							</tr>
+
+						<?php endforeach ?>
+
+					</table>
+
+				<?php endforeach; ?>
+
+			</div>
+		</div>
 		<?php
-		foreach ( $report[ 'changes' ] as $table_report ) {
-			$changes      = $table_report[ 'changes' ];
-			$changes_made = count( $changes );
-
-			if ( $changes_made > 0 ) {
-				$table = $table_report[ 'table_name' ];
-				$html  = '<h2 class = "search-replace-modal-table-headline">';
-				$html .= '<strong>' . esc_attr__( 'Table:', 'search-and-replace' ) . '</strong> ' . $table;
-				$html .= '<strong>' . esc_attr__( 'Changes:', 'search-and-replace' ) . '</strong> ' . $changes_made;
-				$html .= '</h2>';
-
-				$html .= '<table class="search-replace-modal-table"><colgroup><col><col><col><col><col><col><col><col></colgroup>';
-
-				foreach ( $changes as $change ) {
-
-					$html .= '<tr>';
-					$html .= '<th class="search-replace-narrow">' . __( 'row', 'search-and-replace' ) . '</th>
-						<td class="search-replace-narrow">' . $change [ 'row' ] . '</td>
-				         <th> ' . __( 'column', 'search-and-replace' ) . '</th>
-				        <td>' . $change [ 'column' ] . '</td> ';
-
-					//trim results and wrap with highlight class
-					$old_value = esc_html( $change [ 'from' ] );
-					$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
-					$old_value = str_replace( $search, $search_highlight, $old_value );
-
-					$new_value = esc_html( $change[ 'to' ] );
-					$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
-					$new_value = str_replace( $replace, $replace_highlight, $new_value );
-
-					$html .= '<th>' . __( 'Old value:', 'search-and-replace' ) . '</th>
-							<td>' . $old_value . '</td>
-						<th> ' . __( 'New value:', 'search-and-replace' ) . '</th><td>' . $new_value . '</td>';
-					$html .= '</tr>';
-				}
-				$html .= '</table>';
-
-				echo $html;
-			}
-		}
-
-		echo '</div></div>';
 	}
-
 
 	/**
 	 * calls the file delivery in Class DatabaseExporter
