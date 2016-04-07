@@ -2,10 +2,10 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Search & Replace 3.1.0-RC1\n"
+"Project-Id-Version: Search & Replace 3.1.0\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/inspyde-search-replace\n"
-"POT-Creation-Date: 2016-04-07 06:40:27+00:00\n"
+"POT-Creation-Date: 2016-04-07 11:20:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -90,60 +90,60 @@ msgstr ""
 msgid "Search and replace pattern can't be the same!"
 msgstr ""
 
-#: inc/Database/Replace.php:218
+#: inc/Database/Replace.php:219
 msgid "Error updating row: %d."
 msgstr ""
 
-#: inc/FileDownloader.php:40 inc/FileDownloader.php:56
-#: inc/Page/SearchReplace.php:197
+#: inc/FileDownloader.php:46 inc/FileDownloader.php:63
+#: inc/Page/SearchReplace.php:207
 msgid "Search pattern not found."
 msgstr ""
 
-#: inc/FileDownloader.php:62
+#: inc/FileDownloader.php:69
 msgid "Your SQL file was created!"
 msgstr ""
 
-#: inc/FileDownloader.php:68
+#: inc/FileDownloader.php:75
 msgid "Download SQL File"
 msgstr ""
 
-#: inc/FileDownloader.php:102
+#: inc/FileDownloader.php:110
 msgid "%s table was processed."
 msgid_plural "%s tables were processed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/FileDownloader.php:112
+#: inc/FileDownloader.php:120
 msgid "%s cell needs to be updated."
 msgid_plural "%s cells need to be updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/FileDownloader.php:124
+#: inc/FileDownloader.php:132
 msgid "View details"
 msgstr ""
 
-#: inc/FileDownloader.php:139
+#: inc/FileDownloader.php:151
 msgid "Table:"
 msgstr ""
 
-#: inc/FileDownloader.php:140
+#: inc/FileDownloader.php:153
 msgid "Changes:"
 msgstr ""
 
-#: inc/FileDownloader.php:148
+#: inc/FileDownloader.php:163
 msgid "row"
 msgstr ""
 
-#: inc/FileDownloader.php:150
+#: inc/FileDownloader.php:166
 msgid "column"
 msgstr ""
 
-#: inc/FileDownloader.php:162
+#: inc/FileDownloader.php:178
 msgid "Old value:"
 msgstr ""
 
-#: inc/FileDownloader.php:164
+#: inc/FileDownloader.php:180
 msgid "New value:"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr ""
 msgid "Backup Database"
 msgstr ""
 
-#: inc/Page/BackupDatabase.php:57
+#: inc/Page/BackupDatabase.php:67
 msgid "Create SQL File"
 msgstr ""
 
@@ -183,29 +183,29 @@ msgstr ""
 msgid "Replace Domain URL"
 msgstr ""
 
-#: inc/Page/SearchReplace.php:150
+#: inc/Page/SearchReplace.php:160
 msgid "Do Search & Replace"
 msgstr ""
 
-#: inc/Page/SearchReplace.php:168
+#: inc/Page/SearchReplace.php:178
 msgid ""
 "Dry run is selected. No changes were made to the database and no SQL file "
 "was written ."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:176
+#: inc/Page/SearchReplace.php:186
 msgid "The following changes were made to the database: "
 msgstr ""
 
-#: inc/Page/SearchReplace.php:214
+#: inc/Page/SearchReplace.php:224
 msgid "No Tables were selected."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:224
+#: inc/Page/SearchReplace.php:234
 msgid "Search field is empty."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:235
+#: inc/Page/SearchReplace.php:245
 msgid ""
 "Your search contains your current site url. Replacing your site url will "
 "most likely cause your site to break. If you want to change the URL (and "
@@ -217,49 +217,49 @@ msgstr ""
 msgid "SQL Import"
 msgstr ""
 
-#: inc/Page/SqlImport.php:50
+#: inc/Page/SqlImport.php:60
 msgid "Import SQL file"
 msgstr ""
 
-#: inc/Page/SqlImport.php:73
+#: inc/Page/SqlImport.php:83
 msgid "The file has neither '.gz' nor '.sql' Extension.  Import not possible."
 msgstr ""
 
-#: inc/Page/SqlImport.php:86
+#: inc/Page/SqlImport.php:96
 msgid "The file does not seem to be a valid SQL file. Import not possible."
 msgstr ""
 
-#: inc/Page/SqlImport.php:95
+#: inc/Page/SqlImport.php:105
 msgid "The SQL file was successfully imported. %s SQL queries were performed."
 msgstr ""
 
-#: inc/Page/SqlImport.php:107
+#: inc/Page/SqlImport.php:117
 msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini"
 msgstr ""
 
-#: inc/Page/SqlImport.php:110
+#: inc/Page/SqlImport.php:120
 msgid ""
 "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in "
 "the HTML form"
 msgstr ""
 
-#: inc/Page/SqlImport.php:114
+#: inc/Page/SqlImport.php:124
 msgid "The uploaded file was only partially uploaded"
 msgstr ""
 
-#: inc/Page/SqlImport.php:115
+#: inc/Page/SqlImport.php:125
 msgid "No file was uploaded."
 msgstr ""
 
-#: inc/Page/SqlImport.php:116
+#: inc/Page/SqlImport.php:126
 msgid "Missing a temporary folder."
 msgstr ""
 
-#: inc/Page/SqlImport.php:117
+#: inc/Page/SqlImport.php:127
 msgid "Failed to write file to disk."
 msgstr ""
 
-#: inc/Page/SqlImport.php:118
+#: inc/Page/SqlImport.php:128
 msgid "A PHP extension stopped the file upload."
 msgstr ""
 
