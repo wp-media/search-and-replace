@@ -176,9 +176,9 @@ class FileDownloader {
 								$new_value = str_replace( $replace, $replace_highlight, $new_value );
 								?>
 								<th><?php esc_html_e( 'Old value:', 'search-and-replace' ); ?></th>
-								<td><?php echo esc_html( $old_value ); ?></td>
+								<td><?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?></td>
 								<th><?php esc_html_e( 'New value:', 'search-and-replace' ); ?></th>
-								<td><?php echo esc_html( $new_value ); ?></td>
+								<td><?php echo wp_kses( $new_value, [ 'span' => [ 'class' => [] ] ] ); ?></td>
 							</tr>
 
 						<?php endforeach ?>
