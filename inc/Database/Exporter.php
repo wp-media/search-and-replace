@@ -138,14 +138,6 @@ class Exporter {
 		$this->stow( "# --------------------------------------------------------\n" );
 		foreach ( $tables as $table ) {
 
-			// Set default values for backup run.
-			if ( ! isset( $search ) ) {
-				$search = '';
-			}
-			if ( ! isset( $replace ) ) {
-				$replace = '';
-			}
-
 			//count tables
 			$report [ 'tables' ] ++;
 
