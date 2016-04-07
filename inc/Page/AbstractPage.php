@@ -23,7 +23,7 @@ abstract class AbstractPage {
 	 */
 	public function get_menu_title() {
 
-		return esc_html( 'Search & Replace', 'search-and-replace' );
+		return esc_html__( 'Search & Replace', 'search-and-replace' );
 	}
 
 	/**
@@ -75,7 +75,7 @@ abstract class AbstractPage {
 	 */
 	protected function get_submit_button_title() {
 
-		return __( 'Submit', 'search-replace' );
+		return esc_html__( 'Submit', 'search-replace' );
 	}
 
 	/**
