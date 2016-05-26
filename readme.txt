@@ -2,7 +2,7 @@
 Contributors: inpsyde, Bueltge, derpixler, ChriCo, s-hinse, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
-Tested up to: 4.5
+Tested up to: 4.5.2
 Stable tag: 3.1.0
 
 Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
@@ -31,8 +31,10 @@ Our goal with this plugin is to give you a good solution for both Developers and
 - Localized and ready for your own language
 
 = Crafted by Inpsyde =
-The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress since 2006. And yes, we also run that
-[marketplace for premium WordPress plugins and themes](https://marketpress.com).
+The team at [Inpsyde](http://inpsyde.com) is engineering the web and WordPress since 2006.
+
+= Donation? =
+You want to donate - we prefer a [positive review](https://wordpress.org/support/view/plugin-reviews/search-and-replace?rate=5#postform), not more.
 
 == Installation ==
 = Requirements =
