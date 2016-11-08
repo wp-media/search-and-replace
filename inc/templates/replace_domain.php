@@ -18,7 +18,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 
 			<tr>
 				<th><label for="search"><strong><?php esc_html_e( 'Search for: ', 'search-and-replace' ); ?></strong></label></th>
-				<td><input id="search" type="text" name="search" value="<?php echo get_site_url(); ?>" /></td>
+				<td><input id="search" type="text" disabled="disabled" name="search" value="<?php echo get_site_url(); ?>" /></td>
 			</tr>
 			<tr>
 				<th><label for="replace"><strong><?php esc_html_e( 'Replace with: ', 'search-and-replace' ); ?></strong></label></th>
