@@ -10,7 +10,7 @@ use MonkeryTestCase;
  *
  * @package Inpsyde\SearchReplace\Service
  */
-class MaxExecutionTimeTest extends MonkeryTestCase\TestCase{
+class MaxExecutionTimeTest extends MonkeryTestCase\MockeryTestCase{
 
 	/**
 	 * @dataProvider default_test_data

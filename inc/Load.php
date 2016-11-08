@@ -14,8 +14,6 @@ use Requisite\SPLAutoLoader;
  */
 class Load {
 
-	private $plugin_root_dir;
-
 	public function __construct(){
 
 		if( $this->user_can_access() === TRUE ){
