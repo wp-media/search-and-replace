@@ -132,6 +132,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		//remove wp_magic_quotes
 		$search  = stripslashes( filter_input( INPUT_POST, 'search' ) );
+		$replace = stripslashes( filter_input( INPUT_POST, 'replace' ) );
 
 		//if dry run is checked we run the replace function with dry run and return
 		if ( TRUE === $dry_run ) {
