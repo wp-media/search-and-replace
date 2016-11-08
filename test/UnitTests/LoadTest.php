@@ -35,11 +35,9 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 		            ->with( 'manage_options' )
 		            ->andReturn( $user_can );
 
-		$load = new SearchReplace\Load();
-
 		$this->assertSame(
 			$assert,
-			$this->invokeMethod( $load, 'user_can_access' )
+			$this->invokeMethod( new SearchReplace\Load(), 'user_can_access' )
 		);
 
 	}
@@ -80,10 +78,12 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 	 *
 	 * @return mixed Method return.
 	 */
-	private function invokeMethod( $object, $methodName, array $parameters = array()) {
+	private function invokeMethod( &$object, $methodName, array $parameters = array() ) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);
+
+		var_dump( $object, $methodName, $parameters );
 
 		return $method->invokeArgs($object, $parameters);
 	}
