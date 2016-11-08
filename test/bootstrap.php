@@ -2,6 +2,8 @@
 namespace Inpsyde\SearchReplace;
 
 require_once 'vendor/autoload.php';
+require_once 'vendor/antecedent/patchwork/Patchwork.php';
+
 
 /**
  * Load the Requisite library. Alternatively you can use composer's
