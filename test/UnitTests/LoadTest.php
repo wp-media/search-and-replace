@@ -37,7 +37,7 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 
 		$this->assertSame(
 			$assert,
-			$this->invokeMethod( new SearchReplace\Load(), 'user_can_access' )
+			$this->invokeMethod( new SearchReplace\Load(), (string) 'user_can_access' )
 		);
 
 	}
