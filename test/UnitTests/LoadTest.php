@@ -27,8 +27,8 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 
 		Brain\Monkey::functions()
 		            ->expect( 'current_user_can' )
-		            ->with( 'manage_options' )
-		            ->andReturn( $user_can );
+		            ->with( (string) 'manage_options' )
+		            ->andReturn( (string) $user_can );
 
 		$this->assertSame(
 			$assert,
