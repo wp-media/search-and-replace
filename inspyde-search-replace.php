@@ -13,35 +13,25 @@
  * License URI:  license.txt
  */
 
-namespace Inpsyde\SearchReplace;
 
-use Requisite\Requisite;
-use Requisite\Rule\Psr4;
-use Requisite\SPLAutoLoader;
-
-register_activation_hook( __FILE__, __NAMESPACE__ . '\activate' );
-
-add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
+defined( 'ABSPATH' ) or die( 'No direct access!' );
 
 /**
- * Register textdomain.
+ * Validate requirements on activation
+ *
+ * Runs on plugin activation.
+ * Check if php min 5.4.0 if not deactivate the plugin.
+ *
+ * @return void
  */
-function load_textdomain() {
-
-	$lang_dir = plugin_basename( __DIR__ ) . '/l10n/';
-
-	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
-}
-
-/**
- * Run on plugin activation, checks requirements.
- */
-function activate() {
-
-	load_textdomain();
+function search_replace_activate() {
 
 	$required_php_version = '5.4.0';
 	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
+
+
+	$lang_dir = plugin_basename( __DIR__ ) . '/l10n/';
+	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
 
 	if ( ! $correct_php_version ) {
 		deactivate_plugins( basename( __FILE__ ) );
@@ -56,42 +46,29 @@ function activate() {
 		);
 
 	}
+
 }
 
+register_activation_hook( __FILE__, 'search_replace_activate' );
 
 
 /**
- * Load and init in WP Environment.
+ * Load the plugin
+ *
+ * @return void
  */
-function init() {
+function search_replace_load(){
 
-	if ( ! is_admin() ) {
-		return;
+	$load = __DIR__ . '/inc/Load.php';
+
+	if ( file_exists( $load ) ) {
+		require_once $load;
+
+		define( 'SEARCH_REPLACE_BASEDIR', plugin_dir_url( __FILE__ ) );
+
+		new \Inpsyde\SearchReplace\Load();
 	}
-	// This sets the capability needed to run the plugin.
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
 
-	load_textdomain();
-
-	/**
-	 * Load the Requisite library. Alternatively you can use composer's
-	 */
-	require_once __DIR__ . '/inc/requisite/src/Requisite/Requisite.php';
-	Requisite::init();
-
-	$autoloader = new SPLAutoLoader;
-
-	$autoloader->addRule(
-		new Psr4(
-			__DIR__ . '/inc',       // base directory
-			'Inpsyde\SearchReplace' // base namespace
-		)
-	);
-
-
-	// Start the plugin.
-	$plugin = new Plugin();
-	$plugin->run( __FILE__ );
 }
+
+add_action( 'plugins_loaded', 'search_replace_load' );

@@ -11,13 +11,9 @@ class Plugin {
 	/**
 	 * @param string $file : The path to the Plugin main file
 	 */
-	public function run( $file ) {
+	public function run() {
 
 		global $wpdb;
-
-		//Defines the path to the main plugin directory.
-		$plugin_dir_url = plugin_dir_url( $file );
-		define( 'INSR_DIR', $plugin_dir_url );
 
 		if ( is_admin() ) {
 
