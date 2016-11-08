@@ -70,7 +70,8 @@ function search_replace_load(){
 
 		define( 'SEARCH_REPLACE_BASEDIR', plugin_dir_url( __FILE__ ) );
 
-		new \Inpsyde\SearchReplace\Load();
+		$load = new \Inpsyde\SearchReplace\Load();
+		$load->init();
 	}
 
 }
