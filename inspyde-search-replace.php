@@ -6,7 +6,7 @@
  * Author:       Inpsyde GmbH
  * Author URI:   http://inpsyde.com
  * Contributors: s-hinse, derpixler, ChriCo, Bueltge, inpsyde
- * Version:      3.1.0
+ * Version:      3.1.1
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
  * License:      GPLv3+
@@ -21,6 +21,8 @@ defined( 'ABSPATH' ) or die( 'No direct access!' );
  *
  * Runs on plugin activation.
  * Check if php min 5.4.0 if not deactivate the plugin.
+ *
+ * @since 3.1.1
  *
  * @return void
  */
@@ -54,6 +56,8 @@ register_activation_hook( __FILE__, 'search_replace_activate' );
 
 /**
  * Load the plugin
+ *
+ * @since 3.1.1
  *
  * @return void
  */

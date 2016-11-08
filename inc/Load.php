@@ -1,12 +1,17 @@
 <?php
-
 namespace Inpsyde\SearchReplace;
 
 use Requisite\Requisite;
 use Requisite\Rule\Psr4;
 use Requisite\SPLAutoLoader;
 
-
+/**
+ * Class Load handle plugin loading
+ *
+ * @since 3.1.1
+ *
+ * @package Inpsyde\SearchReplace
+ */
 class Load {
 
 	private $plugin_root_dir;
@@ -19,9 +24,15 @@ class Load {
 
 		}
 
-
 	}
 
+	/**
+	 * Initialize the plugin autoload files
+	 *
+	 * @since 3.1.1
+	 *
+	 * @return void
+	 */
 	private function init(){
 
 		/**
@@ -48,6 +59,8 @@ class Load {
 	 * Validate user access
 	 * To change the user access capability use the filter search_replace_access_capability
 	 * @see https://codex.wordpress.org/Roles_and_Capabilities
+	 *
+	 * @since 3.1.1
 	 *
 	 * @return bool
 	 */
