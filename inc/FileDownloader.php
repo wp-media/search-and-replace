@@ -42,16 +42,9 @@ class FileDownloader {
 	 */
 	public function show_modal( $report ) {
 
-		if ( ! isset( $report[ 'changes' ] ) ) {
-			echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
-
-			return;
-		}
-		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
-
-		?>
-
-		<div class="updated notice is-dismissible">
+		if ( array_key_exists( 'changes', $report ) && ! empty( $report[ 'changes' ] ) ) {
+			?>
+			<div class="updated notice is-dismissible">
 			<?php
 			//show changes if there are any
 			if ( count( $report[ 'changes' ] ) > 0 ) {
@@ -63,7 +56,15 @@ class FileDownloader {
 				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 			}
 			?>
-		</div>
+			</div>
+			<?php
+		}
+
+		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
+
+		?>
+
+
 
 		<div class="updated notice is-dismissible insr_sql_button_wrap">
 			<p><?php esc_html_e( 'Your SQL file was created!', 'search-and-replace' ); ?> </p>
