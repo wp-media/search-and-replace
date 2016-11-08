@@ -20,15 +20,10 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 	/**
 	 * @dataProvider test_user_can_access_data
 	 */
-	public function test_user_can_access( $is_admin, $user_can, $assert ){
+	public function test_user_can_access( $user_can, $assert ){
 
 		Brain\Monkey::filters()->expectApplied( 'search_replace_access_capability' )
 						->andReturn( 'manage_options' );
-
-		Brain\Monkey::functions()
-		            ->expect( 'is_admin' )
-		            ->andReturn( $is_admin );
-
 
 		Brain\Monkey::functions()
 		            ->expect( 'current_user_can' )
@@ -49,18 +44,11 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 
 		$data = [
 			'user_with_well_cap_can_access' => [
-				(bool) FALSE,   // $is_admin
 				(bool) TRUE,    // $user_can
 				(bool) TRUE     // $assert
 			],
 			'admins_can_access' => [
-				(bool) TRUE,   // $is_admin
 				(bool) FALSE,  // $user_can
-				(bool) TRUE    // $assert
-			],
-			'no_one_can_access' => [
-				(bool) FALSE,   // $is_admin
-				(bool) FALSE,   // $user_can
 				(bool) FALSE    // $assert
 			]
 
@@ -82,8 +70,6 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);
-
-		var_dump( $object, $methodName, $parameters );
 
 		return $method->invokeArgs($object, $parameters);
 	}

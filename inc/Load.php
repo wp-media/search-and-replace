@@ -59,7 +59,7 @@ class Load {
 
 		$user_cap = apply_filters( 'search_replace_access_capability', 'manage_options' );
 
-		if ( is_admin() || current_user_can( $user_cap ) ) {
+		if ( current_user_can( $user_cap ) ) {
 			return true;
 		}
 
