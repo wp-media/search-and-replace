@@ -1,10 +1,10 @@
 # Changelog
 
-## v3.0.2 (2016-02-xx)
-- Implement better tab and adminpage handling [#33](https://github.com/inpsyde/search-and-replace/issues/33)
-- Prepare the Plugin for localization, change Text-Domain.[#47](https://github.com/inpsyde/search-and-replace/issues/47)
-- Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
 
+## v3.1.1 (2016-04-20)
+- Refactor Plugin loding [#67](https://github.com/inpsyde/search-and-replace/issues/67)
+- Display error notice is the search value the current domain and Save changes to Database selected
+- 
 
 ## v3.1.0-RC1 (2016-04-07)
 - Improve codquality
@@ -14,6 +14,12 @@
 - Add support for Searchpattern with quotes. [#40](https://github.com/inpsyde/search-and-replace/issues/40)
 - Basic travis support for travis was added. [#38](https://github.com/inpsyde/search-and-replace/issues/38)
 - Fix Unittest [#37](https://github.com/inpsyde/search-and-replace/issues/37)
+
+
+## v3.0.2 (2016-04-01)
+- Implement better tab and adminpage handling [#33](https://github.com/inpsyde/search-and-replace/issues/33)
+- Prepare the Plugin for localization, change Text-Domain.[#47](https://github.com/inpsyde/search-and-replace/issues/47)
+- Remove difference in wordings for buttons between descriptions.[#46](https://github.com/inpsyde/search-and-replace/issues/46)
 
 ## v3.0.0 (2016-01-27)
 - Refactor the plugin, new requirements, goal and result.
