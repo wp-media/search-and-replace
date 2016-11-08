@@ -28,12 +28,12 @@ defined( 'ABSPATH' ) or die( 'No direct access!' );
  */
 function search_replace_activate() {
 
+	global $l10n, $l10n_unloaded;
+
 	$required_php_version = '5.4.0';
 	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
 
-
-	$lang_dir = plugin_basename( __DIR__ ) . '/l10n/';
-	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
+	search_replace_textdomain();
 
 	if ( ! $correct_php_version ) {
 		deactivate_plugins( basename( __FILE__ ) );
@@ -77,3 +77,11 @@ function search_replace_load(){
 }
 
 add_action( 'plugins_loaded', 'search_replace_load' );
+
+
+function search_replace_textdomain(){
+
+	$lang_dir = plugin_basename( __DIR__ ) . '/l10n/';
+	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
+
+}

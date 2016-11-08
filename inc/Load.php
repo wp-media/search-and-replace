@@ -23,6 +23,8 @@ class Load {
 	 */
 	public function init(){
 
+		search_replace_textdomain();
+
 		if( $this->user_can_access() === TRUE ) {
 
 			/**
