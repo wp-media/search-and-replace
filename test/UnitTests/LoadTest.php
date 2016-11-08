@@ -74,13 +74,13 @@ class LoadTest extends MonkeryTestCase\BrainMonkeyWpTestCase {
 	/**
 	 * Call protected/private method of a class.
 	 *
-	 * @param object &$object    Instantiated object that we will run method on.
+	 * @param object $object    Instantiated object that we will run method on.
 	 * @param string $methodName Method name to call
 	 * @param array  $parameters Array of parameters to pass into method.
 	 *
 	 * @return mixed Method return.
 	 */
-	private function invokeMethod(&$object, $methodName, array $parameters = array()) {
+	private function invokeMethod( $object, $methodName, array $parameters = array()) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);
