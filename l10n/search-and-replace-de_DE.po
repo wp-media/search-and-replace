@@ -360,7 +360,8 @@ msgstr ""
 #, php-format
 msgid "Look at our other <a href=\"%s\">free WordPress plugins</a>."
 msgstr ""
-"Schau dir auch unsere anderen <a href=\"%s\">free WordPress plugins</a> an."
+"Schau dir auch unsere anderen <a href=\"%s\">kostenlosen WordPress plugins</"
+"a> an."
 
 #: inc/templates/credits.php:38
 msgid "Working at Inpsyde"
