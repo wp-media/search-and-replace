@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Inpsyde Search & Replace\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/inspyde-search-"
 "replace\n"
-"POT-Creation-Date: 2016-11-08 16:35+0100\n"
+"POT-Creation-Date: 2016-11-08 16:44+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Inpsyde GmbH <hello@inpsyde.com>\n"
@@ -308,7 +308,7 @@ msgstr "Fehler beim Upload: "
 
 #: inc/templates/credits.php:12
 msgid "Hey nice to have you here!"
-msgstr "Schön das du hier bist!"
+msgstr "Schön, dass du hier bist!"
 
 #: inc/templates/credits.php:14
 #, php-format
