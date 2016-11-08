@@ -3,7 +3,7 @@
  * Template for displaying sql import page
  */
 // Prevent direct access.
-if ( ! defined( 'INSR_DIR' ) ) {
+if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 	echo "Hi there!  I'm just a part of plugin, not much I can do when called directly.";
 	exit;
 }

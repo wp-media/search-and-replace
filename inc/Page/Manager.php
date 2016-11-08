@@ -139,7 +139,7 @@ class Manager {
 
 		$suffix = $this->get_script_suffix();
 
-		$url    = ( INSR_DIR . '/assets/css/inpsyde-search-replace' . $suffix . '.css' );
+		$url    = ( SEARCH_REPLACE_BASEDIR . '/assets/css/inpsyde-search-replace' . $suffix . '.css' );
 		$handle = 'insr-styles';
 		wp_register_script( $handle, $url );
 		wp_enqueue_style( $handle, $url, array(), FALSE, FALSE );
@@ -159,7 +159,7 @@ class Manager {
 
 		$suffix = $this->get_script_suffix();
 
-		$url    = ( INSR_DIR . '/assets/js/inpsyde-search-replace' . $suffix . '.js' );
+		$url    = ( SEARCH_REPLACE_BASEDIR . '/assets/js/inpsyde-search-replace' . $suffix . '.js' );
 		$handle = 'insr-js';
 		wp_register_script( $handle, $url );
 		wp_enqueue_script( $handle, $url, array(), FALSE, FALSE );
