@@ -1,10 +1,9 @@
 # Changelog
 
 
-## v3.1.1 (2016-04-20)
-- Refactor Plugin loding [#67](https://github.com/inpsyde/search-and-replace/issues/67)
-- Display error notice is the search value the current domain and Save changes to Database selected
-- 
+## v3.1.1 (2016-12-24)
+- Refactor Plugin loading [#67](https://github.com/inpsyde/search-and-replace/issues/67)
+- Display error notice is the search value the current domain and save changes to Database selected
 
 ## v3.1.0-RC1 (2016-04-07)
 - Improve codquality

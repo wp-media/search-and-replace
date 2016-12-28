@@ -109,8 +109,8 @@ class FileDownloader {
 
 		$msg = sprintf(
 			_n(
-				'%s table was processed.',
-				'%s tables were processed.',
+				'%s table was processed. ',
+				'%s tables were processed. ',
 				$report[ 'tables' ],
 				'search-and-replace'
 			),
@@ -119,7 +119,7 @@ class FileDownloader {
 
 		$msg .= sprintf(
 			_n(
-				'%s cell needs to be updated.',
+				'%s cell needs to be updated. ',
 				'%s cells need to be updated.',
 				$report[ 'changes_count' ],
 				'search-and-replace'
