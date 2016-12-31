@@ -30,8 +30,15 @@ class Load {
 			/**
 			 * Load the Requisite library. Alternatively you can use composer's
 			 */
-			require_once __DIR__ . '/requisite/src/Requisite/Requisite.php';
-			Requisite::init();
+			$declared_classes = array_flip( get_declared_classes() );
+
+			if( ! array_key_exists( 'Requisite\Requisite', $declared_classes ) ){
+
+				require_once __DIR__ . '/requisite/src/Requisite/Requisite.php';
+				Requisite::init();
+
+			}
+
 
 			$autoloader = new SPLAutoLoader;
 

@@ -49,6 +49,10 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 5. Result screen after search or search and replace
 
 == Changelog ==
+
+= v3.1.1 (2016-12-31) =
+* hotfix: prevent declaration error with Requisite
+
 = v3.1.1 (2016-12-24) =
 * Refactor Plugin loading [#67](https://github.com/inpsyde/search-and-replace/issues/67)
 * Display error notice is the search value the current domain and save changes to Database selected

@@ -1,5 +1,7 @@
 # Changelog
 
+## v3.1.2 (2016-12-31)
+- hotfix: prevent declaration error with Requisite
 
 ## v3.1.1 (2016-12-24)
 - Refactor Plugin loading [#67](https://github.com/inpsyde/search-and-replace/issues/67)
