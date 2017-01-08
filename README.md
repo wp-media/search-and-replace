@@ -50,7 +50,7 @@ Go to `Tools -> Search & Replace` to view the plugin's user interface.
 Please **always** backup your database before performing search/replace operations.
 
 **Multisite usage:**
-If you are running a WordPress multisite and want to export the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only backup the tables of this subsite.
+If you are running a WordPress multisite and want to export the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only backup the tables of that subsite.
 
 ![screenshot-4](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-4.png)
 
@@ -64,7 +64,7 @@ If you want to replace the database-prefix, check the checkbox "replace database
 Press *Replace Domain URL* button to download your SQL file for migration.
 
 **Multisite usage:**
-If you are running multisite and want to migrate the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only migrate the tables of this subsite. The plugin will also replace the domain names (without http(s)://) in the *wp_blogs* table.
+If you are running multisite and want to migrate the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only migrate the tables of that subsite. The plugin will also replace the domain names (without http(s)://) in the *wp_blogs* table.
 
 ![screenshot-2](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-2.png)
 
@@ -74,7 +74,7 @@ Enter your search/replace values and select the tables you want to search. Click
 By default, the checkbox "Dry run" is checked. In "dry run"- mode, you get a detailed preview of the changes. No changes will be written to the database. Please check always with "dry run" first.
 If you want to apply the changes, uncheck the "dry run"-button, choose if you want to download a sql dump with the changes, or write them into the database. Then click "do search/replace" again.
 **Multisite usage:**
-If you are running multisite and want to search the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only show the tables of this subsite.
+If you are running multisite and want to search the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only show the tables of that subsite.
 
 ![screenshot-1](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-1.png)
 
