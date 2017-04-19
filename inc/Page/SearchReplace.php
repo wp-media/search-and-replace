@@ -133,10 +133,10 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		//remove wp_magic_quotes
 		$search  = stripslashes( filter_input( INPUT_POST, 'search' ) );
 		$replace = stripslashes( filter_input( INPUT_POST, 'replace' ) );
-
+		$csv	 = stripslashes( filter_input( INPUT_POST, 'csv' ) );
 		//if dry run is checked we run the replace function with dry run and return
 		if ( TRUE === $dry_run ) {
-			$this->run_replace( $search, $replace, $tables, $dry_run );
+			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
 
 			return FALSE;
 		}
@@ -145,11 +145,11 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		if ( 'export' === $export_or_save ) {
 			//'export'-button was checked
-			$report = $this->dbe->db_backup( $search, $replace, $tables );
+			$report = $this->dbe->db_backup( $search, $replace, $tables, FALSE, '', $csv );
 			$this->downloader->show_modal( $report );
 		} else {
 			//"Save changes to database" was checked
-			$this->run_replace( $search, $replace, $tables, $dry_run );
+			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
 		}
 		
 		return TRUE;
@@ -173,7 +173,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 *
 	 * @return null
 	 */
-	protected function run_replace( $search, $replace, $tables, $dry_run ) {
+	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = null ) {
 
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
@@ -194,7 +194,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		}
 		$this->replace->set_dry_run( $dry_run );
 
-		$report = $this->replace->run_search_replace( $search, $replace, $tables );
+		$report = $this->replace->run_search_replace( $search, $replace, $tables, $csv );
 
 		if ( is_wp_error( $report ) ) {
 			$this->add_error( __( $report->get_error_message(), 'search-and-replace' ) );
@@ -233,7 +233,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		$replace = filter_input( INPUT_POST, 'replace' );
 
 		//if search field is empty and replace field is not empty quit. If both fields are empty, go on (useful for backup of single tables without changing)
-		if ( '' === $search && '' === $replace ) {
+		if ( '' === $search && '' !== $replace ) {
 			$this->add_error( esc_attr__( 'Search field is empty.', 'search-and-replace' ) );
 
 			return FALSE;

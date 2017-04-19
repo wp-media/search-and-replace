@@ -77,7 +77,7 @@ class Exporter {
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '' ) {
+	public function db_backup( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '', $csv = null ) {
 
 		if ( count( $tables ) < 1 ) {
 			$tables = $this->dbm->get_tables();
@@ -158,7 +158,7 @@ class Exporter {
 				);
 
 			} else {
-				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix );
+				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix, $csv );
 			}
 			//log changes if any
 
@@ -195,7 +195,7 @@ class Exporter {
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
-	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '' ) {
+	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '', $csv = null ) {
 
 		$table_report = array(
 			'table_name' => $table,
