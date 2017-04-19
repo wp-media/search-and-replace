@@ -301,5 +301,20 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		}
 
 	}
+	
+	/**
+	 * shows the csv value in template
+	 */
+	private function get_csv_value() {
+
+		$csv = isset( $_POST[ 'csv' ] ) ? $_POST[ 'csv' ] : '';
+		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+		if ( $dry_run ) {
+			$csv = stripslashes( $csv );
+			$csv = htmlentities( $csv );
+			echo $csv;
+		}
+		
+	}
 
 }

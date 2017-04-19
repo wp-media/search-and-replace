@@ -21,7 +21,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 		</tr>
 		<tr>
 			<th><label for="csv"><strong>CSV Format Search/Replace (optional):</strong></label></th>
-			<td><textarea id="csv" cols="62" name="csv" placeholder="search value, replace value (one per line)"></textarea></td>
+			<td><textarea id="csv" cols="62" name="csv" placeholder="search value, replace value (one per line)"><?php $this->get_csv_value() ?></textarea></td>
 		</tr>
 		<tr>
 			<th><strong><?php esc_html_e( 'Select tables', 'search-and-replace' ); ?></strong></th>
