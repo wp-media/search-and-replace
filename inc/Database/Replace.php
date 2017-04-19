@@ -167,7 +167,10 @@ class Replace {
 				$update     = FALSE;
 
 				foreach ( $columns as $column ) {
-
+					//Skip the GUID column per Wordpress Codex
+					if($column == "guid") {
+						continue;
+					}
 					$data_to_fix = $row[ $column ];
 
 					if ( $column === $primary_key ) {
