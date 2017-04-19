@@ -325,6 +325,8 @@ class Exporter {
 					$table_report[ 'rows' ] ++;
 
 					foreach ( $row as $column => $value ) {
+						//Skip the GUID column per Wordpress Codex
+						
 						//if "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them
 						if ( $new_table !== $table ) {
 							$value = $this->replace->recursive_unserialize_replace(
@@ -335,7 +337,7 @@ class Exporter {
 						//skip replace if no search pattern
 						//check if we need to replace something
 						//skip primary_key
-						if ( $search !== '' && $column !== $primary_key ) {
+						if ( $search !== '' && $column !== $primary_key && $column !== "guid") {
 
 							$edited_data = $this->replace->recursive_unserialize_replace(
 								$search, $replace,
