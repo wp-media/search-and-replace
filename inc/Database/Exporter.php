@@ -301,7 +301,15 @@ class Exporter {
 
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
-
+		//Prepare CSV data
+		if($csv != null) {
+			$csv_lines = explode("\n", $csv);
+			$csv_head = str_getcsv("search,replace");
+			$csv_array = array();
+			foreach ($csv_lines as $line) {
+				$csv_array[] = array_combine($csv_head, str_getcsv($line));
+			}
+		}
 		for ( $page = 0; $page < $pages; $page ++ ) {
 			$start = $page * $page_size;
 
@@ -333,7 +341,11 @@ class Exporter {
 								$search, $replace,
 								$value
 							);
-
+							if($csv != null) {
+								foreach($csv_array as $entry) {
+									$edited_data = $this->recursive_unserialize_replace( $entry['search'], $entry['replace'], $edited_data );
+								}
+							}
 							// Something was changed
 							if ( $edited_data !== $value ) {
 
