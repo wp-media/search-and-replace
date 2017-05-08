@@ -281,6 +281,7 @@ class Exporter {
 
 		$defs = array();
 		$ints = array();
+		$binaries = array();
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
 				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
@@ -290,6 +291,14 @@ class Exporter {
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
+			}
+			elseif ( strpos( strtolower( $struct->Type ), 'binary' ) === 0
+			|| strpos( strtolower( $struct->Type ), 'varbinary' ) === 0
+			|| strpos( strtolower( $struct->Type ), 'blob' ) === 0
+			|| strpos( strtolower( $struct->Type ), 'tinyblob' ) === 0
+			|| strpos( strtolower( $struct->Type ), 'mediumblob' ) === 0
+			|| strpos( strtolower( $struct->type ), 'longblob' ) === 0) {
+				$binaries[ strtolower( $struct->Field ) ] = 1;
 			}
 		}
 
@@ -359,11 +368,18 @@ class Exporter {
 							// yet try to avoid quotation marks around integers
 							$value    = ( NULL === $value || '' === $value ) ? $defs[ strtolower( $column ) ] : $value;
 							$values[] = ( '' === $value ) ? "''" : $value;
-						} else {
-							$values[] = "'" . str_replace(
-									$hex_search, $hex_replace,
-									$this->sql_addslashes( $value )
-								) . "'";
+						}
+						else {
+							if ( isset( $binaries[ strtolower( $column ) ] ) ) {
+								$hex = unpack( 'H*', $value );
+								$values[] = "'$hex[1]'";
+							}
+							else {
+								$values[] = "'" . str_replace(
+										$hex_search, $hex_replace,
+										$this->sql_addslashes( $value )
+									) . "'";
+							}
 						}
 					}
 					$this->stow( " \n" . $entries . implode( ', ', $values ) . ');' );
