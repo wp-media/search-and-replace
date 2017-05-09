@@ -297,7 +297,7 @@ class Exporter {
 			|| strpos( strtolower( $struct->Type ), 'blob' ) === 0
 			|| strpos( strtolower( $struct->Type ), 'tinyblob' ) === 0
 			|| strpos( strtolower( $struct->Type ), 'mediumblob' ) === 0
-			|| strpos( strtolower( $struct->type ), 'longblob' ) === 0) {
+			|| strpos( strtolower( $struct->Type ), 'longblob' ) === 0) {
 				$binaries[ strtolower( $struct->Field ) ] = 1;
 			}
 		}
