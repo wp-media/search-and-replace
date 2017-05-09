@@ -45,6 +45,16 @@ jQuery( document ).ready( function() {
 				}
 
 			}
+			
+			// GZ compression only available for exports
+			$( '#radio2' ).click( function () {
+				$( '#compress' ).attr( 'checked', false );
+				$(' #compress' ).attr( 'disabled', true );
+			} );
+			
+			$( '#radio1' ).click( function () {
+				$(' #compress' ).removeAttr( 'disabled' );
+			} );
 
 			//event listener for changes modal
 			$( '#changes-modal-button' ).click( show_changes_modal );
