@@ -8,7 +8,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 	exit;
 }
 ?>
-	<p><?php esc_html_e( 'If you want to migrate your site to another domain, enter the new URL in the field "Replace with" and create a backup of your database by clicking "Do Replace Domain/Url".',
+	<p><?php esc_html_e( 'If you want to migrate your site to another domain, enter the new URL in the field "Replace with" and click "Do Replace Domain/Url". You can then download a database backup containing the new URL.',
 	             'search-and-replace' ); ?> </p>
 
 	<form action="" method="post">
