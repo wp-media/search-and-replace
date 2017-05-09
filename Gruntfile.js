@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 					domainPath: 'l10n/',                    // Where to save the POT file.
 					exclude: [],                            // List of files or directories to ignore.
 					include: ['.*'],                        // List of files or directories to include.
-					mainFile: 'inspyde-search-replace.php', // Main project file.
+					mainFile: 'inpsyde-search-replace.php', // Main project file.
 					potComments: '',                        // The copyright at the beginning of the POT file.
 					potFilename: 'search-and-replace.pot',  // Name of the POT file.
 					potHeaders: {
