@@ -1,18 +1,18 @@
-# Copyright (C) 2016 Inpsyde GmbH
+# Copyright (C) 2017 Inpsyde GmbH
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Search & Replace 3.1.0\n"
+"Project-Id-Version: Search & Replace 3.1.2\n"
 "Report-Msgid-Bugs-To: "
-"https://wordpress.org/support/plugin/inspyde-search-replace\n"
-"POT-Creation-Date: 2016-04-07 11:20:16+00:00\n"
+"https://wordpress.org/support/plugin/inpsyde-search-replace\n"
+"POT-Creation-Date: 2017-05-09 15:09:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n 0.5.3\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
 "X-Poedit-KeywordsList: "
 "__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
 "attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
@@ -74,11 +74,11 @@ msgstr ""
 msgid "Data contents of table %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:378
+#: inc/Database/Exporter.php:396
 msgid "End of data contents of table %s"
 msgstr ""
 
-#: inc/Database/Exporter.php:460
+#: inc/Database/Exporter.php:478
 msgid "There was an error writing a line to the backup script:"
 msgstr ""
 
@@ -90,60 +90,59 @@ msgstr ""
 msgid "Search and replace pattern can't be the same!"
 msgstr ""
 
-#: inc/Database/Replace.php:219
+#: inc/Database/Replace.php:222
 msgid "Error updating row: %d."
 msgstr ""
 
-#: inc/FileDownloader.php:46 inc/FileDownloader.php:63
-#: inc/Page/SearchReplace.php:207
+#: inc/FileDownloader.php:56 inc/Page/SearchReplace.php:217
 msgid "Search pattern not found."
 msgstr ""
 
-#: inc/FileDownloader.php:69
+#: inc/FileDownloader.php:70
 msgid "Your SQL file was created!"
 msgstr ""
 
-#: inc/FileDownloader.php:75
+#: inc/FileDownloader.php:76
 msgid "Download SQL File"
 msgstr ""
 
-#: inc/FileDownloader.php:110
-msgid "%s table was processed."
-msgid_plural "%s tables were processed."
+#: inc/FileDownloader.php:111
+msgid "%s table was processed. "
+msgid_plural "%s tables were processed. "
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/FileDownloader.php:120
-msgid "%s cell needs to be updated."
+#: inc/FileDownloader.php:121
+msgid "%s cell needs to be updated. "
 msgid_plural "%s cells need to be updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/FileDownloader.php:132
+#: inc/FileDownloader.php:133
 msgid "View details"
 msgstr ""
 
-#: inc/FileDownloader.php:151
+#: inc/FileDownloader.php:152
 msgid "Table:"
 msgstr ""
 
-#: inc/FileDownloader.php:153
+#: inc/FileDownloader.php:154
 msgid "Changes:"
 msgstr ""
 
-#: inc/FileDownloader.php:163
+#: inc/FileDownloader.php:164
 msgid "row"
 msgstr ""
 
-#: inc/FileDownloader.php:166
+#: inc/FileDownloader.php:167
 msgid "column"
 msgstr ""
 
-#: inc/FileDownloader.php:178
+#: inc/FileDownloader.php:179
 msgid "Old value:"
 msgstr ""
 
-#: inc/FileDownloader.php:180
+#: inc/FileDownloader.php:181
 msgid "New value:"
 msgstr ""
 
@@ -183,34 +182,26 @@ msgstr ""
 msgid "Replace Domain URL"
 msgstr ""
 
-#: inc/Page/SearchReplace.php:160
+#: inc/Page/SearchReplace.php:170
 msgid "Do Search & Replace"
 msgstr ""
 
-#: inc/Page/SearchReplace.php:178
+#: inc/Page/SearchReplace.php:188
 msgid ""
 "Dry run is selected. No changes were made to the database and no SQL file "
 "was written ."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:186
+#: inc/Page/SearchReplace.php:196
 msgid "The following changes were made to the database: "
 msgstr ""
 
-#: inc/Page/SearchReplace.php:224
+#: inc/Page/SearchReplace.php:234
 msgid "No Tables were selected."
 msgstr ""
 
-#: inc/Page/SearchReplace.php:234
+#: inc/Page/SearchReplace.php:244
 msgid "Search field is empty."
-msgstr ""
-
-#: inc/Page/SearchReplace.php:245
-msgid ""
-"Your search contains your current site url. Replacing your site url will "
-"most likely cause your site to break. If you want to change the URL (and "
-"you know what you doing), please use the export function and make sure you "
-"backup your database before reimporting the changed SQL."
 msgstr ""
 
 #: inc/Page/SqlImport.php:34
@@ -281,7 +272,8 @@ msgstr ""
 #: inc/templates/credits.php:21
 msgid ""
 "You can contribute the Plugin go to the repository on <a "
-"href=\"%s\">github</a> making changes, create issues or submitting changes."
+"href=\"%s\">github</a> making changes, creating issues, or submitting "
+"changes."
 msgstr ""
 
 #: inc/templates/credits.php:25
@@ -291,7 +283,8 @@ msgstr ""
 #: inc/templates/credits.php:26
 msgid ""
 "Inpsyde has developed enterprise solutions with the world’s most popular "
-"open-source CMS since it was a kitten. Still do, inconvincible convinced."
+"open-source CMS ever since it was a kitten. We still do, inconvincibly "
+"convinced."
 msgstr ""
 
 #: inc/templates/credits.php:28
@@ -310,9 +303,9 @@ msgstr ""
 
 #: inc/templates/credits.php:39
 msgid ""
-"The biggest WordPress enterprise in Europe we’re dynamically growing and "
-"constantly looking for new employees. So do you want to shape WordPress in "
-"an interesting and exciting working environment? Here we are!"
+"As the biggest WordPress enterprise in Europe, we’re dynamically growing "
+"and constantly looking for new employees. So, do you want to shape "
+"WordPress in an interesting and exciting work environment? Here we are!"
 msgstr ""
 
 #: inc/templates/credits.php:40
@@ -346,7 +339,7 @@ msgstr ""
 #: inc/templates/credits.php:50
 msgid ""
 "If you love open source and especially WordPress, if you love to organize "
-"your working days by yourself and want to use your pragmatic "
+"your working days by yourself, and you want to use your pragmatic "
 "problem-solving skills and result-oriented work methods: <a "
 "href=\"%s\">join our team</a>!"
 msgstr ""
@@ -426,13 +419,13 @@ msgstr ""
 msgid "Maximum file size: "
 msgstr ""
 
-#: inspyde-search-replace.php:52
+#: inpsyde-search-replace.php:44
 msgid ""
 "This plugin can not be activated because it requires at least PHP version "
 "%1$s. "
 msgstr ""
 
-#: inspyde-search-replace.php:55
+#: inpsyde-search-replace.php:47
 msgid "back"
 msgstr ""
 
