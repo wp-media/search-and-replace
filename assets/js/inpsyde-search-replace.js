@@ -66,6 +66,14 @@ jQuery( document ).ready( function() {
 					$( document ).unbind( 'keydown', keydown_event_handler )
 				}
 			}
+			
+			// Trying to search for site URL will give warning
+			$( '#search-submit' ).click( function () {
+				if ( $( '#radio2' ).is( ':checked' ) && $( '#search' ).val().indexOf( insr_data_obj.site_url ) != -1 ) {
+					return confirm( insr_data_obj.search_matches_site_url );
+				}
+				return true;
+			} );
 		}
 	)( jQuery );
 

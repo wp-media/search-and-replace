@@ -54,6 +54,13 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	public function render() {
 
 		require_once( __DIR__ . '/../templates/search_replace.php' );
+
+		wp_localize_script( 'insr-js', 'insr_data_obj', array(
+			'search_matches_site_url' => __( 'Your search contains your current site url. ' .
+			'Replacing your site url can cause your site to break. ' .
+			'Are you sure you wish to proceed?', 'search-and-replace' ),
+			'site_url' => $this->get_stripped_site_url(),
+		) );
 	}
 
 	/**
@@ -238,25 +245,6 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 			return FALSE;
 		}
-
-		$export_or_save = filter_input( INPUT_POST, 'export_or_save' );
-		//check if the user tries to replace domain name into the database
-		if ( '' === $export_or_save || 'save_to_db' === $export_or_save ) {
-			$contains_site_url = strpos( $search, $this->get_stripped_site_url() );
-			if ( FALSE !== $contains_site_url ) {
-				$this->add_error(
-					esc_html__(
-						'Your search contains your current site url. Replacing your site url will most likely cause your site to break. If you want to change the URL (and you know what you doing), please use the export function and make sure you backup your database before reimporting the changed SQL.',
-						'search-and-replace'
-					)
-				);
-
-				return FALSE;
-			}
-
-		}
-
-
 
 		return TRUE;
 	}

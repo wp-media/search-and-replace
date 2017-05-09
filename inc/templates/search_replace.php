@@ -48,5 +48,5 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 
 		</tbody>
 	</table>
-	<?php $this->show_submit_button(); ?>
+	<?php $this->show_submit_button( 'search-submit' ); ?>
 </form>

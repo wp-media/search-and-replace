@@ -63,10 +63,10 @@ abstract class AbstractPage {
 	/**
 	 *displays the html for the submit button
 	 */
-	public function show_submit_button() {
+	public function show_submit_button( $name = 'submit' ) {
 
 		echo '<input type="hidden" name="action" value="' . $this->get_slug() . '" />';
-		submit_button( $this->get_submit_button_title() );
+		submit_button( $this->get_submit_button_title(), 'primary', $name );
 		wp_nonce_field( 'replace_domain', 'insr_nonce' );
 	}
 
