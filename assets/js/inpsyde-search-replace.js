@@ -68,8 +68,11 @@ jQuery( document ).ready( function() {
 			}
 			
 			// Trying to search for site URL will give warning
+			// But only if it is not an email address
 			$( '#search-submit' ).click( function () {
-				if ( $( '#radio2' ).is( ':checked' ) && $( '#search' ).val().indexOf( insr_data_obj.site_url ) != -1 ) {
+				if ( $( '#radio2' ).is( ':checked' )
+				&& $( '#search' ).val().indexOf( insr_data_obj.site_url ) != -1
+				&& $( '#search' ).val().indexOf( '@' ) == -1 ) {
 					return confirm( insr_data_obj.search_matches_site_url );
 				}
 				return true;
