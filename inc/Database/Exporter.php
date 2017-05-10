@@ -372,7 +372,7 @@ class Exporter {
 						else {
 							if ( isset( $binaries[ strtolower( $column ) ] ) ) {
 								$hex = unpack( 'H*', $value );
-								$values[] = "'$hex[1]'";
+								$values[] = "0x$hex[1]";
 							}
 							else {
 								$values[] = "'" . str_replace(
