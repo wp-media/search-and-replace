@@ -71,7 +71,8 @@ class Exporter {
 	 * @param array  $tables         The array of table names that should be exported.
 	 * @param bool   $domain_replace If set, exporter will change the domain name without leading http:// in table
 	 *                               wp_blogs if we are on a multisite
-	 * @param        $new_table_prefix
+	 * @param string $new_table_prefix
+	 * @param null   $csv
 	 *
 	 * @return array $report    $report [ 'filename'] : Name of Backup file,
 	 *                          $report[ 'errors'] : WP_Error_object,
