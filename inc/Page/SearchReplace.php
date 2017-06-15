@@ -291,7 +291,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	}
 	
 	/**
-	 * shows the csv value in template
+	 * Shows the csv value in template.
 	 */
 	private function get_csv_value() {
 

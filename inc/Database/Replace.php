@@ -73,13 +73,14 @@ class Replace {
 	 * @param string $search  What we want to replace
 	 * @param string $replace What we want to replace it with.
 	 * @param string $tables  The name of the table we want to look at.
+	 * @param null   $csv
 	 *
-	 * @return array|\WP_Error    Collection of information gathered during the run.
+	 * @return array|\WP_Error Collection of information gathered during the run.
 	 */
 
-	public function run_search_replace( $search, $replace, $tables, $csv = null) {
+	public function run_search_replace( $search, $replace, $tables, $csv = null ) {
 
-		if ( $search === $replace && $search != '' ){
+		if ( $search === $replace && $search !== '' ){
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
 		}
 
@@ -127,7 +128,7 @@ class Replace {
 		);
 
 		// check we have a search string, bail if not
-		if ( empty( $search ) && empty($csv) ) {
+		if ( empty( $search ) && empty( $csv ) ) {
 			$table_report[ 'errors' ][] = 'Search string is empty';
 
 			return $table_report;
@@ -155,12 +156,12 @@ class Replace {
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
 		//Prepare CSV data
-		if($csv != null) {
+		if ( $csv !== null ) {
 			$csv_lines = explode("\n", $csv);
-			$csv_head = str_getcsv("search,replace");
+			$csv_head = str_getcsv( 'search,replace' );
 			$csv_array = array();
-			foreach ($csv_lines as $line) {
-				$csv_array[] = array_combine($csv_head, str_getcsv($line));
+			foreach ( $csv_lines as $line ) {
+				$csv_array[] = array_combine($csv_head, str_getcsv( $line ) );
 			}
 		}
 		for ( $page = 0; $page < $pages; $page ++ ) {
@@ -184,7 +185,7 @@ class Replace {
 
 				foreach ( $columns as $column ) {
 					//Skip the GUID column per Wordpress Codex
-					if($column == "guid") {
+					if ( $column === "guid" ) {
 						continue;
 					}
 					$data_to_fix = $row[ $column ];
@@ -204,8 +205,8 @@ class Replace {
 					// Run a search replace on the data that'll respect the serialisation.
 					$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
 					// Run a search replace by CSV parameters if CSV input present
-					if($csv != null) {
-						foreach($csv_array as $entry) {
+					if ( $csv !== null ) {
+						foreach( $csv_array as $entry ) {
 							$edited_data = $this->recursive_unserialize_replace( $entry['search'], $entry['replace'], $edited_data );
 						}
 					}
