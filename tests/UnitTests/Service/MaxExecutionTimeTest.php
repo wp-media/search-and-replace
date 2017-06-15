@@ -1,36 +1,33 @@
 <?php
+
 namespace Inpsyde\SearchReplace\Tests\Service;
 
-use Brain;
-use Inpsyde\SearchReplace\Service;
-use MonkeryTestCase;
+use Inpsyde\SearchReplace\Tests\AbstractTestCase;
 
 /**
  * Class ExecutionTime - set the service time out up to 0
  *
  * @package Inpsyde\SearchReplace\Service
  */
-class MaxExecutionTimeTest extends MonkeryTestCase\MockeryTestCase{
+class MaxExecutionTimeTest extends AbstractTestCase {
 
 	/**
 	 * @dataProvider default_test_data
 	 */
-	public function test_set( $time, $max_execution_time ){
+	public function test_set( $time, $max_execution_time ) {
 
-		$testee = $this->getMockBuilder('Inpsyde\SearchReplace\Service\MaxExecutionTime')
-		               ->setMethods( array( 'store' ) )
-		               ->getMock();
+		$testee = $this->getMockBuilder( 'Inpsyde\SearchReplace\Service\MaxExecutionTime' )
+			->setMethods( array( 'store' ) )
+			->getMock();
 
 		// set set_time_limit up default_test_data - phpUnit will set it ever to 0
 		\set_time_limit( $max_execution_time );
 
 		$this->assertSame( $max_execution_time, ini_get( 'max_execution_time' ) );
 
-		if( $time == 0 ) {
-
+		if ( $time === 0 ) {
 			$testee->expects( $this->once() )
-			       ->method( 'store' );
-
+				->method( 'store' );
 		}
 
 		// set set_time_limit up default_test_data - phpUnit will set it ever to 0
@@ -40,7 +37,7 @@ class MaxExecutionTimeTest extends MonkeryTestCase\MockeryTestCase{
 
 		$this->assertInternalType( 'int', (int) $time );
 
-#		$testee = new Service\MaxExecutionTime;
+		#		$testee = new Service\MaxExecutionTime;
 		$testee->set( $time );
 
 		$this->assertSame( $time, ini_get( 'max_execution_time' ) );
@@ -50,14 +47,14 @@ class MaxExecutionTimeTest extends MonkeryTestCase\MockeryTestCase{
 	/**
 	 * Test if the restore method calls the set method correctly
 	 */
-	public function test_restore_calls_set(){
+	public function test_restore_calls_set() {
 
-		$testee = $this->getMockBuilder('Inpsyde\SearchReplace\Service\MaxExecutionTime')
-					 ->setMethods( array( 'set' ) )
-		             ->getMock();
+		$testee = $this->getMockBuilder( 'Inpsyde\SearchReplace\Service\MaxExecutionTime' )
+			->setMethods( array( 'set' ) )
+			->getMock();
 
 		$testee->expects( $this->once() )
-			 ->method('set');
+			->method( 'set' );
 
 		$testee->restore();
 
@@ -68,7 +65,7 @@ class MaxExecutionTimeTest extends MonkeryTestCase\MockeryTestCase{
 	 */
 	public function default_test_data() {
 
-		$data = [ ];
+		$data = [];
 
 		# 1. Set timeout to 0
 		$data[ 'test_1' ] = [ (string) 0, (string) 40 ];
