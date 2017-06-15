@@ -1,5 +1,8 @@
 language: php
 
+services:
+  - mysql
+
 php:
   - '5.4'
   - '5.5'
@@ -11,6 +14,9 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
+
+before_install:
+  - mysql -e 'CREATE DATABASE test__database;'
 
 before_script:
   - composer install --no-progress --prefer-source
