@@ -25,17 +25,14 @@ Our goal with this plugin is to give you a good solution for manipulating your d
 - WordPress Multisite support
 - localized and ready for your own language
 
-#### Available languages
-- English
-- German
-- Chinese (Hong Kong SAR)
-+ [contribute your own language](https://translate.wordpress.org/projects/wp-plugins/search-and-replace)
+#### Translations
+Get a translation, your language from the WordPress repository and/or [contribute your own language](https://translate.wordpress.org/projects/wp-plugins/search-and-replace)
 
 ## Requirements:
-PHP 5.4. +
+PHP 5.4 +
 WordPress 4.x (might work with 3.x, but not tested yet)
 
-##Installation
+## Installation
 1. Unpack the download package.
 2. Upload the files to the /wp-content/plugins/ directory.
 3. Activate the plugin in WordPress backend.
