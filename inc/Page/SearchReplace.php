@@ -1,4 +1,5 @@
 <?php
+
 namespace Inpsyde\SearchReplace\Page;
 
 use Inpsyde\SearchReplace\Database,
@@ -57,9 +58,9 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		wp_localize_script( 'insr-js', 'insr_data_obj', array(
 			'search_matches_site_url' => __( 'Your search contains your current site url. ' .
-			'Replacing your site url can cause your site to break. ' .
-			'Are you sure you wish to proceed?', 'search-and-replace' ),
-			'site_url' => $this->get_stripped_site_url(),
+			                                 'Replacing your site url can cause your site to break. ' .
+			                                 'Are you sure you wish to proceed?', 'search-and-replace' ),
+			'site_url'                => $this->get_stripped_site_url(),
 		) );
 	}
 
@@ -84,7 +85,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	/**
 	 *prints a select with all the tables and their sizes
 	 *
-	 * @return void 
+	 * @return void
 	 */
 	protected function show_table_list() {
 
@@ -107,8 +108,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 			//check if dry run. if dry run && current table is in "selected" array add selected attribute
 			if ( isset( $_POST[ 'dry_run' ] )
-				&& $selected_tables
-				&& in_array( $table, $selected_tables, FALSE )
+			     && $selected_tables
+			     && in_array( $table, $selected_tables, FALSE )
 			) {
 				echo "<option value='$table' selected='selected'>$table .  $table_size </option>";
 
@@ -140,7 +141,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		//remove wp_magic_quotes
 		$search  = stripslashes( filter_input( INPUT_POST, 'search' ) );
 		$replace = stripslashes( filter_input( INPUT_POST, 'replace' ) );
-		$csv	 = stripslashes( filter_input( INPUT_POST, 'csv' ) );
+		$csv     = stripslashes( filter_input( INPUT_POST, 'csv' ) );
 		//if dry run is checked we run the replace function with dry run and return
 		if ( TRUE === $dry_run ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
@@ -158,7 +159,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			//"Save changes to database" was checked
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
 		}
-		
+
 		return TRUE;
 	}
 
@@ -180,24 +181,24 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 *
 	 * @return null
 	 */
-	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = null ) {
+	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = NULL ) {
 
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
 			echo '<p><strong>'
-				. esc_html__(
-					'Dry run is selected. No changes were made to the database and no SQL file was written .',
-					'search-and-replace'
-				)
-				. '</strong></p>';
+			     . esc_html__(
+				     'Dry run is selected. No changes were made to the database and no SQL file was written .',
+				     'search-and-replace'
+			     )
+			     . '</strong></p>';
 
 		} else {
 			echo '<p><strong>'
-				. esc_html__(
-					'The following changes were made to the database: ',
-					'search-and-replace'
-				)
-				. '</strong></p>';
+			     . esc_html__(
+				     'The following changes were made to the database: ',
+				     'search-and-replace'
+			     )
+			     . '</strong></p>';
 		}
 		$this->replace->set_dry_run( $dry_run );
 
@@ -289,20 +290,20 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		}
 
 	}
-	
+
 	/**
 	 * Shows the csv value in template.
 	 */
 	private function get_csv_value() {
 
-		$csv = isset( $_POST[ 'csv' ] ) ? $_POST[ 'csv' ] : '';
+		$csv     = isset( $_POST[ 'csv' ] ) ? $_POST[ 'csv' ] : '';
 		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
 		if ( $dry_run ) {
 			$csv = stripslashes( $csv );
 			$csv = htmlentities( $csv );
 			echo $csv;
 		}
-		
+
 	}
 
 }

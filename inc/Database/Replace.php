@@ -1,4 +1,5 @@
 <?php
+
 namespace Inpsyde\SearchReplace\Database;
 
 use Inpsyde\SearchReplace\Service;
@@ -59,7 +60,7 @@ class Replace {
 	 */
 	public function __construct( Manager $dbm, Service\MaxExecutionTime $max_execution ) {
 
-		$this->dbm = $dbm;
+		$this->dbm           = $dbm;
 		$this->max_execution = $max_execution;
 	}
 
@@ -78,9 +79,9 @@ class Replace {
 	 * @return array|\WP_Error Collection of information gathered during the run.
 	 */
 
-	public function run_search_replace( $search, $replace, $tables, $csv = null ) {
+	public function run_search_replace( $search, $replace, $tables, $csv = NULL ) {
 
-		if ( $search === $replace && $search !== '' ){
+		if ( $search === $replace && $search !== '' ) {
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
 		}
 
@@ -107,14 +108,12 @@ class Replace {
 
 		}
 
-
-
 		$this->max_execution->restore();
 
 		return $report;
 	}
 
-	public function replace_values( $search = '', $replace = '', $table, $csv = null ) {
+	public function replace_values( $search = '', $replace = '', $table, $csv = NULL ) {
 
 		$table_report = array(
 			'table_name' => $table,
@@ -156,12 +155,12 @@ class Replace {
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
 		//Prepare CSV data
-		if ( $csv !== null ) {
-			$csv_lines = explode("\n", $csv);
-			$csv_head = str_getcsv( 'search,replace' );
+		if ( $csv !== NULL ) {
+			$csv_lines = explode( "\n", $csv );
+			$csv_head  = str_getcsv( 'search,replace' );
 			$csv_array = array();
 			foreach ( $csv_lines as $line ) {
-				$csv_array[] = array_combine($csv_head, str_getcsv( $line ) );
+				$csv_array[] = array_combine( $csv_head, str_getcsv( $line ) );
 			}
 		}
 		for ( $page = 0; $page < $pages; $page ++ ) {
@@ -205,9 +204,10 @@ class Replace {
 					// Run a search replace on the data that'll respect the serialisation.
 					$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
 					// Run a search replace by CSV parameters if CSV input present
-					if ( $csv !== null ) {
-						foreach( $csv_array as $entry ) {
-							$edited_data = $this->recursive_unserialize_replace( $entry['search'], $entry['replace'], $edited_data );
+					if ( $csv !== NULL ) {
+						foreach ( $csv_array as $entry ) {
+							$edited_data = $this->recursive_unserialize_replace( $entry[ 'search' ],
+							                                                     $entry[ 'replace' ], $edited_data );
 						}
 					}
 					// Something was changed
@@ -228,7 +228,7 @@ class Replace {
 						$update       = TRUE;
 
 					}
-					
+
 				}
 
 				// Determine what to do with updates.
