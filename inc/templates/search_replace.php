@@ -20,6 +20,10 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 			<td><input id="replace" type="text" name="replace" value="<?php $this->get_replace_value() ?>" /></td>
 		</tr>
 		<tr>
+			<th><label for="csv"><strong><?php esc_html_e( 'CSV Format Search/Replace:', 'search-and-replace'); ?></strong></label></th>
+			<td><textarea id="csv" cols="62" name="csv" placeholder="search value, replace value (one per line)"><?php $this->get_csv_value() ?></textarea></td>
+		</tr>
+		<tr>
 			<th><strong><?php esc_html_e( 'Select tables', 'search-and-replace' ); ?></strong></th>
 			<td><?php $this->show_table_list(); ?><br>
 				<br><input id="select_all_tables" type="checkbox" name="select_all" />

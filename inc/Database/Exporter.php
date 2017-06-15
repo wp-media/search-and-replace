@@ -71,13 +71,14 @@ class Exporter {
 	 * @param array  $tables         The array of table names that should be exported.
 	 * @param bool   $domain_replace If set, exporter will change the domain name without leading http:// in table
 	 *                               wp_blogs if we are on a multisite
-	 * @param        $new_table_prefix
+	 * @param string $new_table_prefix
+	 * @param null   $csv
 	 *
 	 * @return array $report    $report [ 'filename'] : Name of Backup file,
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '' ) {
+	public function db_backup( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '', $csv = NULL ) {
 
 		if ( count( $tables ) < 1 ) {
 			$tables = $this->dbm->get_tables();
@@ -158,7 +159,7 @@ class Exporter {
 				);
 
 			} else {
-				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix );
+				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix, $csv );
 			}
 			//log changes if any
 
@@ -195,13 +196,13 @@ class Exporter {
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
-	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '' ) {
+	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '', $csv = NULL ) {
 
 		$table_report = array(
 			'table_name' => $table,
 			'rows'       => 0,
 			'change'     => 0,
-			'changes'    => [ ],
+			'changes'    => [],
 		);
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
@@ -279,25 +280,25 @@ class Exporter {
 		);
 		$this->stow( "#\n" );
 
-		$defs = array();
-		$ints = array();
+		$defs     = array();
+		$ints     = array();
 		$binaries = array();
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
+			     || ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
-			}
-			elseif ( strpos( strtolower( $struct->Type ), 'binary' ) === 0
-			|| strpos( strtolower( $struct->Type ), 'varbinary' ) === 0
-			|| strpos( strtolower( $struct->Type ), 'blob' ) === 0
-			|| strpos( strtolower( $struct->Type ), 'tinyblob' ) === 0
-			|| strpos( strtolower( $struct->Type ), 'mediumblob' ) === 0
-			|| strpos( strtolower( $struct->Type ), 'longblob' ) === 0) {
+			} elseif ( strpos( strtolower( $struct->Type ), 'binary' ) === 0
+			           || strpos( strtolower( $struct->Type ), 'varbinary' ) === 0
+			           || strpos( strtolower( $struct->Type ), 'blob' ) === 0
+			           || strpos( strtolower( $struct->Type ), 'tinyblob' ) === 0
+			           || strpos( strtolower( $struct->Type ), 'mediumblob' ) === 0
+			           || strpos( strtolower( $struct->Type ), 'longblob' ) === 0
+			) {
 				$binaries[ strtolower( $struct->Field ) ] = 1;
 			}
 		}
@@ -310,7 +311,15 @@ class Exporter {
 
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
-
+		//Prepare CSV data
+		if ( $csv !== NULL ) {
+			$csv_lines = explode( "\n", $csv );
+			$csv_head  = str_getcsv( 'search,replace' );
+			$csv_array = array();
+			foreach ( $csv_lines as $line ) {
+				$csv_array[] = array_combine( $csv_head, str_getcsv( $line ) );
+			}
+		}
 		for ( $page = 0; $page < $pages; $page ++ ) {
 			$start = $page * $page_size;
 
@@ -327,7 +336,7 @@ class Exporter {
 
 					foreach ( $row as $column => $value ) {
 						//Skip the GUID column per Wordpress Codex
-						
+
 						//if "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them
 						if ( $new_table !== $table ) {
 							$value = $this->replace->recursive_unserialize_replace(
@@ -338,13 +347,19 @@ class Exporter {
 						//skip replace if no search pattern
 						//check if we need to replace something
 						//skip primary_key
-						if ( $search !== '' && $column !== $primary_key && $column !== "guid") {
+						if ( $search !== '' && $column !== $primary_key && $column !== 'guid' ) {
 
 							$edited_data = $this->replace->recursive_unserialize_replace(
 								$search, $replace,
 								$value
 							);
-
+							if ( $csv !== NULL ) {
+								foreach ( $csv_array as $entry ) {
+									$edited_data = $this->replace->recursive_unserialize_replace( $entry[ 'search' ],
+									                                                              $entry[ 'replace' ],
+									                                                              $edited_data );
+								}
+							}
 							// Something was changed
 							if ( $edited_data !== $value ) {
 
@@ -368,13 +383,11 @@ class Exporter {
 							// yet try to avoid quotation marks around integers
 							$value    = ( NULL === $value || '' === $value ) ? $defs[ strtolower( $column ) ] : $value;
 							$values[] = ( '' === $value ) ? "''" : $value;
-						}
-						else {
+						} else {
 							if ( isset( $binaries[ strtolower( $column ) ] ) ) {
-								$hex = unpack( 'H*', $value );
+								$hex      = unpack( 'H*', $value );
 								$values[] = "0x$hex[1]";
-							}
-							else {
+							} else {
 								$values[] = "'" . str_replace(
 										$hex_search, $hex_replace,
 										$this->sql_addslashes( $value )
@@ -600,6 +613,5 @@ class Exporter {
 		#//build new table name
 		return $new_table_prefix . $part_after_prefix;
 	}
-
 
 }

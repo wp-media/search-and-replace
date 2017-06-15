@@ -1,4 +1,5 @@
 <?php
+
 namespace Inpsyde\SearchReplace\Database;
 
 use Inpsyde\SearchReplace\Service;
@@ -59,7 +60,7 @@ class Replace {
 	 */
 	public function __construct( Manager $dbm, Service\MaxExecutionTime $max_execution ) {
 
-		$this->dbm = $dbm;
+		$this->dbm           = $dbm;
 		$this->max_execution = $max_execution;
 	}
 
@@ -73,13 +74,14 @@ class Replace {
 	 * @param string $search  What we want to replace
 	 * @param string $replace What we want to replace it with.
 	 * @param string $tables  The name of the table we want to look at.
+	 * @param null   $csv
 	 *
-	 * @return array|\WP_Error    Collection of information gathered during the run.
+	 * @return array|\WP_Error Collection of information gathered during the run.
 	 */
 
-	public function run_search_replace( $search, $replace, $tables ) {
+	public function run_search_replace( $search, $replace, $tables, $csv = NULL ) {
 
-		if ( $search === $replace ){
+		if ( $search === $replace && $search !== '' ) {
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
 		}
 
@@ -95,7 +97,7 @@ class Replace {
 		foreach ( (array) $tables as $table ) {
 			//count tables
 			$report [ 'tables' ] ++;
-			$table_report = $this->replace_values( $search, $replace, $table );
+			$table_report = $this->replace_values( $search, $replace, $table, $csv );
 			//log changes if any
 
 			if ( 0 !== $table_report[ 'change' ] ) {
@@ -106,14 +108,12 @@ class Replace {
 
 		}
 
-
-
 		$this->max_execution->restore();
 
 		return $report;
 	}
 
-	public function replace_values( $search = '', $replace = '', $table ) {
+	public function replace_values( $search = '', $replace = '', $table, $csv = NULL ) {
 
 		$table_report = array(
 			'table_name' => $table,
@@ -127,7 +127,7 @@ class Replace {
 		);
 
 		// check we have a search string, bail if not
-		if ( empty( $search ) ) {
+		if ( empty( $search ) && empty( $csv ) ) {
 			$table_report[ 'errors' ][] = 'Search string is empty';
 
 			return $table_report;
@@ -154,7 +154,15 @@ class Replace {
 
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
-
+		//Prepare CSV data
+		if ( $csv !== NULL ) {
+			$csv_lines = explode( "\n", $csv );
+			$csv_head  = str_getcsv( 'search,replace' );
+			$csv_array = array();
+			foreach ( $csv_lines as $line ) {
+				$csv_array[] = array_combine( $csv_head, str_getcsv( $line ) );
+			}
+		}
 		for ( $page = 0; $page < $pages; $page ++ ) {
 
 			$start = $page * $page_size;
@@ -176,7 +184,7 @@ class Replace {
 
 				foreach ( $columns as $column ) {
 					//Skip the GUID column per Wordpress Codex
-					if($column == "guid") {
+					if ( $column === "guid" ) {
 						continue;
 					}
 					$data_to_fix = $row[ $column ];
@@ -195,7 +203,13 @@ class Replace {
 
 					// Run a search replace on the data that'll respect the serialisation.
 					$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
-
+					// Run a search replace by CSV parameters if CSV input present
+					if ( $csv !== NULL ) {
+						foreach ( $csv_array as $entry ) {
+							$edited_data = $this->recursive_unserialize_replace( $entry[ 'search' ],
+							                                                     $entry[ 'replace' ], $edited_data );
+						}
+					}
 					// Something was changed
 					if ( $edited_data !== $data_to_fix ) {
 
