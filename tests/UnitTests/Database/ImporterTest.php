@@ -7,22 +7,6 @@ use Inpsyde\SearchReplace\Tests\AbstractTestCase;
 
 class ImporterTest extends AbstractTestCase {
 
-	public function setUp() {
-
-		parent::setUp();
-
-		foreach ( [ 'DB_HOST'     => '127.0.0.1',
-		            'DB_USER'     => 'travis',
-		            'DB_PASSWORD' => '',
-		            'DB_NAME'     => 'test__database'
-		] as $const => $value
-		) {
-			if ( ! defined( $const ) ) {
-				define( $const, $value );
-			}
-		}
-	}
-
 	//wrong sql code should throw an error
 	public function test_import_invalid_sql_() {
 

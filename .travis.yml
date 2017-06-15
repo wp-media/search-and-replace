@@ -18,6 +18,7 @@ matrix:
 before_install:
   - mysql -e 'CREATE DATABASE test__database;'
 
+
 before_script:
   - composer install --no-progress --prefer-source
 
