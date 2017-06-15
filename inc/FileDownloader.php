@@ -2,6 +2,7 @@
 namespace Inpsyde\SearchReplace;
 
 use Inpsyde\SearchReplace\Database\Exporter;
+use Inpsyde\SearchReplace\Service\MaxExecutionTime;
 
 /**
  * Class FileDownloader
@@ -26,13 +27,19 @@ class FileDownloader {
 	protected $dbe;
 
 	/**
+	 * @var MaxExecutionTime
+	 */
+	private $max_execution;
+
+	/**
 	 * Admin constructor.
 	 *
 	 * @param Exporter $dbe
 	 */
-	public function __construct( Exporter $dbe ) {
+	public function __construct( Exporter $dbe, MaxExecutionTime $max_execution ) {
 
 		$this->dbe = $dbe;
+		$this->max_execution = $max_execution;
 	}
 
 	/**
@@ -242,16 +249,20 @@ class FileDownloader {
 	 * calls the file delivery in Class DatabaseExporter
 	 *
 	 * @wp-hook init
+	 *
+	 * @return bool
 	 */
 	public function deliver_backup_file() {
 
 		if ( ! $_SERVER[ 'REQUEST_METHOD' ] === 'POST' ) {
-			return;
+			return FALSE;
 		}
 
 		if ( ! isset( $_POST[ 'insr_nonce' ] ) || ! wp_verify_nonce( $_POST[ 'insr_nonce' ], 'download_sql' ) ) {
-			return;
+			return FALSE;
 		}
+
+		$this->max_execution->set();
 
 		if ( isset( $_POST[ 'action' ] ) && 'download_file' === $_POST[ 'action' ] ) {
 
@@ -273,5 +284,6 @@ class FileDownloader {
 			$this->dbe->deliver_backup( $sql_file, $compress );
 		}
 
+		$this->max_execution->restore();
 	}
 }

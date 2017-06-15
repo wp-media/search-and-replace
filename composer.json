@@ -1,7 +1,12 @@
 {
   "name": "inpsyde/search-and-replace",
   "description": "Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.",
-  "keywords"   : ["wordpress", "multisite", "plugin", "database"],
+  "keywords": [
+    "wordpress",
+    "multisite",
+    "plugin",
+    "database"
+  ],
   "license": "GPL-3.0+",
   "type": "wordpress-plugin",
   "homepage": "https://github.com/inpsyde/search-and-replace/",
@@ -41,14 +46,23 @@
     "mockery/mockery": "*",
     "inpsyde/monkery-test-case": "dev-master",
     "mnsami/composer-custom-directory-installer": "1.1.*",
-    "dnaber/requisite": "1.0"
+    "dnaber/requisite": "1.0",
+    "wp-coding-standards/wpcs": "~0.6.0"
   },
-  "extra":
-  {
+  "extra": {
     "installer-paths": {
       "./inc/requisite": [
         "dnaber/requisite"
       ]
     }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@phpcs"
+    ],
+    "post-update-cmd": [
+      "@phpcs"
+    ],
+    "phpcs": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs"
   }
 }

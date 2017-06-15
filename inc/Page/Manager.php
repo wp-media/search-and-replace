@@ -162,7 +162,7 @@ class Manager {
 		$url    = ( SEARCH_REPLACE_BASEDIR . '/assets/js/inpsyde-search-replace' . $suffix . '.js' );
 		$handle = 'insr-js';
 		wp_register_script( $handle, $url );
-		wp_enqueue_script( $handle, $url, array(), FALSE, true );
+		wp_enqueue_script( $handle, $url, array(), FALSE, TRUE );
 
 	}
 

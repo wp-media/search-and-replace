@@ -1,4 +1,5 @@
 <?php
+
 namespace Inpsyde\SearchReplace\Database;
 
 /**
@@ -43,7 +44,9 @@ class Manager {
 				$tables = $this->wpdb->get_col( "SHOW TABLES LIKE'" . $this->wpdb->base_prefix . "%'" );
 			} else {
 				$blog_id = get_current_blog_id();
-				$tables  = $this->wpdb->get_col( "SHOW TABLES LIKE '" . $this->wpdb->base_prefix . absint( $blog_id ) . "\_%'" );
+				$tables  = $this->wpdb->get_col(
+					"SHOW TABLES LIKE '" . $this->wpdb->base_prefix . absint( $blog_id ) . "\_%'"
+				);
 			}
 
 		} else {
@@ -145,7 +148,7 @@ class Manager {
 	public function update( $table, $update_sql, $where_sql ) {
 
 		$sql = 'UPDATE ' . $table . ' SET ' . implode( ', ', $update_sql ) .
-		       ' WHERE ' . implode( ' AND ', array_filter( $where_sql ) );
+			' WHERE ' . implode( ' AND ', array_filter( $where_sql ) );
 
 		return $this->wpdb->query( $sql );
 	}

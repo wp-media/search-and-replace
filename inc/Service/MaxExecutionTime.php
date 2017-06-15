@@ -9,7 +9,7 @@ namespace Inpsyde\SearchReplace\Service;
 class MaxExecutionTime {
 
 	/**
-	 * @var max_execution_time
+	 * @var int
 	 */
 	private $met;
 
@@ -20,7 +20,7 @@ class MaxExecutionTime {
 	 */
 	public function set( $time = 0 ){
 
-		if( $time == 0 ){
+		if( $time === 0 ){
 			$this->store();
 		}
 

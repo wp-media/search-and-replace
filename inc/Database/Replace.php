@@ -47,13 +47,20 @@ class Replace {
 	protected $dry_run = TRUE;
 
 	/**
+	 * @var Service\MaxExecutionTime
+	 */
+	private $max_execution;
+
+	/**
 	 * Replace constructor.
 	 *
-	 * @param Manager $dbm
+	 * @param Manager                  $dbm
+	 * @param Service\MaxExecutionTime $max_execution
 	 */
-	public function __construct( Manager $dbm ) {
+	public function __construct( Manager $dbm, Service\MaxExecutionTime $max_execution ) {
 
 		$this->dbm = $dbm;
+		$this->max_execution = $max_execution;
 	}
 
 	/**
@@ -67,7 +74,7 @@ class Replace {
 	 * @param string $replace What we want to replace it with.
 	 * @param string $tables  The name of the table we want to look at.
 	 *
-	 * @return array    Collection of information gathered during the run.
+	 * @return array|\WP_Error    Collection of information gathered during the run.
 	 */
 
 	public function run_search_replace( $search, $replace, $tables ) {
@@ -76,8 +83,7 @@ class Replace {
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
 		}
 
-		$execution_time = new Service\MaxExecutionTime();
-		$execution_time->set();
+		$this->max_execution->set();
 
 		$report = array(
 			'errors'        => NULL,
@@ -100,7 +106,9 @@ class Replace {
 
 		}
 
-		$execution_time->restore();
+
+
+		$this->max_execution->restore();
 
 		return $report;
 	}

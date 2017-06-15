@@ -1,10 +1,10 @@
 <?php # -*- coding: utf-8 -*-
-/**
+/*
  * Plugin Name:  Search & Replace
  * Plugin URI:   https://wordpress.org/plugins/search-and-replace/
  * Description:  Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.
- * Author:       Inpsyde GmbH
- * Author URI:   http://inpsyde.com
+ * Author:       Inpsyde GmbH Author
+ * URI:          https://inpsyde.com
  * Contributors: s-hinse, derpixler, ChriCo, Bueltge, inpsyde
  * Version:      3.1.2
  * Text Domain:  search-and-replace
@@ -13,8 +13,19 @@
  * License URI:  license.txt
  */
 
+use Requisite\Requisite;
+use Requisite\Rule\Psr4;
+use Requisite\SPLAutoLoader;
+use Inpsyde\SearchReplace\Database as Database;
+use Inpsyde\SearchReplace\Page as Page;
 
 defined( 'ABSPATH' ) or die( 'No direct access!' );
+
+
+
+add_action( 'plugins_loaded', 'search_replace_load' );
+register_activation_hook( __FILE__, 'search_replace_activate' );
+
 
 /**
  * Validate requirements on activation
@@ -28,8 +39,6 @@ defined( 'ABSPATH' ) or die( 'No direct access!' );
  */
 function search_replace_activate() {
 
-	global $l10n, $l10n_unloaded;
-
 	$required_php_version = '5.4.0';
 	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
 
@@ -41,7 +50,10 @@ function search_replace_activate() {
 		wp_die(
 			'<p>' .
 			sprintf(
-				esc_attr__( 'This plugin can not be activated because it requires at least PHP version %1$s. ', 'search-and-replace' ),
+				esc_attr__(
+					'This plugin can not be activated because it requires at least PHP version %1$s. ',
+					'search-and-replace'
+				),
 				$required_php_version
 			)
 			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . esc_attr__( 'back', 'search-and-replace' ) . '</a>'
@@ -51,39 +63,87 @@ function search_replace_activate() {
 
 }
 
-register_activation_hook( __FILE__, 'search_replace_activate' );
-
-
 /**
  * Load the plugin
  *
  * @since 3.1.1
  *
- * @return void
+ * @return bool
  */
-function search_replace_load(){
+function search_replace_load() {
+	global $wpdb;
 
-	$load = __DIR__ . '/inc/Load.php';
-
-	if ( file_exists( $load ) ) {
-		require_once $load;
-
-		define( 'SEARCH_REPLACE_BASEDIR', plugin_dir_url( __FILE__ ) );
-
-		$load = new \Inpsyde\SearchReplace\Load();
-		$load->init();
+	// all hooks are just available on backend.
+	if ( ! is_admin() ) {
+		return FALSE;
 	}
 
+	$load = __DIR__ . '/inc/Load.php';
+	if ( ! file_exists( $load ) ) {
+		return FALSE;
+	}
+
+	define( 'SEARCH_REPLACE_BASEDIR', plugin_dir_url( __FILE__ ) );
+
+	search_replace_textdomain();
+
+	$user_cap = apply_filters( 'search_replace_access_capability', 'manage_options' );
+	if ( ! current_user_can( $user_cap ) ) {
+		return FALSE;
+	}
+
+	/**
+	 * Load the Requisite library. Alternatively you can use composer's
+	 */
+	$declared_classes = array_flip( get_declared_classes() );
+	if ( ! array_key_exists( 'Requisite\Requisite', $declared_classes ) ) {
+		require_once __DIR__ . '/requisite/src/Requisite/Requisite.php';
+		Requisite::init();
+	}
+
+	$autoloader = new SPLAutoLoader();
+	$autoloader->addRule(
+		new Psr4(
+			__DIR__,       // base directory
+			'Inpsyde\SearchReplace' // base namespace
+		)
+	);
+
+	$max_execution = new Inpsyde\SearchReplace\Service\MaxExecutionTime();
+
+	$dbm = new Database\Manager( $wpdb );
+	$replace = new Database\Replace( $dbm, $max_execution );
+	$dbe = new Database\Exporter( $replace, $dbm );
+	$dbi = new Database\Importer( $max_execution );
+
+	$downloader = new Inpsyde\SearchReplace\FileDownloader( $dbe, $max_execution );
+	add_action( 'init', array( $downloader, 'deliver_backup_file' ) );
+
+	$page_manager = new Page\Manager();
+	$page_manager->add_page( new Page\BackupDatabase( $dbe, $downloader ) );
+	$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe, $downloader ) );
+	$page_manager->add_page( new Page\ReplaceDomain( $dbm, $dbe, $downloader ) );
+	$page_manager->add_page( new Page\SqlImport( $dbi ) );
+	$page_manager->add_page( new Page\Credits() );
+
+	add_action( 'admin_menu', array( $page_manager, 'register_pages' ) );
+	add_action( 'admin_head', array( $page_manager, 'remove_submenu_pages' ) );
+
+	add_action( 'admin_enqueue_scripts', array( $page_manager, 'register_css' ) );
+	add_action( 'admin_enqueue_scripts', array( $page_manager, 'register_js' ) );
+
+	return TRUE;
 }
 
-add_action( 'plugins_loaded', 'search_replace_load' );
 
 /**
- * Load plugins translations
+ * Loading the plugin translations.
  */
-function search_replace_textdomain(){
+function search_replace_textdomain() {
 
-	$lang_dir = plugin_basename( __DIR__ ) . '/l10n/';
-	load_plugin_textdomain( 'search-and-replace', FALSE, $lang_dir );
-
+	return load_plugin_textdomain(
+		'search-and-replace',
+		FALSE,
+		plugin_basename( __DIR__ ) . '/l10n/'
+	);
 }
