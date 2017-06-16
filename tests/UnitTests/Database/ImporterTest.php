@@ -7,14 +7,12 @@ use Inpsyde\SearchReplace\Tests\AbstractTestCase;
 
 class ImporterTest extends AbstractTestCase {
 
-	//wrong sql code should throw an error
-	public function test_import_invalid_sql_() {
+	public function test_import_invalid_sql() {
 
-		//$this->assertMysqli();
 		$mysqli = $this->getMockBuilder( '\mysqli' )
 			->getMock();
 
-		$mysqli->expects( $this->once() )
+		$mysqli->expects( $this->any() )
 			->method( 'multi_query' );
 
 		$testee = new Importer( $this->get_max_exec_mock() );
@@ -22,7 +20,6 @@ class ImporterTest extends AbstractTestCase {
 		$this->assertEquals( - 1, $result );
 	}
 
-	//function should return the number of sql queries performed
 	public function test_import_valid_sql() {
 
 		$this->assertMysqli();
