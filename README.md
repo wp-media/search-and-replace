@@ -1,7 +1,5 @@
 # Search & Replace
 [![Latest Stable Version](https://poser.pugx.org/inpsyde/search-and-replace/v/stable)](https://packagist.org/packages/inpsyde/search-and-replace) [![Latest Unstable Version](https://poser.pugx.org/inpsyde/search-and-replace/v/unstable)](https://packagist.org/packages/inpsyde/search-and-replace) [![License](https://poser.pugx.org/inpsyde/search-and-replace/license)](https://packagist.org/packages/inpsyde/search-and-replace) ![Travis Status](https://travis-ci.org/inpsyde/search-and-replace.svg)
-[![Download stats on WordPress.org](http://www.rene-reimann.de/wporg-downloads-poser-badge.php?plugin-slug=search-and-replace)](https://wordpress.org/plugins/search-and-replace/stats/)
-
 
 ## Description:
 With Search & Replace you can search for everything and replace this with everything **but before** you do this you can easily **create** a simple **database backup** and restore it.
