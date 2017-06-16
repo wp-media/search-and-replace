@@ -23,5 +23,5 @@ before_script:
   - composer install --no-progress --prefer-source
 
 script:
-  - phpunit
+  - vendor/bin/phpunit
   - vendor/bin/phpcs ./inc/ --standard=phpcs.ruleset.xml --extensions=php
