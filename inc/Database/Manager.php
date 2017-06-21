@@ -166,7 +166,7 @@ class Manager {
 	}
 
 	/**
-	 * returns a SQL CREATE TABLE Statement for the table provided in $table
+	 * Returns a SQL CREATE TABLE Statement for the table provided in $table
 	 *
 	 * @param $table String The Name of the table we want to create the statement for.
 	 *

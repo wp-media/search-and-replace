@@ -41,12 +41,12 @@ interface PageInterface {
 	public function get_slug();
 
 	/**
-	 * rendering the page content.
+	 * Rendering the page content.
 	 */
 	public function render();
 
 	/**
-	 * saving the data.
+	 * Saving the data.
 	 *
 	 * @return boolean
 	 */

@@ -25,7 +25,7 @@ class Importer {
 	}
 
 	/**
-	 * imports a sql file via mysqli
+	 * Imports a sql file via mysqli
 	 *
 	 * @param  string $sql
 	 *
