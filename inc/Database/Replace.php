@@ -318,7 +318,7 @@ class Replace {
 			} else {
 				if ( is_string( $data ) ) {
 					// Do not allow to return valid serialized data,
-					// if after replacement data is_serialized then add one | to the replacement.
+					// If after replacement data is_serialized then add one | to the replacement.
 					$tmp_data = $data;
 					$data     = str_replace( $from, $to, $data );
 					if ( is_serialized( $data, false ) ) {
