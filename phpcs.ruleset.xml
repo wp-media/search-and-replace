@@ -40,7 +40,4 @@
     <exclude name="WordPress.Arrays.ArrayDeclaration.ValueNotAligned"/>
     <exclude name="WordPress.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
 
-    <!-- TRUE, FALSE, NULL are constant, we write in uppercase. -->
-    <rule ref="Generic.PHP.UpperCaseConstant"/>
-
 </ruleset>
