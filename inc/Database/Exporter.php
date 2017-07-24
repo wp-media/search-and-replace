@@ -282,6 +282,8 @@ class Exporter {
 
 		$defs     = array();
 		$ints     = array();
+		// This array is storage for maybe_serialized values. We must prevent deserialization of user supplied content.
+		$maybe_serialized = array();
 		$binaries = array();
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
@@ -292,14 +294,10 @@ class Exporter {
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
-			} elseif ( strpos( strtolower( $struct->Type ), 'binary' ) === 0
-			           || strpos( strtolower( $struct->Type ), 'varbinary' ) === 0
-			           || strpos( strtolower( $struct->Type ), 'blob' ) === 0
-			           || strpos( strtolower( $struct->Type ), 'tinyblob' ) === 0
-			           || strpos( strtolower( $struct->Type ), 'mediumblob' ) === 0
-			           || strpos( strtolower( $struct->Type ), 'longblob' ) === 0
-			) {
-				$binaries[ strtolower( $struct->Field ) ] = 1;
+			}
+			// Longtext is used for meta_values as best practice in all of the automatic products.
+			if ( ( 0 === strpos( strtolower( $struct->Type ), 'longtext' ) ) ) {
+				$maybe_serialized[] = strtolower( $struct->Field );
 			}
 		}
 
@@ -337,7 +335,19 @@ class Exporter {
 					foreach ( $row as $column => $value ) {
 						//Skip the GUID column per Wordpress Codex
 
-						//if "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them
+						// If "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them.
+						if ( $new_table !== $table ) {
+							// Check if column is expected to hold serialized value.
+							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
+								$value = $this->replace->recursive_unserialize_replace(
+									$table_prefix, $new_table_prefix,
+									$value
+								);
+							} else {
+								$value = str_replace( $table_prefix, $new_table_prefix, $value );
+							}
+						}
+
 						if ( $new_table !== $table ) {
 							$value = $this->replace->recursive_unserialize_replace(
 								$table_prefix, $new_table_prefix,
@@ -349,10 +359,16 @@ class Exporter {
 						//skip primary_key
 						if ( $search !== '' && $column !== $primary_key && $column !== 'guid' ) {
 
-							$edited_data = $this->replace->recursive_unserialize_replace(
-								$search, $replace,
-								$value
-							);
+							// Check if column is expected to hold serialized value.
+							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
+								$edited_data = $this->replace->recursive_unserialize_replace(
+									$search, $replace,
+									$value
+								);
+							} else {
+								$edited_data = str_replace( $search, $replace, $value );
+							}
+
 							if ( $csv !== NULL ) {
 								foreach ( $csv_array as $entry ) {
 									$edited_data = $this->replace->recursive_unserialize_replace( $entry[ 'search' ],
@@ -366,7 +382,6 @@ class Exporter {
 								$table_report[ 'change' ] ++;
 
 								// log changes
-
 								$table_report[ 'changes' ][] = array(
 									'row'    => $table_report[ 'rows' ],
 									'column' => $column,

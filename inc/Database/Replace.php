@@ -126,6 +126,24 @@ class Replace {
 			'errors'     => array(),
 		);
 
+		// Grab table structure in order to determine which columns are used to store serialized values in it.
+		$table_structure = $this->dbm->get_table_structure( $table );
+		if ( ! $table_structure ) {
+			$this->errors->add(
+				1,
+				esc_attr__( 'Error getting table details', 'search-and-replace' ) . ': $table'
+			);
+
+			return $table_report;
+		}
+		$maybe_serialized = array();
+		foreach ( $table_structure as $struct ) {
+			// Longtext is used for meta_values as best practice in all of the automatic products.
+			if ( ( 0 === strpos( strtolower( $struct->Type ), 'longtext' ) ) ) {
+				$maybe_serialized[] = strtolower( $struct->Field );
+			}
+		}
+
 		// check we have a search string, bail if not
 		if ( empty( $search ) && empty( $csv ) ) {
 			$table_report[ 'errors' ][] = 'Search string is empty';
@@ -193,16 +211,15 @@ class Replace {
 						$where_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $data_to_fix ) . '"';
 						continue;
 					}
-					/*	// exclude cols
-						if ( in_array( $column, $this->exclude_cols ) )
-							continue;
-
-						// include cols
-						if ( ! empty( $this->include_cols ) && ! in_array( $column, $this->include_cols ) )
-							continue;*/
 
 					// Run a search replace on the data that'll respect the serialisation.
-					$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
+					if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
+						// Run a search replace on the data that'll respect the serialisation.
+						$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
+					} else {
+						$edited_data = str_replace( $search, $replace, $data_to_fix );
+					}
+
 					// Run a search replace by CSV parameters if CSV input present
 					if ( $csv !== NULL ) {
 						foreach ( $csv_array as $entry ) {
@@ -210,6 +227,7 @@ class Replace {
 							                                                     $entry[ 'replace' ], $edited_data );
 						}
 					}
+
 					// Something was changed
 					if ( $edited_data !== $data_to_fix ) {
 
@@ -275,7 +293,8 @@ class Replace {
 		// some unserialized data cannot be re-serialised eg. SimpleXMLElements
 		try {
 
-			if ( is_string( $data ) && ( $unserialized = @unserialize( $data ) ) !== FALSE ) {
+			if ( is_string( $data ) && is_serialized( $data ) && ( $unserialized = @unserialize( $data ) ) !== false ) {
+				// Changed to maybe_unserialize because wp serialization != php serialization.
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, TRUE );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = array();
@@ -298,7 +317,13 @@ class Replace {
 				unset( $_tmp );
 			} else {
 				if ( is_string( $data ) ) {
-					$data = str_replace( $from, $to, $data );
+					// Do not allow to return valid serialized data,
+					// if after replacement data is_serialized then add one | to the replacement.
+					$tmp_data = $data;
+					$data     = str_replace( $from, $to, $data );
+					if ( is_serialized( $data, false ) ) {
+						$data = str_replace( $from, '|' . $to, $tmp_data );
+					}
 
 				}
 			}
