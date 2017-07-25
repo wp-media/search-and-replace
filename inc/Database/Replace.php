@@ -215,7 +215,7 @@ class Replace {
 
 				foreach ( $columns as $column ) {
 					//Skip the GUID column per Wordpress Codex
-					if ( $column === "guid" ) {
+					if ( $column === 'guid' ) {
 						continue;
 					}
 					$data_to_fix = $row[ $column ];
