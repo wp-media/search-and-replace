@@ -53,6 +53,19 @@ class Replace {
 	private $max_execution;
 
 	/**
+	 * Store error messages.
+	 *
+	 * @var
+	 */
+	private $errors;
+
+	/**
+	 * Store csv data
+	 * @var array
+	 */
+	private $csv_data = array();
+
+		/**
 	 * Replace constructor.
 	 *
 	 * @param Manager                  $dbm
@@ -81,7 +94,7 @@ class Replace {
 
 	public function run_search_replace( $search, $replace, $tables, $csv = null ) {
 
-		if ( $search === $replace && $search !== '' ) {
+		if ( $search === $replace && '' !== $search ) {
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
 		}
 
@@ -172,15 +185,16 @@ class Replace {
 
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
-		//Prepare CSV data
+
+		// Prepare CSV data
 		if ( $csv !== null ) {
 			$csv_lines = explode( "\n", $csv );
 			$csv_head  = str_getcsv( 'search,replace' );
-			$csv_array = array();
 			foreach ( $csv_lines as $line ) {
-				$csv_array[] = array_combine( $csv_head, str_getcsv( $line ) );
+				$this->csv_data[] = array_combine( $csv_head, str_getcsv( $line ) );
 			}
 		}
+
 		for ( $page = 0; $page < $pages; $page ++ ) {
 
 			$start = $page * $page_size;
@@ -222,7 +236,7 @@ class Replace {
 
 					// Run a search replace by CSV parameters if CSV input present
 					if ( $csv !== null ) {
-						foreach ( $csv_array as $entry ) {
+						foreach ( $this->csv_data as $entry ) {
 							$edited_data = $this->recursive_unserialize_replace( $entry['search'],
 								$entry['replace'], $edited_data );
 						}
@@ -414,6 +428,13 @@ class Replace {
 	public function get_dry_run() {
 
 		return $this->dry_run;
+	}
+
+	/**
+	 * @param $getMessage
+	 * @param $string
+	 */
+	private function add_error( $getMessage, $string ) {
 	}
 
 }
