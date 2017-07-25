@@ -45,7 +45,7 @@ class Replace {
 	/**
 	 * @var bool - set if dry run
 	 */
-	protected $dry_run = TRUE;
+	protected $dry_run = true;
 
 	/**
 	 * @var Service\MaxExecutionTime
@@ -79,7 +79,7 @@ class Replace {
 	 * @return array|\WP_Error Collection of information gathered during the run.
 	 */
 
-	public function run_search_replace( $search, $replace, $tables, $csv = NULL ) {
+	public function run_search_replace( $search, $replace, $tables, $csv = null ) {
 
 		if ( $search === $replace && $search !== '' ) {
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
@@ -88,7 +88,7 @@ class Replace {
 		$this->max_execution->set();
 
 		$report = array(
-			'errors'        => NULL,
+			'errors'        => null,
 			'changes'       => array(),
 			'tables'        => '0',
 			'changes_count' => '0',
@@ -96,14 +96,14 @@ class Replace {
 
 		foreach ( (array) $tables as $table ) {
 			//count tables
-			$report [ 'tables' ] ++;
+			$report ['tables'] ++;
 			$table_report = $this->replace_values( $search, $replace, $table, $csv );
 			//log changes if any
 
-			if ( 0 !== $table_report[ 'change' ] ) {
-				$report[ 'changes' ][ $table ] = $table_report;
+			if ( 0 !== $table_report['change'] ) {
+				$report['changes'][ $table ] = $table_report;
 
-				$report [ 'changes_count' ] += $table_report[ 'change' ];
+				$report ['changes_count'] += $table_report['change'];
 			}
 
 		}
@@ -113,7 +113,7 @@ class Replace {
 		return $report;
 	}
 
-	public function replace_values( $search = '', $replace = '', $table, $csv = NULL ) {
+	public function replace_values( $search = '', $replace = '', $table, $csv = null ) {
 
 		$table_report = array(
 			'table_name' => $table,
@@ -146,18 +146,18 @@ class Replace {
 
 		// check we have a search string, bail if not
 		if ( empty( $search ) && empty( $csv ) ) {
-			$table_report[ 'errors' ][] = 'Search string is empty';
+			$table_report['errors'][] = 'Search string is empty';
 
 			return $table_report;
 		}
 		//split columns array in primary key string and columns array
 		$columns     = $this->dbm->get_columns( $table );
-		$primary_key = $columns[ 0 ];
-		$columns     = $columns[ 1 ];
+		$primary_key = $columns[0];
+		$columns     = $columns[1];
 
-		if ( NULL === $primary_key ) {
+		if ( null === $primary_key ) {
 			array_push(
-				$table_report[ 'errors' ],
+				$table_report['errors'],
 				"The table \"{$table}\" has no primary key. Changes will have to be made manually.",
 				'results'
 			);
@@ -165,7 +165,7 @@ class Replace {
 			return $table_report;
 		}
 
-		$table_report[ 'start' ] = microtime();
+		$table_report['start'] = microtime();
 
 		// Count the number of rows we have in the table if large we'll split into blocks, This is a mod from Simon Wheatley
 		$row_count = $this->dbm->get_rows( $table );
@@ -173,7 +173,7 @@ class Replace {
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
 		//Prepare CSV data
-		if ( $csv !== NULL ) {
+		if ( $csv !== null ) {
 			$csv_lines = explode( "\n", $csv );
 			$csv_head  = str_getcsv( 'search,replace' );
 			$csv_array = array();
@@ -189,16 +189,16 @@ class Replace {
 			$data = $this->dbm->get_table_content( $table, $start, $page_size );
 
 			if ( ! $data ) {
-				$table_report[ 'errors' ][] = 'no data in table ' . $table;
+				$table_report['errors'][] = 'no data in table ' . $table;
 			}
 
 			foreach ( $data as $row ) {
 
-				$table_report[ 'rows' ] ++;
+				$table_report['rows'] ++;
 
 				$update_sql = array();
 				$where_sql  = array();
-				$update     = FALSE;
+				$update     = false;
 
 				foreach ( $columns as $column ) {
 					//Skip the GUID column per Wordpress Codex
@@ -221,36 +221,36 @@ class Replace {
 					}
 
 					// Run a search replace by CSV parameters if CSV input present
-					if ( $csv !== NULL ) {
+					if ( $csv !== null ) {
 						foreach ( $csv_array as $entry ) {
-							$edited_data = $this->recursive_unserialize_replace( $entry[ 'search' ],
-							                                                     $entry[ 'replace' ], $edited_data );
+							$edited_data = $this->recursive_unserialize_replace( $entry['search'],
+								$entry['replace'], $edited_data );
 						}
 					}
 
 					// Something was changed
 					if ( $edited_data !== $data_to_fix ) {
 
-						$table_report[ 'change' ] ++;
+						$table_report['change'] ++;
 
 						// log changes
 						//TODO : does it work with non UTF-8 encodings?
-						$table_report[ 'changes' ][] = array(
-							'row'    => $table_report[ 'rows' ],
+						$table_report['changes'][] = array(
+							'row'    => $table_report['rows'],
 							'column' => $column,
 							'from'   => $data_to_fix,
 							'to'     => $edited_data,
 						);
 
 						$update_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $edited_data ) . '"';
-						$update       = TRUE;
+						$update       = true;
 
 					}
 
 				}
 
 				// Determine what to do with updates.
-				if ( TRUE === $this->dry_run ) {
+				if ( true === $this->dry_run ) {
 					// Don't do anything if a dry run
 				} elseif ( $update && ! empty( $where_sql ) ) {
 					// If there are changes to make, run the query.
@@ -258,19 +258,19 @@ class Replace {
 					$result = $this->dbm->update( $table, $update_sql, $where_sql );
 
 					if ( ! $result ) {
-						$table_report[ 'errors' ][] = sprintf(
+						$table_report['errors'][] = sprintf(
 							__( 'Error updating row: %d.', 'search-and-replace' ),
 							$row
 						);
 					} else {
-						$table_report[ 'updates' ] ++;
+						$table_report['updates'] ++;
 					}
 
 				}
 			}
 		}
 
-		$table_report[ 'end' ] = microtime( TRUE );
+		$table_report['end'] = microtime( true );
 		$this->dbm->flush();
 
 		return $table_report;
@@ -288,7 +288,7 @@ class Replace {
 	 *
 	 * @return array The original array with all elements replaced as needed.
 	 */
-	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = FALSE ) {
+	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = false ) {
 
 		// some unserialized data cannot be re-serialised eg. SimpleXMLElements
 		try {
@@ -298,7 +298,7 @@ class Replace {
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, true );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = array();
-				foreach ( $data as $key => $value ) {
+				foreach ( (array) $data as $key => $value ) {
 					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false );
 				}
 
@@ -334,7 +334,7 @@ class Replace {
 			}
 
 		}
-		catch ( Exception $error ) {
+		catch ( \Exception $error ) {
 
 			$this->add_error( $error->getMessage(), 'results' );
 
@@ -352,14 +352,14 @@ class Replace {
 	 * @return bool
 	 */
 
-	protected function is_json( $string, $strict = FALSE ) {
+	protected function is_json( $string, $strict = false ) {
 
-		$json = @json_decode( $string, TRUE );
-		if ( $strict === TRUE && ! is_array( $json ) ) {
-			return FALSE;
+		$json = @json_decode( $string, true );
+		if ( $strict === true && ! is_array( $json ) ) {
+			return false;
 		}
 
-		return ! ( $json === NULL || $json === FALSE );
+		return ! ( $json === null || $json === false );
 	}
 
 	/**
