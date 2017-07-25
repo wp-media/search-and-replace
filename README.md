@@ -84,4 +84,4 @@ Import a SQL file or a gzipped SQL file into your database here. This may delete
 ![screenshot-3](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-3.png)
 
 ### License
-Good news, this plugin is free for everyone! Since it's released under the GPL, you can use it free of charge on your personal or commercial blog.
+Good news, this plugin is free for everyone! Since it's released under the [GNU General Public License v3 (or later)](http://www.gnu.org/licenses/gpl-3.0.html), you can use it free of charge on your personal or commercial blog.

@@ -30,4 +30,4 @@ Thanks for contributing to Search & Replace WordPress plugin &mdash; you rock!
 * Wait for feedback. The Inpsyde team looks at pull requests on a regular basis.
 
 # License
-By contributing code to Search & Replace, you grant its use under the [GNU General Public License v2 (or later)](http://www.gnu.org/licenses/gpl-2.0.html).
+By contributing code to Search & Replace, you grant its use under the [GNU General Public License v3 (or later)](http://www.gnu.org/licenses/gpl-3.0.html).
