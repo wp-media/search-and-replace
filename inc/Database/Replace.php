@@ -295,28 +295,26 @@ class Replace {
 
 			if ( is_string( $data ) && is_serialized( $data ) && ( $unserialized = @unserialize( $data ) ) !== false ) {
 				// Changed to maybe_unserialize because wp serialization != php serialization.
-				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, TRUE );
+				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, true );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = array();
 				foreach ( $data as $key => $value ) {
-					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, FALSE );
+					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false );
 				}
 
 				$data = $_tmp;
 				unset( $_tmp );
-			} // Submitted by Tina Matter
-			elseif ( is_object( $data ) ) {
-				// $data_class = get_class( $data );
-				$_tmp  = $data; // new $data_class( );
+			} elseif ( is_object( $data ) ) {
+				$_tmp  = $data;
 				$props = get_object_vars( $data );
 				foreach ( $props as $key => $value ) {
-					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, FALSE );
+					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false );
 				}
 
 				$data = $_tmp;
 				unset( $_tmp );
 			} else {
-				if ( is_string( $data ) ) {
+				if ( is_string( $data ) && ! is_serialized_string( $data ) ) {
 					// Do not allow to return valid serialized data,
 					// If after replacement data is_serialized then add one | to the replacement.
 					$tmp_data = $data;
@@ -325,6 +323,9 @@ class Replace {
 						$data = str_replace( $from, '|' . $to, $tmp_data );
 					}
 
+				} else {
+					$data = str_replace( $from, $to, $data );
+					$data = serialize( $data );
 				}
 			}
 
