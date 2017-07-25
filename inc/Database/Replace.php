@@ -152,7 +152,7 @@ class Replace {
 		$maybe_serialized = array();
 		foreach ( $table_structure as $struct ) {
 			// Longtext is used for meta_values as best practice in all of the automatic products.
-			if ( ( 0 === strpos( strtolower( $struct->Type ), 'longtext' ) ) ) {
+			if ( 0 === stripos( $struct->Type, 'longtext' ) ) {
 				$maybe_serialized[] = strtolower( $struct->Field );
 			}
 		}
