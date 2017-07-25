@@ -50,6 +50,12 @@ class Exporter {
 	protected $fp;
 
 	/**
+	 * Store csv data
+	 * @var array
+	 */
+	private $csv_data = array();
+
+	/**
 	 * Exporter constructor.
 	 *
 	 * @param Replace $replace
@@ -313,9 +319,9 @@ class Exporter {
 		if ( $csv !== NULL ) {
 			$csv_lines = explode( "\n", $csv );
 			$csv_head  = str_getcsv( 'search,replace' );
-			$csv_array = array();
+
 			foreach ( $csv_lines as $line ) {
-				$csv_array[] = array_combine( $csv_head, str_getcsv( $line ) );
+				$this->csv_data[] = array_combine( $csv_head, str_getcsv( $line ) );
 			}
 		}
 		for ( $page = 0; $page < $pages; $page ++ ) {
@@ -370,7 +376,7 @@ class Exporter {
 							}
 
 							if ( $csv !== NULL ) {
-								foreach ( $csv_array as $entry ) {
+								foreach ( $this->csv_data as $entry ) {
 									$edited_data = $this->replace->recursive_unserialize_replace( $entry[ 'search' ],
 									                                                              $entry[ 'replace' ],
 									                                                              $edited_data );
