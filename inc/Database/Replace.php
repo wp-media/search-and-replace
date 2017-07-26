@@ -327,13 +327,24 @@ class Replace {
 				$data = $_tmp;
 				unset( $_tmp );
 			} else {
-				if ( is_string( $data ) && ! is_serialized_string( $data ) ) {
+				if ( is_string( $data ) ) {
+
+					$marker = false;
+					if ( is_serialized_string( $data ) ) {
+						$data   = @unserialize( $data );
+						$marker = true;
+					}
+
 					// Do not allow to return valid serialized data,
 					// If after replacement data is_serialized then add one | to the replacement.
 					$tmp_data = $data;
 					$data     = str_replace( $from, $to, $data );
 					if ( is_serialized( $data, false ) ) {
 						$data = str_replace( $from, '|' . $to, $tmp_data );
+					}
+
+					if ( $marker ){
+						$data = maybe_serialize($data);
 					}
 
 				} else {
