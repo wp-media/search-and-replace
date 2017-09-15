@@ -63,7 +63,7 @@ class Manager {
 			 * @param string        $cap
 			 * @param PageInterface $page
 			 */
-			$cap = apply_filters( 'insr-capability', 'install_plugins', $page );
+			$cap = apply_filters( 'insr-capability', 'manage_options', $page );
 
 			add_submenu_page(
 				'tools.php',
