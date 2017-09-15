@@ -44,7 +44,7 @@ input[name="search"], input[name="replace"], #select_tables {
 	bottom: 30px;
 	z-index: 160000;
 	background-color: #fff;
-	overflow: hidden;
+	overflow: auto;
 }
 
 .search-replace-modal-header .notice-dismiss {
