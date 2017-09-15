@@ -10,7 +10,7 @@ namespace Inpsyde\SearchReplace\Database;
 class Exporter {
 
 	/**
-	 * @Stores all error messages in a WP_Error Object
+	 * Stores all error messages in a WP_Error Object
 	 */
 	protected $errors;
 
@@ -38,7 +38,7 @@ class Exporter {
 	protected $page_size = 100;
 
 	/**
-	 * @String stores the filename of the backup file
+	 * Stores the filename of the backup file
 	 */
 	protected $backup_filename;
 

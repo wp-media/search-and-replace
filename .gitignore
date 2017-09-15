@@ -1,6 +1,3 @@
-
-tests/tmp/
-phpunit*.xml
 .DS_Store
 ._*
 node_modules/
@@ -9,7 +6,7 @@ npm*
 
 composer.lock
 
-vendor
-inc/requisite/*
-!inc/requisite/src
+vendor(
+!vendor/autoload.php
+!vendor/composer/
 *.zip

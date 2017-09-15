@@ -45,11 +45,11 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * callback function for menu item
+	 * Callback function for menu item
 	 */
 	public function render() {
 
-		require_once( __DIR__ . '/../templates/sql_import.php' );
+		require_once( __DIR__ . '/../templates/sql-import.php' );
 	}
 
 	/**
@@ -60,6 +60,9 @@ class SqlImport extends AbstractPage implements PageInterface {
 		return __( 'Import SQL file', 'search-and-replace' );
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function save() {
 
 		// TODO: Better handling of large files
@@ -67,13 +70,15 @@ class SqlImport extends AbstractPage implements PageInterface {
 		$php_upload_error_code = $_FILES[ 'file_to_upload' ][ 'error' ];
 		if ( 0 === $php_upload_error_code ) {
 
-			//get file extension
+			// get file extension
 			$ext = strrchr( $_FILES [ 'file_to_upload' ][ 'name' ], '.' );
-			//parse file
+			// parse file
 			$tempfile = $_FILES [ 'file_to_upload' ][ 'tmp_name' ];
 			switch ( $ext ) {
 				case '.sql':
+					// @codingStandardsIgnoreStart
 					$sql_source = file_get_contents( $tempfile );
+					// @codingStandardsIgnoreEnd
 					break;
 				case '.gz':
 					$sql_source = $this->read_gzfile_into_string( $tempfile );
@@ -89,7 +94,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 					return;
 			}
 
-			//call import function
+			// call import function
 			$success = $this->dbi->import_sql( $sql_source );
 			if ( - 1 === $success ) {
 				$this->add_error(
@@ -101,17 +106,17 @@ class SqlImport extends AbstractPage implements PageInterface {
 			} else {
 				echo '<div class="updated notice is-dismissible">';
 				echo '<p>';
-				$msg = printf(
+				sprintf(
 					__(
-						'The SQL file was successfully imported. %s SQL queries were performed.', 'search-and-replace'
+						'The SQL file was successfully imported. %s SQL queries were performed.',
+						'search-and-replace'
 					),
-					$success
+					esc_html( $success )
 				);
-				echo esc_html( $msg );
 				echo '</p></div>';
 			}
 		} else {
-			//show error
+			// show error
 			$php_upload_errors = array(
 				0 => 'There is no error, the file uploaded with success',
 				1 => esc_html__(
@@ -128,8 +133,11 @@ class SqlImport extends AbstractPage implements PageInterface {
 				8 => esc_html__( 'A PHP extension stopped the file upload.', 'search-and-replace' ),
 			);
 
-			$$this->add_error(
-				__( 'Upload Error: ' . $php_upload_errors[ $php_upload_error_code ], 'search-and-replace' )
+			$this->add_error(
+				printf(
+					__( 'Upload Error: %s', 'search-and-replace' ),
+					$php_upload_errors[ $php_upload_error_code ]
+				)
 			);
 		}
 
@@ -138,13 +146,13 @@ class SqlImport extends AbstractPage implements PageInterface {
 	/**
 	 * reads a gz file into a string
 	 *
-	 * @param $filename String path ot file
+	 * @param string $filename String path ot file.
 	 *
-	 * @return string The file contents
+	 * @return string The file contents.
 	 */
 	private function read_gzfile_into_string( $filename ) {
 
-		$zd = gzopen( $filename, 'r' );
+		$zd       = gzopen( $filename, 'r' );
 		$contents = gzread( $zd, 10000 );
 		gzclose( $zd );
 
@@ -178,14 +186,16 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * @param $size
+	 * @param int $size
 	 *
 	 * @return float
 	 */
 	private function parse_size( $size ) {
 
-		$unit = preg_replace( '/[^bkmgtpezy]/i', '', $size ); // Remove the non-unit characters from the size.
-		$size = preg_replace( '/[^0-9\.]/', '', $size ); // Remove the non-numeric characters from the size.
+		// Remove the non-unit characters from the size.
+		$unit = preg_replace( '/[^bkmgtpezy]/i', '', $size );
+		// Remove the non-numeric characters from the size.
+		$size = preg_replace( '/[^0-9\.]/', '', $size );
 		if ( $unit ) {
 			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
 			return round( $size * pow( 1024, stripos( 'bkmgtpezy', $unit[ 0 ] ) ) );

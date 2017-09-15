@@ -18,7 +18,7 @@ abstract class AbstractPage {
 
 	/**
 	 * By default "Search & Replace". Can be overwritten in child-classes.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_menu_title() {
@@ -48,24 +48,30 @@ abstract class AbstractPage {
 			return;
 		}
 
-		$html = '<div class="error notice is-dismissible">';
-		$html .= sprintf( '<strong>%s</strong>', esc_html__( 'Errors:', 'search-and-replace' ) );
-		$html .= '<ul>';
-		foreach ( $this->errors as $error ) :
-			$html .= '<li>' . esc_html( $error ) . '</li>';
-		endforeach;
-		$html .= '</ul>';
-		$html .= '</div>';
+		?>
+		<div class="error notice is-dismissible">
+			<?= sprintf( '<strong>%s</strong>', esc_html__( 'Errors:', 'search-and-replace' ) ); ?>
+			<ul>
+				<?php foreach ( $this->errors as $error ) : ?>
+					<li><?= esc_html( $error ); ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
 
-		echo $html;
+		<?php
 	}
 
 	/**
-	 *displays the html for the submit button
+	 * Displays the html for the submit button.
+	 *
+	 * @param string $name
 	 */
 	public function show_submit_button( $name = 'submit' ) {
 
-		echo '<input type="hidden" name="action" value="' . $this->get_slug() . '" />';
+		printf(
+			'<input type="hidden" name="action" value="%s" />',
+			esc_attr( $this->get_slug() )
+		);
 		submit_button( $this->get_submit_button_title(), 'primary', $name );
 		wp_nonce_field( 'replace_domain', 'insr_nonce' );
 	}

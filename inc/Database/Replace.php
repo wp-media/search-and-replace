@@ -14,24 +14,19 @@ use Inpsyde\SearchReplace\Service;
 class Replace {
 
 	/**
-	 * the  search string
-	 *
-	 * @var
+	 * The search string
 	 */
 	protected $search;
 
 	/**
-	 *  the replacement string
-	 *
-	 * @var
+	 * The replacement string
 	 */
 	protected $replace;
 
 	/**
 	 * The Database Interface Object
 	 *
-	 * @type Manager
-	 * @var
+	 * @var Manager
 	 */
 	protected $dbm;
 
@@ -126,6 +121,14 @@ class Replace {
 		return $report;
 	}
 
+	/**
+	 * @param string $search
+	 * @param string $replace
+	 * @param string $table
+	 * @param null   $csv
+	 *
+	 * @return array
+	 */
 	public function replace_values( $search = '', $replace = '', $table, $csv = null ) {
 
 		$table_report = array(

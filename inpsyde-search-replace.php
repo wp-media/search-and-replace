@@ -21,11 +21,8 @@ use Inpsyde\SearchReplace\Page as Page;
 
 defined( 'ABSPATH' ) or die( 'No direct access!' );
 
-
-
 add_action( 'plugins_loaded', 'search_replace_load' );
 register_activation_hook( __FILE__, 'search_replace_activate' );
-
 
 /**
  * Validate requirements on activation
@@ -71,15 +68,11 @@ function search_replace_activate() {
  * @return bool
  */
 function search_replace_load() {
+
 	global $wpdb;
 
 	// all hooks are just available on backend.
 	if ( ! is_admin() ) {
-		return FALSE;
-	}
-
-	$load = __DIR__ . '/inc/Load.php';
-	if ( ! file_exists( $load ) ) {
 		return FALSE;
 	}
 
@@ -92,29 +85,18 @@ function search_replace_load() {
 		return FALSE;
 	}
 
-	/**
-	 * Load the Requisite library. Alternatively you can use composer's
-	 */
-	$declared_classes = array_flip( get_declared_classes() );
-	if ( ! array_key_exists( 'Requisite\Requisite', $declared_classes ) ) {
-		require_once __DIR__ . '/requisite/src/Requisite/Requisite.php';
-		Requisite::init();
+	$file = __DIR__ . '/vendor/autoload.php';
+	if ( ! file_exists( $file ) ) {
+		return FALSE;
 	}
-
-	$autoloader = new SPLAutoLoader();
-	$autoloader->addRule(
-		new Psr4(
-			__DIR__,       // base directory
-			'Inpsyde\SearchReplace' // base namespace
-		)
-	);
+	include_once( $file );
 
 	$max_execution = new Inpsyde\SearchReplace\Service\MaxExecutionTime();
 
-	$dbm = new Database\Manager( $wpdb );
+	$dbm     = new Database\Manager( $wpdb );
 	$replace = new Database\Replace( $dbm, $max_execution );
-	$dbe = new Database\Exporter( $replace, $dbm );
-	$dbi = new Database\Importer( $max_execution );
+	$dbe     = new Database\Exporter( $replace, $dbm );
+	$dbi     = new Database\Importer( $max_execution );
 
 	$downloader = new Inpsyde\SearchReplace\FileDownloader( $dbe, $max_execution );
 	add_action( 'init', array( $downloader, 'deliver_backup_file' ) );
@@ -134,7 +116,6 @@ function search_replace_load() {
 
 	return TRUE;
 }
-
 
 /**
  * Loading the plugin translations.

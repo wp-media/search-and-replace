@@ -2,6 +2,7 @@
 /**
  * Template for displaying sql export page
  */
+
 // Prevent direct access.
 if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 	echo "Hi there!  I'm just a part of plugin, not much I can do when called directly.";

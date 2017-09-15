@@ -18,31 +18,31 @@ class MaxExecutionTime {
 	 *
 	 * @param int $time
 	 */
-	public function set( $time = 0 ){
+	public function set( $time = 0 ) {
 
-		if( $time === 0 ){
+		if ( 0 === $time ) {
 			$this->store();
 		}
 
-	    set_time_limit( $time );
+		set_time_limit( $time );
 
 	}
 
 	/**
-	 * Restor timelimit
+	 * Restore timelimit.
 	 */
-	public function restore(){
+	public function restore() {
 
 		$this->set( $this->met );
 
-    }
+	}
 
 	/**
-	 *
+	 * Fetch the max_execution_time from php.ini.
 	 */
-	public function store(){
+	public function store() {
 
-		$this->met = (int) ini_get('max_execution_time');
+		$this->met = (int) ini_get( 'max_execution_time' );
 
 	}
 

@@ -52,11 +52,11 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 *shows the page template
+	 * Shows the page template
 	 */
 	public function render() {
 
-		require_once( __DIR__ . '/../templates/db_backup.php' );
+		require_once( __DIR__ . '/../templates/db-backup.php' );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * event handler for click on export sql button
+	 * Event handler for click on export sql button
 	 */
 	public function save() {
 
