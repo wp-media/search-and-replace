@@ -211,11 +211,11 @@ class FileDownloader {
 	 */
 	public function trim_search_results( $needle, $haystack, $delimiter ) {
 
-		//if result has <200 characters we return the whole string
+		//if result has <100 characters we return the whole string
 		if ( strlen( $haystack ) < 100 ) {
 			return $haystack;
 		}
-		$trimmed_results = NULL;
+		$trimmed_results = null;
 		// Get all occurrences of $needle with up to 50 chars front & back.
 		preg_match_all( '@.{0,50}' . $needle . '.{0,50}@', $haystack, $trimmed_results );
 		$return_value = '';
@@ -224,7 +224,7 @@ class FileDownloader {
 		for ( $i = 0; $i < $imax; $i ++ ) {
 			//reset delimiter, might have been changed
 			$local_delimiter = $delimiter;
-			//check if the first trimmmed result is the beginning of $haystack. if so remove leading delimiter
+			//check if the first trimmed result is the beginning of $haystack. if so remove leading delimiter
 			if ( $i === 0 ) {
 				$pos = strpos( $haystack, $trimmed_results[ 0 ][ $i ] );
 				if ( $pos === 0 ) {
