@@ -109,13 +109,15 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			return false;
 		}
 
-		$tables  = isset( $_POST[ 'select_tables' ] ) ? $_POST[ 'select_tables' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
+		$tables  = isset( $_POST['select_tables'] ) ? $_POST['select_tables'] : '';
+		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
 
 		// remove wp_magic_quotes
 		$search  = stripslashes( filter_input( INPUT_POST, 'search' ) );
 		$replace = stripslashes( filter_input( INPUT_POST, 'replace' ) );
 		$csv     = stripslashes( filter_input( INPUT_POST, 'csv' ) );
+		$csv = ( $csv === '' ? null : $csv );
+
 		// if dry run is checked we run the replace function with dry run and return
 		if ( true === $dry_run ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
@@ -175,9 +177,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 *
 	 * @return null
 	 */
-	protected function run_replace(
-		$search, $replace, $tables, $dry_run, $csv = NULL
-	) {
+	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = null ) {
 
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
@@ -205,12 +205,12 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			$this->display_errors();
 		} else {
 
-			if ( count( $report[ 'changes' ] ) > 0 ) {
+			if ( count( $report['changes'] ) > 0 ) {
 				$this->downloader->show_changes( $report );
 			}
 
 			// if no changes found report that
-			if ( 0 === count( $report [ 'changes' ] ) ) {
+			if ( 0 === count( $report ['changes'] ) ) {
 				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 			}
 		}
@@ -236,15 +236,15 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		// if we come from a dry run, we select the tables to the dry run again
 		/** @var bool | string $selected_tables */
 		$selected_tables = false;
-		if ( isset( $_POST[ 'select_tables' ] ) ) {
-			$selected_tables = $_POST[ 'select_tables' ];
+		if ( isset( $_POST['select_tables'] ) ) {
+			$selected_tables = $_POST['select_tables'];
 		}
 
 		echo '<select id="select_tables" name="select_tables[]" multiple="multiple"  size = "' . $select_rows . '">';
 		foreach ( $tables as $table ) {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 			// check if dry run. if dry run && current table is in "selected" array add selected attribute
-			$selected = ( isset( $_POST[ 'dry_run' ] )
+			$selected = ( isset( $_POST['dry_run'] )
 			              && $selected_tables
 			              && in_array( $table, $selected_tables, false )
 			)
@@ -275,8 +275,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function get_search_value() {
 
-		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
+		$search  = isset( $_POST['search'] ) ? $_POST['search'] : '';
+		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
 
 		if ( $dry_run ) {
 			$search = stripslashes( $search );
@@ -291,8 +291,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function get_replace_value() {
 
-		$replace = isset( $_POST[ 'replace' ] ) ? $_POST[ 'replace' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
+		$replace = isset( $_POST['replace'] ) ? $_POST['replace'] : '';
+		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
 		if ( $dry_run ) {
 			$replace = stripslashes( $replace );
 			$replace = htmlentities( $replace );
@@ -306,8 +306,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function get_csv_value() {
 
-		$csv     = isset( $_POST[ 'csv' ] ) ? $_POST[ 'csv' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
+		$csv     = isset( $_POST['csv'] ) ? $_POST['csv'] : '';
+		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
 		if ( $dry_run ) {
 			$csv = stripslashes( $csv );
 			$csv = htmlentities( $csv );
