@@ -34,7 +34,6 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 			<td><input
 					id="search"
 					type="text"
-					disabled="disabled"
 					name="search"
 					value="<?= get_site_url(); ?>"
 				/>
