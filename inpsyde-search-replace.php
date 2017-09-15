@@ -13,9 +13,6 @@
  * License URI:  license.txt
  */
 
-use Requisite\Requisite;
-use Requisite\Rule\Psr4;
-use Requisite\SPLAutoLoader;
 use Inpsyde\SearchReplace\Database as Database;
 use Inpsyde\SearchReplace\Page as Page;
 
