@@ -1,12 +1,25 @@
+# General
 .DS_Store
 ._*
+
+# npm
 node_modules/
-npm*
+
+# WP SVN
 .svn/
 
+# Locks
 composer.lock
 
-vendor(
+# Vendor (e.g. Composer)
+vendor/*
 !vendor/autoload.php
 !vendor/composer/
+
+# Package
 *.zip
+
+# IDE PhpStorm
+.idea/
+*.ipr
+*.iws
