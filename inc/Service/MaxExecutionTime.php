@@ -24,7 +24,7 @@ class MaxExecutionTime {
 			$this->store();
 		}
 
-		set_time_limit( $time );
+		@set_time_limit( $time );
 
 	}
 
