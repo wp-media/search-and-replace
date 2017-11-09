@@ -123,7 +123,7 @@ class Exporter {
 
 		//Begin new backup of MySql
 		//get charset. if not set assume utf8
-		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
+		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8mb4' );
 		$this->stow( '# ' . esc_attr__( 'WordPress MySQL database backup', 'search-and-replace' ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( '# ' . sprintf( __( 'Generated: %s', 'search-and-replace' ), date( 'l j. F Y H:i T' ) ) . "\n" );
