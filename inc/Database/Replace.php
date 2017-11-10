@@ -309,7 +309,7 @@ class Replace {
 		// some unserialized data cannot be re-serialised eg. SimpleXMLElements
 		try {
 
-			if ( is_string( $data ) && is_serialized( $data ) && ( $unserialized = @unserialize( $data ) ) !== false ) {
+			if ( is_string( $data ) && is_serialized( $data ) && ( $unserialized = @unserialize( $data, false ) ) !== false ) {
 				// Changed to maybe_unserialize because wp serialization != php serialization.
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, true );
 			} elseif ( is_array( $data ) ) {
