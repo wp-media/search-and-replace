@@ -56,7 +56,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 </p>
 <p>
 	<?= sprintf(
-		___( 'Look at our other <a href="%s">free WordPress plugins</a>.', 'search-and-replace' ),
+		_e( 'Look at our other <a href="%s">free WordPress plugins</a>.', 'search-and-replace' ),
 		esc_url( 'https://profiles.wordpress.org/inpsyde/#content-plugins' )
 	);
 	?>
