@@ -48,19 +48,13 @@ class Replace {
 	private $max_execution;
 
 	/**
-	 * Store error messages.
-	 *
-	 * @var
-	 */
-	private $errors;
-
-	/**
 	 * Store csv data
+	 *
 	 * @var array
 	 */
 	private $csv_data = array();
 
-		/**
+	/**
 	 * Replace constructor.
 	 *
 	 * @param Manager                  $dbm
@@ -104,14 +98,14 @@ class Replace {
 
 		foreach ( (array) $tables as $table ) {
 			//count tables
-			$report ['tables'] ++;
+			$report [ 'tables' ] ++;
 			$table_report = $this->replace_values( $search, $replace, $table, $csv );
 			//log changes if any
 
-			if ( 0 !== $table_report['change'] ) {
-				$report['changes'][ $table ] = $table_report;
+			if ( 0 !== $table_report[ 'change' ] ) {
+				$report[ 'changes' ][ $table ] = $table_report;
 
-				$report ['changes_count'] += $table_report['change'];
+				$report [ 'changes_count' ] += $table_report[ 'change' ];
 			}
 
 		}
@@ -144,14 +138,11 @@ class Replace {
 
 		// Grab table structure in order to determine which columns are used to store serialized values in it.
 		$table_structure = $this->dbm->get_table_structure( $table );
-		if ( ! $table_structure ) {
-			$this->errors->add(
-				1,
-				esc_attr__( 'Error getting table details', 'search-and-replace' ) . ': $table'
-			);
 
+		if ( ! $table_structure ) {
 			return $table_report;
 		}
+
 		$maybe_serialized = array();
 		foreach ( $table_structure as $struct ) {
 			// Longtext is used for meta_values as best practice in all of the automatic products.
@@ -162,17 +153,17 @@ class Replace {
 
 		// check we have a search string, bail if not
 		if ( empty( $search ) && empty( $csv ) ) {
-			$table_report['errors'][] = 'Search string is empty';
+			$table_report[ 'errors' ][] = 'Search string is empty';
 
 			return $table_report;
 		}
 		//split columns array in primary key string and columns array
-		$columns     = $this->dbm->get_columns( $table );
+		$columns = $this->dbm->get_columns( $table );
 		list( $primary_key, $columns ) = $columns;
 
 		if ( null === $primary_key ) {
 			array_push(
-				$table_report['errors'],
+				$table_report[ 'errors' ],
 				"The table \"{$table}\" has no primary key. Changes will have to be made manually.",
 				'results'
 			);
@@ -180,7 +171,7 @@ class Replace {
 			return $table_report;
 		}
 
-		$table_report['start'] = microtime();
+		$table_report[ 'start' ] = microtime();
 
 		// Count the number of rows we have in the table if large we'll split into blocks, This is a mod from Simon Wheatley
 		$row_count = $this->dbm->get_rows( $table );
@@ -205,12 +196,12 @@ class Replace {
 			$data = $this->dbm->get_table_content( $table, $start, $page_size );
 
 			if ( ! $data ) {
-				$table_report['errors'][] = 'no data in table ' . $table;
+				$table_report[ 'errors' ][] = 'no data in table ' . $table;
 			}
 
 			foreach ( $data as $row ) {
 
-				$table_report['rows'] ++;
+				$table_report[ 'rows' ] ++;
 
 				$update_sql = array();
 				$where_sql  = array();
@@ -239,20 +230,20 @@ class Replace {
 					// Run a search replace by CSV parameters if CSV input present
 					if ( $csv !== null ) {
 						foreach ( $this->csv_data as $entry ) {
-							$edited_data = $this->recursive_unserialize_replace( $entry['search'],
-								$entry['replace'], $edited_data );
+							$edited_data = $this->recursive_unserialize_replace( $entry[ 'search' ],
+								$entry[ 'replace' ], $edited_data );
 						}
 					}
 
 					// Something was changed
 					if ( $edited_data !== $data_to_fix ) {
 
-						$table_report['change'] ++;
+						$table_report[ 'change' ] ++;
 
 						// log changes
 						//TODO : does it work with non UTF-8 encodings?
-						$table_report['changes'][] = array(
-							'row'    => $table_report['rows'],
+						$table_report[ 'changes' ][] = array(
+							'row'    => $table_report[ 'rows' ],
 							'column' => $column,
 							'from'   => $data_to_fix,
 							'to'     => $edited_data,
@@ -274,19 +265,19 @@ class Replace {
 					$result = $this->dbm->update( $table, $update_sql, $where_sql );
 
 					if ( ! $result ) {
-						$table_report['errors'][] = sprintf(
+						$table_report[ 'errors' ][] = sprintf(
 							__( 'Error updating row: %d.', 'search-and-replace' ),
 							$row
 						);
 					} else {
-						$table_report['updates'] ++;
+						$table_report[ 'updates' ] ++;
 					}
 
 				}
 			}
 		}
 
-		$table_report['end'] = microtime( true );
+		$table_report[ 'end' ] = microtime( true );
 		$this->dbm->flush();
 
 		return $table_report;
@@ -346,8 +337,8 @@ class Replace {
 						$data = str_replace( $from, '|' . $to, $tmp_data );
 					}
 
-					if ( $marker ){
-						$data = maybe_serialize($data);
+					if ( $marker ) {
+						$data = maybe_serialize( $data );
 					}
 
 				} else {
@@ -360,8 +351,7 @@ class Replace {
 				return serialize( $data );
 			}
 
-		}
-		catch ( \Exception $error ) {
+		} catch ( \Exception $error ) {
 
 			$this->add_error( $error->getMessage(), 'results' );
 
@@ -442,12 +432,4 @@ class Replace {
 
 		return $this->dry_run;
 	}
-
-	/**
-	 * @param $getMessage
-	 * @param $string
-	 */
-	private function add_error( $getMessage, $string ) {
-	}
-
 }
