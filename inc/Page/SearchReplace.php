@@ -101,22 +101,18 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	public function save() {
 
-		// check for errors in form
 		if ( ! $this->is_request_valid() ) {
-
-			$this->display_errors();
-
 			return false;
 		}
 
-		$tables  = isset( $_POST['select_tables'] ) ? $_POST['select_tables'] : '';
-		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
+		$tables  = isset( $_POST[ 'select_tables' ] ) ? $_POST[ 'select_tables' ] : '';
+		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
 
 		// remove wp_magic_quotes
 		$search  = stripslashes( filter_input( INPUT_POST, 'search' ) );
 		$replace = stripslashes( filter_input( INPUT_POST, 'replace' ) );
 		$csv     = stripslashes( filter_input( INPUT_POST, 'csv' ) );
-		$csv = ( $csv === '' ? null : $csv );
+		$csv     = ( $csv === '' ? null : $csv );
 
 		// if dry run is checked we run the replace function with dry run and return
 		if ( true === $dry_run ) {
@@ -146,9 +142,17 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	protected function is_request_valid() {
 
-		$select_tables = filter_input( INPUT_POST, 'select_tables' );
-		if ( '' === $select_tables ) {
-			$this->add_error( __( 'No Tables were selected.', 'search-and-replace' ) );
+		// Try to retrieve tables if selected.
+		$select_tables = isset( $_POST[ 'select_tables' ] ) ?
+			filter_var( $_POST[ 'select_tables' ], FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY ) :
+			'';
+
+		// If not table are selected mark the request as invalid but let user know why.
+		if ( ! $select_tables ) {
+			$this->add_error( esc_html__(
+				'No Tables were selected. You must select at least one table to perform the action.',
+				'search-and-replace'
+			) );
 
 			return false;
 		}
@@ -205,12 +209,12 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			$this->display_errors();
 		} else {
 
-			if ( count( $report['changes'] ) > 0 ) {
+			if ( count( $report[ 'changes' ] ) > 0 ) {
 				$this->downloader->show_changes( $report );
 			}
 
 			// if no changes found report that
-			if ( 0 === count( $report ['changes'] ) ) {
+			if ( 0 === count( $report [ 'changes' ] ) ) {
 				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 			}
 		}
@@ -236,15 +240,15 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		// if we come from a dry run, we select the tables to the dry run again
 		/** @var bool | string $selected_tables */
 		$selected_tables = false;
-		if ( isset( $_POST['select_tables'] ) ) {
-			$selected_tables = $_POST['select_tables'];
+		if ( isset( $_POST[ 'select_tables' ] ) ) {
+			$selected_tables = $_POST[ 'select_tables' ];
 		}
 
 		echo '<select id="select_tables" name="select_tables[]" multiple="multiple"  size = "' . $select_rows . '">';
 		foreach ( $tables as $table ) {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 			// check if dry run. if dry run && current table is in "selected" array add selected attribute
-			$selected = ( isset( $_POST['dry_run'] )
+			$selected = ( isset( $_POST[ 'dry_run' ] )
 			              && $selected_tables
 			              && in_array( $table, $selected_tables, false )
 			)
@@ -275,8 +279,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function get_search_value() {
 
-		$search  = isset( $_POST['search'] ) ? $_POST['search'] : '';
-		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
+		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : '';
+		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
 
 		if ( $dry_run ) {
 			$search = stripslashes( $search );
@@ -291,8 +295,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function get_replace_value() {
 
-		$replace = isset( $_POST['replace'] ) ? $_POST['replace'] : '';
-		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
+		$replace = isset( $_POST[ 'replace' ] ) ? $_POST[ 'replace' ] : '';
+		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
 		if ( $dry_run ) {
 			$replace = stripslashes( $replace );
 			$replace = htmlentities( $replace );
@@ -306,8 +310,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function get_csv_value() {
 
-		$csv     = isset( $_POST['csv'] ) ? $_POST['csv'] : '';
-		$dry_run = isset( $_POST['dry_run'] ) ? true : false;
+		$csv     = isset( $_POST[ 'csv' ] ) ? $_POST[ 'csv' ] : '';
+		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
 		if ( $dry_run ) {
 			$csv = stripslashes( $csv );
 			$csv = htmlentities( $csv );
