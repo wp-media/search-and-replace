@@ -103,7 +103,7 @@ class Manager {
 		$output = '<div class="wrap">';
 		$output .= '<h1 id="title">' . esc_html__( 'Search & Replace', 'search-and-replace' ) . '</h1>';
 		$output .= '<h2 class="nav-tab-wrapper">';
-		$page = '';
+
 		foreach ( $this->pages as $slug => $page ) :
 			$class = $current_page === $slug ? 'nav-tab-active' : '';
 			$output .= sprintf(
@@ -113,16 +113,19 @@ class Manager {
 				$page->get_page_title()
 			);
 		endforeach;
+		unset($page);
+
 		$output .= '</h2>';
+
+		// Set the current page.
+		$page = $this->pages[ $current_page ];
 
 		echo $output;
 		echo '<div class="tab__content">';
 		$this->save();
 		$page->display_errors();
-		$page = $this->pages[ $current_page ];
 		$page->render();
 		echo '</div>';
-
 		echo '</div>'; // wrap
 	}
 

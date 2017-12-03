@@ -50,7 +50,11 @@ abstract class AbstractPage {
 
 		?>
 		<div class="error notice is-dismissible">
-			<?= sprintf( '<strong>%s</strong>', esc_html__( 'Errors:', 'search-and-replace' ) ); ?>
+			<p>
+				<strong>
+					<?php esc_html_e( 'Errors:', 'search-and-replace' ); ?>
+				</strong>
+			</p>
 			<ul>
 				<?php foreach ( $this->errors as $error ) : ?>
 					<li><?= esc_html( $error ); ?></li>
