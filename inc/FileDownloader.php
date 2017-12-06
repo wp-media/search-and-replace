@@ -1,4 +1,5 @@
 <?php
+
 namespace Inpsyde\SearchReplace;
 
 use Inpsyde\SearchReplace\Database\Exporter;
@@ -38,7 +39,7 @@ class FileDownloader {
 	 */
 	public function __construct( Exporter $dbe, MaxExecutionTime $max_execution ) {
 
-		$this->dbe = $dbe;
+		$this->dbe           = $dbe;
 		$this->max_execution = $max_execution;
 	}
 
@@ -52,17 +53,17 @@ class FileDownloader {
 		if ( array_key_exists( 'changes', $report ) && ! empty( $report[ 'changes' ] ) ) {
 			?>
 			<div class="updated notice is-dismissible">
-			<?php
-			//show changes if there are any
-			if ( count( $report[ 'changes' ] ) > 0 ) {
-				$this->show_changes( $report );
-			}
+				<?php
+				//show changes if there are any
+				if ( count( $report[ 'changes' ] ) > 0 ) {
+					$this->show_changes( $report );
+				}
 
-			//if no changes found report that
-			if ( 0 === count( $report [ 'changes' ] ) ) {
-				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
-			}
-			?>
+				//if no changes found report that
+				if ( 0 === count( $report [ 'changes' ] ) ) {
+					echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
+				}
+				?>
 			</div>
 			<?php
 		}
@@ -72,17 +73,16 @@ class FileDownloader {
 		?>
 
 
-
 		<div class="updated notice is-dismissible insr_sql_button_wrap">
 			<p><?php esc_html_e( 'Your SQL file was created!', 'search-and-replace' ); ?> </p>
 			<form action method="post">
 				<?php wp_nonce_field( $this->nonce_action, $this->nonce_name ); ?>
-				<input type="hidden" name="action" value="download_file" />
+				<input type="hidden" name="action" value="download_file"/>
 				<input type="hidden" name="sql_file" value="<?php echo esc_attr( $report[ 'filename' ] ); ?>">
 				<input type="hidden" name="compress" value="<?php echo esc_attr( $compress ); ?>">
 				<input id="insr_submit" type="submit" value="<?php esc_attr_e(
 					'Download SQL File', 'search-and-replace'
-				) ?>" class="button" />
+				) ?>" class="button"/>
 			</form>
 		</div>
 		<?php
@@ -164,32 +164,52 @@ class FileDownloader {
 
 					<table class="search-replace-modal-table">
 
-						<?php foreach ( $changes as $change ) : ?>
+						<thead>
+							<tr>
+								<th class="search-replace-row search-replace-narrow">
+									<?php esc_html_e( 'Row', 'search-and-replace' ); ?>
+								</th>
+								<th class="search-replace-column">
+									<?php esc_html_e( 'Column', 'search-and-replace' ); ?>
+								</th>
+								<th class="search-replace-old-value">
+									<?php esc_html_e( 'Old value', 'search-and-replace' ); ?>
+								</th>
+								<th class="search-replace-new-value">
+									<?php esc_html_e( 'New value', 'search-and-replace' ); ?>
+								</th>
+							</tr>
+						</thead>
+
+						<tbody>
+						<?php foreach ( $changes as $change ) :
+							//trim results and wrap with highlight class
+							$old_value = esc_html( $change [ 'from' ] );
+							$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
+							$old_value = str_replace( $search, $search_highlight, $old_value );
+
+							$new_value = esc_html( $change[ 'to' ] );
+							$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
+							$new_value = str_replace( $replace, $replace_highlight, $new_value );
+							?>
 
 							<tr>
-								<th class="search-replace-narrow">
-									<?php esc_html_e( 'row', 'search-and-replace' ); ?>
-								</th>
-								<td class="search-replace-narrow"><?php echo esc_html( $change [ 'row' ] ); ?></td>
-								<th><?php esc_html_e( 'column', 'search-and-replace' ); ?></th>
-								<td><?php echo esc_html( $change [ 'column' ] ); ?></td>
-								<?php
-								//trim results and wrap with highlight class
-								$old_value = esc_html( $change [ 'from' ] );
-								$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
-								$old_value = str_replace( $search, $search_highlight, $old_value );
-
-								$new_value = esc_html( $change[ 'to' ] );
-								$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
-								$new_value = str_replace( $replace, $replace_highlight, $new_value );
-								?>
-								<th><?php esc_html_e( 'Old value:', 'search-and-replace' ); ?></th>
-								<td><?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?></td>
-								<th><?php esc_html_e( 'New value:', 'search-and-replace' ); ?></th>
-								<td><?php echo wp_kses( $new_value, [ 'span' => [ 'class' => [] ] ] ); ?></td>
+								<td class="search-replace-row search-replace-narrow">
+									<?php echo esc_html( $change [ 'row' ] ); ?>
+								</td>
+								<td class="search-replace-column">
+									<?php echo esc_html( $change [ 'column' ] ); ?>
+								</td>
+								<td class="search-replace-old-value">
+									<?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?>
+								</td>
+								<td class="search-replace-new-value">
+									<?php echo wp_kses( $new_value, [ 'span' => [ 'class' => [] ] ] ); ?>
+								</td>
 							</tr>
 
 						<?php endforeach ?>
+						</tbody>
 
 					</table>
 
@@ -245,6 +265,7 @@ class FileDownloader {
 
 		return $return_value;
 	}
+
 	/**
 	 * calls the file delivery in Class DatabaseExporter
 	 *
@@ -255,11 +276,11 @@ class FileDownloader {
 	public function deliver_backup_file() {
 
 		if ( ! $_SERVER[ 'REQUEST_METHOD' ] === 'POST' ) {
-			return FALSE;
+			return false;
 		}
 
 		if ( ! isset( $_POST[ 'insr_nonce' ] ) || ! wp_verify_nonce( $_POST[ 'insr_nonce' ], 'download_sql' ) ) {
-			return FALSE;
+			return false;
 		}
 
 		$this->max_execution->set();
@@ -271,14 +292,14 @@ class FileDownloader {
 				$sql_file = $_POST[ 'sql_file' ];
 			}
 
-			$compress = FALSE;
+			$compress = false;
 			if ( isset( $_POST[ 'compress' ] ) ) {
 				$compress = $_POST[ 'compress' ];
 			}
 
 			// If file name contains path or does not end with '.sql' exit.
 			$ext = strrchr( $sql_file, '.' );
-			if ( FALSE !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
+			if ( false !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
 				die;
 			}
 			$this->dbe->deliver_backup( $sql_file, $compress );
