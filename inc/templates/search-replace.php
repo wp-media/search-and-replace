@@ -23,7 +23,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 		<tr>
 			<th><label for="csv"><strong><?php esc_html_e( 'CSV Format Search/Replace:', 'search-and-replace'); ?></strong></label></th>
 			<td>
-                            <textarea id="csv" cols="46"  rows="5" name="csv" placeholder="<?php esc_html_e("search value, replace value (one per line)" , "search-and-replace")?>" ><?php $this->get_csv_value() ?></textarea>
+                            <textarea id="csv" cols="46"  rows="5" name="csv" placeholder="<?php esc_html_e( 'search value, replace value (one per line)' , 'search-and-replace')?>" ><?php $this->get_csv_value() ?></textarea>
                             <p id="csv-hint"><?php esc_html_e( 'Using comma delimited( , ). For example to replace cat with dog: cat,dog'  , 'search-and-replace' );?></p>
                         </td>
                 </tr>
