@@ -2,8 +2,8 @@
 
 namespace Inpsyde\SearchReplace\Page;
 
-use Inpsyde\SearchReplace\Database,
-	Inpsyde\SearchReplace\Service;
+use Inpsyde\SearchReplace\Database;
+use Inpsyde\SearchReplace\Service;
 use Inpsyde\SearchReplace\FileDownloader;
 
 /**
