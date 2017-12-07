@@ -3,6 +3,7 @@
 ## 3.2.0 (ToDo)
 * Added CSV format alternative for search/replace [#82].
 * Change code structure, preparation for more solid UnitTests.
+* Improve Modal Table UI.
 
 ## v3.1.2 (2016-12-31)
 - hotfix: prevent declaration error with Requisite
