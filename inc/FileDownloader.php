@@ -191,24 +191,27 @@ class FileDownloader {
 							$new_value = esc_html( $change[ 'to' ] );
 							$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
 							$new_value = str_replace( $replace, $replace_highlight, $new_value );
-							?>
 
-							<tr>
-								<td class="search-replace-row search-replace-narrow">
-									<?php echo esc_html( $change [ 'row' ] ); ?>
-								</td>
-								<td class="search-replace-column">
-									<?php echo esc_html( $change [ 'column' ] ); ?>
-								</td>
-								<td class="search-replace-old-value">
-									<?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?>
-								</td>
-								<td class="search-replace-new-value">
-									<?php echo wp_kses( $new_value, [ 'span' => [ 'class' => [] ] ] ); ?>
-								</td>
-							</tr>
+							if ( $old_value and $new_value ) : ?>
 
-						<?php endforeach ?>
+								<tr>
+									<td class="search-replace-row search-replace-narrow">
+										<?php echo esc_html( $change [ 'row' ] ); ?>
+									</td>
+									<td class="search-replace-column">
+										<?php echo esc_html( $change [ 'column' ] ); ?>
+									</td>
+									<td class="search-replace-old-value">
+										<?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?>
+									</td>
+									<td class="search-replace-new-value">
+										<?php echo wp_kses( $new_value, [ 'span' => [ 'class' => [] ] ] ); ?>
+									</td>
+								</tr>
+
+							<?php
+							endif;
+						endforeach; ?>
 						</tbody>
 
 					</table>
@@ -237,11 +240,15 @@ class FileDownloader {
 		}
 		$trimmed_results = null;
 		// Get all occurrences of $needle with up to 50 chars front & back.
-		preg_match_all( '@.{0,50}' . $needle . '.{0,50}@', $haystack, $trimmed_results );
+		$matches      = preg_match_all( '@.{0,50}' . $needle . '.{0,50}@', $haystack, $trimmed_results );
 		$return_value = '';
-		/** @var array $trimmed_results */
-		$imax = count( $trimmed_results );
-		for ( $i = 0; $i < $imax; $i ++ ) {
+
+		//  Don't need to perform any action if no matches.
+		if ( ! $matches ) {
+			return $return_value;
+		}
+
+		for ( $i = 0; $i < $matches; $i ++ ) {
 			//reset delimiter, might have been changed
 			$local_delimiter = $delimiter;
 			//check if the first trimmed result is the beginning of $haystack. if so remove leading delimiter
@@ -252,7 +259,7 @@ class FileDownloader {
 				}
 			}
 			//check if the last trimmed result is the end of $haystack. if so, remove trailing delimiter
-			$last_index = count( $trimmed_results ) - 1;
+			$last_index = $matches - 1;
 			if ( $i === $last_index ) {
 				$trimmed_result_length = strlen( $trimmed_results[ 0 ][ $i ] );
 				$substring             = substr( $haystack, - $trimmed_result_length );
