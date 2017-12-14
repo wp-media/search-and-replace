@@ -27,7 +27,7 @@ Our goal with this plugin is to give you a good solution for manipulating your d
 Get a translation, your language from the WordPress repository and/or [contribute your own language](https://translate.wordpress.org/projects/wp-plugins/search-and-replace)
 
 ## Requirements:
-PHP 5.4 +
+PHP 5.6 +
 WordPress 4.x (might work with 3.x, but not tested yet)
 
 ## Installation
