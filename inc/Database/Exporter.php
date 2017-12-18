@@ -51,9 +51,10 @@ class Exporter {
 
 	/**
 	 * Store csv data
+	 *
 	 * @var array
 	 */
-	private $csv_data = array();
+	private $csv_data = [];
 
 	/**
 	 * Exporter constructor.
@@ -84,19 +85,19 @@ class Exporter {
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search = '', $replace = '', $tables = array(), $domain_replace = FALSE, $new_table_prefix = '', $csv = NULL ) {
+	public function db_backup( $search = '', $replace = '', $tables = [], $domain_replace = false, $new_table_prefix = '', $csv = null ) {
 
 		if ( count( $tables ) < 1 ) {
 			$tables = $this->dbm->get_tables();
 		}
 
-		$report = array(
-			'errors'        => NULL,
-			'changes'       => array(),
+		$report = [
+			'errors'        => null,
+			'changes'       => [],
 			'tables'        => '0',
 			'changes_count' => '0',
 			'filename'      => '',
-		);
+		];
 
 		$table_prefix = $this->dbm->get_base_prefix();
 
@@ -202,14 +203,14 @@ class Exporter {
 	 * @return array $table_report Reports the changes made to the db.
 	 */
 
-	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '', $csv = NULL ) {
+	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '', $csv = null ) {
 
-		$table_report = array(
+		$table_report = [
 			'table_name' => $table,
 			'rows'       => 0,
 			'change'     => 0,
 			'changes'    => [],
-		);
+		];
 		//do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
 		$new_table    = $table;
@@ -256,7 +257,7 @@ class Exporter {
 
 		/** @var array $create_table */
 		$create_table = $this->dbm->get_create_table_statement( $table );
-		if ( FALSE === $create_table ) {
+		if ( false === $create_table ) {
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'search-and-replace' ), $table );
 			$this->errors->add( 2, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
@@ -269,7 +270,7 @@ class Exporter {
 		}
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
 
-		if ( FALSE === $table_structure ) {
+		if ( false === $table_structure ) {
 			$err_msg = sprintf( __( 'Error getting table structure of %s', 'search-and-replace' ), $table );
 			$this->errors->add( 3, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
@@ -286,19 +287,19 @@ class Exporter {
 		);
 		$this->stow( "#\n" );
 
-		$defs     = array();
-		$ints     = array();
+		$defs = [];
+		$ints = [];
 		// This array is storage for maybe_serialized values. We must prevent deserialization of user supplied content.
-		$maybe_serialized = array();
-		$binaries = array();
+		$maybe_serialized = [];
+		$binaries         = [];
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
-			     || ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
+				|| ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
 			) {
-				$defs[ strtolower( $struct->Field ) ] = ( NULL === $struct->Default ) ? 'NULL' : $struct->Default;
+				$defs[ strtolower( $struct->Field ) ] = ( null === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
 			}
 			// Longtext is used for meta_values as best practice in all of the automatic products.
@@ -316,7 +317,7 @@ class Exporter {
 		$page_size = $this->page_size;
 		$pages     = ceil( $row_count / $page_size );
 		//Prepare CSV data
-		if ( $csv !== NULL ) {
+		if ( $csv !== null ) {
 			$csv_lines = explode( "\n", $csv );
 			$csv_head  = str_getcsv( 'search,replace' );
 
@@ -331,11 +332,11 @@ class Exporter {
 
 			$entries = 'INSERT INTO ' . $this->backquote( $new_table ) . ' VALUES (';
 			//    \x08\\x09, not required
-			$hex_search  = array( "\x00", "\x0a", "\x0d", "\x1a" );
-			$hex_replace = array( '\0', '\n', '\r', '\Z' );
+			$hex_search  = [ "\x00", "\x0a", "\x0d", "\x1a" ];
+			$hex_replace = [ '\0', '\n', '\r', '\Z' ];
 			if ( $table_data ) {
 				foreach ( $table_data as $row ) {
-					$values = array();
+					$values = [];
 					$table_report[ 'rows' ] ++;
 
 					foreach ( $row as $column => $value ) {
@@ -347,7 +348,8 @@ class Exporter {
 							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
 								$value = $this->replace->recursive_unserialize_replace(
 									$table_prefix, $new_table_prefix,
-									$value
+									$value,
+									true
 								);
 							} else {
 								$value = str_replace( $table_prefix, $new_table_prefix, $value );
@@ -357,7 +359,8 @@ class Exporter {
 						if ( $new_table !== $table ) {
 							$value = $this->replace->recursive_unserialize_replace(
 								$table_prefix, $new_table_prefix,
-								$value
+								$value,
+								true
 							);
 						}
 						//skip replace if no search pattern
@@ -369,40 +372,44 @@ class Exporter {
 							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
 								$edited_data = $this->replace->recursive_unserialize_replace(
 									$search, $replace,
-									$value
+									$value,
+									true
 								);
 							} else {
 								$edited_data = str_replace( $search, $replace, $value );
 							}
 
-							if ( $csv !== NULL ) {
+							if ( $csv !== null ) {
 								foreach ( $this->csv_data as $entry ) {
-									$edited_data = $this->replace->recursive_unserialize_replace( $entry[ 'search' ],
-									                                                              $entry[ 'replace' ],
-									                                                              $edited_data );
+									$edited_data = $this->replace->recursive_unserialize_replace(
+										$entry[ 'search' ],
+										$entry[ 'replace' ],
+										$edited_data,
+										true
+									);
 								}
 							}
+
 							// Something was changed
 							if ( $edited_data !== $value ) {
-
 								$table_report[ 'change' ] ++;
 
 								// log changes
-								$table_report[ 'changes' ][] = array(
+								$table_report[ 'changes' ][] = [
 									'row'    => $table_report[ 'rows' ],
 									'column' => $column,
 									'from'   => $value,
 									'to'     => $edited_data,
-								);
-								$value                       = $edited_data;
+								];
 
+								$value = $edited_data;
 							}
 
 						}
 						if ( isset( $ints[ strtolower( $column ) ] ) ) {
 							// make sure there are no blank spots in the insert syntax,
 							// yet try to avoid quotation marks around integers
-							$value    = ( NULL === $value || '' === $value ) ? $defs[ strtolower( $column ) ] : $value;
+							$value    = ( null === $value || '' === $value ) ? $defs[ strtolower( $column ) ] : $value;
 							$values[] = ( '' === $value ) ? "''" : $value;
 						} else {
 							if ( isset( $binaries[ strtolower( $column ) ] ) ) {
@@ -447,7 +454,7 @@ class Exporter {
 	 *
 	 * @return mixed
 	 */
-	protected function sql_addslashes( $a_string = '', $is_like = FALSE ) {
+	protected function sql_addslashes( $a_string = '', $is_like = false ) {
 
 		if ( $is_like ) {
 			$a_string = str_replace( '\\', '\\\\\\\\', $a_string );
@@ -470,7 +477,7 @@ class Exporter {
 
 		if ( ! empty( $a_name ) && $a_name !== '*' ) {
 			if ( is_array( $a_name ) ) {
-				$result = array();
+				$result = [];
 				reset( $a_name );
 				while ( list( $key, $val ) = each( $a_name ) ) {
 					$result[ $key ] = '`' . $val . '`';
@@ -488,7 +495,7 @@ class Exporter {
 	protected function open( $filename = '', $mode = 'w' ) {
 
 		if ( '' === $filename ) {
-			return FALSE;
+			return false;
 		}
 
 		return @fopen( $filename, $mode );
@@ -506,7 +513,7 @@ class Exporter {
 	 */
 	protected function stow( $query_line ) {
 
-		if ( @fwrite( $this->fp, $query_line ) === FALSE ) {
+		if ( @fwrite( $this->fp, $query_line ) === false ) {
 			$this->errors->add(
 				4,
 				esc_attr__( 'There was an error writing a line to the backup script:', 'search-and-replace' )
@@ -521,10 +528,10 @@ class Exporter {
 	 *
 	 * @return bool FALSE if error , has to DIE when file is delivered
 	 */
-	public function deliver_backup( $filename = '', $compress = FALSE ) {
+	public function deliver_backup( $filename = '', $compress = false ) {
 
 		if ( '' === $filename ) {
-			return FALSE;
+			return false;
 		}
 
 		$diskfile = $this->backup_dir . $filename;
