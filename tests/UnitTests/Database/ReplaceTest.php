@@ -198,6 +198,70 @@ class ReplaceTest extends AbstractTestCase {
 				'search'     => 'Mr WordPress',
 				'replace'    => 'Mr Drupal',
 			],
+			[
+				'serialized' => serialize(
+					$nestedObjects = (object) [
+						'types' => [
+							'text'     => 'This is a simple name',
+							'url'      => 'http://www.wordpress.org',
+							'stdClass' => new \stdClass(),
+							'array'    => [
+								'simple element indexed',
+							],
+						],
+					]
+				),
+				'expected'   => 'O:8:"stdClass":1:{s:5:"types";a:4:{s:4:"text";s:21:"This is a simple name";s:3:"url";s:21:"http://www.drupal.org";s:8:"stdClass";O:8:"stdClass":0:{}s:5:"array";a:1:{i:0;s:22:"simple element indexed";}}}',
+				'search'     => '.wordpress.',
+				'replace'    => '.drupal.',
+			],
+			[
+				'serialized' => serialize(
+					(object) [
+						'types' => [
+							'text'     => 'This is a simple name',
+							'url'      => 'http://www.wordpress.org',
+							'stdClass' => (object) [
+								'property' => 'An inner property text',
+							],
+							'array'    => [
+								'simple element indexed',
+							],
+						],
+					]
+				),
+				'expected'   => 'O:8:"stdClass":1:{s:5:"types";a:4:{s:4:"text";s:21:"This is a simple name";s:3:"url";s:24:"http://www.wordpress.org";s:8:"stdClass";O:8:"stdClass":1:{s:8:"property";s:19:"Replaced inner text";}s:5:"array";a:1:{i:0;s:22:"simple element indexed";}}}',
+				'search'     => 'An inner property text',
+				'replace'    => 'Replaced inner text',
+			],
+			[
+				'serialized' => serialize(
+					(object) [
+						'types' => [
+							'text'     => 'This is a simple name',
+							'url'      => 'http://www.wordpress.org',
+							'stdClass' => (object) [
+								'property' => 'An inner property text',
+							],
+							'array'    => [
+								'types' => [
+									'text'     => 'This is a simple name',
+									'url'      => 'http://www.wordpress.org',
+									'stdClass' => (object) [
+										'property' => 'An inner property text',
+									],
+									'array'    => [
+										'simple element indexed',
+									],
+								],
+							],
+						],
+					]
+				),
+				'expect'     => 'O:8:"stdClass":1:{s:5:"types";a:4:{s:4:"text";s:21:"This is a simple name";s:3:"url";s:24:"http://www.wordpress.org";s:8:"stdClass";O:8:"stdClass":1:{s:8:"property";s:22:"This has been replaced";}s:5:"array";a:1:{s:5:"types";a:4:{s:4:"text";s:21:"This is a simple name";s:3:"url";s:24:"http://www.wordpress.org";s:8:"stdClass";O:8:"stdClass":1:{s:8:"property";s:22:"This has been replaced";}s:5:"array";a:1:{i:0;s:22:"simple element indexed";}}}}}',
+				'search'     => 'An inner property text',
+				'replace'    => 'This has been replaced',
+			],
 		];
 	}
 
@@ -332,6 +396,18 @@ class ReplaceTest extends AbstractTestCase {
 					// Also the world will end. See WP 3.6.1.
 					if ( is_serialized( $data, false ) ) {
 						return serialize( $data );
+					}
+
+					return $data;
+				}
+			);
+
+		bm\Functions\when( 'maybe_unserialize' )
+			->alias(
+				function ( $data ) {
+
+					if ( is_serialized( $data ) ) {
+						return @unserialize( $data );
 					}
 
 					return $data;
