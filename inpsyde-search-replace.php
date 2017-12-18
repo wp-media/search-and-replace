@@ -25,7 +25,7 @@ register_activation_hook( __FILE__, 'search_replace_activate' );
  * Validate requirements on activation
  *
  * Runs on plugin activation.
- * Check if php min 5.4.0 if not deactivate the plugin.
+ * Check if php min 5.6.0 if not deactivate the plugin.
  *
  * @since 3.1.1
  *
@@ -33,7 +33,7 @@ register_activation_hook( __FILE__, 'search_replace_activate' );
  */
 function search_replace_activate() {
 
-	$required_php_version = '5.4.0';
+	$required_php_version = '5.6.0';
 	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
 
 	search_replace_textdomain();

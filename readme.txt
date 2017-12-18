@@ -16,7 +16,7 @@ The second is a full support for serialized data but there are a lot more featur
 
 Our goal with this plugin is to give you a good solution for both Developers and Users of WordPress.
 
-> **Note:** This plugin requires PHP 5.4 or higher to be activated.
+> **Note:** This plugin requires PHP 5.6 or higher to be activated.
 
 [**Checkout our GitHub Repository**](https://github.com/inpsyde/search-and-replace)
 
@@ -39,7 +39,7 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 == Installation ==
 = Requirements =
 - WordPress 4.0 (Single and Multisite)
-- PHP 5.4, newer PHP versions will work faster.
+- PHP 5.6, newer PHP versions will work faster.
 
 == Screenshots ==
 1. Search and Replace
