@@ -4,8 +4,6 @@ namespace Inpsyde\SearchReplace\Tests\Database;
 
 use Inpsyde\SearchReplace\Database\Importer;
 use Inpsyde\SearchReplace\Tests\AbstractTestCase;
-use \Mockery as m;
-use Brain\Monkey as bm;
 
 class ImporterTest extends AbstractTestCase {
 
