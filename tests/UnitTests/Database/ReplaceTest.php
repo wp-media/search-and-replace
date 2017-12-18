@@ -193,6 +193,12 @@ class ReplaceTest extends AbstractTestCase {
 
 		return [
 			[
+				'serialized' => 's:12:"Mr WordPress";',
+				'expected'   => 's:9:"Mr Drupal";',
+				'search'     => 'Mr WordPress',
+				'replace'    => 'Mr Drupal',
+			],
+			[
 				'serialized' => 'a:1:{s:4:"Test";s:12:"Mr WordPress";}',
 				'expected'   => 'a:1:{s:4:"Test";s:9:"Mr Drupal";}',
 				'search'     => 'Mr WordPress',
