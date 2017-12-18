@@ -22,9 +22,6 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertContains( 'Search string is empty', $result );
 	}
 
-	/**
-	 * Pay attention to the code sniffer regarding the WordPress spell check.
-	 */
 	function test_string_replace() {
 
 		$columns = [
@@ -80,9 +77,62 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertEquals( 'Mr. Drupal', $result[ 'changes' ][ 0 ][ 'to' ] );
 	}
 
-	/**
-	 * Pay attention to the code sniffer regarding the WordPress spell check.
-	 */
+	function test_umlaut_replace() {
+
+		$columns = [
+			0 => 'comment_ID',
+			1 => [
+				0 => 'comment_ID',
+				1 => 'comment_post_ID',
+				2 => 'comment_author',
+			],
+		];
+
+		$table_content = [
+			0 => [
+				'comment_ID'      => '1',
+				'comment_post_ID' => '1',
+				'comment_author'  => 'Mr Wordpress',
+			],
+		];
+
+		$table_structure = [
+			(object) [
+				'Field' => 'comment_author',
+				'Type'  => 'tinytext',
+			],
+		];
+
+		$dbm_mock = m::mock(
+			'\Inpsyde\SearchReplace\Database\Manager',
+			[ m::mock( '\wpdb' ) ]
+		);
+
+		$dbm_mock->shouldReceive( 'get_table_structure' )
+			->once()
+			->andReturn( $table_structure );
+
+		$dbm_mock->shouldReceive( 'get_columns' )
+			->once()
+			->andReturn( $columns );
+
+		$dbm_mock->shouldReceive( 'get_rows' )
+			->once()
+			->andReturn( 1 );
+
+		$dbm_mock->shouldReceive( 'get_table_content' )
+			->once()
+			->andReturn( $table_content );
+
+		$dbm_mock->shouldReceive( 'flush' )
+			->once();
+
+		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
+		$result = $testee->replace_values( 'Mr Wordpress', 'Mr. Drüpal', 'wp_plugin_test_comments' );
+
+		$this->assertEquals( 'Mr. Drüpal', $result[ 'changes' ][ 0 ][ 'to' ] );
+	}
+
 	function test_substring_replace() {
 
 		$columns = [
@@ -139,9 +189,22 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertEquals( $result[ 'changes' ][ 0 ][ 'to' ], 'Mrs WordPress' );
 	}
 
-	function test_object_replace() {
+	function objectProvider() {
 
-		$serialized = 'a:1:{s:4:"Test";s:12:"Mr WordPress";}';
+		return [
+			[
+				'serialized' => 'a:1:{s:4:"Test";s:12:"Mr WordPress";}',
+				'expected'   => 'a:1:{s:4:"Test";s:9:"Mr Drupal";}',
+				'search'     => 'Mr WordPress',
+				'replace'    => 'Mr Drupal',
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider objectProvider
+	 */
+	function test_object_replace( $serialized, $expected, $search, $replace ) {
 
 		$columns = [
 			0 => 'comment_ID',
@@ -300,65 +363,8 @@ class ReplaceTest extends AbstractTestCase {
 			->once();
 
 		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
-		$result = $testee->replace_values( 'Mr WordPress', 'Mr Drupal', 'wp_plugin_test_comments' );
+		$result = $testee->replace_values( $search, $replace, 'wp_plugin_test_comments' );
 
-		$this->assertEquals( 'a:1:{s:4:"Test";s:9:"Mr Drupal";}', $result[ 'changes' ][ 0 ][ 'to' ] );
+		$this->assertEquals( $expected, $result[ 'changes' ][ 0 ][ 'to' ] );
 	}
-
-	function test_umlaut_replace() {
-
-		$columns = [
-			0 => 'comment_ID',
-			1 => [
-				0 => 'comment_ID',
-				1 => 'comment_post_ID',
-				2 => 'comment_author',
-			],
-		];
-
-		$table_content = [
-			0 => [
-				'comment_ID'      => '1',
-				'comment_post_ID' => '1',
-				'comment_author'  => 'Mr Wordpress',
-			],
-		];
-
-		$table_structure = [
-			(object) [
-				'Field' => 'comment_author',
-				'Type'  => 'tinytext',
-			],
-		];
-
-		$dbm_mock = m::mock(
-			'\Inpsyde\SearchReplace\Database\Manager',
-			[ m::mock( '\wpdb' ) ]
-		);
-
-		$dbm_mock->shouldReceive( 'get_table_structure' )
-			->once()
-			->andReturn( $table_structure );
-
-		$dbm_mock->shouldReceive( 'get_columns' )
-			->once()
-			->andReturn( $columns );
-
-		$dbm_mock->shouldReceive( 'get_rows' )
-			->once()
-			->andReturn( 1 );
-
-		$dbm_mock->shouldReceive( 'get_table_content' )
-			->once()
-			->andReturn( $table_content );
-
-		$dbm_mock->shouldReceive( 'flush' )
-			->once();
-
-		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
-		$result = $testee->replace_values( 'Mr Wordpress', 'Mr. Drüpal', 'wp_plugin_test_comments' );
-
-		$this->assertEquals( 'Mr. Drüpal', $result[ 'changes' ][ 0 ][ 'to' ] );
-	}
-
 }
