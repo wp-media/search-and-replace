@@ -312,11 +312,10 @@ class Replace {
 		try {
 			$unserialized = ( is_serialized( $data ) ) ?
 				// @codingStandardsIgnoreLine
-				unserialize( $data, [] ) :
+				maybe_unserialize( $data ) :
 				false;
 
 			if ( is_string( $data ) && is_serialized( $data ) && $unserialized !== false ) {
-				// Changed to maybe_unserialize because wp serialization != php serialization.
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = [];
