@@ -4,19 +4,18 @@ namespace Inpsyde\SearchReplace\Tests\Database;
 
 use Inpsyde\SearchReplace\Database\Importer;
 use Inpsyde\SearchReplace\Tests\AbstractTestCase;
+use \Mockery as m;
+use Brain\Monkey as bm;
 
 class ImporterTest extends AbstractTestCase {
 
 	public function test_import_invalid_sql() {
 
-		$mysqli = $this->getMockBuilder( '\mysqli' )
-			->getMock();
-
-		$mysqli->expects( $this->any() )
-			->method( 'multi_query' );
+		$this->assertMysqli();
 
 		$testee = new Importer( $this->get_max_exec_mock() );
-		$result = $testee->import_sql( "" );
+		$result = $testee->import_sql( '' );
+
 		$this->assertEquals( - 1, $result );
 	}
 
@@ -28,7 +27,7 @@ class ImporterTest extends AbstractTestCase {
 		$result = $testee->import_sql(
 			'create table if not exists  some_table (PersonID int, SomeValue VARCHAR(255));'
 		);
+
 		$this->assertEquals( 1, $result );
 	}
-
 }

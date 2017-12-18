@@ -35,7 +35,7 @@ class Importer {
 
 		$this->max_execution->set();
 
-		//connect via mysqli for easier db import
+		// connect via mysqli for easier db import
 		$mysqli = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
 
 		// Run the SQL
