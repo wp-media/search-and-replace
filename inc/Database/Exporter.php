@@ -488,7 +488,19 @@ class Exporter {
 			return false;
 		}
 
+		// Build the file path.
 		$diskfile = $this->backup_dir . $filename;
+
+		// Let know the user why we cannot download his file.
+		if ( ! file_exists( $diskfile ) ) {
+			wp_die(
+				esc_html__( 'Seems was not possible to create the file for some reason.', 'search-and-replace' ),
+				esc_html__( 'Cannot Process the file - Search &amp; Replace', 'search-and-replace' ),
+				[
+					'back_link' => true,
+				]
+			);
+		}
 
 		// Compress file if set.
 		if ( $compress ) {
@@ -536,20 +548,17 @@ class Exporter {
 		}
 
 		// Provide file for download.
-		if ( file_exists( $diskfile ) ) {
-			header( 'Content-Type: application/force-download' );
-			header( 'Content-Type: application/octet-stream' );
-			header( 'Content-Length: ' . filesize( $diskfile ) );
-			header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Type: application/force-download' );
+		header( 'Content-Type: application/octet-stream' );
+		header( 'Content-Length: ' . filesize( $diskfile ) );
+		header( 'Content-Disposition: attachment; filename=' . $filename );
 
-			$success = readfile( $diskfile );
+		$success = readfile( $diskfile );
 
-			if ( $success ) {
-				unlink( $diskfile );
-				die();
-			}
+		if ( $success ) {
+			unlink( $diskfile );
+			die();
 		}
-
 	}
 
 	/**
