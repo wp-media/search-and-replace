@@ -20,7 +20,7 @@ class FileDownloader {
 	/**
 	 * @var string
 	 */
-	private $nonce_name = 'insr_nonce';
+	private $nonce_name = 'insr_nonce_download';
 
 	/**
 	 * @var Exporter
@@ -50,28 +50,28 @@ class FileDownloader {
 	 */
 	public function show_modal( $report ) {
 
-		if ( array_key_exists( 'changes', $report ) && ! empty( $report[ 'changes' ] ) ) {
+		// Set compress status.
+		// @codingStandardsIgnoreLine
+		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
+
+		if ( array_key_exists( 'changes', $report ) && ! empty( $report[ 'changes' ] ) ) :
 			?>
 			<div class="updated notice is-dismissible">
 				<?php
-				//show changes if there are any
+				// Show changes if there are any.
 				if ( count( $report[ 'changes' ] ) > 0 ) {
 					$this->show_changes( $report );
 				}
 
-				//if no changes found report that
+				// If no changes found report that.
 				if ( 0 === count( $report [ 'changes' ] ) ) {
 					echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 				}
 				?>
 			</div>
-			<?php
-		}
-
-		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
-
+		<?php
+		endif;
 		?>
-
 
 		<div class="updated notice is-dismissible insr_sql_button_wrap">
 			<p><?php esc_html_e( 'Your SQL file was created!', 'search-and-replace' ); ?> </p>
@@ -92,16 +92,16 @@ class FileDownloader {
 	 * displays the changes made to the db
 	 * echoes the changes in formatted html
 	 *
-	 * @param $report                 array 'errors' : WP-Error Object if Errors
-	 *                                'tables' : Number of tables processed
-	 *                                'changes_count' : Number of changes made
-	 *                                'changes'
-	 *                                Array  with at least these elements:
-	 *                                'table_name'=>$[name of current table],
-	 *                                'changes' => array('row'    => [row that has been changed ],
-	 *                                'column' => [column that has been changed],
-	 *                                'from'   => ( old value ),
-	 *                                'to'     => ( $new value ),
+	 * @param $report array 'errors' : WP-Error Object if Errors.
+	 *
+	 *      'tables' : Number of tables processed
+	 *      'changes_count' : Number of changes made
+	 *      'changes' : Array  with at least these elements:
+	 *          'table_name'=> $[name of current table],
+	 *          'changes'   => array('row'    => [row that has been changed ],
+	 *          'column'    => [column that has been changed],
+	 *          'from'      => ( old value ),
+	 *          'to'        => ( $new value ),
 	 *
 	 * @return string
 	 */
@@ -282,36 +282,66 @@ class FileDownloader {
 	 */
 	public function deliver_backup_file() {
 
-		if ( ! $_SERVER[ 'REQUEST_METHOD' ] === 'POST' ) {
+		// Retrieve the nonce value.
+		// @codingStandardsIgnoreStart
+		$nonce = isset( $_POST[ $this->nonce_name ] ) ?
+			filter_var( $_POST[ $this->nonce_name ], FILTER_SANITIZE_STRING )
+			: '';
+		// @codingStandardsIgnoreEnd
+
+		// If nonce has not been send, just return nothing else to do here.
+		// The method may be hooked to a wp action, so it's executed on every page request.
+		if ( ! $nonce ) {
 			return false;
 		}
 
-		if ( ! isset( $_POST[ 'insr_nonce' ] ) || ! wp_verify_nonce( $_POST[ 'insr_nonce' ], 'download_sql' ) ) {
-			return false;
+		// Die in case the nonce has been passed but not a valid one.
+		// @codingStandardsIgnoreLine
+		if ( ! wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action ) ) {
+			wp_die( 'Cheating Uh?' );
 		}
 
 		$this->max_execution->set();
 
-		if ( isset( $_POST[ 'action' ] ) && 'download_file' === $_POST[ 'action' ] ) {
+		// Get the action to perform.
+		// @codingStandardsIgnoreLine
+		$action = isset( $_POST[ 'action' ] ) ? filter_var( $_POST[ 'action' ], FILTER_SANITIZE_STRING ) : '';
 
-			$sql_file = '';
-			if ( isset( $_POST[ 'sql_file' ] ) ) {
-				$sql_file = $_POST[ 'sql_file' ];
-			}
-
-			$compress = false;
-			if ( isset( $_POST[ 'compress' ] ) ) {
-				$compress = (bool) filter_var( $_POST[ 'compress' ], FILTER_VALIDATE_BOOLEAN );
-			}
-
-			// If file name contains path or does not end with '.sql' exit.
-			$ext = strrchr( $sql_file, '.' );
-			if ( false !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
-				die;
-			}
-			$this->dbe->deliver_backup( $sql_file, $compress );
+		if ( 'download_file' !== $action ) {
+			return false;
 		}
 
+		$sql_file = '';
+		$compress = false;
+
+		// @codingStandardsIgnoreLine
+		if ( isset( $_POST[ 'sql_file' ] ) ) {
+			// @codingStandardsIgnoreLine
+			$sql_file = sanitize_file_name( $_POST[ 'sql_file' ] );
+		}
+
+		if ( ! $sql_file ) {
+			wp_die( esc_html__( 'The file you are looking for doesn\'t exists.', 'search-and-replace' ) );
+		}
+
+		// If file name contains path or does not end with '.sql' exit.
+		// @todo create a function to prevent traversal path.
+		$ext = strrchr( $sql_file, '.' );
+		if ( false !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
+			wp_die( 'Cheating Uh?' );
+		}
+
+		// @codingStandardsIgnoreLine
+		if ( isset( $_POST[ 'compress' ] ) ) {
+			// @codingStandardsIgnoreLine
+			$compress = (bool) filter_var( $_POST[ 'compress' ], FILTER_VALIDATE_BOOLEAN );
+		}
+
+		// Download the file.
+		$this->dbe->deliver_backup( $sql_file, $compress );
+
 		$this->max_execution->restore();
+
+		return true;
 	}
 }
