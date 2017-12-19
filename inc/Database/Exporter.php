@@ -85,7 +85,14 @@ class Exporter {
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
 	 */
-	public function db_backup( $search = '', $replace = '', $tables = [], $domain_replace = false, $new_table_prefix = '', $csv = null ) {
+	public function db_backup(
+		$search = '',
+		$replace = '',
+		$tables = [],
+		$domain_replace = false,
+		$new_table_prefix = '',
+		$csv = null
+	) {
 
 		if ( count( $tables ) < 1 ) {
 			$tables = $this->dbm->get_tables();
@@ -104,49 +111,57 @@ class Exporter {
 		// wp_blogs needs special treatment in multisite domain replace, we need to check later if we are working on it.
 		$wp_blogs_table = $table_prefix . 'blogs';
 
-		$this->backup_filename = $new_table_prefix === '' ? DB_NAME . "_$table_prefix.sql"
-			: DB_NAME . "_$new_table_prefix.sql";
+		$this->backup_filename = $new_table_prefix === '' ?
+			DB_NAME . "_$table_prefix.sql" :
+			DB_NAME . "_$new_table_prefix.sql";
 
-		if ( is_writable( $this->backup_dir ) ) {
-			$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
-			if ( ! $this->fp ) {
-				$this->errors->add(
-					8, esc_attr__( 'Could not open the backup file for writing!', 'search-and-replace' )
-				);
-
-				return $report;
-			}
-		} else {
+		// If the directory for the backup isn't writable, don't proceed.
+		// @todo Use WP_Filesystem() to access to the file system.
+		if ( ! is_writable( $this->backup_dir ) ) {
 			$this->errors->add( 9, esc_attr__( 'The backup directory is not writable!', 'search-and-replace' ) );
 
 			return $report;
 		}
 
-		//Begin new backup of MySql
-		//get charset. if not set assume utf8
+		$this->fp = $this->open( $this->backup_dir . $this->backup_filename );
+
+		if ( ! $this->fp ) {
+			$this->errors->add(
+				8,
+				esc_attr__( 'Could not open the backup file for writing!', 'search-and-replace' )
+			);
+
+			return $report;
+		}
+
+		// Begin new backup of MySql get charset. if not set assume utf8.
 		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8mb4' );
+
 		$this->stow( '# ' . esc_attr__( 'WordPress MySQL database backup', 'search-and-replace' ) . "\n" );
 		$this->stow( "#\n" );
 		$this->stow( '# ' . sprintf( __( 'Generated: %s', 'search-and-replace' ), date( 'l j. F Y H:i T' ) ) . "\n" );
 		$this->stow( '# ' . sprintf( __( 'Hostname: %s', 'search-and-replace' ), DB_HOST ) . "\n" );
 		$this->stow( '# ' . sprintf( __( 'Database: %s', 'search-and-replace' ), $this->backquote( DB_NAME ) ) . "\n" );
+
 		if ( '' !== $new_table_prefix ) {
 			$this->stow(
 				'# ' . sprintf(
-					__( 'Changed table prefix: From %s to %s ', 'search-and-replace' ),
+				/* translators: $1 and $2 are the name of the database. */
+					__( 'Changed table prefix: From %1$s to %2$s ', 'search-and-replace' ),
 					$table_prefix,
 					$new_table_prefix
 				)
 				. "\n"
 			);
 		}
-		$this->stow( "# --------------------------------------------------------\n" );
 
+		$this->stow( "# --------------------------------------------------------\n" );
 		$this->stow( "/*!40101 SET NAMES $charset */;\n" );
 		$this->stow( "# --------------------------------------------------------\n" );
+
 		foreach ( $tables as $table ) {
 
-			//count tables
+			// Count tables.
 			$report [ 'tables' ] ++;
 
 			/**
@@ -168,8 +183,8 @@ class Exporter {
 			} else {
 				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix, $csv );
 			}
-			//log changes if any
 
+			// Log changes if any.
 			if ( 0 !== $table_report[ 'change' ] ) {
 				$report[ 'changes' ][ $table ] = $table_report;
 
@@ -178,10 +193,12 @@ class Exporter {
 		}
 
 		$this->close( $this->fp );
-		//return errors if any
+
+		// Return errors if any.
 		if ( count( $this->errors->get_error_codes() ) ) {
 			$report[ 'errors' ] = $this->errors;
 		}
+
 		$report [ 'filename' ] = $this->backup_filename;
 
 		return $report;
@@ -189,11 +206,13 @@ class Exporter {
 	}
 
 	/**
+	 * Backup Table
+	 *
 	 * Taken partially from phpMyAdmin and partially from
 	 * Alain Wolf, Zurich - Switzerland
+	 *
 	 * Website: http://restkultur.ch/personal/wolf/scripts/db_backup/
-	 * Modified by Scott Merrill (http://www.skippy.net/)
-	 * to use the WordPress $wpdb object
+	 * Modified by Scott Merrill (http://www.skippy.net/) to use the WordPress $wpdb object
 	 *
 	 * @param string $search
 	 * @param string $replace
@@ -211,19 +230,22 @@ class Exporter {
 			'change'     => 0,
 			'changes'    => [],
 		];
-		//do we need to replace the prefix?
+
+		// Do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
 		$new_table    = $table;
+
 		if ( '' !== $new_table_prefix ) {
 			$new_table = $this->get_new_table_name( $table, $new_table_prefix );
-
 		}
 
 		// Create the SQL statements
 		$this->stow( '# --------------------------------------------------------' . "\n" );
 		$this->stow( '# ' . sprintf( __( 'Table: %s', 'search-and-replace' ), $this->backquote( $new_table ) ) . "\n" );
 
+		// Retrieve table structure.
 		$table_structure = $this->dbm->get_table_structure( $table );
+
 		if ( ! $table_structure ) {
 			$this->errors->add( 1, __( 'Error getting table details', 'search-and-replace' ) . ": $table" );
 
@@ -257,17 +279,18 @@ class Exporter {
 
 		/** @var array $create_table */
 		$create_table = $this->dbm->get_create_table_statement( $table );
+
 		if ( false === $create_table ) {
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'search-and-replace' ), $table );
 			$this->errors->add( 2, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
 		}
-		//replace prefix if necessary
+
+		// Replace prefix if necessary
 		if ( '' !== $new_table_prefix ) {
-
 			$create_table[ 0 ][ 1 ] = str_replace( $table, $new_table, $create_table[ 0 ][ 1 ] );
-
 		}
+
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
 
 		if ( false === $table_structure ) {
@@ -292,6 +315,7 @@ class Exporter {
 		// This array is storage for maybe_serialized values. We must prevent deserialization of user supplied content.
 		$maybe_serialized = [];
 		$binaries         = [];
+
 		foreach ( $table_structure as $struct ) {
 			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
 				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
@@ -302,21 +326,21 @@ class Exporter {
 				$defs[ strtolower( $struct->Field ) ] = ( null === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
 			}
+
 			// Longtext is used for meta_values as best practice in all of the automatic products.
-			if ( ( 0 === strpos( strtolower( $struct->Type ), 'longtext' ) ) ) {
+			if ( 0 === strpos( strtolower( $struct->Type ), 'longtext' ) ) {
 				$maybe_serialized[] = strtolower( $struct->Field );
 			}
 		}
 
-		//split columns array in primary key string and columns array
+		// Split columns array in primary key string and columns array.
 		$columns     = $this->dbm->get_columns( $table );
 		$primary_key = $columns[ 0 ];
+		$row_count   = $this->dbm->get_rows( $table );
+		$page_size   = $this->page_size;
+		$pages       = ceil( $row_count / $page_size );
 
-		$row_count = $this->dbm->get_rows( $table );
-
-		$page_size = $this->page_size;
-		$pages     = ceil( $row_count / $page_size );
-		//Prepare CSV data
+		// Prepare CSV data.
 		if ( $csv !== null ) {
 			$csv_lines = explode( "\n", $csv );
 			$csv_head  = str_getcsv( 'search,replace' );
@@ -331,23 +355,25 @@ class Exporter {
 			$table_data = $this->dbm->get_table_content( $table, $start, $page_size );
 
 			$entries = 'INSERT INTO ' . $this->backquote( $new_table ) . ' VALUES (';
-			//    \x08\\x09, not required
+			// \x08\\x09, not required
 			$hex_search  = [ "\x00", "\x0a", "\x0d", "\x1a" ];
 			$hex_replace = [ '\0', '\n', '\r', '\Z' ];
-			if ( $table_data ) {
-				foreach ( $table_data as $row ) {
+
+			if ( $table_data ) :
+				foreach ( $table_data as $row ) :
 					$values = [];
 					$table_report[ 'rows' ] ++;
 
-					foreach ( $row as $column => $value ) {
-						//Skip the GUID column per Wordpress Codex
+					foreach ( $row as $column => $value ) :
+						// Skip the GUID column per WordPress Codex.
 
 						// If "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them.
 						if ( $new_table !== $table ) {
 							// Check if column is expected to hold serialized value.
 							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
 								$value = $this->replace->recursive_unserialize_replace(
-									$table_prefix, $new_table_prefix,
+									$table_prefix,
+									$new_table_prefix,
 									$value,
 									true
 								);
@@ -358,14 +384,16 @@ class Exporter {
 
 						if ( $new_table !== $table ) {
 							$value = $this->replace->recursive_unserialize_replace(
-								$table_prefix, $new_table_prefix,
+								$table_prefix,
+								$new_table_prefix,
 								$value,
 								true
 							);
 						}
-						//skip replace if no search pattern
-						//check if we need to replace something
-						//skip primary_key
+
+						// Skip replace if no search pattern
+						// Check if we need to replace something
+						// Skip primary_key
 						if ( $search !== '' && $column !== $primary_key && $column !== 'guid' ) {
 
 							// Check if column is expected to hold serialized value.
@@ -404,8 +432,8 @@ class Exporter {
 
 								$value = $edited_data;
 							}
-
 						}
+
 						if ( isset( $ints[ strtolower( $column ) ] ) ) {
 							// make sure there are no blank spots in the insert syntax,
 							// yet try to avoid quotation marks around integers
@@ -422,11 +450,12 @@ class Exporter {
 									) . "'";
 							}
 						}
-					}
-					$this->stow( " \n" . $entries . implode( ', ', $values ) . ');' );
-				}
+					endforeach;
 
-			}
+					$this->stow( " \n" . $entries . implode( ', ', $values ) . ');' );
+
+				endforeach;
+			endif;
 		}
 
 		// Create footer/closing comment in SQL-file
@@ -434,6 +463,7 @@ class Exporter {
 		$this->stow( "#\n" );
 		$this->stow(
 			'# ' . sprintf(
+			/* translators: $1 is the name of the table */
 				__( 'End of data contents of table %s', 'search-and-replace' ),
 				$this->backquote( $new_table )
 			) . "\n"
@@ -442,7 +472,121 @@ class Exporter {
 		$this->stow( "\n" );
 
 		return $table_report;
+	}
 
+	/**
+	 * Deliver
+	 *
+	 * @param string $filename The name of the file to be downloaded.
+	 * @param bool   $compress If TRUE, gz compression is used.
+	 *
+	 * @return bool FALSE if error , has to DIE when file is delivered
+	 */
+	public function deliver_backup( $filename = '', $compress = false ) {
+
+		if ( '' === $filename ) {
+			return false;
+		}
+
+		$diskfile = $this->backup_dir . $filename;
+		//compress file if set
+		if ( $compress ) {
+			$gz_diskfile = "{$diskfile}.gz";
+
+			/**
+			 * Try upping the memory limit before gzipping
+			 */
+			if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
+				@ini_set( 'memory_limit', '64M' );
+			}
+
+			if ( file_exists( $diskfile ) ) {
+				/**
+				 * Try gzipping with an external application
+				 */
+				if ( ! file_exists( $gz_diskfile ) ) {
+					@exec( "gzip $diskfile" );
+				}
+
+				if ( file_exists( $gz_diskfile ) ) {
+
+					unlink( $diskfile );
+
+					$diskfile = $gz_diskfile;
+					$filename = "{$filename}.gz";
+
+					/**
+					 * Try to compress to gzip, if available
+					 */
+				} else {
+					if ( function_exists( 'gzencode' ) ) {
+						if ( function_exists( 'file_get_contents' ) ) {
+							$text = file_get_contents( $diskfile );
+						} else {
+							$text = implode( '', file( $diskfile ) );
+						}
+
+						$gz_text = gzencode( $text, 9 );
+						$fp      = fopen( $gz_diskfile, 'w' );
+
+						fwrite( $fp, $gz_text );
+
+						if ( fclose( $fp ) ) {
+							unlink( $diskfile );
+							$diskfile = $gz_diskfile;
+							$filename = "{$filename}.gz";
+						}
+					}
+				}
+			} elseif ( file_exists( $gz_diskfile ) ) {
+				$diskfile = $gz_diskfile;
+				$filename = "{$filename}.gz";
+			}
+		}
+
+		//provide file for download
+		if ( file_exists( $diskfile ) ) {
+			header( 'Content-Type: application/force-download' );
+			header( 'Content-Type: application/octet-stream' );
+			header( 'Content-Length: ' . filesize( $diskfile ) );
+			header( 'Content-Disposition: attachment; filename=' . $filename );
+
+			$success = readfile( $diskfile );
+
+			if ( $success ) {
+				unlink( $diskfile );
+				die();
+			}
+		}
+
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_backup_dir() {
+
+		return $this->backup_dir;
+	}
+
+	/**
+	 * strips the current table prefix and adds a new one provided in $new_table_prefix
+	 *
+	 * @param $table
+	 * @param $new_table_prefix
+	 *
+	 * @return string  The table name with new prefix
+	 */
+	protected function get_new_table_name( $table, $new_table_prefix ) {
+
+		// Get length of base_prefix
+		$prefix        = $this->dbm->get_base_prefix();
+		$prefix_length = strlen( $prefix );
+		// Strip old prefix
+		$part_after_prefix = substr( $table, $prefix_length );
+
+		// Build new table name
+		return $new_table_prefix . $part_after_prefix;
 	}
 
 	/**
@@ -492,6 +636,14 @@ class Exporter {
 		}
 	}
 
+	/**
+	 * Open Resource
+	 *
+	 * @param string $filename
+	 * @param string $mode
+	 *
+	 * @return bool|resource
+	 */
 	protected function open( $filename = '', $mode = 'w' ) {
 
 		if ( '' === $filename ) {
@@ -501,6 +653,11 @@ class Exporter {
 		return @fopen( $filename, $mode );
 	}
 
+	/**
+	 * Close Resource
+	 *
+	 * @param $fp
+	 */
 	protected function close( $fp ) {
 
 		fclose( $fp );
@@ -521,125 +678,4 @@ class Exporter {
 			);
 		}
 	}
-
-	/**
-	 * @param string $filename The name of the file to be downloaded
-	 * @param bool   $compress If TRUE, gz compression is used
-	 *
-	 * @return bool FALSE if error , has to DIE when file is delivered
-	 */
-	public function deliver_backup( $filename = '', $compress = false ) {
-
-		if ( '' === $filename ) {
-			return false;
-		}
-
-		$diskfile = $this->backup_dir . $filename;
-		//compress file if set
-		if ( $compress ) {
-			$gz_diskfile = "{$diskfile}.gz";
-
-			/**
-			 * Try upping the memory limit before gzipping
-			 */
-			if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
-				@ini_set( 'memory_limit', '64M' );
-			}
-
-			if ( file_exists( $diskfile ) ) {
-				/**
-				 * Try gzipping with an external application
-				 */
-				if ( ! file_exists( $gz_diskfile ) ) {
-					@exec( "gzip $diskfile" );
-				}
-
-				if ( file_exists( $gz_diskfile ) ) {
-
-					unlink( $diskfile );
-
-					$diskfile = $gz_diskfile;
-					$filename = "{$filename}.gz";
-
-					/**
-					 * Try to compress to gzip, if available
-					 */
-				} else {
-					if ( function_exists( 'gzencode' ) ) {
-						if ( function_exists( 'file_get_contents' ) ) {
-							$text = file_get_contents( $diskfile );
-						} else {
-							$text = implode( '', file( $diskfile ) );
-						}
-						$gz_text = gzencode( $text, 9 );
-						$fp      = fopen( $gz_diskfile, 'w' );
-						fwrite( $fp, $gz_text );
-						if ( fclose( $fp ) ) {
-							unlink( $diskfile );
-							$diskfile = $gz_diskfile;
-							$filename = "{$filename}.gz";
-						}
-					}
-				}
-				/*
-				 *
-				 */
-			} elseif ( file_exists( $gz_diskfile ) ) {
-				$diskfile = $gz_diskfile;
-				$filename = "{$filename}.gz";
-			}
-		}
-
-		//provide file for download
-		if ( file_exists( $diskfile ) ) {
-			header( 'Content-Type: application/force-download' );
-			header( 'Content-Type: application/octet-stream' );
-			header( 'Content-Length: ' . filesize( $diskfile ) );
-			header( 'Content-Disposition: attachment; filename=' . $filename );
-			$success = readfile( $diskfile );
-			if ( $success ) {
-				unlink( $diskfile );
-				die();
-			}
-		}
-
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_backup_dir() {
-
-		return $this->backup_dir;
-	}
-
-	/**
-	 * @string  $backup_dir
-	 * @param $backup_dir
-	 */
-	public function set_backup_dir( $backup_dir ) {
-
-		$this->backup_dir = $backup_dir;
-	}
-
-	/**
-	 * strips the current table prefix and adds a new one provided in $new_table_prefix
-	 *
-	 * @param $table
-	 * @param $new_table_prefix
-	 *
-	 * @return string  The table name with new prefix
-	 */
-	protected function get_new_table_name( $table, $new_table_prefix ) {
-
-		//get length of base_prefix
-		$prefix        = $this->dbm->get_base_prefix();
-		$prefix_length = strlen( $prefix );
-		//strip old prefix
-		$part_after_prefix = substr( $table, $prefix_length );
-
-		#//build new table name
-		return $new_table_prefix . $part_after_prefix;
-	}
-
 }
