@@ -70,7 +70,7 @@ function search_replace_load() {
 
 	// all hooks are just available on backend.
 	if ( ! is_admin() ) {
-		return FALSE;
+		return false;
 	}
 
 	define( 'SEARCH_REPLACE_BASEDIR', plugin_dir_url( __FILE__ ) );
@@ -78,25 +78,23 @@ function search_replace_load() {
 	search_replace_textdomain();
 
 	$user_cap = apply_filters( 'search_replace_access_capability', 'manage_options' );
-	if ( ! current_user_can( $user_cap ) ) {
-		return FALSE;
+	$file     = __DIR__ . '/vendor/autoload.php';
+
+	if ( ! current_user_can( $user_cap ) || ! file_exists( $file ) ) {
+		return false;
 	}
 
-	$file = __DIR__ . '/vendor/autoload.php';
-	if ( ! file_exists( $file ) ) {
-		return FALSE;
-	}
-	include_once( $file );
+	include_once $file;
 
 	$max_execution = new Inpsyde\SearchReplace\Service\MaxExecutionTime();
 
 	$dbm     = new Database\Manager( $wpdb );
 	$replace = new Database\Replace( $dbm, $max_execution );
-	$dbe     = new Database\Exporter( $replace, $dbm );
+	$dbe     = new Database\Exporter( $replace, $dbm, new \WP_Error() );
 	$dbi     = new Database\Importer( $max_execution );
 
 	$downloader = new Inpsyde\SearchReplace\FileDownloader( $dbe, $max_execution );
-	add_action( 'init', array( $downloader, 'deliver_backup_file' ) );
+	add_action( 'init', [ $downloader, 'deliver_backup_file' ] );
 
 	$page_manager = new Page\Manager();
 	$page_manager->add_page( new Page\BackupDatabase( $dbe, $downloader ) );
@@ -105,13 +103,13 @@ function search_replace_load() {
 	$page_manager->add_page( new Page\SqlImport( $dbi ) );
 	$page_manager->add_page( new Page\Credits() );
 
-	add_action( 'admin_menu', array( $page_manager, 'register_pages' ) );
-	add_action( 'admin_head', array( $page_manager, 'remove_submenu_pages' ) );
+	add_action( 'admin_menu', [ $page_manager, 'register_pages' ] );
+	add_action( 'admin_head', [ $page_manager, 'remove_submenu_pages' ] );
 
-	add_action( 'admin_enqueue_scripts', array( $page_manager, 'register_css' ) );
-	add_action( 'admin_enqueue_scripts', array( $page_manager, 'register_js' ) );
+	add_action( 'admin_enqueue_scripts', [ $page_manager, 'register_css' ] );
+	add_action( 'admin_enqueue_scripts', [ $page_manager, 'register_js' ] );
 
-	return TRUE;
+	return true;
 }
 
 /**
@@ -121,7 +119,7 @@ function search_replace_textdomain() {
 
 	return load_plugin_textdomain(
 		'search-and-replace',
-		FALSE,
+		false,
 		plugin_basename( __DIR__ ) . '/l10n/'
 	);
 }

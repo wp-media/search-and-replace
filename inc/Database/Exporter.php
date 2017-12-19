@@ -34,7 +34,6 @@ class Exporter {
 	 *
 	 * @var int
 	 */
-
 	protected $page_size = 100;
 
 	/**
@@ -62,9 +61,9 @@ class Exporter {
 	 * @param Replace $replace
 	 * @param Manager $dbm
 	 */
-	public function __construct( Replace $replace, Manager $dbm ) {
+	public function __construct( Replace $replace, Manager $dbm, \WP_Error $wp_error ) {
 
-		$this->errors     = new \WP_Error();
+		$this->errors     = $wp_error;
 		$this->backup_dir = get_temp_dir();
 		$this->replace    = $replace;
 		$this->dbm        = $dbm;
@@ -221,7 +220,6 @@ class Exporter {
 	 *
 	 * @return array $table_report Reports the changes made to the db.
 	 */
-
 	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '', $csv = null ) {
 
 		$table_report = [
@@ -230,6 +228,15 @@ class Exporter {
 			'change'     => 0,
 			'changes'    => [],
 		];
+
+		// Default columns values.
+		$defs = [];
+		// Integer value container.
+		$ints = [];
+
+		// This array is storage for maybe_serialized values. We must prevent deserialization of user supplied content.
+		$maybe_serialized = [];
+		$binaries         = [];
 
 		// Do we need to replace the prefix?
 		$table_prefix = $this->dbm->get_base_prefix();
@@ -310,18 +317,12 @@ class Exporter {
 		);
 		$this->stow( "#\n" );
 
-		$defs = [];
-		$ints = [];
-		// This array is storage for maybe_serialized values. We must prevent deserialization of user supplied content.
-		$maybe_serialized = [];
-		$binaries         = [];
-
 		foreach ( $table_structure as $struct ) {
-			if ( ( 0 === strpos( $struct->Type, 'tinyint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'smallint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'mediumint' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'int' ) )
-				|| ( 0 === strpos( strtolower( $struct->Type ), 'bigint' ) )
+			if ( 0 === strpos( $struct->Type, 'tinyint' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'smallint' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'mediumint' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'int' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'bigint' )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( null === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
@@ -349,6 +350,7 @@ class Exporter {
 				$this->csv_data[] = array_combine( $csv_head, str_getcsv( $line ) );
 			}
 		}
+
 		for ( $page = 0; $page < $pages; $page ++ ) {
 			$start = $page * $page_size;
 
@@ -365,9 +367,8 @@ class Exporter {
 					$table_report[ 'rows' ] ++;
 
 					foreach ( $row as $column => $value ) :
-						// Skip the GUID column per WordPress Codex.
-
-						// If "change database prefix" is set we have to look for occurrences of the old prefix in the db entries and change them.
+						// If "change database prefix" is set we have to look for occurrences of the old prefix
+						// in the db entries and change them.
 						if ( $new_table !== $table ) {
 							// Check if column is expected to hold serialized value.
 							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
@@ -394,6 +395,7 @@ class Exporter {
 						// Skip replace if no search pattern
 						// Check if we need to replace something
 						// Skip primary_key
+						// Skip `guid` column https://codex.wordpress.org/Changing_The_Site_URL#Important_GUID_Note
 						if ( $search !== '' && $column !== $primary_key && $column !== 'guid' ) {
 
 							// Check if column is expected to hold serialized value.
@@ -673,8 +675,13 @@ class Exporter {
 		if ( @fwrite( $this->fp, $query_line ) === false ) {
 			$this->errors->add(
 				4,
-				esc_attr__( 'There was an error writing a line to the backup script:', 'search-and-replace' )
-				. ' ' . $query_line . ' ' . $php_errormsg
+				sprintf(
+					esc_attr__(
+						'There was an error writing a line to the backup script: %s',
+						'search-and-replace'
+					),
+					intval( $query_line )
+				)
 			);
 		}
 	}
