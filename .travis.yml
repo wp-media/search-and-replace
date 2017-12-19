@@ -22,4 +22,3 @@ before_script:
 
 script:
   - vendor/bin/phpunit
-  - vendor/bin/phpcs ./inc/ --standard=phpcs.ruleset.xml --extensions=php
