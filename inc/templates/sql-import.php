@@ -14,14 +14,20 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 	<table class="form-table">
 		<tbody>
 		<tr>
-			<th><strong><?php esc_html_e( 'Select SQL file to upload. ', 'search-and-replace' ); ?></strong></th>
+			<th>
+				<strong>
+					<?php esc_html_e( 'Select SQL file to upload. ', 'search-and-replace' ); ?>
+				</strong>
+			</th>
 
 			<td><input type="file" name="file_to_upload" id="file_to_upload"></td>
 		</tr>
 		<tr>
 			<th></th>
-			<td><?php esc_html_e( 'Maximum file size: ', 'search-and-replace' ); ?>
-				<?= esc_html( $this->file_upload_max_size() ) . 'KB'; ?></td>
+			<td>
+				<?php esc_html_e( 'Maximum file size: ', 'search-and-replace' ); ?>
+				<?php echo floatval( $this->file_upload_max_size() ) . 'KB'; ?>
+			</td>
 		</tr>
 		</tbody>
 	</table>
