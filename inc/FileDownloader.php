@@ -77,12 +77,12 @@ class FileDownloader {
 			<p><?php esc_html_e( 'Your SQL file was created!', 'search-and-replace' ); ?> </p>
 			<form action method="post">
 				<?php wp_nonce_field( $this->nonce_action, $this->nonce_name ); ?>
-				<input type="hidden" name="action" value="download_file"/>
+				<input type="hidden" name="action" value="download_file" />
 				<input type="hidden" name="sql_file" value="<?php echo esc_attr( $report[ 'filename' ] ); ?>">
 				<input type="hidden" name="compress" value="<?php echo esc_attr( $compress ); ?>">
 				<input id="insr_submit" type="submit" value="<?php esc_attr_e(
 					'Download SQL File', 'search-and-replace'
-				) ?>" class="button"/>
+				) ?>" class="button" />
 			</form>
 		</div>
 		<?php
@@ -112,7 +112,7 @@ class FileDownloader {
 		$search_highlight  = '<span class="search-replace-search-value">' . $search . '</span>';
 		$replace           = esc_html( $_POST [ 'replace' ] );
 		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
-		$delimiter         = array( ' ...', '...<br>' );
+		$delimiter         = [ ' ...', '...<br>' ];
 
 		$msg = sprintf(
 			_n(
@@ -165,20 +165,20 @@ class FileDownloader {
 					<table class="search-replace-modal-table">
 
 						<thead>
-							<tr>
-								<th class="search-replace-row search-replace-narrow">
-									<?php esc_html_e( 'Row', 'search-and-replace' ); ?>
-								</th>
-								<th class="search-replace-column">
-									<?php esc_html_e( 'Column', 'search-and-replace' ); ?>
-								</th>
-								<th class="search-replace-old-value">
-									<?php esc_html_e( 'Old value', 'search-and-replace' ); ?>
-								</th>
-								<th class="search-replace-new-value">
-									<?php esc_html_e( 'New value', 'search-and-replace' ); ?>
-								</th>
-							</tr>
+						<tr>
+							<th class="search-replace-row search-replace-narrow">
+								<?php esc_html_e( 'Row', 'search-and-replace' ); ?>
+							</th>
+							<th class="search-replace-column">
+								<?php esc_html_e( 'Column', 'search-and-replace' ); ?>
+							</th>
+							<th class="search-replace-old-value">
+								<?php esc_html_e( 'Old value', 'search-and-replace' ); ?>
+							</th>
+							<th class="search-replace-new-value">
+								<?php esc_html_e( 'New value', 'search-and-replace' ); ?>
+							</th>
+						</tr>
 						</thead>
 
 						<tbody>
@@ -301,7 +301,7 @@ class FileDownloader {
 
 			$compress = false;
 			if ( isset( $_POST[ 'compress' ] ) ) {
-				$compress = $_POST[ 'compress' ];
+				$compress = (bool) filter_var( $_POST[ 'compress' ], FILTER_VALIDATE_BOOLEAN );
 			}
 
 			// If file name contains path or does not end with '.sql' exit.
