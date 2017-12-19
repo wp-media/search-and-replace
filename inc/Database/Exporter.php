@@ -504,60 +504,78 @@ class Exporter {
 
 		// Compress file if set.
 		if ( $compress ) {
-			$gz_diskfile = "{$diskfile}.gz";
+			// Gzipping may eat into memory.
+			$this->increase_memory();
 
-			// Try upping the memory limit before gzipping.
-			if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
-				@ini_set( 'memory_limit', '64M' );
-			}
-
-			if ( file_exists( $diskfile ) ) {
-				// Try gzipping with an external application.
-				if ( ! file_exists( $gz_diskfile ) ) {
-					@exec( "gzip $diskfile" );
-				}
-
-				if ( file_exists( $gz_diskfile ) ) {
-					$diskfile = $gz_diskfile;
-					$filename = "{$filename}.gz";
-					// Try to compress to gzip, if available.
-				} else {
-					if ( function_exists( 'gzencode' ) ) {
-						if ( function_exists( 'file_get_contents' ) ) {
-							$text = file_get_contents( $diskfile );
-						} else {
-							$text = implode( '', file( $diskfile ) );
-						}
-
-						$gz_text = gzencode( $text, 9 );
-						$fp      = fopen( $gz_diskfile, 'w' );
-
-						fwrite( $fp, $gz_text );
-
-						if ( fclose( $fp ) ) {
-							unlink( $diskfile );
-							$diskfile = $gz_diskfile;
-							$filename = "{$filename}.gz";
-						}
-					}
-				}
-			} elseif ( file_exists( $gz_diskfile ) ) {
-				$diskfile = $gz_diskfile;
-				$filename = "{$filename}.gz";
-			}
+			$diskfile = $this->gzip( $diskfile );
 		}
 
 		// Provide file for download.
 		header( 'Content-Type: application/force-download' );
 		header( 'Content-Type: application/octet-stream' );
 		header( 'Content-Length: ' . filesize( $diskfile ) );
-		header( 'Content-Disposition: attachment; filename=' . $filename );
+		header( 'Content-Disposition: attachment; filename=' . basename( $diskfile ) );
 
 		$success = readfile( $diskfile );
 
 		if ( $success ) {
 			unlink( $diskfile );
 			die();
+		}
+	}
+
+	/**
+	 * Gzip
+	 *
+	 * @param string $diskfile The path of the file to compress
+	 *
+	 * @return string the file path compressed or not
+	 */
+	private function gzip( $diskfile ) {
+
+		// The file to serve.
+		$gz_diskfile = "{$diskfile}.gz";
+
+		// Always serve a fresh file.
+		// If file all-ready exists doesn't mean we have the same replace request.
+		file_exists( $gz_diskfile ) and unlink( $gz_diskfile );
+
+		// Try gzipping with an external application.
+		@exec( "gzip $diskfile" );
+
+		if ( file_exists( $gz_diskfile ) ) {
+			$diskfile = $gz_diskfile;
+		}
+
+		// If we are not capable of using `gzip` command, lets try something else.
+		if ( $diskfile !== $gz_diskfile && function_exists( 'gzencode' ) ) {
+			$text    = file_get_contents( $diskfile );
+			$gz_text = gzencode( $text, 9 );
+			$fp      = fopen( $gz_diskfile, 'w' );
+
+			fwrite( $fp, $gz_text );
+
+			// Don't serve gzipped file if actually we encounter problem to close it.
+			if ( fclose( $fp ) ) {
+				unlink( $diskfile );
+
+				$diskfile = $gz_diskfile;
+			}
+		}
+
+		return $diskfile;
+	}
+
+	/**
+	 * Increase Memory
+	 *
+	 * @return void
+	 */
+	private function increase_memory() {
+
+		// Try upping the memory limit before gzipping.
+		if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
+			@ini_set( 'memory_limit', '64M' );
 		}
 	}
 
