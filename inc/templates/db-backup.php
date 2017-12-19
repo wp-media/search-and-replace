@@ -10,11 +10,13 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 }
 ?>
 
-	<p><?php esc_html_e(
-			'Create a backup of your database by clicking "Create SQL File".',
-			'search-and-replace' ); ?>
-	</p>
+<p>
+	<?php esc_html_e(
+		'Create a backup of your database by clicking "Create SQL File".',
+		'search-and-replace'
+	); ?>
+</p>
 
-	<form action="" method="post">
-		<?php $this->show_submit_button(); ?>
-	</form>
+<form action="" method="post">
+	<?php $this->show_submit_button(); ?>
+</form>
