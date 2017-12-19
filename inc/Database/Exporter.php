@@ -12,41 +12,41 @@ class Exporter {
 	/**
 	 * Stores all error messages in a WP_Error Object
 	 */
-	protected $errors;
+	private $errors;
 
 	/**
 	 * @string  The Path to the Backup Directory
 	 */
-	protected $backup_dir;
+	private $backup_dir;
 
 	/**
 	 * @var Replace
 	 */
-	protected $replace;
+	private $replace;
 
 	/**
 	 * @var Manager
 	 */
-	protected $dbm;
+	private $dbm;
 
 	/**
 	 * Count of rows to be replaced at a time
 	 *
 	 * @var int
 	 */
-	protected $page_size = 100;
+	private $page_size = 100;
 
 	/**
 	 * Stores the filename of the backup file
 	 */
-	protected $backup_filename;
+	private $backup_filename;
 
 	/**
 	 * Store file path.
 	 *
 	 * @var $fp
 	 */
-	protected $fp;
+	private $fp;
 
 	/**
 	 * Store csv data
@@ -589,7 +589,7 @@ class Exporter {
 	 *
 	 * @return string  The table name with new prefix
 	 */
-	protected function get_new_table_name( $table, $new_table_prefix ) {
+	private function get_new_table_name( $table, $new_table_prefix ) {
 
 		// Get length of base_prefix
 		$prefix        = $this->dbm->get_base_prefix();
@@ -610,7 +610,7 @@ class Exporter {
 	 *
 	 * @return mixed
 	 */
-	protected function sql_addslashes( $a_string = '', $is_like = false ) {
+	private function sql_addslashes( $a_string = '', $is_like = false ) {
 
 		if ( $is_like ) {
 			$a_string = str_replace( '\\', '\\\\\\\\', $a_string );
@@ -631,7 +631,7 @@ class Exporter {
 	 *
 	 * @return array|string
 	 */
-	protected function backquote( $a_name ) {
+	private function backquote( $a_name ) {
 
 		if ( ! empty( $a_name ) && $a_name !== '*' ) {
 			if ( is_array( $a_name ) ) {
@@ -658,7 +658,7 @@ class Exporter {
 	 *
 	 * @return bool|resource
 	 */
-	protected function open( $filename = '', $mode = 'w' ) {
+	private function open( $filename = '', $mode = 'w' ) {
 
 		if ( '' === $filename ) {
 			return false;
@@ -672,7 +672,7 @@ class Exporter {
 	 *
 	 * @param $fp
 	 */
-	protected function close( $fp ) {
+	private function close( $fp ) {
 
 		fclose( $fp );
 	}
@@ -682,7 +682,7 @@ class Exporter {
 	 *
 	 * @param $query_line
 	 */
-	protected function stow( $query_line ) {
+	private function stow( $query_line ) {
 
 		if ( @fwrite( $this->fp, $query_line ) === false ) {
 			$this->errors->add(
