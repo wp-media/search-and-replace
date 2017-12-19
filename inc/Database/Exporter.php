@@ -489,21 +489,18 @@ class Exporter {
 		}
 
 		$diskfile = $this->backup_dir . $filename;
-		//compress file if set
+
+		// Compress file if set.
 		if ( $compress ) {
 			$gz_diskfile = "{$diskfile}.gz";
 
-			/**
-			 * Try upping the memory limit before gzipping
-			 */
+			// Try upping the memory limit before gzipping.
 			if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
 				@ini_set( 'memory_limit', '64M' );
 			}
 
 			if ( file_exists( $diskfile ) ) {
-				/**
-				 * Try gzipping with an external application
-				 */
+				// Try gzipping with an external application.
 				if ( ! file_exists( $gz_diskfile ) ) {
 					@exec( "gzip $diskfile" );
 				}
@@ -515,9 +512,7 @@ class Exporter {
 					$diskfile = $gz_diskfile;
 					$filename = "{$filename}.gz";
 
-					/**
-					 * Try to compress to gzip, if available
-					 */
+				// Try to compress to gzip, if available.
 				} else {
 					if ( function_exists( 'gzencode' ) ) {
 						if ( function_exists( 'file_get_contents' ) ) {
@@ -544,7 +539,7 @@ class Exporter {
 			}
 		}
 
-		//provide file for download
+		// Provide file for download.
 		if ( file_exists( $diskfile ) ) {
 			header( 'Content-Type: application/force-download' );
 			header( 'Content-Type: application/octet-stream' );
@@ -562,6 +557,8 @@ class Exporter {
 	}
 
 	/**
+	 * Get new Table name
+	 *
 	 * strips the current table prefix and adds a new one provided in $new_table_prefix
 	 *
 	 * @param $table
@@ -602,6 +599,8 @@ class Exporter {
 	}
 
 	/**
+	 * Back Quote
+	 *
 	 * Add backquotes to tables and db-names in
 	 * SQL queries. Taken from phpMyAdmin.
 	 *
