@@ -24,53 +24,53 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 		<tr>
 			<th>
 				<label for="search">
-					<strong>
-						<?php esc_html_e(
-							'Search for: ', 'search-and-replace'
-						); ?>
-					</strong>
+					<?php esc_html_e( 'Search for: ', 'search-and-replace' ); ?>
 				</label>
 			</th>
-			<td><input
-					id="search"
-					type="text"
-					name="search"
-					value="<?= get_site_url(); ?>"
-				/>
+			<td>
+				<input id="search" type="text" name="search" value="<?php esc_url( get_site_url() ); ?>" />
 			</td>
 		</tr>
+
 		<tr>
 			<th>
 				<label for="replace">
-					<strong>
-						<?php esc_html_e( 'Replace with: ', 'search-and-replace' ); ?>
-					</strong>
+					<?php esc_html_e( 'Replace with: ', 'search-and-replace' ); ?>
 				</label>
 			</th>
-			<td><input id="replace" type="url" name="replace" placeholder="<?php esc_attr_e( 'New URL' ) ?>" /></td>
+			<td>
+				<input
+					id="replace"
+					type="text"
+					name="replace"
+					placeholder="<?php esc_attr_e( 'New URL', 'search-and-replace' ); ?>"
+				/>
+			</td>
 		</tr>
+
 		<tr>
 			<th>
 				<label for="change_db_prefix">
-					<strong>
-						<?php esc_html_e( 'Change database prefix', 'search-and-replace' ); ?>
-					</strong>
+					<?php esc_html_e( 'Change database prefix', 'search-and-replace' ); ?>
 				</label>
 			</th>
 			<td><input id="change_db_prefix" type="checkbox" name="change_db_prefix" /></td>
 		</tr>
+
 		<tr class="disabled">
 			<th>
 				<label for="current_db_prefix">
-					<strong
-					><?php esc_html_e( 'Current prefix: ', 'search-and-replace' ); ?>
-					</strong>
+					<?php esc_html_e( 'Current prefix: ', 'search-and-replace' ); ?>
 				</label>
 			</th>
 			<td><?= esc_html( $this->dbm->get_base_prefix() ); ?></td>
 		</tr>
+
 		<tr class="maybe_disabled disabled">
-			<th><label for="new_db_prefix"><strong><?php esc_html_e( 'New prefix: ', 'search-and-replace' ); ?></strong></label>
+			<th>
+				<label for="new_db_prefix">
+					<?php esc_html_e( 'New prefix: ', 'search-and-replace' ); ?>
+				</label>
 			</th>
 			<td>
 				<input
@@ -78,7 +78,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 					type="text"
 					name="new_db_prefix"
 					disabled
-					placeholder="<?php esc_attr_e( 'New database prefix', 'search-and-replace' ) ?>"
+					placeholder="<?php esc_attr_e( 'New database prefix', 'search-and-replace' ); ?>"
 				/>
 			</td>
 		</tr>
