@@ -169,7 +169,6 @@ class Exporter {
 			 * are stored without http://
 			 */
 			if ( $domain_replace && is_multisite() && $table === $wp_blogs_table ) {
-
 				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
 				$stripped_url_replace = substr( $replace, strpos( $replace, '/' ) + 2 );
 				$table_report         = $this->backup_table(
@@ -178,7 +177,6 @@ class Exporter {
 					$table,
 					$new_table_prefix
 				);
-
 			} else {
 				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix, $csv );
 			}
@@ -561,14 +559,6 @@ class Exporter {
 			}
 		}
 
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_backup_dir() {
-
-		return $this->backup_dir;
 	}
 
 	/**
