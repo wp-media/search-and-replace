@@ -506,13 +506,9 @@ class Exporter {
 				}
 
 				if ( file_exists( $gz_diskfile ) ) {
-
-					unlink( $diskfile );
-
 					$diskfile = $gz_diskfile;
 					$filename = "{$filename}.gz";
-
-				// Try to compress to gzip, if available.
+					// Try to compress to gzip, if available.
 				} else {
 					if ( function_exists( 'gzencode' ) ) {
 						if ( function_exists( 'file_get_contents' ) ) {
