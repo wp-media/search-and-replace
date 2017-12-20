@@ -408,20 +408,26 @@ class Exporter {
 						// Check if we need to replace something
 						// Skip primary_key
 						// Skip `guid` column https://codex.wordpress.org/Changing_The_Site_URL#Important_GUID_Note
-						if ( $search !== '' && $column !== $primary_key && $column !== 'guid' ) {
-							// Check if column is expected to hold serialized value.
-							if ( in_array( strtolower( $column ), $maybe_serialized, true )
-								&& is_serialized( $value, false )
-							) {
-								$edited_data = $this->replace->recursive_unserialize_replace(
-									$search,
-									$replace,
-									$value
-								);
-							} else {
-								$edited_data = str_replace( $search, $replace, $value );
+						if ( $column !== $primary_key && $column !== 'guid' ) {
+							// Initialize
+							$edited_data = '';
+
+							if ( '' !== $search ) {
+								// Check if column is expected to hold serialized value.
+								if ( in_array( strtolower( $column ), $maybe_serialized, true )
+									&& is_serialized( $value, false )
+								) {
+									$edited_data = $this->replace->recursive_unserialize_replace(
+										$search,
+										$replace,
+										$value
+									);
+								} else {
+									$edited_data = str_replace( $search, $replace, $value );
+								}
 							}
 
+							// If csv string has passed let's replace those values.
 							if ( $csv !== null ) {
 								foreach ( $this->csv_data as $entry ) {
 									$edited_data = is_serialized( $edited_data, false ) ?
@@ -433,7 +439,7 @@ class Exporter {
 								}
 							}
 
-							// Something was changed
+							// When a replace happen, update the table report.
 							if ( $edited_data !== $value ) {
 								$table_report[ 'change' ] ++;
 
