@@ -440,7 +440,7 @@ class Exporter {
 							}
 
 							// When a replace happen, update the table report.
-							if ( $edited_data !== $value ) {
+							if ( $edited_data && $edited_data !== $value ) {
 								$table_report[ 'change' ] ++;
 
 								// log changes
