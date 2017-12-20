@@ -49,6 +49,7 @@ class FileDownloader {
 	 * @param array $report
 	 */
 	public function show_modal( $report ) {
+
 		// Set compress status.
 		// @codingStandardsIgnoreLine
 		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
@@ -120,28 +121,8 @@ class FileDownloader {
 		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
 		$delimiter         = [ ' ...', '...<br>' ];
 
-		$msg = sprintf(
-			_n(
-				'%s table was processed. ',
-				'%s tables were processed. ',
-				$report[ 'tables' ],
-				'search-and-replace'
-			),
-			$report[ 'tables' ]
-		);
+		$this->show_message_by_report( $report );
 
-		$msg .= sprintf(
-			_n(
-				'%s cell needs to be updated. ',
-				'%s cells need to be updated.',
-				$report[ 'changes_count' ],
-				'search-and-replace'
-			),
-			$report[ 'changes_count' ]
-		);
-		echo esc_html( $msg );
-
-		//create modal window for detailed view of changes
 		?>
 		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'search-and-replace' ); ?></a></p>
 		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
@@ -165,7 +146,7 @@ class FileDownloader {
 						<strong><?php esc_html_e( 'Table:', 'search-and-replace' ); ?></strong>
 						<?php echo esc_html( $table ); ?>
 
-						<strong><?php esc_html_e( 'Changes:', 'search-and-replace' ); ?></strong>
+						<strong><?php esc_html_e( 'Columns Changes:', 'search-and-replace' ); ?></strong>
 						<?php echo esc_html( $changes_made ); ?>
 					</h2>
 
@@ -353,5 +334,37 @@ class FileDownloader {
 		$this->max_execution->restore();
 
 		return true;
+	}
+
+	/**
+	 * Show Message by Report
+	 *
+	 * @param array $report The list of all the changes made.
+	 *
+	 * @return void
+	 */
+	private function show_message_by_report( $report ) {
+
+		$msg = sprintf(
+			_n(
+				'%s table was processed. ',
+				'%s tables were processed. ',
+				$report[ 'tables' ],
+				'search-and-replace'
+			),
+			intval( $report[ 'tables' ] )
+		);
+
+		$msg .= sprintf(
+			_n(
+				'%s cell needs to be updated. ',
+				'%s cells need to be updated.',
+				$report[ 'changes_count' ],
+				'search-and-replace'
+			),
+			intval( $report[ 'changes_count' ] )
+		);
+
+		echo '<p>' . esc_html( $msg ) . '</p>';
 	}
 }
