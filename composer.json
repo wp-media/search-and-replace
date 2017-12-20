@@ -51,7 +51,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Inpsyde\\SearchReplace\\Tests\\": "tests/UnitTests/",
+      "Inpsyde\\SearchReplace\\Tests\\Unit\\": "tests/phpunit/Unit/",
       "Inpsyde\\SearchReplace\\": "src/"
     }
   }
