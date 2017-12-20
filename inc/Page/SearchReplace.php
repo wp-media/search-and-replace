@@ -215,9 +215,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		if ( is_wp_error( $report ) ) {
 			$this->add_error( __( $report->get_error_message(), 'search-and-replace' ) );
-			$this->display_errors();
 		} else {
-
 			if ( count( $report[ 'changes' ] ) > 0 ) {
 				$this->downloader->show_changes( $report );
 			}
@@ -229,7 +227,6 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		}
 
 		echo '</div>';
-
 	}
 
 	/**
