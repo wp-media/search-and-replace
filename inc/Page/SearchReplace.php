@@ -111,6 +111,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			return false;
 		}
 
+		// @codingStandardsIgnoreLine
 		$dry_run = isset( $_POST[ 'dry_run' ] ) ? true : false;
 
 		// remove wp_magic_quotes

@@ -199,7 +199,6 @@ class Exporter {
 		$report [ 'filename' ] = $this->backup_filename;
 
 		return $report;
-
 	}
 
 	/**
@@ -369,13 +368,16 @@ class Exporter {
 						// in the db entries and change them.
 						if ( $new_table !== $table ) {
 							// Check if column is expected to hold serialized value.
-							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
-								$value = is_serialized( $value, false ) ?
-									$this->replace->recursive_unserialize_replace(
+							if ( in_array( strtolower( $column ), $maybe_serialized, true )
+								&& is_serialized( $value, false )
+							) {
+								$value = $this->replace->recursive_unserialize_replace(
 										$table_prefix,
 										$new_table_prefix,
 										$value
-									) : str_replace( $table_prefix, $new_table_prefix, $value );
+								);
+							} else {
+								$value = str_replace( $table_prefix, $new_table_prefix, $value );
 							}
 						}
 
