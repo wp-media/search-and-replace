@@ -12,35 +12,24 @@ use Inpsyde\SearchReplace\Service;
  * @package Inpsyde\SearchReplace\Database
  */
 class Replace {
-
-	/**
-	 * The search string
-	 */
-	protected $search;
-
-	/**
-	 * The replacement string
-	 */
-	protected $replace;
-
 	/**
 	 * The Database Interface Object
 	 *
 	 * @var Manager
 	 */
-	protected $dbm;
+	private $dbm;
 
 	/**
 	 * Count of rows to be replaced at a time
 	 *
 	 * @var int
 	 */
-	protected $page_size = 100;
+	private $page_size = 100;
 
 	/**
 	 * @var bool - set if dry run
 	 */
-	protected $dry_run = true;
+	private $dry_run = true;
 
 	/**
 	 * @var Service\MaxExecutionTime
@@ -386,25 +375,6 @@ class Replace {
 		}
 
 		return $data;
-	}
-
-	/**
-	 * Checks if the submitted string is a JSON object
-	 *
-	 * @param            $string
-	 * @param bool|FALSE $strict
-	 *
-	 * @return bool
-	 */
-
-	protected function is_json( $string, $strict = false ) {
-
-		$json = @json_decode( $string, true );
-		if ( $strict === true && ! is_array( $json ) ) {
-			return false;
-		}
-
-		return ! ( $json === null || $json === false );
 	}
 
 	/**
