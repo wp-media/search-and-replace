@@ -1,6 +1,6 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Tests;
+namespace Inpsyde\SearchReplace\Tests\Unit;
 
 use Inpsyde\SearchReplace\FileDownloader;
 

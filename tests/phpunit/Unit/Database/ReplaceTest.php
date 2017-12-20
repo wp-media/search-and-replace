@@ -1,9 +1,9 @@
 <?php
 
+namespace Inpsyde\SearchReplace\Tests\Unit\Database;
+
 use Inpsyde\SearchReplace\Database\Replace;
-use Inpsyde\SearchReplace\Tests\AbstractTestCase;
-use \Mockery as m;
-use \Brain\Monkey as bm;
+use Inpsyde\SearchReplace\Tests\Unit\AbstractTestCase;
 
 /**
  * Class ReplaceTest
@@ -362,7 +362,7 @@ class ReplaceTest extends AbstractTestCase {
 		$manager_mock       = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
 		$max_exec_time_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
-		$sut      = new Replace( $manager_mock, $max_exec_time_mock);
+		$sut      = new Replace( $manager_mock, $max_exec_time_mock );
 		$response = $sut->recursive_unserialize_replace( $from, $to, $data );
 
 		$this->assertSame( $expected, $response );

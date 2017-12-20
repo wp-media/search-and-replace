@@ -1,9 +1,9 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Tests\Database;
+namespace Inpsyde\SearchReplace\Tests\Unit\Database;
 
 use Inpsyde\SearchReplace\Database\Importer;
-use Inpsyde\SearchReplace\Tests\AbstractTestCase;
+use Inpsyde\SearchReplace\Tests\Unit\AbstractTestCase;
 
 class ImporterTest extends AbstractTestCase {
 

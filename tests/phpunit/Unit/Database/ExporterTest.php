@@ -1,9 +1,9 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Tests\Database;
+namespace Inpsyde\SearchReplace\Tests\Unit\Database;
 
 use Inpsyde\SearchReplace\Database\Exporter;
-use Inpsyde\SearchReplace\Tests\AbstractTestCase;
+use Inpsyde\SearchReplace\Tests\Unit\AbstractTestCase;
 
 class ExporterTest extends AbstractTestCase {
 
@@ -289,8 +289,8 @@ class ExporterTest extends AbstractTestCase {
 			->returnArg( 1 );
 		\Brain\Monkey\Functions\when( '__' )
 			->returnArg( 1 );
-		\Brain\Monkey\Functions\when('is_serialized')
-			->alias([$this, 'is_serialized']);
+		\Brain\Monkey\Functions\when( 'is_serialized' )
+			->alias( [ $this, 'is_serialized' ] );
 
 		$replace_mock  = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Replace' );
 		$dbm_mock      = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );

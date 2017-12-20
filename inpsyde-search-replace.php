@@ -5,7 +5,7 @@
  * Description:  Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.
  * Author:       Inpsyde GmbH Author
  * URI:          https://inpsyde.com
- * Contributors: s-hinse, derpixler, ChriCo, Bueltge, inpsyde
+ * Contributors: inpsyde, Bueltge, ChriCo
  * Version:      3.2.0-dev
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
@@ -13,113 +13,109 @@
  * License URI:  license.txt
  */
 
-use Inpsyde\SearchReplace\Database as Database;
-use Inpsyde\SearchReplace\Page as Page;
+namespace Inpsyde\SearchAndReplace;
 
-defined( 'ABSPATH' ) or die( 'No direct access!' );
+if ( ! function_exists( 'add_filter' ) ) {
+	return;
+}
 
-add_action( 'plugins_loaded', 'search_replace_load' );
-register_activation_hook( __FILE__, 'search_replace_activate' );
+add_action( 'plugins_loaded', __NAMESPACE__ . '\initialize' );
 
 /**
- * Validate requirements on activation
+ * @wp-hook plugins_loaded
  *
- * Runs on plugin activation.
- * Check if php min 5.6.0 if not deactivate the plugin.
- *
- * @since 3.1.1
- *
- * @return void
+ * @throws \Throwable   When WP_DEBUG=TRUE exceptions will be thrown.
  */
-function search_replace_activate() {
+function initialize() {
 
-	$required_php_version = '5.6.0';
-	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
+	try {
 
-	search_replace_textdomain();
+		load_plugin_textdomain( 'search-and-replace' );
 
-	if ( ! $correct_php_version ) {
-		deactivate_plugins( basename( __FILE__ ) );
+		if ( ! check_plugin_requirements() ) {
 
-		wp_die(
-			'<p>' .
-			sprintf(
-				esc_attr__(
-					'This plugin can not be activated because it requires at least PHP version %1$s. ',
-					'search-and-replace'
-				),
-				$required_php_version
-			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . esc_attr__( 'back', 'search-and-replace' ) . '</a>'
-		);
+			return FALSE;
+		}
+
+		$plugin = new SearchAndReplace();
+
+		$plugin->register( new Exporter\Provider() );
+
+		$plugin->boot();
 
 	}
+	catch ( \Throwable $e ) {
 
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			throw $e;
+		}
+
+		do_action( 'search-and-replace.error', $e );
+
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /**
- * Load the plugin
- *
- * @since 3.1.1
- *
  * @return bool
  */
-function search_replace_load() {
+function check_plugin_requirements() {
 
-	global $wpdb;
+	$min_php_version     = '7.0';
+	$current_php_version = phpversion();
+	if ( ! version_compare( $current_php_version, $min_php_version, '>=' ) ) {
+		admin_notice(
+			sprintf(
+			/* translators: %1$s is the min PHP-version, %2$s the current PHP-version */
+				__(
+					'Search & Replace requires PHP version %1$1s or higher. You are running version %2$2s.',
+					'search-and-replace'
+				),
+				$min_php_version,
+				$current_php_version
+			)
+		);
 
-	// all hooks are just available on backend.
-	if ( ! is_admin() ) {
-		return false;
+		return FALSE;
 	}
 
-	define( 'SEARCH_REPLACE_BASEDIR', plugin_dir_url( __FILE__ ) );
+	if ( ! class_exists( SearchAndReplace::class ) ) {
+		$autoloader = __DIR__ . '/vendor/autoload.php';
+		if ( file_exists( $autoloader ) ) {
+			/** @noinspection PhpIncludeInspection */
+			require $autoloader;
+		} else {
 
-	search_replace_textdomain();
+			admin_notice(
+				__(
+					'Could not find a working autoloader for Search and Replace.',
+					'search-and-replace'
+				)
+			);
 
-	$user_cap = apply_filters( 'search_replace_access_capability', 'manage_options' );
-	$file     = __DIR__ . '/vendor/autoload.php';
-
-	if ( ! current_user_can( $user_cap ) || ! file_exists( $file ) ) {
-		return false;
+			return FALSE;
+		}
 	}
 
-	include_once $file;
-
-	$max_execution = new Inpsyde\SearchReplace\Service\MaxExecutionTime();
-
-	$dbm     = new Database\Manager( $wpdb );
-	$replace = new Database\Replace( $dbm, $max_execution );
-	$dbe     = new Database\Exporter( $replace, $dbm, new \WP_Error() );
-	$dbi     = new Database\Importer( $max_execution );
-
-	$downloader = new Inpsyde\SearchReplace\FileDownloader( $dbe, $max_execution );
-	add_action( 'init', [ $downloader, 'deliver_backup_file' ] );
-
-	$page_manager = new Page\Manager();
-	$page_manager->add_page( new Page\BackupDatabase( $dbe, $downloader ) );
-	$page_manager->add_page( new Page\SearchReplace( $dbm, $replace, $dbe, $downloader ) );
-	$page_manager->add_page( new Page\ReplaceDomain( $dbm, $dbe, $downloader ) );
-	$page_manager->add_page( new Page\SqlImport( $dbi ) );
-	$page_manager->add_page( new Page\Credits() );
-
-	add_action( 'admin_menu', [ $page_manager, 'register_pages' ] );
-	add_action( 'admin_head', [ $page_manager, 'remove_submenu_pages' ] );
-
-	add_action( 'admin_enqueue_scripts', [ $page_manager, 'register_css' ] );
-	add_action( 'admin_enqueue_scripts', [ $page_manager, 'register_js' ] );
-
-	return true;
+	return TRUE;
 }
 
 /**
- * Loading the plugin translations.
+ * @param string $message
  */
-function search_replace_textdomain() {
+function admin_notice( $message ) {
 
-	return load_plugin_textdomain(
-		'search-and-replace',
-		false,
-		plugin_basename( __DIR__ ) . '/l10n/'
+	add_action(
+		'admin_notices',
+		function () use ( $message ) {
+
+			printf(
+				'<div class="notice notice-error"><p>%1$s</p></div>',
+				esc_html( $message )
+			);
+		}
 	);
+
 }

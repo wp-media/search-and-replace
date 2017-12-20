@@ -1,4 +1,0 @@
-# Export the same files as the wordpress.org plugin repository
-# Based on https://plugins.trac.wordpress.org/browser/search-and-replace/trunk
-
-wporg   export-ignore

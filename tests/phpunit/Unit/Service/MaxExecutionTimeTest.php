@@ -1,8 +1,8 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Tests\Service;
+namespace Inpsyde\SearchReplace\Tests\Unit\Service;
 
-use Inpsyde\SearchReplace\Tests\AbstractTestCase;
+use Inpsyde\SearchReplace\Tests\Unit\AbstractTestCase;
 
 /**
  * Class ExecutionTime - set the service time out up to 0
