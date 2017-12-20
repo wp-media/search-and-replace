@@ -25,7 +25,7 @@ class FileDownloader {
 	/**
 	 * @var Exporter
 	 */
-	protected $dbe;
+	private $dbe;
 
 	/**
 	 * @var MaxExecutionTime
