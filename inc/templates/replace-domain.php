@@ -63,7 +63,9 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 					<?php esc_html_e( 'Current prefix: ', 'search-and-replace' ); ?>
 				</label>
 			</th>
-			<td><?= esc_html( $this->dbm->get_base_prefix() ); ?></td>
+			<td>
+				<?php echo esc_html( $this->dbm->get_base_prefix() ); ?>
+			</td>
 		</tr>
 
 		<tr class="maybe_disabled disabled">
@@ -78,8 +80,11 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 					type="text"
 					name="new_db_prefix"
 					disabled
-					placeholder="<?php esc_attr_e( 'New database prefix', 'search-and-replace' ); ?>"
+					placeholder="<?php esc_attr_e( 'E.g new_', 'search-and-replace' ); ?>"
 				/>
+				<p>
+					<?php esc_html_e( 'Underscore suffix "_" can be omitted', 'search-and-replace' ); ?>
+				</p>
 			</td>
 		</tr>
 		</tbody>
