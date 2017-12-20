@@ -149,17 +149,17 @@ class FileDownloader {
 					$changes = $table_report[ 'changes' ];
 					$changes_made = count( $changes );
 
-					if ( $changes_made < 1 ) :
+					if ( $changes_made < 1 ) {
 						continue;
-					endif;
+					}
 
 					$table = $table_report[ 'table_name' ];
 					?>
 					<h2 class="search-replace-modal-table-headline">
 						<strong><?php esc_html_e( 'Table:', 'search-and-replace' ); ?></strong>
-						<?php echo $table; ?>
+						<?php esc_html_e($table); ?>
 						<strong><?php esc_html_e( 'Changes:', 'search-and-replace' ); ?></strong>
-						<?php echo $changes_made; ?>
+						<?php esc_html_e($changes_made); ?>
 					</h2>
 
 					<table class="search-replace-modal-table">
