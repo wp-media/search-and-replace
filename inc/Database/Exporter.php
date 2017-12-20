@@ -323,6 +323,15 @@ class Exporter {
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( null === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
+
+			} elseif ( 0 === strpos( strtolower( $struct->Type ), 'binary' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'varbinary' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'blob' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'tinyblob' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'mediumblob' )
+				|| 0 === strpos( strtolower( $struct->Type ), 'longblob' )
+			) {
+				$binaries[ strtolower( $struct->Field ) ] = 1;
 			}
 
 			// Longtext is used for meta_values as best practice in all of the automatic products.
@@ -372,9 +381,9 @@ class Exporter {
 								&& is_serialized( $value, false )
 							) {
 								$value = $this->replace->recursive_unserialize_replace(
-										$table_prefix,
-										$new_table_prefix,
-										$value
+									$table_prefix,
+									$new_table_prefix,
+									$value
 								);
 							} else {
 								$value = str_replace( $table_prefix, $new_table_prefix, $value );
@@ -446,7 +455,8 @@ class Exporter {
 								$values[] = "0x$hex[1]";
 							} else {
 								$values[] = "'" . str_replace(
-										$hex_search, $hex_replace,
+										$hex_search,
+										$hex_replace,
 										$this->sql_addslashes( $value )
 									) . "'";
 							}
