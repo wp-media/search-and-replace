@@ -58,13 +58,13 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		wp_localize_script(
 			'insr-js',
-			'insr_data_obj', array(
+			'insr_data_obj', [
 				'search_matches_site_url' => __(
 					'Your search contains your current site url. Replacing your site url can cause your site to break. Are you sure you wish to proceed?',
 					'search-and-replace'
 				),
 				'site_url'                => $this->get_stripped_site_url(),
-			)
+			]
 		);
 	}
 
@@ -120,7 +120,13 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		$csv     = stripslashes( filter_input( INPUT_POST, 'csv' ) );
 		$csv     = ( $csv === '' ? null : $csv );
 
-		// if dry run is checked we run the replace function with dry run and return
+		// Do not perform anything if we haven't anything.
+		if ( ( ! $search && ! $replace ) && ! $csv ) {
+			$this->add_error( esc_html__( 'You must provide at least a search string or a csv data' ) );
+			return false;
+		}
+
+		// If dry run is checked we run the replace function with dry run and return
 		if ( true === $dry_run ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
 
@@ -150,10 +156,12 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		// If not table are selected mark the request as invalid but let user know why.
 		if ( ! $this->selected_tables() ) {
-			$this->add_error( esc_html__(
-				'No Tables were selected. You must select at least one table to perform the action.',
-				'search-and-replace'
-			) );
+			$this->add_error(
+				esc_html__(
+					'No Tables were selected. You must select at least one table to perform the action.',
+					'search-and-replace'
+				)
+			);
 
 			return false;
 		}
@@ -187,19 +195,19 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		echo '<div class="updated notice is-dismissible">';
 		if ( $dry_run ) {
 			echo '<p><strong>'
-			     . esc_html__(
-				     'Dry run is selected. No changes were made to the database and no SQL file was written .',
-				     'search-and-replace'
-			     )
-			     . '</strong></p>';
+				. esc_html__(
+					'Dry run is selected. No changes were made to the database and no SQL file was written .',
+					'search-and-replace'
+				)
+				. '</strong></p>';
 
 		} else {
 			echo '<p><strong>'
-			     . esc_html__(
-				     'The following changes were made to the database: ',
-				     'search-and-replace'
-			     )
-			     . '</strong></p>';
+				. esc_html__(
+					'The following changes were made to the database: ',
+					'search-and-replace'
+				)
+				. '</strong></p>';
 		}
 		$this->replace->set_dry_run( $dry_run );
 
@@ -245,8 +253,8 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			$table_size = isset ( $sizes[ $table ] ) ? $sizes[ $table ] : '';
 			// check if dry run. if dry run && current table is in "selected" array add selected attribute
 			$selected = ( isset( $_POST[ 'dry_run' ] )
-			              && $selected_tables
-			              && in_array( $table, $selected_tables, false )
+				&& $selected_tables
+				&& in_array( $table, $selected_tables, false )
 			)
 				? 'selected="selected"'
 				: '';
@@ -323,7 +331,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function selected_tables() {
 
-		$tables = array();
+		$tables = [];
 
 		if ( ! empty( $_POST[ 'select_tables' ] ) ) {
 			$tables = filter_var( $_POST[ 'select_tables' ], FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY );
