@@ -171,13 +171,16 @@ class Exporter {
 			if ( $domain_replace && is_multisite() && $table === $wp_blogs_table ) {
 				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
 				$stripped_url_replace = substr( $replace, strpos( $replace, '/' ) + 2 );
-				$table_report         = $this->backup_table(
+
+				// Backup table.
+				$table_report = $this->backup_table(
 					$stripped_url_search,
 					$stripped_url_replace,
 					$table,
 					$new_table_prefix
 				);
 			} else {
+				// Backup table.
 				$table_report = $this->backup_table( $search, $replace, $table, $new_table_prefix, $csv );
 			}
 
@@ -285,6 +288,7 @@ class Exporter {
 		$create_table = $this->dbm->get_create_table_statement( $table );
 
 		if ( false === $create_table ) {
+			/* translators: $1 is the name of the table */
 			$err_msg = sprintf( __( 'Error with SHOW CREATE TABLE for %s.', 'search-and-replace' ), $table );
 			$this->errors->add( 2, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
@@ -292,12 +296,14 @@ class Exporter {
 
 		// Replace prefix if necessary
 		if ( '' !== $new_table_prefix ) {
-			$create_table[ 0 ][ 1 ] = str_replace( $table, $new_table, $create_table[ 0 ][ 1 ] );
+			$create_table[ 0 ][ 1 ]           = str_replace( $table, $new_table, $create_table[ 0 ][ 1 ] );
+			$table_report[ 'new_table_name' ] = $new_table;
 		}
 
 		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
 
 		if ( false === $table_structure ) {
+			/* translators: $1 is the name of the table */
 			$err_msg = sprintf( __( 'Error getting table structure of %s', 'search-and-replace' ), $table );
 			$this->errors->add( 3, $err_msg );
 			$this->stow( "#\n# $err_msg\n#\n" );
@@ -307,10 +313,9 @@ class Exporter {
 		$this->stow( "\n\n" );
 		$this->stow( "#\n" );
 		$this->stow(
-			'# ' . sprintf(
-				__( 'Data contents of table %s', 'search-and-replace' ),
-				$this->backquote( $new_table )
-			) . "\n"
+		/* translators: $1 is the name of the new table */
+			'# ' . sprintf( __( 'Data contents of table %s', 'search-and-replace' ), $this->backquote( $new_table ) ) .
+			"\n"
 		);
 		$this->stow( "#\n" );
 

@@ -54,13 +54,25 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 		if ( '' === $replace ) {
 			$this->add_error( esc_html__( 'Replace Field should not be empty.', 'search-and-replace' ) );
 
-			return FALSE;
+			return false;
 		}
 
-		$report = $this->dbe->db_backup( $search, $replace, array(), TRUE, $new_db_prefix );
+		// Do not pass the new db prefix if `change_db_prefix` isn't flagged.
+		// @codingStandardsIgnoreStart
+		$change_db_prefix = isset( $_POST[ 'change_db_prefix' ] ) ?
+			filter_var( $_POST[ 'change_db_prefix' ], FILTER_VALIDATE_BOOLEAN ) :
+			false;
+		// @codingStandardsIgnoreEnd
+
+		$new_db_prefix = $change_db_prefix ? $new_db_prefix : '';
+
+		// Make the backup.
+		$report = $this->dbe->db_backup( $search, $replace, [], true, $new_db_prefix );
+
+		// Show the replace report.
 		$this->downloader->show_modal( $report );
 
-		return TRUE;
+		return true;
 	}
 
 	/**
