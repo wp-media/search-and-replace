@@ -370,24 +370,24 @@ class Exporter {
 						if ( $new_table !== $table ) {
 							// Check if column is expected to hold serialized value.
 							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
-								$value = $this->replace->recursive_unserialize_replace(
-									$table_prefix,
-									$new_table_prefix,
-									$value,
-									true
-								);
-							} else {
-								$value = str_replace( $table_prefix, $new_table_prefix, $value );
+								$value = is_serialized( $value, false ) ?
+									$this->replace->recursive_unserialize_replace(
+										$table_prefix,
+										$new_table_prefix,
+										$value,
+										true
+									) : str_replace( $table_prefix, $new_table_prefix, $value );
 							}
 						}
 
 						if ( $new_table !== $table ) {
-							$value = $this->replace->recursive_unserialize_replace(
-								$table_prefix,
-								$new_table_prefix,
-								$value,
-								true
-							);
+							$value = is_serialized( $value, false ) ?
+								$this->replace->recursive_unserialize_replace(
+									$table_prefix,
+									$new_table_prefix,
+									$value,
+									true
+								) : str_replace( $table_prefix, $new_table_prefix, $value );
 						}
 
 						// Skip replace if no search pattern
@@ -395,11 +395,13 @@ class Exporter {
 						// Skip primary_key
 						// Skip `guid` column https://codex.wordpress.org/Changing_The_Site_URL#Important_GUID_Note
 						if ( $search !== '' && $column !== $primary_key && $column !== 'guid' ) {
-
 							// Check if column is expected to hold serialized value.
-							if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
+							if ( in_array( strtolower( $column ), $maybe_serialized, true )
+								&& is_serialized( $value, false )
+							) {
 								$edited_data = $this->replace->recursive_unserialize_replace(
-									$search, $replace,
+									$search,
+									$replace,
 									$value,
 									true
 								);
@@ -409,12 +411,13 @@ class Exporter {
 
 							if ( $csv !== null ) {
 								foreach ( $this->csv_data as $entry ) {
-									$edited_data = $this->replace->recursive_unserialize_replace(
-										$entry[ 'search' ],
-										$entry[ 'replace' ],
-										$edited_data,
-										true
-									);
+									$edited_data = is_serialized( $edited_data, false ) ?
+										$this->replace->recursive_unserialize_replace(
+											$entry[ 'search' ],
+											$entry[ 'replace' ],
+											$edited_data,
+											true
+										) : str_replace( $entry[ 'search' ], $entry[ 'replace' ], $value );
 								}
 							}
 

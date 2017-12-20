@@ -224,7 +224,9 @@ class Replace {
 					}
 
 					// Run a search replace on the data that'll respect the serialisation.
-					if ( in_array( strtolower( $column ), $maybe_serialized, true ) ) {
+					if ( in_array( strtolower( $column ), $maybe_serialized, true )
+						&& is_serialized( $data_to_fix, false )
+					) {
 						// Run a search replace on the data that'll respect the serialisation.
 						$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix, true );
 					} else {
@@ -234,11 +236,12 @@ class Replace {
 					// Run a search replace by CSV parameters if CSV input present
 					if ( null !== $csv ) {
 						foreach ( $this->csv_data as $entry ) {
-							$edited_data = $this->recursive_unserialize_replace(
-								$entry[ 'search' ],
-								$entry[ 'replace' ],
-								$edited_data
-							);
+							$edited_data = is_serialized( $edited_data, false ) ?
+								$this->recursive_unserialize_replace(
+									$entry[ 'search' ],
+									$entry[ 'replace' ],
+									$edited_data
+								) : str_replace( $entry[ 'search' ], $entry[ 'replace' ], $data_to_fix );
 						}
 					}
 
@@ -297,6 +300,11 @@ class Replace {
 	 * Take a serialised array and unserialize it replacing elements as needed and
 	 * unserializing any subordinate arrays and performing the replace on those too.
 	 *
+	 * Be aware, the method due to his recursive characteristic cannot prevent execution in case the
+	 * data passed to the function isn't a serialized value at the first time.
+	 *
+	 * It's up to you to be sure the value is serialized before call the method.
+	 *
 	 * @param string              $from       String we're looking to replace.
 	 * @param string              $to         What we want it to be replaced with.
 	 * @param array|string|object $data       Used to pass any subordinate arrays back to in.
@@ -310,12 +318,12 @@ class Replace {
 
 		// Some unserialized data cannot be re-serialised eg. SimpleXMLElements.
 		try {
-			$unserialized = ( is_serialized( $data ) ) ?
+			$unserialized = ( is_serialized( $data, false ) ) ?
 				// @codingStandardsIgnoreLine
 				maybe_unserialize( $data ) :
 				false;
 
-			if ( is_string( $data ) && is_serialized( $data ) && $unserialized !== false ) {
+			if ( $unserialized !== false ) {
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = [];
@@ -337,30 +345,31 @@ class Replace {
 
 				unset( $_tmp );
 			} else {
-				if ( is_string( $data ) ) {
-					$marker = false;
-					if ( is_serialized_string( $data ) ) {
-						// @codingStandardsIgnoreLine
-						$data   = unserialize( $data, [] );
-						$marker = true;
-					}
+				// Don't process data that isn't a string.
+				// In this case, just return it because we haven't coverage for this kind of value.
+				if ( ! is_string( $data ) ) {
+					return $data;
+				}
 
-					// Do not allow to return valid serialized data,
-					// If after replacement data is_serialized then add one | to the replacement.
-					$tmp_data = $data;
-					$data     = str_replace( $from, $to, $data );
+				$marker = false;
 
-					if ( is_serialized( $data, false ) ) {
-						$data = str_replace( $from, '|' . $to, $tmp_data );
-					}
-
-					if ( $marker ) {
-						$data = maybe_serialize( $data );
-					}
-				} else {
-					$data = str_replace( $from, $to, $data );
+				if ( is_serialized_string( $data ) ) {
 					// @codingStandardsIgnoreLine
-					$data = serialize( $data );
+					$data   = maybe_unserialize( $data );
+					$marker = true;
+				}
+
+				$tmp_data = $data;
+				$data     = str_replace( $from, $to, $data );
+
+				// Do not allow to return valid serialized data,
+				// If after replacement data is_serialized then add one | to the replacement.
+				if ( is_serialized( $data, false ) ) {
+					$data = str_replace( $from, '|' . $to, $tmp_data );
+				}
+
+				if ( $marker ) {
+					$data = maybe_serialize( $data );
 				}
 			}
 

@@ -301,124 +301,16 @@ class ReplaceTest extends AbstractTestCase {
 		];
 
 		bm\Functions\when( 'is_serialized_string' )
-			->alias(
-				function ( $data ) {
-
-					// if it isn't a string, it isn't a serialized string.
-					if ( ! is_string( $data ) ) {
-						return false;
-					}
-					$data = trim( $data );
-					if ( strlen( $data ) < 4 ) {
-						return false;
-					} elseif ( ':' !== $data[ 1 ] ) {
-						return false;
-					} elseif ( ';' !== substr( $data, - 1 ) ) {
-						return false;
-					} elseif ( $data[ 0 ] !== 's' ) {
-						return false;
-					} elseif ( '"' !== substr( $data, - 2, 1 ) ) {
-						return false;
-					} else {
-						return true;
-					}
-				}
-			);
+			->alias( [ $this, 'is_serialized_string' ] );
 
 		bm\Functions\when( 'is_serialized' )
-			->alias(
-				function ( $data, $strict = true ) {
-
-					// if it isn't a string, it isn't serialized.
-					if ( ! is_string( $data ) ) {
-						return false;
-					}
-					$data = trim( $data );
-					if ( 'N;' == $data ) {
-						return true;
-					}
-					if ( strlen( $data ) < 4 ) {
-						return false;
-					}
-					if ( ':' !== $data[ 1 ] ) {
-						return false;
-					}
-					if ( $strict ) {
-						$lastc = substr( $data, - 1 );
-						if ( ';' !== $lastc && '}' !== $lastc ) {
-							return false;
-						}
-					} else {
-						$semicolon = strpos( $data, ';' );
-						$brace     = strpos( $data, '}' );
-						// Either ; or } must exist.
-						if ( false === $semicolon && false === $brace ) {
-							return false;
-						}
-						// But neither must be in the first X characters.
-						if ( false !== $semicolon && $semicolon < 3 ) {
-							return false;
-						}
-						if ( false !== $brace && $brace < 4 ) {
-							return false;
-						}
-					}
-					$token = $data[ 0 ];
-					switch ( $token ) {
-						case 's' :
-							if ( $strict ) {
-								if ( '"' !== substr( $data, - 2, 1 ) ) {
-									return false;
-								}
-							} elseif ( false === strpos( $data, '"' ) ) {
-								return false;
-							}
-						// or else fall through
-						case 'a' :
-						case 'O' :
-							return (bool) preg_match( "/^{$token}:[0-9]+:/s", $data );
-						case 'b' :
-						case 'i' :
-						case 'd' :
-							$end = $strict ? '$' : '';
-
-							return (bool) preg_match( "/^{$token}:[0-9.E-]+;$end/", $data );
-					}
-
-					return false;
-				}
-			);
+			->alias( [ $this, 'is_serialized' ] );
 
 		bm\Functions\when( 'maybe_serialize' )
-			->alias(
-				function ( $data ) {
-
-					if ( is_array( $data ) || is_object( $data ) ) {
-						return serialize( $data );
-					}
-
-					// Double serialization is required for backward compatibility.
-					// See https://core.trac.wordpress.org/ticket/12930
-					// Also the world will end. See WP 3.6.1.
-					if ( is_serialized( $data, false ) ) {
-						return serialize( $data );
-					}
-
-					return $data;
-				}
-			);
+			->alias( [ $this, 'maybe_serialize' ] );
 
 		bm\Functions\when( 'maybe_unserialize' )
-			->alias(
-				function ( $data ) {
-
-					if ( is_serialized( $data ) ) {
-						return @unserialize( $data );
-					}
-
-					return $data;
-				}
-			);
+			->alias( [ $this, 'maybe_unserialize' ] );
 
 		$dbm_mock = m::mock(
 			'\Inpsyde\SearchReplace\Database\Manager',
@@ -448,5 +340,157 @@ class ReplaceTest extends AbstractTestCase {
 		$result = $testee->replace_values( $search, $replace, 'wp_plugin_test_comments' );
 
 		$this->assertEquals( $expected, $result[ 'changes' ][ 0 ][ 'to' ] );
+	}
+
+	/**
+	 * @dataProvider serializedDataProvider
+	 */
+	function test_recursive_unserialize_replace( $from, $to, $data, $expected ) {
+
+		bm\Functions\when( 'is_serialized_string' )
+			->alias( [ $this, 'is_serialized_string' ] );
+
+		bm\Functions\when( 'is_serialized' )
+			->alias( [ $this, 'is_serialized' ] );
+
+		bm\Functions\when( 'maybe_serialize' )
+			->alias( [ $this, 'maybe_serialize' ] );
+
+		bm\Functions\when( 'maybe_unserialize' )
+			->alias( [ $this, 'maybe_unserialize' ] );
+
+		$manager_mock       = m::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
+		$max_exec_time_mock = m::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
+
+		$sut      = new Replace( $manager_mock, $max_exec_time_mock);
+		$response = $sut->recursive_unserialize_replace( $from, $to, $data, true );
+
+		$this->assertSame( $expected, $response );
+	}
+
+	function serializedDataProvider() {
+
+		return [
+			[
+				'from'     => '1',
+				'two'      => '2',
+				'data'     => 'a:0:{}',
+				'expected' => 'a:0:{}',
+			],
+			[
+				'from'     => 'count',
+				'two'      => 'new_count',
+				'data'     => 'a:2:{i:2;s:5:"count";s:12:"_multiwidget";i:1;}',
+				'expected' => 'a:2:{i:2;s:9:"new_count";s:12:"_multiwidget";i:1;}',
+			],
+		];
+	}
+
+	public function is_serialized_string( $data ) {
+
+		// if it isn't a string, it isn't a serialized string.
+		if ( ! is_string( $data ) ) {
+			return false;
+		}
+		$data = trim( $data );
+		if ( strlen( $data ) < 4 ) {
+			return false;
+		} elseif ( ':' !== $data[ 1 ] ) {
+			return false;
+		} elseif ( ';' !== substr( $data, - 1 ) ) {
+			return false;
+		} elseif ( $data[ 0 ] !== 's' ) {
+			return false;
+		} elseif ( '"' !== substr( $data, - 2, 1 ) ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public function is_serialized( $data, $strict = true ) {
+
+		// if it isn't a string, it isn't serialized.
+		if ( ! is_string( $data ) ) {
+			return false;
+		}
+		$data = trim( $data );
+		if ( 'N;' == $data ) {
+			return true;
+		}
+		if ( strlen( $data ) < 4 ) {
+			return false;
+		}
+		if ( ':' !== $data[ 1 ] ) {
+			return false;
+		}
+		if ( $strict ) {
+			$lastc = substr( $data, - 1 );
+			if ( ';' !== $lastc && '}' !== $lastc ) {
+				return false;
+			}
+		} else {
+			$semicolon = strpos( $data, ';' );
+			$brace     = strpos( $data, '}' );
+			// Either ; or } must exist.
+			if ( false === $semicolon && false === $brace ) {
+				return false;
+			}
+			// But neither must be in the first X characters.
+			if ( false !== $semicolon && $semicolon < 3 ) {
+				return false;
+			}
+			if ( false !== $brace && $brace < 4 ) {
+				return false;
+			}
+		}
+		$token = $data[ 0 ];
+		switch ( $token ) {
+			case 's' :
+				if ( $strict ) {
+					if ( '"' !== substr( $data, - 2, 1 ) ) {
+						return false;
+					}
+				} elseif ( false === strpos( $data, '"' ) ) {
+					return false;
+				}
+			// or else fall through
+			case 'a' :
+			case 'O' :
+				return (bool) preg_match( "/^{$token}:[0-9]+:/s", $data );
+			case 'b' :
+			case 'i' :
+			case 'd' :
+				$end = $strict ? '$' : '';
+
+				return (bool) preg_match( "/^{$token}:[0-9.E-]+;$end/", $data );
+		}
+
+		return false;
+	}
+
+	public function maybe_serialize( $data ) {
+
+		if ( is_array( $data ) || is_object( $data ) ) {
+			return serialize( $data );
+		}
+
+		// Double serialization is required for backward compatibility.
+		// See https://core.trac.wordpress.org/ticket/12930
+		// Also the world will end. See WP 3.6.1.
+		if ( is_serialized( $data, false ) ) {
+			return serialize( $data );
+		}
+
+		return $data;
+	}
+
+	public function maybe_unserialize( $data ) {
+
+		if ( is_serialized( $data ) ) {
+			return @unserialize( $data );
+		}
+
+		return $data;
 	}
 }
