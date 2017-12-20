@@ -395,15 +395,6 @@ class Exporter {
 							}
 						}
 
-						if ( $new_table !== $table ) {
-							$value = is_serialized( $value, false ) ?
-								$this->replace->recursive_unserialize_replace(
-									$table_prefix,
-									$new_table_prefix,
-									$value
-								) : str_replace( $table_prefix, $new_table_prefix, $value );
-						}
-
 						// Skip replace if no search pattern
 						// Check if we need to replace something
 						// Skip primary_key
