@@ -3,8 +3,6 @@
 namespace Inpsyde\SearchReplace\Tests;
 
 use Inpsyde\SearchReplace\FileDownloader;
-use Brain\Monkey as bm;
-use Mockery as m;
 
 class FileDownloaderTest extends AbstractTestCase {
 
@@ -19,13 +17,13 @@ class FileDownloaderTest extends AbstractTestCase {
 			'compressed'          => false,
 		];
 
-		bm\Functions\when( 'wp_verify_nonce' )
+		\Brain\Monkey\Functions\when( 'wp_verify_nonce' )
 			->justReturn( true );
-		bm\Functions\when( 'sanitize_file_name' )
+		\Brain\Monkey\Functions\when( 'sanitize_file_name' )
 			->returnArg( 1 );
 
-		$exporter_mock      = m::spy( 'Inpsyde\\SearchReplace\\Database\\Exporter' );
-		$max_exec_time_mock = m::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
+		$exporter_mock      = \Mockery::spy( 'Inpsyde\\SearchReplace\\Database\\Exporter' );
+		$max_exec_time_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
 		$max_exec_time_mock->shouldReceive( 'set' )
 			->once();
@@ -53,13 +51,13 @@ class FileDownloaderTest extends AbstractTestCase {
 			'compressed'          => false,
 		];
 
-		bm\Functions\when( 'wp_verify_nonce' )
+		\Brain\Monkey\Functions\when( 'wp_verify_nonce' )
 			->justReturn( false );
 
-		bm\Functions\when( 'esc_html__' )
+		\Brain\Monkey\Functions\when( 'esc_html__' )
 			->returnArg( 1 );
 
-		bm\Functions\expect( 'wp_die' )
+		\Brain\Monkey\Functions\expect( 'wp_die' )
 			->once()
 			->with( 'Cheating Uh?' )
 			->andReturnUsing(
@@ -68,8 +66,8 @@ class FileDownloaderTest extends AbstractTestCase {
 				}
 			);
 
-		$exporter_mock      = m::mock( 'Inpsyde\\SearchReplace\\Database\\Exporter' );
-		$max_exec_time_mock = m::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
+		$exporter_mock      = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Exporter' );
+		$max_exec_time_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
 		$instance = new FileDownloader( $exporter_mock, $max_exec_time_mock );
 		$instance->deliver_backup_file();

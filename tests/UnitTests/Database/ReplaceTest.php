@@ -13,7 +13,7 @@ class ReplaceTest extends AbstractTestCase {
 
 	function test_empty_search_string() {
 
-		$dbm_mock = m::mock( '\Inpsyde\SearchReplace\Database\Manager' );
+		$dbm_mock = \Mockery::mock( '\Inpsyde\SearchReplace\Database\Manager' );
 		$dbm_mock->shouldReceive( 'get_table_structure' );
 
 		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
@@ -48,9 +48,9 @@ class ReplaceTest extends AbstractTestCase {
 			],
 		];
 
-		$dbm_mock = m::mock(
+		$dbm_mock = \Mockery::mock(
 			'\Inpsyde\SearchReplace\Database\Manager',
-			[ m::mock( '\wpdb' ) ]
+			[ \Mockery::mock( '\wpdb' ) ]
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
@@ -103,9 +103,9 @@ class ReplaceTest extends AbstractTestCase {
 			],
 		];
 
-		$dbm_mock = m::mock(
+		$dbm_mock = \Mockery::mock(
 			'\Inpsyde\SearchReplace\Database\Manager',
-			[ m::mock( '\wpdb' ) ]
+			[ \Mockery::mock( '\wpdb' ) ]
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
@@ -159,9 +159,9 @@ class ReplaceTest extends AbstractTestCase {
 			],
 		];
 
-		$dbm_mock = m::mock(
+		$dbm_mock = \Mockery::mock(
 			'\Inpsyde\SearchReplace\Database\Manager',
-			[ m::mock( '\wpdb' ) ]
+			[ \Mockery::mock( '\wpdb' ) ]
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
@@ -300,21 +300,21 @@ class ReplaceTest extends AbstractTestCase {
 			],
 		];
 
-		bm\Functions\when( 'is_serialized_string' )
+		\Brain\Monkey\Functions\when( 'is_serialized_string' )
 			->alias( [ $this, 'is_serialized_string' ] );
 
-		bm\Functions\when( 'is_serialized' )
+		\Brain\Monkey\Functions\when( 'is_serialized' )
 			->alias( [ $this, 'is_serialized' ] );
 
-		bm\Functions\when( 'maybe_serialize' )
+		\Brain\Monkey\Functions\when( 'maybe_serialize' )
 			->alias( [ $this, 'maybe_serialize' ] );
 
-		bm\Functions\when( 'maybe_unserialize' )
+		\Brain\Monkey\Functions\when( 'maybe_unserialize' )
 			->alias( [ $this, 'maybe_unserialize' ] );
 
-		$dbm_mock = m::mock(
+		$dbm_mock = \Mockery::mock(
 			'\Inpsyde\SearchReplace\Database\Manager',
-			[ m::mock( '\wpdb' ) ]
+			[ \Mockery::mock( '\wpdb' ) ]
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
@@ -347,20 +347,20 @@ class ReplaceTest extends AbstractTestCase {
 	 */
 	function test_recursive_unserialize_replace( $from, $to, $data, $expected ) {
 
-		bm\Functions\when( 'is_serialized_string' )
+		\Brain\Monkey\Functions\when( 'is_serialized_string' )
 			->alias( [ $this, 'is_serialized_string' ] );
 
-		bm\Functions\when( 'is_serialized' )
+		\Brain\Monkey\Functions\when( 'is_serialized' )
 			->alias( [ $this, 'is_serialized' ] );
 
-		bm\Functions\when( 'maybe_serialize' )
+		\Brain\Monkey\Functions\when( 'maybe_serialize' )
 			->alias( [ $this, 'maybe_serialize' ] );
 
-		bm\Functions\when( 'maybe_unserialize' )
+		\Brain\Monkey\Functions\when( 'maybe_unserialize' )
 			->alias( [ $this, 'maybe_unserialize' ] );
 
-		$manager_mock       = m::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
-		$max_exec_time_mock = m::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
+		$manager_mock       = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
+		$max_exec_time_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
 		$sut      = new Replace( $manager_mock, $max_exec_time_mock);
 		$response = $sut->recursive_unserialize_replace( $from, $to, $data );

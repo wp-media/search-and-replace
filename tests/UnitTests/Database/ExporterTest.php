@@ -4,23 +4,21 @@ namespace Inpsyde\SearchReplace\Tests\Database;
 
 use Inpsyde\SearchReplace\Database\Exporter;
 use Inpsyde\SearchReplace\Tests\AbstractTestCase;
-use Mockery as m;
-use \Brain\Monkey as bm;
 
 class ExporterTest extends AbstractTestCase {
 
 	public function testSearchReplace()
 	{
-		bm\Functions\when( 'get_temp_dir' )
+		\Brain\Monkey\Functions\when( 'get_temp_dir' )
 			->justReturn( './' );
-		bm\Functions\when( 'esc_attr__' )
+		\Brain\Monkey\Functions\when( 'esc_attr__' )
 			->returnArg( 1 );
-		bm\Functions\when( '__' )
+		\Brain\Monkey\Functions\when( '__' )
 			->returnArg( 1 );
 
-		$replace_mock  = m::mock( 'Inpsyde\\SearchReplace\\Database\\Replace' );
-		$dbm_mock      = m::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
-		$wp_error_mock = m::mock( '\WP_Error' );
+		$replace_mock  = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Replace' );
+		$dbm_mock      = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
+		$wp_error_mock = \Mockery::mock( '\WP_Error' );
 
 		$dbm_mock->shouldReceive( 'get_base_prefix' )
 			->andReturn( 'wp_' );
@@ -148,16 +146,16 @@ class ExporterTest extends AbstractTestCase {
 
 	public function testGUIDSkip() {
 
-		bm\Functions\when( 'get_temp_dir' )
+		\Brain\Monkey\Functions\when( 'get_temp_dir' )
 			->justReturn( './' );
-		bm\Functions\when( 'esc_attr__' )
+		\Brain\Monkey\Functions\when( 'esc_attr__' )
 			->returnArg( 1 );
-		bm\Functions\when( '__' )
+		\Brain\Monkey\Functions\when( '__' )
 			->returnArg( 1 );
 
-		$replace_mock  = m::mock( 'Inpsyde\\SearchReplace\\Database\\Replace' );
-		$dbm_mock      = m::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
-		$wp_error_mock = m::mock( '\WP_Error' );
+		$replace_mock  = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Replace' );
+		$dbm_mock      = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
+		$wp_error_mock = \Mockery::mock( '\WP_Error' );
 
 		$dbm_mock->shouldReceive( 'get_base_prefix' )
 			->andReturn( 'wp_' );
