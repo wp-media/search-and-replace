@@ -11,7 +11,7 @@ use \Brain\Monkey as bm;
  */
 class ReplaceTest extends AbstractTestCase {
 
-	function test_empty_search_string() {
+	public function test_empty_search_string() {
 
 		$dbm_mock = \Mockery::mock( '\Inpsyde\SearchReplace\Database\Manager' );
 		$dbm_mock->shouldReceive( 'get_table_structure' );
@@ -22,7 +22,7 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertContains( 'Search string is empty', $result );
 	}
 
-	function test_string_replace() {
+	public function test_string_replace() {
 
 		$columns = [
 			0 => 'comment_ID',
@@ -77,7 +77,7 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertEquals( 'Mr. Drupal', $result[ 'changes' ][ 0 ][ 'to' ] );
 	}
 
-	function test_umlaut_replace() {
+	public function test_umlaut_replace() {
 
 		$columns = [
 			0 => 'comment_ID',
@@ -133,7 +133,7 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertEquals( 'Mr. Drüpal', $result[ 'changes' ][ 0 ][ 'to' ] );
 	}
 
-	function test_substring_replace() {
+	public function test_substring_replace() {
 
 		$columns = [
 			0 => 'comment_ID',
@@ -189,7 +189,7 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertEquals( $result[ 'changes' ][ 0 ][ 'to' ], 'Mrs WordPress' );
 	}
 
-	function objectProvider() {
+	public function objectProvider() {
 
 		return [
 			[
@@ -274,7 +274,7 @@ class ReplaceTest extends AbstractTestCase {
 	/**
 	 * @dataProvider objectProvider
 	 */
-	function test_object_replace( $serialized, $expected, $search, $replace ) {
+	public function test_object_replace( $serialized, $expected, $search, $replace ) {
 
 		$columns = [
 			0 => 'comment_ID',
@@ -345,7 +345,7 @@ class ReplaceTest extends AbstractTestCase {
 	/**
 	 * @dataProvider serializedDataProvider
 	 */
-	function test_recursive_unserialize_replace( $from, $to, $data, $expected ) {
+	public function test_recursive_unserialize_replace( $from, $to, $data, $expected ) {
 
 		\Brain\Monkey\Functions\when( 'is_serialized_string' )
 			->alias( [ $this, 'is_serialized_string' ] );
@@ -368,7 +368,7 @@ class ReplaceTest extends AbstractTestCase {
 		$this->assertSame( $expected, $response );
 	}
 
-	function serializedDataProvider() {
+	public function serializedDataProvider() {
 
 		return [
 			[
