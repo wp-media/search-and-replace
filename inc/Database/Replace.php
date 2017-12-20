@@ -228,7 +228,7 @@ class Replace {
 						&& is_serialized( $data_to_fix, false )
 					) {
 						// Run a search replace on the data that'll respect the serialisation.
-						$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix, true );
+						$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
 					} else {
 						$edited_data = str_replace( $search, $replace, $data_to_fix );
 					}
@@ -308,13 +308,13 @@ class Replace {
 	 * @param string              $from       String we're looking to replace.
 	 * @param string              $to         What we want it to be replaced with.
 	 * @param array|string|object $data       Used to pass any subordinate arrays back to in.
-	 * @param bool                $serialised Does the array passed via $data need serialising.
+	 * @param bool                $serialised Does the array passed via $data need serialising. Default to true.
 	 *
 	 * @throws \Throwable Whatever exception is thrown if WP_DEBUG is true.
 	 *
 	 * @return array The original array with all elements replaced as needed.
 	 */
-	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = false ) {
+	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = true ) {
 
 		// Some unserialized data cannot be re-serialised eg. SimpleXMLElements.
 		try {
@@ -324,11 +324,11 @@ class Replace {
 				false;
 
 			if ( $unserialized !== false ) {
-				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized );
+				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, false );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = [];
 				foreach ( (array) $data as $key => $value ) {
-					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value );
+					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false);
 				}
 
 				$data = $_tmp;
@@ -338,7 +338,7 @@ class Replace {
 				$_tmp  = $data;
 				$props = get_object_vars( $data );
 				foreach ( $props as $key => $value ) {
-					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value );
+					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false);
 				}
 
 				$data = $_tmp;

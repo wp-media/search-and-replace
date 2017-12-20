@@ -363,7 +363,7 @@ class ReplaceTest extends AbstractTestCase {
 		$max_exec_time_mock = m::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
 		$sut      = new Replace( $manager_mock, $max_exec_time_mock);
-		$response = $sut->recursive_unserialize_replace( $from, $to, $data, true );
+		$response = $sut->recursive_unserialize_replace( $from, $to, $data );
 
 		$this->assertSame( $expected, $response );
 	}
