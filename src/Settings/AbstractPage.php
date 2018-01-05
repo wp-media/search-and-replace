@@ -1,13 +1,28 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Page;
+namespace Inpsyde\SearchAndReplace\Settings;
+
+use Inpsyde\SearchAndReplace\Core\PluginConfig;
 
 /**
  * Class AbstractPage
  *
- * @package Inpsyde\SearchReplace\Page
+ * @package Inpsyde\SearchAndReplace\Page
  */
 abstract class AbstractPage {
+
+	/**
+	 * @var PluginConfig
+	 */
+	protected $config;
+
+	/**
+	 * @param PluginConfig $config
+	 */
+	public function __construct( PluginConfig $config ) {
+
+		$this->config = $config;
+	}
 
 	/**
 	 * Returns the translated title for the page.

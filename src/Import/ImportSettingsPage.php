@@ -1,15 +1,15 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Page;
+namespace Inpsyde\SearchAndReplace\Import;
 
-use Inpsyde\SearchReplace\Database;
+use Inpsyde\SearchAndReplace\Database;
+use Inpsyde\SearchAndReplace\Settings\AbstractPage;
+use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
- * Class SqlImport
- *
- * @package Inpsyde\SearchReplace\inc\Page
+ * @package Inpsyde\SearchAndReplace\Import
  */
-class SqlImport extends AbstractPage implements PageInterface {
+class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 
 	/**
 	 * @var Database\Importer
@@ -27,7 +27,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function get_page_title() {
 
@@ -35,9 +35,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * Return the static slug string.
-	 *
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	public function get_slug() {
 
@@ -45,15 +43,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * Callback function for menu item
-	 */
-	public function render() {
-
-		require_once dirname(__DIR__) . '/templates/sql-import.php';
-	}
-
-	/**
-	 * @return string
+	 * {@inheritdoc}
 	 */
 	protected function get_submit_button_title() {
 
@@ -61,9 +51,43 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
+	 * Callback function for menu item
+	 */
+	public function render() {
+
+		?>
+
+		<form action="" method="post" enctype="multipart/form-data">
+			<table class="form-table">
+				<tbody>
+				<tr>
+					<th>
+						<strong>
+							<?php esc_html_e( 'Select SQL file to upload. ', 'search-and-replace' ); ?>
+						</strong>
+					</th>
+
+					<td><input type="file" name="file_to_upload" id="file_to_upload"></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<?php esc_html_e( 'Maximum file size: ', 'search-and-replace' ); ?>
+						<?php echo floatval( $this->file_upload_max_size() ) . 'KB'; ?>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<?php $this->show_submit_button(); ?>
+		</form>
+
+		<?php
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
-	public function save() {
+	public function save( array $request_data = [] ) {
 
 		// TODO: Better handling of large files
 		// maybe like here: http://stackoverflow.com/questions/147821/loading-sql-files-from-within-php , answer by user 'gromo'
@@ -88,7 +112,8 @@ class SqlImport extends AbstractPage implements PageInterface {
 							'search-and-replace'
 						)
 					);
-					return;
+
+					return FALSE;
 			}
 
 			// call import function
@@ -111,6 +136,8 @@ class SqlImport extends AbstractPage implements PageInterface {
 					$success
 				);
 				echo '</p></div>';
+
+				return TRUE;
 			}
 		} else {
 			// show error
@@ -141,7 +168,8 @@ class SqlImport extends AbstractPage implements PageInterface {
 				),
 				7 => esc_html__(
 					'Failed to write file to disk.',
-					'search-and-replace' ),
+					'search-and-replace'
+				),
 				8 => esc_html__(
 					'A PHP extension stopped the file upload.',
 					'search-and-replace'
@@ -156,6 +184,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 			);
 		}
 
+		return FALSE;
 	}
 
 	/**
@@ -213,7 +242,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 		$size = preg_replace( '/[^0-9\.]/', '', $size );
 		if ( $unit ) {
 			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-			return round( $size * pow( 1024, stripos( 'bkmgtpezy', $unit[0] ) ) );
+			return round( $size * pow( 1024, stripos( 'bkmgtpezy', $unit[ 0 ] ) ) );
 		} else {
 			return round( $size );
 		}

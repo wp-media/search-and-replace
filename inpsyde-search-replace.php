@@ -15,6 +15,8 @@
 
 namespace Inpsyde\SearchAndReplace;
 
+use Inpsyde\SearchAndReplace\Core\ConfigBuilder;
+
 if ( ! function_exists( 'add_filter' ) ) {
 	return;
 }
@@ -36,10 +38,19 @@ function initialize() {
 
 			return FALSE;
 		}
+		$config = ConfigBuilder::from_file( __FILE__ );
 
-		$plugin = new SearchAndReplace();
+		$plugin = new SearchAndReplace(
+			[
+				'config' => $config->freeze(),
+			]
+		);
 
-		$plugin->register( new Exporter\Provider() );
+		$plugin->register( new Settings\Provider() );
+		$plugin->register( new Replace\Provider() );
+		$plugin->register( new Backup\Provider() );
+		$plugin->register( new Import\Provider() );
+		$plugin->register( new Credits\Provider() );
 
 		$plugin->boot();
 

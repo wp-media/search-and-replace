@@ -1,0 +1,55 @@
+// Form *****************************************
+//
+//
+//
+
+// We've to nest our selectors, because WP has pretty ugly ones which are hard to "overwrite".
+.inpsyde-form {
+
+	.button {
+		border: none;
+		border-radius: 2px;
+		clear: both;
+		display: inline-block;
+		height: 36px;
+		line-height: 36px;
+		outline: 0;
+		padding: 0 2rem;
+		margin-left: 20px;
+		text-transform: uppercase;
+		text-decoration: none;
+		background: $color__inpsyde;
+		color: $color__mine-shaft;
+		cursor: pointer;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 10px rgba(0, 0, 0, 0.12);
+		transition: all 0.25s ease-in;
+
+		&:hover,
+		&:focus {
+			background: $color__inpsyde--dark;
+			color: $color__white;
+		}
+	}
+
+	.inpsyde-form-field {
+
+	}
+}
+
+// Specific field styles ********************************
+
+.form-row {
+
+	&--has-errors {
+		background: $color__clouds;
+		color: red;
+	}
+}
+
+.form-errors {
+	font-weight: 600;
+
+	&__entry {
+		color: red;
+	}
+}

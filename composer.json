@@ -46,13 +46,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Inpsyde\\SearchReplace\\": "src/"
+      "Inpsyde\\SearchAndReplace\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Inpsyde\\SearchReplace\\Tests\\Unit\\": "tests/phpunit/Unit/",
-      "Inpsyde\\SearchReplace\\": "src/"
+      "Inpsyde\\SearchAndReplace\\Tests\\Unit\\": "tests/phpunit/Unit/",
+      "Inpsyde\\SearchAndReplace\\": "src/"
     }
   }
 }

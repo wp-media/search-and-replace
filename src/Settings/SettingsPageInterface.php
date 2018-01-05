@@ -1,13 +1,13 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Page;
+namespace Inpsyde\SearchAndReplace\Settings;
 
 /**
  * Interface PageInterface
  *
- * @package Inpsyde\SearchReplace\Page
+ * @package Inpsyde\SearchAndReplace\Page
  */
-interface PageInterface {
+interface SettingsPageInterface {
 
 	/**
 	 * @param string $msg
@@ -48,7 +48,9 @@ interface PageInterface {
 	/**
 	 * Saving the data.
 	 *
+	 * @param array $request_data
+	 *
 	 * @return boolean
 	 */
-	public function save();
+	public function save( array $request_data = [] );
 }

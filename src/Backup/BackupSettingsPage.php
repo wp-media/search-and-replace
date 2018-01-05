@@ -1,15 +1,18 @@
 <?php
-namespace Inpsyde\SearchReplace\Page;
 
-use Inpsyde\SearchReplace\Database;
-use Inpsyde\SearchReplace\FileDownloader;
+namespace Inpsyde\SearchAndReplace\Page;
+
+use Inpsyde\SearchAndReplace\Database;
+use Inpsyde\SearchAndReplace\FileDownloader;
+use Inpsyde\SearchAndReplace\Settings\AbstractPage;
+use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
  * Class BackupDatabase
  *
- * @package Inpsyde\SearchReplace\Page
+ * @package Inpsyde\SearchAndReplace\Page
  */
-class BackupDatabase extends AbstractPage implements PageInterface {
+class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
 
 	/**
 	 * @var Database\Exporter
@@ -56,7 +59,17 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	 */
 	public function render() {
 
-		require_once( __DIR__ . '/../templates/db-backup.php' );
+		?>
+		<p>
+			<?php esc_html_e(
+				'Create a backup of your database by clicking "Create SQL File".',
+				'search-and-replace'
+			); ?>
+		</p>
+		<form action="" method="post">
+			<?php $this->show_submit_button(); ?>
+		</form>
+		<?php
 	}
 
 	/**
@@ -68,9 +81,11 @@ class BackupDatabase extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * Event handler for click on export sql button
+	 * Event handler for click on export sql button.
+	 *
+	 * @param array $request_data
 	 */
-	public function save() {
+	public function save( array $request_data = [] ) {
 
 		$report = $this->dbe->db_backup();
 		$this->downloader->show_modal( $report );

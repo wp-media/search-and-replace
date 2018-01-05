@@ -1,0 +1,52 @@
+// tabs
+.inpsyde-tabs {
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+	background: $color__white;
+	max-width: 1000px;
+
+	// the current tab navigation item.
+	.ui-tabs-active {
+		border-bottom: 3px solid $color__mine-shaft;
+
+		a {
+			padding-top: 0;
+		}
+	}
+}
+
+.inpsyde-tab {
+
+	// The Navigation **************************
+	&__navigation {
+		background: $color__clouds;
+		min-height: 75px;
+		margin: 0;
+
+		&-item {
+			margin-bottom: 0;
+			border-bottom: 3px solid transparent;
+			font-size: 17px;
+			display: inline-block;
+			height: 75px;
+			line-height: 75px;
+
+			&:hover,
+			&:focus {
+				border-bottom: 3px solid $color__mine-shaft;
+			}
+
+			a {
+				color: $color__mine-shaft;
+				display: block;
+				padding: 0 20px;
+				text-decoration: none;
+			}
+		}
+	}
+
+	// The Content *************************************
+	&__content {
+		padding: 25px 20px;
+		background: $color__white;
+	}
+}
