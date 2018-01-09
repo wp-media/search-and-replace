@@ -13,7 +13,7 @@ use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
  *
  * @package Inpsyde\SearchAndReplace\Page
  */
-class BackupSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
 	 * @var DatabaseBackup

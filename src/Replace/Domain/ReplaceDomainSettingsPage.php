@@ -12,12 +12,12 @@ use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 /**
  * @package Inpsyde\SearchAndReplace\Replace\Domain
  */
-class ReplaceDomainSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class ReplaceDomainSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
-	 * @var \Inpsyde\SearchAndReplace\Database\DatabaseBackup
+	 * @var DatabaseBackup
 	 */
-	private $exporter;
+	private $backup;
 
 	/**
 	 * @var SettingsManager
@@ -33,13 +33,13 @@ class ReplaceDomainSettingsSettingsPage extends AbstractSettingsPage implements 
 	 * ReplaceDomain constructor.
 	 *
 	 * @param Manager        $manager
-	 * @param DatabaseBackup $exporter
+	 * @param DatabaseBackup $backup
 	 * @param FileDownloader $downloader
 	 */
-	public function __construct( Manager $manager, DatabaseBackup $exporter, FileDownloader $downloader ) {
+	public function __construct( Manager $manager, DatabaseBackup $backup, FileDownloader $downloader ) {
 
 		$this->db_manager = $manager;
-		$this->exporter   = $exporter;
+		$this->backup     = $backup;
 		$this->downloader = $downloader;
 	}
 
@@ -72,9 +72,15 @@ class ReplaceDomainSettingsSettingsPage extends AbstractSettingsPage implements 
 	 */
 	public function save( array $request_data = [] ) {
 
-		$search        = esc_url_raw( $request_data[ 'search' ] );
-		$replace       = esc_url_raw( $request_data[ 'replace' ] );
-		$new_db_prefix = esc_attr( $request_data[ 'new_db_prefix' ] );
+		$search        = isset( $request_data[ 'search' ] ) ? esc_url_raw( $request_data[ 'search' ] ) : '';
+		$replace       = isset( $request_data[ 'replace' ] ) ? esc_url_raw( $request_data[ 'replace' ] ) : '';
+		$new_db_prefix = isset( $request_data[ 'new_db_prefix' ] ) ? esc_attr( $request_data[ 'new_db_prefix' ] ) : '';
+		// Do not pass the new db prefix if `change_db_prefix` isn't flagged.
+		// @codingStandardsIgnoreStart
+		$change_db_prefix = isset( $_POST[ 'change_db_prefix' ] )
+			? filter_var( $_POST[ 'change_db_prefix' ], FILTER_VALIDATE_BOOLEAN )
+			: FALSE;
+		// @codingStandardsIgnoreEnd
 
 		// search field should not be empty
 		if ( '' === $replace ) {
@@ -83,19 +89,9 @@ class ReplaceDomainSettingsSettingsPage extends AbstractSettingsPage implements 
 			return FALSE;
 		}
 
-		// Do not pass the new db prefix if `change_db_prefix` isn't flagged.
-		// @codingStandardsIgnoreStart
-		$change_db_prefix = isset( $_POST[ 'change_db_prefix' ] )
-			? filter_var( $_POST[ 'change_db_prefix' ], FILTER_VALIDATE_BOOLEAN )
-			: FALSE;
-		// @codingStandardsIgnoreEnd
-
 		$new_db_prefix = $change_db_prefix ? $new_db_prefix : '';
 
-		// Make the backup.
-		$report = $this->exporter->backup( $search, $replace, [], TRUE, $new_db_prefix );
-
-		// Show the replace report.
+		$report = $this->backup->backup( $search, $replace, [], TRUE, $new_db_prefix );
 		$this->downloader->show_modal( $report );
 
 		return TRUE;

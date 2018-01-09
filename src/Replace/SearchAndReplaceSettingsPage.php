@@ -11,7 +11,7 @@ use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 /**
  * @package Inpsyde\SearchAndReplace\Replace
  */
-class SearchAndReplaceSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
 	 * @var string

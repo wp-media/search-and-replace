@@ -11,7 +11,7 @@ use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
  *
  * @package Inpsyde\SearchAndReplace\Credits
  */
-class CreditsSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class CreditsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
 	 * {@inheritdoc}

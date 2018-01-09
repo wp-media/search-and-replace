@@ -18,7 +18,7 @@ final class Provider implements ServiceProviderInterface {
 
 		$plugin[ 'Replace.Domain.ReplaceDomainSettingsPage' ] = function ( Container $plugin ) {
 
-			return new Domain\ReplaceDomainSettingsSettingsPage(
+			return new Domain\ReplaceDomainSettingsPage(
 				$plugin[ 'Database.Manager' ],
 				$plugin[ 'Database.DatabaseExporter' ],
 				$plugin[ 'File.FileDownloader' ]
@@ -27,7 +27,7 @@ final class Provider implements ServiceProviderInterface {
 
 		$plugin[ 'Replace.SearchAndReplaceSettingsPage' ] = function ( Container $plugin ) {
 
-			return new SearchAndReplaceSettingsSettingsPage(
+			return new SearchAndReplaceSettingsPage(
 				$plugin[ 'Database.Manager' ],
 				$plugin[ 'Database.Replace' ],
 				$plugin[ 'Database.DatabaseExporter' ],

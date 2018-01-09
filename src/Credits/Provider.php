@@ -18,7 +18,7 @@ final class Provider implements ServiceProviderInterface {
 
 		$plugin[ 'Credits.CreditsSettingsPage' ] = function ( Container $plugin ) {
 
-			return new CreditsSettingsSettingsPage( $plugin[ 'config' ] );
+			return new CreditsSettingsPage( $plugin[ 'config' ] );
 		};
 
 		$plugin->extend(
