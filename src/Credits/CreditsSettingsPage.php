@@ -30,14 +30,6 @@ class CreditsSettingsPage extends AbstractSettingsPage implements SettingsPageIn
 	}
 
 	/**
-	 * {@inheritdoc}
-	 */
-	public function save( array $request_data = [] ) {
-
-		return TRUE;
-	}
-
-	/**
 	 * Callback function for credits content.
 	 */
 	public function render( NonceInterface $nonce ) {

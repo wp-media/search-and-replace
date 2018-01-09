@@ -49,12 +49,4 @@ interface SettingsPageInterface {
 	 */
 	public function render( NonceInterface $nonce );
 
-	/**
-	 * Saving the data.
-	 *
-	 * @param array $request_data
-	 *
-	 * @return boolean
-	 */
-	public function save( array $request_data = [] );
 }

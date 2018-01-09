@@ -7,11 +7,12 @@ use Inpsyde\SearchAndReplace\Database\DatabaseImporter;
 use Inpsyde\SearchAndReplace\File\UploadedFile;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
+use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
 /**
  * @package Inpsyde\SearchAndReplace\Import
  */
-class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
 
 	/**
 	 * @var string
@@ -114,7 +115,7 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	/**
 	 * {@inheritdoc}
 	 */
-	public function save( array $request_data = [] ) {
+	public function update( array $request_data = [] ) {
 
 		$file = new UploadedFile( $_FILES[ self::FILE_KEY ] );
 

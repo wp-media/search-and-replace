@@ -57,7 +57,9 @@ class SettingsManager {
 				}
 			);
 
-			add_action( 'load-' . $hook, [ $this, 'save' ] );
+			if ( $page instanceof UpdateAwareSettingsPage ) {
+				add_action( 'load-' . $hook, [ $this, 'save' ] );
+			}
 		}
 	}
 
@@ -91,8 +93,8 @@ class SettingsManager {
 			return FALSE;
 		}
 
-		/** @var SettingsPageInterface */
-		return $this->pages[ $page ]->save( $request_data );
+		/** @var UpdateAwareSettingsPage */
+		return $this->pages[ $page ]->update( $request_data );
 	}
 
 	/**

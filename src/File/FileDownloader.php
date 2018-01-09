@@ -2,6 +2,7 @@
 
 namespace Inpsyde\SearchAndReplace\File;
 
+use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
 use Inpsyde\SearchAndReplace\Service\MaxExecutionTime;
 

@@ -7,13 +7,14 @@ use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
+use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
 /**
  * Class BackupDatabase
  *
  * @package Inpsyde\SearchAndReplace\Page
  */
-class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
 
 	/**
 	 * @var DatabaseBackup
@@ -89,7 +90,7 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	 *
 	 * @return bool
 	 */
-	public function save( array $request_data = [] ) {
+	public function update( array $request_data = [] ) {
 
 		$report = $this->exporter->backup();
 		$this->downloader->show_modal( $report );

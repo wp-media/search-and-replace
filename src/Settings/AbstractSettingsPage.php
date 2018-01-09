@@ -17,19 +17,6 @@ abstract class AbstractSettingsPage {
 	];
 
 	/**
-	 * @var PluginConfig
-	 */
-	protected $config;
-
-	/**
-	 * @param PluginConfig $config
-	 */
-	public function __construct( PluginConfig $config ) {
-
-		$this->config = $config;
-	}
-
-	/**
 	 * Returns the translated title for the page.
 	 *
 	 * @return string

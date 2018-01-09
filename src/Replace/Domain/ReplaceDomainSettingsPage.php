@@ -8,11 +8,12 @@ use Inpsyde\SearchAndReplace\Database\Manager;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
+use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
 /**
  * @package Inpsyde\SearchAndReplace\Replace\Domain
  */
-class ReplaceDomainSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
+class ReplaceDomainSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
 
 	/**
 	 * @var DatabaseBackup
@@ -20,7 +21,7 @@ class ReplaceDomainSettingsPage extends AbstractSettingsPage implements Settings
 	private $backup;
 
 	/**
-	 * @var SettingsManager
+	 * @var Manager
 	 */
 	private $db_manager;
 
@@ -70,7 +71,7 @@ class ReplaceDomainSettingsPage extends AbstractSettingsPage implements Settings
 	/**
 	 * {@inheritdoc}
 	 */
-	public function save( array $request_data = [] ) {
+	public function update( array $request_data = [] ) {
 
 		$search        = isset( $request_data[ 'search' ] ) ? esc_url_raw( $request_data[ 'search' ] ) : '';
 		$replace       = isset( $request_data[ 'replace' ] ) ? esc_url_raw( $request_data[ 'replace' ] ) : '';

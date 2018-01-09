@@ -7,16 +7,12 @@ use Inpsyde\SearchAndReplace\Database;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
+use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
 /**
  * @package Inpsyde\SearchAndReplace\Replace
  */
-class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
-
-	/**
-	 * @var string
-	 */
-	private $modal;
+class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
 
 	/**
 	 * @var Database\Manager
@@ -260,7 +256,7 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 	/**
 	 * {@inheritdoc}
 	 */
-	public function save( array $request_data = [] ) {
+	public function update( array $request_data = [] ) {
 
 		if ( ! $this->is_request_valid() ) {
 			return FALSE;
