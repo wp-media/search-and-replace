@@ -16,6 +16,7 @@
 namespace Inpsyde\SearchAndReplace;
 
 use Inpsyde\SearchAndReplace\Core\ConfigBuilder;
+use Inpsyde\SearchAndReplace\Events\LogEvents;
 
 if ( ! function_exists( 'add_filter' ) ) {
 	return;
@@ -46,6 +47,9 @@ function initialize() {
 			]
 		);
 
+		$plugin->register( new Assets\Provider() );
+		$plugin->register( new Service\Provider() );
+		$plugin->register( new Database\Provider() );
 		$plugin->register( new Settings\Provider() );
 		$plugin->register( new Replace\Provider() );
 		$plugin->register( new Backup\Provider() );
@@ -61,7 +65,7 @@ function initialize() {
 			throw $e;
 		}
 
-		do_action( 'search-and-replace.error', $e );
+		do_action( LogEvents::CRITICAL, $e );
 
 		return FALSE;
 	}

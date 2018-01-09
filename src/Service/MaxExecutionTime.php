@@ -1,10 +1,10 @@
 <?php
-namespace Inpsyde\SearchReplace\Service;
+namespace Inpsyde\SearchAndReplace\Service;
 
 /**
  * Class RunTime - set the service time out up to 0
  *
- * @package Inpsyde\SearchReplace\Service
+ * @package Inpsyde\SearchAndReplace\Service
  */
 class MaxExecutionTime {
 

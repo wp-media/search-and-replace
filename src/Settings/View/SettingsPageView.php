@@ -18,8 +18,8 @@ class SettingsPageView implements SettingsPageViewInterface {
 		$current_page = isset( $_GET[ 'page' ] ) ? $_GET[ 'page' ] : key( $pages );
 
 		?>
-		<div class="wrap">';
-			<h1 class="settings__headline">' . esc_html__( 'Search & Replace', 'search-and-replace' ) . '</h1>';
+		<div class="wrap">
+			<h1 class="settings__headline"><?php esc_html_e( 'Search & Replace', 'search-and-replace' ) ?></h1>
 
 			<div class="inpsyde-tabs">
 				<div class="inpsyde-tab__navigation">

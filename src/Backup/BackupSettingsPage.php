@@ -84,6 +84,8 @@ class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
 	 * Event handler for click on export sql button.
 	 *
 	 * @param array $request_data
+	 *
+	 * @return bool
 	 */
 	public function save( array $request_data = [] ) {
 

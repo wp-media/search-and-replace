@@ -1,12 +1,13 @@
 <?php
-namespace Inpsyde\SearchReplace\Database;
 
-use Inpsyde\SearchReplace\Service\MaxExecutionTime;
+namespace Inpsyde\SearchAndReplace\Database;
+
+use Inpsyde\SearchAndReplace\Service\MaxExecutionTime;
 
 /**
  * Class Importer
  *
- * @package Inpsyde\SearchReplace\Database
+ * @package Inpsyde\SearchAndReplace\Database
  */
 class Importer {
 
@@ -21,6 +22,7 @@ class Importer {
 	 * @param MaxExecutionTime $max_execution
 	 */
 	public function __construct( MaxExecutionTime $max_execution ) {
+
 		$this->max_execution = $max_execution;
 	}
 
@@ -31,7 +33,7 @@ class Importer {
 	 *
 	 * @return int  Number of Sql queries made, -1 if error
 	 */
-	public function import_sql( $sql ) {
+	public function import( $sql ) {
 
 		$this->max_execution->set();
 

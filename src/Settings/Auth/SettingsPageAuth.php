@@ -5,7 +5,7 @@ namespace Inpsyde\SearchAndReplace\Settings\Auth;
 use Brain\Nonces\ArrayContext;
 use Brain\Nonces\NonceInterface;
 use Brain\Nonces\WpNonce;
-use Inpsyde\SearchAndReplace\Events\LoggingEvents;
+use Inpsyde\SearchAndReplace\Events\LogEvents;
 
 class SettingsPageAuth implements SettingsPageAuthInterface {
 
@@ -43,7 +43,7 @@ class SettingsPageAuth implements SettingsPageAuthInterface {
 
 		if ( ! current_user_can( $this->cap ) ) {
 			do_action(
-				LoggingEvents::ERROR,
+				LogEvents::ERROR,
 				'User has no sufficient rights to save page',
 				[
 					'method' => __METHOD__,

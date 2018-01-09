@@ -3,6 +3,7 @@
 namespace Inpsyde\SearchAndReplace;
 
 use Inpsyde\SearchAndReplace\Core\BootableProviderInterface;
+use Inpsyde\SearchAndReplace\Events\BootstrapEvents;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -10,9 +11,6 @@ use Pimple\ServiceProviderInterface;
  * @package Inpsyde\SearchAndReplace
  */
 final class SearchAndReplace extends Container {
-
-	const ACTION_BOOT = 'search-and-replace.boot';
-	const ACTION_ERROR = 'search-and-replace.error';
 
 	/**
 	 * @var bool
@@ -66,7 +64,8 @@ final class SearchAndReplace extends Container {
 		 *
 		 * @param SearchAndReplace
 		 */
-		\do_action( self::ACTION_BOOT, $this );
+
+		\do_action( BootstrapEvents::BOOT, $this );
 
 		foreach ( $this->providers as $provider ) {
 			if ( $provider instanceof BootableProviderInterface ) {
