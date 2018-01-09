@@ -2,25 +2,27 @@
 
 namespace Inpsyde\SearchAndReplace\Replace\Domain;
 
-use Inpsyde\SearchAndReplace\Database;
-use Inpsyde\SearchAndReplace\FileDownloader;
-use Inpsyde\SearchAndReplace\Settings\AbstractPage;
+use Brain\Nonces\NonceInterface;
+use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
+use Inpsyde\SearchAndReplace\Database\Manager;
+use Inpsyde\SearchAndReplace\File\FileDownloader;
+use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
  * @package Inpsyde\SearchAndReplace\Replace\Domain
  */
-class ReplaceDomainSettingsPage extends AbstractPage implements SettingsPageInterface {
+class ReplaceDomainSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
-	 * @var \Inpsyde\SearchAndReplace\Database\Exporter
+	 * @var \Inpsyde\SearchAndReplace\Database\DatabaseBackup
 	 */
-	private $dbe;
+	private $exporter;
 
 	/**
 	 * @var SettingsManager
 	 */
-	private $dbm;
+	private $db_manager;
 
 	/**
 	 * @var FileDownloader
@@ -30,14 +32,14 @@ class ReplaceDomainSettingsPage extends AbstractPage implements SettingsPageInte
 	/**
 	 * ReplaceDomain constructor.
 	 *
-	 * @param Database\Manager  $dbm
-	 * @param Database\Exporter $dbe
-	 * @param FileDownloader    $downloader
+	 * @param Manager        $manager
+	 * @param DatabaseBackup $exporter
+	 * @param FileDownloader $downloader
 	 */
-	public function __construct( Database\Manager $dbm, Database\Exporter $dbe, FileDownloader $downloader ) {
+	public function __construct( Manager $manager, DatabaseBackup $exporter, FileDownloader $downloader ) {
 
-		$this->dbm        = $dbm;
-		$this->dbe        = $dbe;
+		$this->db_manager = $manager;
+		$this->exporter   = $exporter;
 		$this->downloader = $downloader;
 	}
 
@@ -84,16 +86,14 @@ class ReplaceDomainSettingsPage extends AbstractPage implements SettingsPageInte
 		// Do not pass the new db prefix if `change_db_prefix` isn't flagged.
 		// @codingStandardsIgnoreStart
 		$change_db_prefix = isset( $_POST[ 'change_db_prefix' ] )
-			?
-			filter_var( $_POST[ 'change_db_prefix' ], FILTER_VALIDATE_BOOLEAN )
-			:
-			FALSE;
+			? filter_var( $_POST[ 'change_db_prefix' ], FILTER_VALIDATE_BOOLEAN )
+			: FALSE;
 		// @codingStandardsIgnoreEnd
 
 		$new_db_prefix = $change_db_prefix ? $new_db_prefix : '';
 
 		// Make the backup.
-		$report = $this->dbe->db_backup( $search, $replace, [], TRUE, $new_db_prefix );
+		$report = $this->exporter->backup( $search, $replace, [], TRUE, $new_db_prefix );
 
 		// Show the replace report.
 		$this->downloader->show_modal( $report );
@@ -104,7 +104,7 @@ class ReplaceDomainSettingsPage extends AbstractPage implements SettingsPageInte
 	/**
 	 * Shows the page template
 	 */
-	public function render() {
+	public function render( NonceInterface $nonce ) {
 
 		?>
 
@@ -156,7 +156,7 @@ class ReplaceDomainSettingsPage extends AbstractPage implements SettingsPageInte
 						</label>
 					</th>
 					<td>
-						<?php echo esc_html( $this->dbm->get_base_prefix() ); ?>
+						<?php echo esc_html( $this->db_manager->get_base_prefix() ); ?>
 					</td>
 				</tr>
 
@@ -181,6 +181,7 @@ class ReplaceDomainSettingsPage extends AbstractPage implements SettingsPageInte
 				</tr>
 				</tbody>
 			</table>
+			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
 			<?php $this->show_submit_button(); ?>
 		</form>
 

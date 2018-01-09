@@ -2,6 +2,8 @@
 
 namespace Inpsyde\SearchAndReplace\Settings;
 
+use Brain\Nonces\NonceInterface;
+
 /**
  * Interface PageInterface
  *
@@ -17,7 +19,7 @@ interface SettingsPageInterface {
 	/**
 	 * Echoes the content of the $errors array as formatted HTML if it contains error messages.
 	 */
-	public function display_errors();
+	public function render_notifications();
 
 	/**
 	 * Returns the translated Menu title for add_submenu_page().
@@ -42,8 +44,10 @@ interface SettingsPageInterface {
 
 	/**
 	 * Rendering the page content.
+	 *
+	 * @param NonceInterface $nonce
 	 */
-	public function render();
+	public function render( NonceInterface $nonce );
 
 	/**
 	 * Saving the data.

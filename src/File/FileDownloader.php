@@ -1,14 +1,14 @@
 <?php
 
-namespace Inpsyde\SearchReplace;
+namespace Inpsyde\SearchAndReplace\File;
 
-use Inpsyde\SearchReplace\Database\Exporter;
-use Inpsyde\SearchReplace\Service\MaxExecutionTime;
+use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
+use Inpsyde\SearchAndReplace\Service\MaxExecutionTime;
 
 /**
  * Class FileDownloader
  *
- * @package Inpsyde\SearchReplace
+ * @package Inpsyde\SearchAndReplace\File
  */
 class FileDownloader {
 
@@ -23,23 +23,17 @@ class FileDownloader {
 	private $nonce_name = 'insr_nonce_download';
 
 	/**
-	 * @var Exporter
-	 */
-	private $dbe;
-
-	/**
 	 * @var MaxExecutionTime
 	 */
 	private $max_execution;
 
 	/**
-	 * Admin constructor.
+	 * FileDownloader constructor.
 	 *
-	 * @param Exporter $dbe
+	 * @param MaxExecutionTime $max_execution
 	 */
-	public function __construct( Exporter $dbe, MaxExecutionTime $max_execution ) {
+	public function __construct( MaxExecutionTime $max_execution ) {
 
-		$this->dbe           = $dbe;
 		$this->max_execution = $max_execution;
 	}
 
@@ -49,6 +43,7 @@ class FileDownloader {
 	 * @param array $report
 	 */
 	public function show_modal( $report ) {
+
 		// Set compress status.
 		// @codingStandardsIgnoreLine
 		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
@@ -108,16 +103,20 @@ class FileDownloader {
 
 		// Get search & replace values in order to highlight them in the results.
 		// @codingStandardsIgnoreStart
-		$search  = isset( $_POST[ 'search' ] ) ?
-			esc_html( filter_var( $_POST [ 'search' ], FILTER_SANITIZE_STRING ) ) :
+		$search  = isset( $_POST[ 'search' ] )
+			?
+			esc_html( filter_var( $_POST [ 'search' ], FILTER_SANITIZE_STRING ) )
+			:
 			'';
-		$replace = isset( $_POST[ 'replace' ] ) ?
-			esc_html( filter_var( $_POST [ 'replace' ], FILTER_SANITIZE_STRING ) ) :
+		$replace = isset( $_POST[ 'replace' ] )
+			?
+			esc_html( filter_var( $_POST [ 'replace' ], FILTER_SANITIZE_STRING ) )
+			:
 			'';
 		// @codingStandardsIgnoreEnd
 
-		$search_highlight  = '<span class="search-replace-search-value">' . $search . '</span>';
-		$replace_highlight = '<span class ="search-replace-replace-value">' . $replace . '</span>';
+		$search_highlight  = '<span class="search-and-replace__search-value">' . $search . '</span>';
+		$replace_highlight = '<span class ="search-and-replace__replace-value">' . $replace . '</span>';
 		$delimiter         = [ ' ...', '...<br>' ];
 
 		$msg = sprintf(
@@ -144,12 +143,12 @@ class FileDownloader {
 		//create modal window for detailed view of changes
 		?>
 		<p><a href="#" id="changes-modal-button"><?php esc_html_e( 'View details', 'search-and-replace' ); ?></a></p>
-		<div id="changes-modal-background" class="search-replace-modal-background" style="display: none;"></div>
-		<div id="changes-modal" class="search-replace-modal " style="display: none;">
-			<div class="search-replace-modal-header">
-				<button type="button" id="changes-modal-close" class="search-replace-modal-close-button"></button>
+		<div id="changes-modal-background" class="search-and-replace-modal__background" style="display: none;"></div>
+		<div id="changes-modal" class="search-and-replace-modal " style="display: none;">
+			<div class="search-and-replace-modal__header">
+				<button type="button" id="changes-modal-close" class="search-and-replace-modal__close-button"></button>
 			</div>
-			<div class="search-replace-changes-modal-content">
+			<div class="search-and-replace-modal__content">
 				<?php
 				foreach ( $report[ 'changes' ] as $table_report ) :
 					$changes = $table_report[ 'changes' ];
@@ -161,7 +160,7 @@ class FileDownloader {
 
 					$table = $table_report[ 'table_name' ];
 					?>
-					<h2 class="search-replace-modal-table-headline">
+					<h2 class="search-and-replace-modal__table-headline">
 						<strong><?php esc_html_e( 'Table:', 'search-and-replace' ); ?></strong>
 						<?php echo esc_html( $table ); ?>
 
@@ -169,20 +168,20 @@ class FileDownloader {
 						<?php echo esc_html( $changes_made ); ?>
 					</h2>
 
-					<table class="search-replace-modal-table">
+					<table class="search-and-replace-modal__table">
 
 						<thead>
 						<tr>
-							<th class="search-replace-row search-replace-narrow">
+							<th class="search-and-replace-modal__table-row search-and-replace-modal__table-narrow">
 								<?php esc_html_e( 'Row', 'search-and-replace' ); ?>
 							</th>
-							<th class="search-replace-column">
+							<th class="search-and-replace-modal__table-column">
 								<?php esc_html_e( 'Column', 'search-and-replace' ); ?>
 							</th>
-							<th class="search-replace-old-value">
+							<th class="search-and-replace__old-value">
 								<?php esc_html_e( 'Old value', 'search-and-replace' ); ?>
 							</th>
-							<th class="search-replace-new-value">
+							<th class="search-and-replace__new-value">
 								<?php esc_html_e( 'New value', 'search-and-replace' ); ?>
 							</th>
 						</tr>
@@ -202,16 +201,16 @@ class FileDownloader {
 
 							if ( $old_value and $new_value ) : ?>
 								<tr>
-									<td class="search-replace-row search-replace-narrow">
+									<td class="search-and-replace-modal__table-row search-and-replace-modal__table-narrow">
 										<?php echo esc_html( $change [ 'row' ] ); ?>
 									</td>
-									<td class="search-replace-column">
+									<td class="search-and-replace-modal__table-column">
 										<?php echo esc_html( $change [ 'column' ] ); ?>
 									</td>
-									<td class="search-replace-old-value">
+									<td class="search-and-replace__old-value">
 										<?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?>
 									</td>
-									<td class="search-replace-new-value">
+									<td class="search-and-replace__new-value">
 										<?php echo wp_kses( $new_value, [ 'span' => [ 'class' => [] ] ] ); ?>
 									</td>
 								</tr>
@@ -244,7 +243,7 @@ class FileDownloader {
 		if ( strlen( $haystack ) < 100 ) {
 			return $haystack;
 		}
-		$trimmed_results = null;
+		$trimmed_results = NULL;
 		// Get all occurrences of $needle with up to 50 chars front & back.
 		$matches      = preg_match_all( '@.{0,50}' . $needle . '.{0,50}@', $haystack, $trimmed_results );
 		$return_value = '';
@@ -302,7 +301,7 @@ class FileDownloader {
 		// If nonce has not been send, just return nothing else to do here.
 		// The method may be hooked to a wp action, so it's executed on every page request.
 		if ( ! $nonce ) {
-			return false;
+			return FALSE;
 		}
 
 		// Die in case the nonce has been passed but not a valid one.
@@ -318,11 +317,11 @@ class FileDownloader {
 		$action = isset( $_POST[ 'action' ] ) ? filter_var( $_POST[ 'action' ], FILTER_SANITIZE_STRING ) : '';
 
 		if ( 'download_file' !== $action ) {
-			return false;
+			return FALSE;
 		}
 
 		$sql_file = '';
-		$compress = false;
+		$compress = FALSE;
 
 		// @codingStandardsIgnoreLine
 		if ( isset( $_POST[ 'sql_file' ] ) ) {
@@ -337,7 +336,7 @@ class FileDownloader {
 		// If file name contains path or does not end with '.sql' exit.
 		// @todo create a function to prevent traversal path.
 		$ext = strrchr( $sql_file, '.' );
-		if ( false !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
+		if ( FALSE !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
 			wp_die( 'Cheating Uh?' );
 		}
 
@@ -347,11 +346,103 @@ class FileDownloader {
 			$compress = (bool) filter_var( $_POST[ 'compress' ], FILTER_VALIDATE_BOOLEAN );
 		}
 
-		// Download the file.
-		$this->dbe->deliver_backup( $sql_file, $compress );
+		if ( '' === $filename ) {
+			return FALSE;
+		}
+
+		// Build the file path.
+		$diskfile = get_temp_dir() . $filename;
+
+		// Let know the user why we cannot download his file.
+		if ( ! file_exists( $diskfile ) ) {
+			wp_die(
+				esc_html__( 'Seems was not possible to create the file for some reason.', 'search-and-replace' ),
+				esc_html__( 'Cannot Process the file - Search &amp; Replace', 'search-and-replace' ),
+				[
+					'back_link' => TRUE,
+				]
+			);
+		}
+
+		// Compress file if set.
+		if ( $compress ) {
+			// Gzipping may eat into memory.
+			$this->increase_memory();
+
+			$diskfile = $this->gzip( $diskfile );
+		}
+
+		// Provide file for download.
+		header( 'Content-Type: application/force-download' );
+		header( 'Content-Type: application/octet-stream' );
+		header( 'Content-Length: ' . filesize( $diskfile ) );
+		header( 'Content-Disposition: attachment; filename=' . basename( $diskfile ) );
+
+		$success = readfile( $diskfile );
+
+		if ( $success ) {
+			unlink( $diskfile );
+			die();
+		}
 
 		$this->max_execution->restore();
 
-		return true;
+		return TRUE;
 	}
+
+	/**
+	 * Increase Memory
+	 *
+	 * @return void
+	 */
+	private function increase_memory() {
+
+		// Try upping the memory limit before gzipping.
+		if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
+			@ini_set( 'memory_limit', '64M' );
+		}
+	}
+
+	/**
+	 * Gzip
+	 *
+	 * @param string $diskfile The path of the file to compress
+	 *
+	 * @return string the file path compressed or not
+	 */
+	private function gzip( $diskfile ) {
+
+		// The file to serve.
+		$gz_diskfile = "{$diskfile}.gz";
+
+		// Always serve a fresh file.
+		// If file all-ready exists doesn't mean we have the same replace request.
+		file_exists( $gz_diskfile ) and unlink( $gz_diskfile );
+
+		// Try gzipping with an external application.
+		@exec( "gzip $diskfile" );
+
+		if ( file_exists( $gz_diskfile ) ) {
+			$diskfile = $gz_diskfile;
+		}
+
+		// If we are not capable of using `gzip` command, lets try something else.
+		if ( $diskfile !== $gz_diskfile && function_exists( 'gzencode' ) ) {
+			$text    = file_get_contents( $diskfile );
+			$gz_text = gzencode( $text, 9 );
+			$fp      = fopen( $gz_diskfile, 'w' );
+
+			fwrite( $fp, $gz_text );
+
+			// Don't serve gzipped file if actually we encounter problem to close it.
+			if ( fclose( $fp ) ) {
+				unlink( $diskfile );
+
+				$diskfile = $gz_diskfile;
+			}
+		}
+
+		return $diskfile;
+	}
+
 }

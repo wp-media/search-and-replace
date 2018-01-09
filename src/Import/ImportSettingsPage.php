@@ -2,15 +2,16 @@
 
 namespace Inpsyde\SearchAndReplace\Import;
 
-use Inpsyde\SearchAndReplace\Database\Importer;
+use Brain\Nonces\NonceInterface;
+use Inpsyde\SearchAndReplace\Database\DatabaseImporter;
 use Inpsyde\SearchAndReplace\File\UploadedFile;
-use Inpsyde\SearchAndReplace\Settings\AbstractPage;
+use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
  * @package Inpsyde\SearchAndReplace\Import
  */
-class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
+class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
 	 * @var string
@@ -23,16 +24,16 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 	private $allowed_extensions = [ 'gz', 'sql' ];
 
 	/**
-	 * @var Importer
+	 * @var DatabaseImporter
 	 */
 	private $importer;
 
 	/**
 	 * ImportSettingsPage constructor.
 	 *
-	 * @param Importer $importer
+	 * @param DatabaseImporter $importer
 	 */
-	public function __construct( Importer $importer ) {
+	public function __construct( DatabaseImporter $importer ) {
 
 		$this->importer = $importer;
 	}
@@ -64,7 +65,7 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 	/**
 	 * Callback function for menu item
 	 */
-	public function render() {
+	public function render( NonceInterface $nonce ) {
 
 		?>
 
@@ -84,7 +85,7 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 							name="<?= esc_attr( self::FILE_KEY ) ?>"
 							id="<?= esc_attr( self::FILE_KEY ) ?>"
 						/>
-						<p class="form-description description">#
+						<p class="form-description description">
 							<?php
 							printf(
 								__( 'Allowed file extensions are: "%s"', 'search-and-replace' ),
@@ -103,6 +104,7 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 				</tr>
 				</tbody>
 			</table>
+			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
 			<?php $this->show_submit_button(); ?>
 		</form>
 
@@ -128,6 +130,7 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 			return FALSE;
 		}
 
+		$ext = $file->getExtension();
 		if ( ! in_array( $ext, $this->allowed_extensions, TRUE ) ) {
 			$this->add_error(
 				esc_html__(
@@ -139,9 +142,6 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 			return FALSE;
 		}
 
-		$sql = '';
-		$ext = $file->getExtension();
-
 		if ( $ext === 'sql' ) {
 			// @codingStandardsIgnoreLine
 			$sql = file_get_contents( $file->name() );
@@ -149,6 +149,8 @@ class ImportSettingsPage extends AbstractPage implements SettingsPageInterface {
 			$zd  = gzopen( $file->name(), 'r' );
 			$sql = gzread( $zd, 10000 );
 			gzclose( $zd );
+		} else {
+			$sql = '';
 		}
 
 		if ( $sql === '' ) {

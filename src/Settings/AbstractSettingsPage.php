@@ -5,11 +5,16 @@ namespace Inpsyde\SearchAndReplace\Settings;
 use Inpsyde\SearchAndReplace\Core\PluginConfig;
 
 /**
- * Class AbstractPage
+ * Class AbstractSettingsPage
  *
- * @package Inpsyde\SearchAndReplace\Page
+ * @package Inpsyde\SearchAndReplace\Settings
  */
-abstract class AbstractPage {
+abstract class AbstractSettingsPage {
+
+	protected $notifications = [
+		'errors'  => [],
+		'updated' => []
+	];
 
 	/**
 	 * @var PluginConfig
@@ -42,42 +47,41 @@ abstract class AbstractPage {
 	}
 
 	/**
-	 * @var array
-	 */
-	protected $errors = array();
-
-	/**
 	 * @param string $msg
 	 */
 	public function add_error( $msg ) {
 
-		$this->errors[] = (string) $msg;
+		$this->notifications[ 'error' ][] = (string) $msg;
+	}
+
+	/**
+	 * @param $msg
+	 */
+	public function add_updated( $msg ) {
+
+		$this->notifications[ 'updated' ][] = (string) $msg;
 	}
 
 	/**
 	 * Echoes the content of the $errors array as formatted HTML if it contains error messages.
 	 */
-	public function display_errors() {
+	public function render_notifications() {
 
-		if ( count( $this->errors ) < 1 ) {
-			return;
+		foreach ( $this->notifications as $type => $notifications ) {
+
+			if ( count( $notifications ) < 1 ) {
+				continue;
+			}
+			?>
+			<div class="<?= esc_attr( $type ) ?> notice is-dismissible">
+				<ul>
+					<?php foreach ( $notifications as $msg ) : ?>
+						<li><?= esc_html( $msg ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+			<?php
 		}
-
-		?>
-		<div class="error notice is-dismissible">
-			<p>
-				<strong>
-					<?php esc_html_e( 'Errors:', 'search-and-replace' ); ?>
-				</strong>
-			</p>
-			<ul>
-				<?php foreach ( $this->errors as $error ) : ?>
-					<li><?= esc_html( $error ); ?></li>
-				<?php endforeach; ?>
-			</ul>
-		</div>
-
-		<?php
 	}
 
 	/**
@@ -92,7 +96,6 @@ abstract class AbstractPage {
 			esc_attr( $this->get_slug() )
 		);
 		submit_button( $this->get_submit_button_title(), 'primary', $name );
-		wp_nonce_field( 'replace_domain', 'insr_nonce' );
 	}
 
 	/**

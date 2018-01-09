@@ -18,22 +18,29 @@ final class Provider implements ServiceProviderInterface {
 
 		$plugin[ 'Replace.Domain.ReplaceDomainSettingsPage' ] = function ( Container $plugin ) {
 
-			// TODO
-			//return new Domain\ReplaceDomainSettingsPage( $plugin[ 'config' ] );
+			return new Domain\ReplaceDomainSettingsSettingsPage(
+				$plugin[ 'Database.Manager' ],
+				$plugin[ 'Database.DatabaseExporter' ],
+				$plugin[ 'File.FileDownloader' ]
+			);
 		};
 
-		$plugin[ 'Replace.SearchAndReplaceSettingsPage' ] = function (Container $plugin ) {
+		$plugin[ 'Replace.SearchAndReplaceSettingsPage' ] = function ( Container $plugin ) {
 
-			// TODO
-			//return new SearchAndReplaceSettingsPage( $plugin[ 'config' ] );
+			return new SearchAndReplaceSettingsSettingsPage(
+				$plugin[ 'Database.Manager' ],
+				$plugin[ 'Database.Replace' ],
+				$plugin[ 'Database.DatabaseExporter' ],
+				$plugin[ 'File.FileDownloader' ]
+			);
 		};
 
 		$plugin->extend(
 			'Settings.SettingsManager',
 			function ( SettingsManager $manager, Container $plugin ) {
 
-				//$manager->add_page( $plugin[ 'Replace.SearchAndReplaceSettingsPage' ] );
-				//$manager->add_page( $plugin[ 'Replace.Domain.ReplaceDomainSettingsPage' ] );
+				$manager->add_page( $plugin[ 'Replace.SearchAndReplaceSettingsPage' ] );
+				$manager->add_page( $plugin[ 'Replace.Domain.ReplaceDomainSettingsPage' ] );
 
 				return $manager;
 			}

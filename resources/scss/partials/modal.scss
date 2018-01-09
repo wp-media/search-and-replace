@@ -1,7 +1,7 @@
 // Modal ************************************************************
 
 // styles for "detailed view" modal
-.search-replace-modal {
+.search-and-replace-modal {
 	position: fixed;
 	top: 30px;
 	left: 30px;
@@ -77,7 +77,7 @@
 			vertical-align: baseline;
 		}
 
-		.search-replace-narrow {
+		&-narrow {
 			width: 50px;
 		}
 
@@ -90,10 +90,11 @@
 			background-color: $color__clouds;
 		}
 
-		.search-replace-row {
+		&-row {
 			text-align: center;
 		}
-		.search-replace-column {
+
+		&-column {
 			width: 150px;
 		}
 	}

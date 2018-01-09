@@ -1,19 +1,18 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Database;
+namespace Inpsyde\SearchAndReplace\Database;
 
 /**
  * Class Manager
  *
- * @package Inpsyde\SearchReplace\Database
+ * @package Inpsyde\SearchAndReplace\Database
  */
 class Manager {
 
 	/**
 	 * @var \wpdb
-	 * Wordpress Database Class
-	 * some functions adapted from :
-	 * https://github.com/ExpandedFronts/Better-Search-Replace/blob/master/includes/class-bsr-db.php
+	 *
+	 * @link https://github.com/ExpandedFronts/Better-Search-Replace/blob/master/includes/class-bsr-db.php
 	 */
 	private $wpdb;
 

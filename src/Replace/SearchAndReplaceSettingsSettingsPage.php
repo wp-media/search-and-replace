@@ -2,18 +2,24 @@
 
 namespace Inpsyde\SearchAndReplace\Replace;
 
+use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database;
-use Inpsyde\SearchAndReplace\FileDownloader;
-use Inpsyde\SearchAndReplace\Settings\AbstractPage;
+use Inpsyde\SearchAndReplace\File\FileDownloader;
+use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
  * @package Inpsyde\SearchAndReplace\Replace
  */
-class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageInterface {
+class SearchAndReplaceSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
-	 * @var SettingsManager
+	 * @var string
+	 */
+	private $modal;
+
+	/**
+	 * @var Database\Manager
 	 */
 	private $dbm;
 
@@ -23,9 +29,9 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 	private $replace;
 
 	/**
-	 * @var $dbe
+	 * @var $exporter
 	 */
-	private $dbe;
+	private $exporter;
 
 	/**
 	 * @var FileDownloader
@@ -35,23 +41,23 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 	/**
 	 * BackupDatabase constructor.
 	 *
-	 * @param Database\Manager  $dbm
-	 * @param Database\Replace  $replace
-	 * @param Database\Exporter $dbe
-	 * @param FileDownloader    $downloader
+	 * @param Database\Manager        $manager
+	 * @param Database\Replace        $replace
+	 * @param Database\DatabaseBackup $dbe
+	 * @param FileDownloader          $downloader
 	 */
-	public function __construct( Database\Manager $dbm, Database\Replace $replace, Database\Exporter $dbe, FileDownloader $downloader ) {
+	public function __construct( Database\Manager $manager, Database\Replace $replace, Database\DatabaseBackup $dbe, FileDownloader $downloader ) {
 
-		$this->dbm        = $dbm;
+		$this->dbm        = $manager;
 		$this->replace    = $replace;
-		$this->dbe        = $dbe;
+		$this->exporter   = $dbe;
 		$this->downloader = $downloader;
 	}
 
 	/**
 	 * Shows the page contents
 	 */
-	public function render() {
+	public function render( NonceInterface $nonce ) {
 
 		?>
 		<form action="" method="post">
@@ -84,10 +90,16 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 						</label>
 					</th>
 					<td>
-				<textarea id="csv" cols="46" rows="5" name="csv" placeholder="<?php esc_html_e(
-					'search value, replace value (one per line)',
-					'search-and-replace'
-				); ?>"><?php $this->get_csv_value(); ?></textarea>
+				<textarea
+					id="csv"
+					cols="46"
+					rows="5"
+					name="csv"
+					placeholder="<?php esc_html_e(
+						'search value, replace value (one per line)',
+						'search-and-replace'
+					); ?>"
+				><?php $this->get_csv_value(); ?></textarea>
 						<p id="csv-hint">
 							<?php esc_html_e(
 								'Using comma delimited( , ). For example to replace cat with dog: cat,dog',
@@ -151,6 +163,7 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 
 				</tbody>
 			</table>
+			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
 			<?php $this->show_submit_button( 'search-submit' ); ?>
 		</form>
 
@@ -255,9 +268,6 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 
 		// Retrieve tables.
 		$tables = $this->selected_tables();
-		if ( ! $tables ) {
-			return FALSE;
-		}
 
 		// @codingStandardsIgnoreLine
 		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
@@ -279,7 +289,7 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 
 		if ( 'export' === $export_or_save ) {
 			// 'export'-button was checked
-			$report = $this->dbe->db_backup( $search, $replace, $tables, FALSE, '', $csv );
+			$report = $this->exporter->backup( $search, $replace, $tables, FALSE, '', $csv );
 			$this->downloader->show_modal( $report );
 		} else {
 			// "Save changes to database" was checked
@@ -334,43 +344,41 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = NULL ) {
 
-		echo '<div class="updated notice is-dismissible">';
-		if ( $dry_run ) {
-			echo '<p><strong>'
-				. esc_html__(
-					'Dry run is selected. No changes were made to the database and no SQL file was written .',
-					'search-and-replace'
-				)
-				. '</strong></p>';
 
-		} else {
-			echo '<p><strong>'
-				. esc_html__(
-					'The following changes were made to the database: ',
-					'search-and-replace'
-				)
-				. '</strong></p>';
-		}
 		$this->replace->set_dry_run( $dry_run );
 
 		$report = $this->replace->run_search_replace( $search, $replace, $tables, $csv );
-
 		if ( is_wp_error( $report ) ) {
 			$this->add_error( __( $report->get_error_message(), 'search-and-replace' ) );
-			$this->display_errors();
-		} else {
+		} elseif ( 0 === count( $report [ 'changes' ] ) ) {
+			$this->add_error( __( 'Search pattern not found.', 'search-and-replace', 'search-and-replace' ) );
 
-			if ( count( $report[ 'changes' ] ) > 0 ) {
-				$this->downloader->show_changes( $report );
-			}
+			return FALSE;
+		} elseif ( count( $report[ 'changes' ] ) > 0 ) {
 
-			// if no changes found report that
-			if ( 0 === count( $report [ 'changes' ] ) ) {
-				echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
-			}
+
+			$message = ( $dry_run )
+				?
+				__(
+					'Dry run is selected. No changes were made to the database and no SQL file was written .',
+					'search-and-replace'
+				)
+				: __(
+					'The following changes were made to the database: ',
+					'search-and-replace'
+				);
+
+			ob_start();
+			$this->downloader->show_changes( $report );
+			$modal = ob_get_contents();
+			ob_end_clean();
+
+			printf(
+				'<div class="updated notice is-dismissible"><p><strong>%s</strong></p>%s</div>',
+				$message,
+				$modal
+			);
 		}
-
-		echo '</div>';
 
 	}
 
@@ -405,7 +413,7 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 				"<option value='%s' %s>%s</option>",
 				esc_attr( $table ),
 				$selected,
-				esc_html( $table . $table_size )
+				esc_html( $table . ' ' . $table_size )
 			);
 
 		}
@@ -423,6 +431,8 @@ class SearchAndReplaceSettingsPage extends AbstractPage implements SettingsPageI
 
 		if ( ! empty( $_POST[ 'select_tables' ] ) ) {
 			$tables = filter_var( $_POST[ 'select_tables' ], FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY );
+		} elseif ( isset( $_POST[ 'select_all' ] ) ) {
+			$tables = $this->dbm->get_tables();
 		}
 
 		return $tables;

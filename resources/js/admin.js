@@ -33,7 +33,7 @@
 		function show_changes_modal() {
 
 			$( '#changes-modal, #changes-modal-background' ).show();
-			$(document.body).toggleClass('search-replace-modal-open');
+			$(document.body).toggleClass('search-and-replace--isOpen');
 
 			//add listener for close with "esc" - key
 			$( document ).bind( 'keydown', keydown_event_handler );
@@ -42,7 +42,7 @@
 		function hide_changes_modal() {
 
 			$( '#changes-modal, #changes-modal-background' ).hide();
-			$(document.body).toggleClass('search-replace-modal-open');
+			$(document.body).toggleClass('search-and-replace--isOpen');
 		}
 
 		function keydown_event_handler( e ) {

@@ -1,10 +1,11 @@
 <?php
 
-namespace Inpsyde\SearchAndReplace\Page;
+namespace Inpsyde\SearchAndReplace\Backup;
 
-use Inpsyde\SearchAndReplace\Database;
-use Inpsyde\SearchAndReplace\FileDownloader;
-use Inpsyde\SearchAndReplace\Settings\AbstractPage;
+use Brain\Nonces\NonceInterface;
+use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
+use Inpsyde\SearchAndReplace\File\FileDownloader;
+use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
@@ -12,12 +13,12 @@ use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
  *
  * @package Inpsyde\SearchAndReplace\Page
  */
-class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
+class BackupSettingsSettingsPage extends AbstractSettingsPage implements SettingsPageInterface {
 
 	/**
-	 * @var Database\Exporter
+	 * @var DatabaseBackup
 	 */
-	private $dbe;
+	private $exporter;
 
 	/**
 	 * @var FileDownloader
@@ -25,14 +26,14 @@ class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
 	private $downloader;
 
 	/**
-	 * BackupDatabase constructor.
+	 * BackupSettingsPage constructor.
 	 *
-	 * @param Database\Exporter $dbe
-	 * @param FileDownloader    $downloader
+	 * @param DatabaseBackup $exporter
+	 * @param FileDownloader $downloader
 	 */
-	public function __construct( Database\Exporter $dbe, FileDownloader $downloader ) {
+	public function __construct( DatabaseBackup $exporter, FileDownloader $downloader ) {
 
-		$this->dbe        = $dbe;
+		$this->exporter   = $exporter;
 		$this->downloader = $downloader;
 	}
 
@@ -57,7 +58,7 @@ class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
 	/**
 	 * Shows the page template
 	 */
-	public function render() {
+	public function render( NonceInterface $nonce ) {
 
 		?>
 		<p>
@@ -67,6 +68,7 @@ class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
 			); ?>
 		</p>
 		<form action="" method="post">
+			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
 			<?php $this->show_submit_button(); ?>
 		</form>
 		<?php
@@ -89,7 +91,7 @@ class BackupSettingsPage extends AbstractPage implements SettingsPageInterface {
 	 */
 	public function save( array $request_data = [] ) {
 
-		$report = $this->dbe->db_backup();
+		$report = $this->exporter->backup();
 		$this->downloader->show_modal( $report );
 
 		return TRUE;

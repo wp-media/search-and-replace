@@ -2,6 +2,8 @@
 
 namespace Inpsyde\SearchAndReplace\Settings\View;
 
+use Brain\Nonces\NonceInterface;
+use Inpsyde\SearchAndReplace\Core\PluginConfig;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
 /**
@@ -10,9 +12,24 @@ use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 class SettingsPageView implements SettingsPageViewInterface {
 
 	/**
+	 * @var PluginConfig
+	 */
+	protected $config;
+
+	/**
+	 * SettingsPageView constructor.
+	 *
+	 * @param PluginConfig $config
+	 */
+	public function __construct( PluginConfig $config ) {
+
+		$this->config = $config;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
-	public function render( array $pages = [] ) {
+	public function render( array $pages = [], NonceInterface $nonce ) {
 
 		$url          = admin_url( 'tools.php' );
 		$current_page = isset( $_GET[ 'page' ] ) ? $_GET[ 'page' ] : key( $pages );
@@ -41,8 +58,8 @@ class SettingsPageView implements SettingsPageViewInterface {
 					// Set the current page.
 					/** @var SettingsPageInterface $page */
 					$page = $pages[ $current_page ];
-					$page->display_errors();
-					$page->render();
+					$page->render_notifications();
+					$page->render( $nonce );
 					?>
 				</div>
 				<img

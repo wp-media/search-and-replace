@@ -1,17 +1,19 @@
 <?php
 
-namespace Inpsyde\SearchReplace\Database;
+namespace Inpsyde\SearchAndReplace\Database;
 
-use Inpsyde\SearchReplace\Service;
+use Inpsyde\SearchAndReplace\Service;
 
 /**
  * Class Replace
  * runs search & replace on a database
- * adapted from: https://github.com/interconnectit/Search-Replace-DB/blob/master/srdb.class.php
  *
- * @package Inpsyde\SearchReplace\Database
+ * @link    https://github.com/interconnectit/Search-Replace-DB/blob/master/srdb.class.php
+ *
+ * @package Inpsyde\SearchAndReplace\Database
  */
 class Replace {
+
 	/**
 	 * The Database Interface Object
 	 *
@@ -29,7 +31,7 @@ class Replace {
 	/**
 	 * @var bool - set if dry run
 	 */
-	private $dry_run = true;
+	private $dry_run = TRUE;
 
 	/**
 	 * @var Service\MaxExecutionTime
@@ -64,13 +66,13 @@ class Replace {
 	 *
 	 * @param string $search  What we want to replace.
 	 * @param string $replace What we want to replace it with.
-	 * @param string $tables  The name of the table we want to look at.
+	 * @param string|array $tables  The name of the table we want to look at.
 	 * @param null   $csv
 	 *
 	 * @return array|\WP_Error Collection of information gathered during the run.
 	 */
 
-	public function run_search_replace( $search, $replace, $tables, $csv = null ) {
+	public function run_search_replace( $search, $replace, $tables, $csv = NULL ) {
 
 		if ( $search === $replace && '' !== $search ) {
 			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
@@ -79,7 +81,7 @@ class Replace {
 		$this->max_execution->set();
 
 		$report = [
-			'errors'        => null,
+			'errors'        => NULL,
 			'changes'       => [],
 			'tables'        => '0',
 			'changes_count' => '0',
@@ -112,7 +114,7 @@ class Replace {
 	 *
 	 * @return array
 	 */
-	public function replace_values( $search = '', $replace = '', $table, $csv = null ) {
+	public function replace_values( $search = '', $replace = '', $table, $csv = NULL ) {
 
 		$table_report = [
 			'table_name' => $table,
@@ -154,7 +156,7 @@ class Replace {
 
 		list( $primary_key, $columns ) = $columns;
 
-		if ( null === $primary_key ) {
+		if ( NULL === $primary_key ) {
 			array_push(
 				$table_report[ 'errors' ],
 				"The table \"{$table}\" has no primary key. Changes will have to be made manually.",
@@ -173,7 +175,7 @@ class Replace {
 		$pages     = ceil( $row_count / $page_size );
 
 		// Prepare CSV data
-		if ( null !== $csv ) {
+		if ( NULL !== $csv && $csv !== '' ) {
 			$csv_lines = explode( "\n", $csv );
 			$csv_head  = str_getcsv( 'search,replace' );
 			foreach ( $csv_lines as $line ) {
@@ -197,7 +199,7 @@ class Replace {
 
 				$update_sql = [];
 				$where_sql  = [];
-				$update     = true;
+				$update     = TRUE;
 
 				foreach ( $columns as $column ) {
 					// Skip the GUID column per WordPress Codex.
@@ -213,8 +215,8 @@ class Replace {
 					}
 
 					// Run a search replace on the data that'll respect the serialisation.
-					if ( in_array( strtolower( $column ), $maybe_serialized, true )
-						&& is_serialized( $data_to_fix, false )
+					if ( in_array( strtolower( $column ), $maybe_serialized, TRUE )
+						&& is_serialized( $data_to_fix, FALSE )
 					) {
 						// Run a search replace on the data that'll respect the serialisation.
 						$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
@@ -223,9 +225,9 @@ class Replace {
 					}
 
 					// Run a search replace by CSV parameters if CSV input present
-					if ( null !== $csv ) {
+					if ( NULL !== $csv ) {
 						foreach ( $this->csv_data as $entry ) {
-							$edited_data = is_serialized( $edited_data, false ) ?
+							$edited_data = is_serialized( $edited_data, FALSE ) ?
 								$this->recursive_unserialize_replace(
 									$entry[ 'search' ],
 									$entry[ 'replace' ],
@@ -248,12 +250,12 @@ class Replace {
 						];
 
 						$update_sql[] = $column . ' = "' . $this->mysql_escape_mimic( $edited_data ) . '"';
-						$update       = true;
+						$update       = TRUE;
 					}
 				}
 
 				// Determine what to do with updates.
-				if ( true === $this->dry_run ) {
+				if ( TRUE === $this->dry_run ) {
 					// Don't do anything if a dry run.
 					continue;
 				}
@@ -275,7 +277,7 @@ class Replace {
 			}
 		}
 
-		$table_report[ 'end' ] = microtime( true );
+		$table_report[ 'end' ] = microtime( TRUE );
 
 		$this->dbm->flush();
 
@@ -303,21 +305,23 @@ class Replace {
 	 *
 	 * @return array The original array with all elements replaced as needed.
 	 */
-	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = true ) {
+	public function recursive_unserialize_replace( $from = '', $to = '', $data = '', $serialised = TRUE ) {
 
 		// Some unserialized data cannot be re-serialised eg. SimpleXMLElements.
 		try {
-			$unserialized = ( is_serialized( $data, false ) ) ?
+			$unserialized = ( is_serialized( $data, FALSE ) )
+				?
 				// @codingStandardsIgnoreLine
-				maybe_unserialize( $data ) :
-				false;
+				maybe_unserialize( $data )
+				:
+				FALSE;
 
-			if ( $unserialized !== false ) {
-				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, false );
+			if ( $unserialized !== FALSE ) {
+				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, FALSE );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = [];
 				foreach ( (array) $data as $key => $value ) {
-					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false);
+					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, FALSE );
 				}
 
 				$data = $_tmp;
@@ -327,7 +331,7 @@ class Replace {
 				$_tmp  = $data;
 				$props = get_object_vars( $data );
 				foreach ( $props as $key => $value ) {
-					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false);
+					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, FALSE );
 				}
 
 				$data = $_tmp;
@@ -340,12 +344,12 @@ class Replace {
 					return $data;
 				}
 
-				$marker = false;
+				$marker = FALSE;
 
 				if ( is_serialized_string( $data ) ) {
 					// @codingStandardsIgnoreLine
 					$data   = maybe_unserialize( $data );
-					$marker = true;
+					$marker = TRUE;
 				}
 
 				$tmp_data = $data;
@@ -353,7 +357,7 @@ class Replace {
 
 				// Do not allow to return valid serialized data,
 				// If after replacement data is_serialized then add one | to the replacement.
-				if ( is_serialized( $data, false ) ) {
+				if ( is_serialized( $data, FALSE ) ) {
 					$data = str_replace( $from, '|' . $to, $tmp_data );
 				}
 
@@ -366,7 +370,8 @@ class Replace {
 				// @codingStandardsIgnoreLine
 				$data = serialize( $data );
 			}
-		} catch ( \Throwable $throwable ) {
+		}
+		catch ( \Throwable $throwable ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				throw $throwable;
 			}

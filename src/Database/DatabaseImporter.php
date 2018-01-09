@@ -2,14 +2,20 @@
 
 namespace Inpsyde\SearchAndReplace\Database;
 
+use Inpsyde\SearchAndReplace\Core\PluginConfig;
 use Inpsyde\SearchAndReplace\Service\MaxExecutionTime;
 
 /**
- * Class Importer
+ * Class DatabaseImporter
  *
  * @package Inpsyde\SearchAndReplace\Database
  */
-class Importer {
+class DatabaseImporter {
+
+	/**
+	 * @var PluginConfig
+	 */
+	private $config;
 
 	/**
 	 * @var MaxExecutionTime
@@ -21,8 +27,9 @@ class Importer {
 	 *
 	 * @param MaxExecutionTime $max_execution
 	 */
-	public function __construct( MaxExecutionTime $max_execution ) {
+	public function __construct( PluginConfig $config, MaxExecutionTime $max_execution ) {
 
+		$this->config        = $config;
 		$this->max_execution = $max_execution;
 	}
 
@@ -38,7 +45,12 @@ class Importer {
 		$this->max_execution->set();
 
 		// connect via mysqli for easier db import
-		$mysqli = new \mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
+		$mysqli = new \mysqli(
+			$this->config->get( 'db.host' ),
+			$this->config->get( 'db.user' ),
+			$this->config->get( 'db.password' ),
+			$this->config->get( 'db.name' )
+		);
 
 		// Run the SQL
 		$i = 1;

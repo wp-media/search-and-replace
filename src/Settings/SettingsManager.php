@@ -45,7 +45,7 @@ class SettingsManager {
 
 		foreach ( $this->pages as $slug => $page ) {
 
-			add_submenu_page(
+			$hook = add_submenu_page(
 				'tools.php',
 				$page->get_page_title(),
 				$page->get_menu_title(),
@@ -53,9 +53,11 @@ class SettingsManager {
 				$slug,
 				function () {
 
-					$this->view->render( $this->pages );
+					$this->view->render( $this->pages, $this->auth->nonce() );
 				}
 			);
+
+			add_action( 'load-' . $hook, [ $this, 'save' ] );
 		}
 	}
 
@@ -77,7 +79,7 @@ class SettingsManager {
 	public function save() {
 
 		$request_data = $_POST;
-		$page         = isset( $request_data[ 'action' ] ) ? $request_data[ 'action' ] : '';
+		$page         = $_GET[ 'page' ] ? : '';
 
 		if ( $page === '' || ! isset( $this->pages[ $page ] ) ) {
 

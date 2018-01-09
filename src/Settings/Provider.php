@@ -5,7 +5,6 @@ namespace Inpsyde\SearchAndReplace\Settings;
 use Inpsyde\SearchAndReplace\Core\BootableProviderInterface;
 use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuth;
 use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
-use Inpsyde\SearchAndReplace\Settings\SettingsManager;
 use Inpsyde\SearchAndReplace\Settings\View\SettingsPageView;
 use Inpsyde\SearchAndReplace\Settings\View\SettingsPageViewInterface;
 use Pimple\Container;
@@ -21,9 +20,9 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 	 */
 	public function register( Container $plugin ) {
 
-		$plugin[ 'Settings.View.SettingsPageView' ] = function (): SettingsPageViewInterface {
+		$plugin[ 'Settings.View.SettingsPageView' ] = function ( Container $plugin ): SettingsPageViewInterface {
 
-			return new SettingsPageView();
+			return new SettingsPageView( $plugin[ 'config' ] );
 		};
 
 		$plugin[ 'Settings.Auth.SettingsPageAuth' ] = function ( Container $plugin ): SettingsPageAuthInterface {

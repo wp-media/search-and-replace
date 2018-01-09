@@ -2,6 +2,11 @@
 
 namespace Inpsyde\SearchAndReplace\File;
 
+/**
+ * Class UploadedFile
+ *
+ * @package Inpsyde\SearchAndReplace\File
+ */
 class UploadedFile extends \SplFileInfo {
 
 	protected $name;
@@ -12,7 +17,12 @@ class UploadedFile extends \SplFileInfo {
 
 	protected $error;
 
-	public function __construct( $file ) {
+	/**
+	 * UploadedFile constructor.
+	 *
+	 * @param array $file
+	 */
+	public function __construct( array $file = [] ) {
 
 		$name = str_replace( '\\', '/', $file[ 'name' ] );
 		$pos  = strrpos( $name, '/' );
@@ -25,26 +35,41 @@ class UploadedFile extends \SplFileInfo {
 		parent::__construct( $this->name );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function name() {
 
-		return $this->name;
+		return (string) $this->name;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function mine() {
 
-		return $this->mime;
+		return (string) $this->mime;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function size() {
 
-		return $this->size;
+		return (int) $this->size;
 	}
 
+	/**
+	 * @return int
+	 */
 	public function error() {
 
 		return (int) $this->error;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function error_message() {
 
 		$errors = [

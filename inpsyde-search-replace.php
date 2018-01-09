@@ -41,6 +41,15 @@ function initialize() {
 		}
 		$config = ConfigBuilder::from_file( __FILE__ );
 
+		$config->import(
+			[
+				'db.host'     => DB_HOST,
+				'db.user'     => DB_USER,
+				'db.password' => DB_PASSWORD,
+				'db.name'     => DB_NAME
+			]
+		);
+
 		$plugin = new SearchAndReplace(
 			[
 				'config' => $config->freeze(),
@@ -49,6 +58,7 @@ function initialize() {
 
 		$plugin->register( new Assets\Provider() );
 		$plugin->register( new Service\Provider() );
+		$plugin->register( new File\Provider() );
 		$plugin->register( new Database\Provider() );
 		$plugin->register( new Settings\Provider() );
 		$plugin->register( new Replace\Provider() );
@@ -78,7 +88,7 @@ function initialize() {
  */
 function check_plugin_requirements() {
 
-	$min_php_version     = '7.0';
+	$min_php_version     = '5.6';
 	$current_php_version = phpversion();
 	if ( ! version_compare( $current_php_version, $min_php_version, '>=' ) ) {
 		admin_notice(
