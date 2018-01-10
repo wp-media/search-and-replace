@@ -31,8 +31,6 @@ class CreditsSettingsPage extends AbstractSettingsPage implements SettingsPageIn
 
 	/**
 	 * Callback function for credits content.
-	 *
-	 * @param Request $request
 	 */
 	public function render( Request $request ) {
 

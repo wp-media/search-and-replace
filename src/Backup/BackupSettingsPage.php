@@ -2,11 +2,11 @@
 
 namespace Inpsyde\SearchAndReplace\Backup;
 
+use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
 use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
-use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -28,20 +28,13 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	private $downloader;
 
 	/**
-	 * @var SettingsPageAuthInterface
-	 */
-	private $auth;
-
-	/**
 	 * BackupSettingsPage constructor.
 	 *
-	 * @param SettingsPageAuthInterface $auth
-	 * @param DatabaseBackup            $exporter
-	 * @param FileDownloader            $downloader
+	 * @param DatabaseBackup $exporter
+	 * @param FileDownloader $downloader
 	 */
-	public function __construct( SettingsPageAuthInterface $auth, DatabaseBackup $exporter, FileDownloader $downloader ) {
+	public function __construct( DatabaseBackup $exporter, FileDownloader $downloader ) {
 
-		$this->auth       = $auth;
 		$this->exporter   = $exporter;
 		$this->downloader = $downloader;
 	}
@@ -65,9 +58,7 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	}
 
 	/**
-	 * Shows the page template
-	 *
-	 * @param Request $request
+	 * Shows the page template.
 	 */
 	public function render( Request $request ) {
 
@@ -78,11 +69,7 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 				'search-and-replace'
 			); ?>
 		</p>
-		<form action="" method="post">
-			<?= \Brain\Nonces\formField( $this->auth->nonce() ) /* xss ok */ ?>
-			<?php $this->show_submit_button(); ?>
-		</form>
-		<?php
+		<?php $this->show_submit_button();
 	}
 
 	/**
@@ -106,14 +93,6 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 		$this->downloader->show_modal( $report );
 
 		return TRUE;
-	}
-
-	/**
-	 * @return SettingsPageAuthInterface
-	 */
-	public function auth() {
-
-		return $this->auth;
 	}
 
 }

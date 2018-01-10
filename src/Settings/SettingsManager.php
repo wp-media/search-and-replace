@@ -51,20 +51,15 @@ class SettingsManager {
 
 		foreach ( $this->pages as $slug => $page ) {
 
-			$cap = $page instanceof UpdateAwareSettingsPage
-				? $page->auth()
-					->cap()
-				: $this->auth->cap();
-
 			$hook = add_submenu_page(
 				'tools.php',
 				$page->get_page_title(),
 				$page->get_menu_title(),
-				$cap,
+				$this->auth->cap(),
 				$slug,
 				function () {
 
-					$this->view->render( $this->pages, $this->request );
+					$this->view->render( $this->pages, $this->request, $this->auth->nonce() );
 				}
 			);
 
@@ -91,7 +86,8 @@ class SettingsManager {
 	 */
 	public function save() {
 
-		if ( $this->request->server()->get( 'REQUEST_METHOD' ) !== 'POST' ) {
+		if ( $this->request->server()
+				->get( 'REQUEST_METHOD' ) !== 'POST' ) {
 
 			return FALSE;
 		}
@@ -107,12 +103,10 @@ class SettingsManager {
 		/** @var SettingsPageInterface|UpdateAwareSettingsPage $page */
 		$page = $this->pages[ $page_slug ];
 
-		if ( ! $page->auth()
-			->is_allowed( $this->request ) ) {
+		if ( ! $this->auth->is_allowed( $this->request ) ) {
 
 			array_walk(
-				$page->auth()
-					->errors(),
+				$this->auth->errors(),
 				[ $page, 'add_error' ]
 			);
 

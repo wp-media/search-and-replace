@@ -2,11 +2,11 @@
 
 namespace Inpsyde\SearchAndReplace\Import;
 
+use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseImporter;
 use Inpsyde\SearchAndReplace\File\UploadedFile;
 use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
-use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -31,19 +31,12 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	private $importer;
 
 	/**
-	 * @var SettingsPageAuthInterface
-	 */
-	private $auth;
-
-	/**
 	 * ImportSettingsPage constructor.
 	 *
-	 * @param SettingsPageAuthInterface $auth
-	 * @param DatabaseImporter          $importer
+	 * @param DatabaseImporter $importer
 	 */
-	public function __construct( SettingsPageAuthInterface $auth, DatabaseImporter $importer ) {
+	public function __construct( DatabaseImporter $importer ) {
 
-		$this->auth     = $auth;
 		$this->importer = $importer;
 	}
 
@@ -79,47 +72,41 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	public function render( Request $request ) {
 
 		?>
+		<table class="form-table">
+			<tbody>
+			<tr>
+				<th>
+					<strong>
+						<?php esc_html_e( 'Select SQL file to upload. ', 'search-and-replace' ); ?>
+					</strong>
+				</th>
 
-		<form action="" method="post" enctype="multipart/form-data">
-			<table class="form-table">
-				<tbody>
-				<tr>
-					<th>
-						<strong>
-							<?php esc_html_e( 'Select SQL file to upload. ', 'search-and-replace' ); ?>
-						</strong>
-					</th>
-
-					<td>
-						<input
-							type="file"
-							name="<?= esc_attr( self::FILE_KEY ) ?>"
-							id="<?= esc_attr( self::FILE_KEY ) ?>"
-						/>
-						<p class="form-description description">
-							<?php
-							printf(
-								__( 'Allowed file extensions are: "%s"', 'search-and-replace' ),
-								implode( ', "', $this->allowed_extensions )
-							);
-							?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th></th>
-					<td>
-						<?php esc_html_e( 'Maximum file size: ', 'search-and-replace' ); ?>
-						<?php echo floatval( $this->file_upload_max_size() ) . 'KB'; ?>
-					</td>
-				</tr>
-				</tbody>
-			</table>
-			<?= \Brain\Nonces\formField( $this->auth->nonce() ) /* xss ok */ ?>
-			<?php $this->show_submit_button(); ?>
-		</form>
-
-		<?php
+				<td>
+					<input
+						type="file"
+						name="<?= esc_attr( self::FILE_KEY ) ?>"
+						id="<?= esc_attr( self::FILE_KEY ) ?>"
+					/>
+					<p class="form-description description">
+						<?php
+						printf(
+							__( 'Allowed file extensions are: "%s"', 'search-and-replace' ),
+							implode( ', "', $this->allowed_extensions )
+						);
+						?>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<th></th>
+				<td>
+					<?php esc_html_e( 'Maximum file size: ', 'search-and-replace' ); ?>
+					<?php echo floatval( $this->file_upload_max_size() ) . 'KB'; ?>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		<?php $this->show_submit_button();
 	}
 
 	/**
@@ -202,14 +189,6 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 
 		return TRUE;
 
-	}
-
-	/**
-	 * @return SettingsPageAuthInterface
-	 */
-	public function auth() {
-
-		return $this->auth;
 	}
 
 	/**

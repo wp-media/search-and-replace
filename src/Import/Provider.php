@@ -19,7 +19,6 @@ final class Provider implements ServiceProviderInterface {
 		$plugin[ 'Backup.ImportSettingsPage' ] = function ( Container $plugin ) {
 
 			return new ImportSettingsPage(
-				$plugin[ 'Settings.Auth.SettingsPageAuth' ],
 				$plugin[ 'Database.DatabaseImporter' ]
 			);
 		};

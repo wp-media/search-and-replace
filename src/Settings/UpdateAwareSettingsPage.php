@@ -13,11 +13,6 @@ use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 interface UpdateAwareSettingsPage {
 
 	/**
-	 * @return SettingsPageAuthInterface
-	 */
-	public function auth();
-
-	/**
 	 * Updating or using the send data.
 	 *
 	 * @param Request $request

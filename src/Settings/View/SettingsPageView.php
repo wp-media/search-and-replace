@@ -2,10 +2,10 @@
 
 namespace Inpsyde\SearchAndReplace\Settings\View;
 
+use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Core\PluginConfig;
 use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
-use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
 /**
  * @package Inpsyde\SearchAndReplace\Page
@@ -30,22 +30,13 @@ class SettingsPageView implements SettingsPageViewInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function render( array $pages = [], Request $request ) {
+	public function render( array $pages = [], Request $request, NonceInterface $nonce ) {
 
 		$url          = admin_url( 'tools.php' );
-		$current_page = $request->query()
-			->has( 'page' )
-			? $request->query()
-				->get( 'page' )
+		$query        = $request->query();
+		$current_page = $query->has( 'page' )
+			? $query->get( 'page' )
 			: key( $pages );
-
-		$pages = array_filter(
-			$pages,
-			function ( SettingsPageInterface $page ) use ( $request ) {
-
-				return ( $page instanceof UpdateAwareSettingsPage && ! $page->auth()->is_allowed( $request ) ) || TRUE;
-			}
-		);
 
 		?>
 		<div class="wrap">
@@ -71,13 +62,17 @@ class SettingsPageView implements SettingsPageViewInterface {
 					?>
 				</div>
 				<div class="inpsyde-tab__content">
-					<?php
-					// Set the current page.
-					/** @var SettingsPageInterface $page */
-					$page = $pages[ $current_page ];
-					$page->render_notifications();
-					$page->render( $request );
-					?>
+
+					<form action="" method="post" enctype="multipart/form-data">
+						<?php
+						// Set the current page.
+						/** @var SettingsPageInterface $page */
+						$page = $pages[ $current_page ];
+						$page->render_notifications();
+						$page->render( $request );
+						echo \Brain\Nonces\formField( $nonce ) /* xss ok */
+						?>
+					</form>
 				</div>
 				<img
 					src="<?= esc_url( $this->config->get( 'assets.img.url' ) . 'inpsyde.svg' ); ?>"

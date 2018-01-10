@@ -6,7 +6,6 @@ use Inpsyde\SearchAndReplace\Database;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
 use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
-use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -14,11 +13,6 @@ use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
  * @package Inpsyde\SearchAndReplace\Replace
  */
 class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
-
-	/**
-	 * @var SettingsPageAuthInterface
-	 */
-	private $auth;
 
 	/**
 	 * @var Database\Manager
@@ -43,21 +37,18 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 	/**
 	 * BackupDatabase constructor.
 	 *
-	 * @param  SettingsPageAuthInterface $auth
-	 * @param Database\Manager           $manager
-	 * @param Database\Replace           $replace
-	 * @param Database\DatabaseBackup    $dbe
-	 * @param FileDownloader             $downloader
+	 * @param Database\Manager        $manager
+	 * @param Database\Replace        $replace
+	 * @param Database\DatabaseBackup $dbe
+	 * @param FileDownloader          $downloader
 	 */
 	public function __construct(
-		SettingsPageAuthInterface $auth,
 		Database\Manager $manager,
 		Database\Replace $replace,
 		Database\DatabaseBackup $dbe,
 		FileDownloader $downloader
 	) {
 
-		$this->auth       = $auth;
 		$this->dbm        = $manager;
 		$this->replace    = $replace;
 		$this->exporter   = $dbe;
@@ -78,54 +69,53 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 		}
 
 		?>
-		<form action="" method="post">
-			<table class="form-table">
-				<tbody>
-				<tr>
-					<th>
-						<label for="search">
-							<?php esc_html_e( 'Search for: ', 'search-and-replace' ); ?>
-						</label>
-					</th>
-					<td>
-						<input
-							id="search"
-							type="text"
-							name="search"
-							value="<?php
-							echo $is_dry_run
-								? $escape( $data->get( 'search', '' ) )
-								: '';
-							?>"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<th>
-						<label for="replace">
-							<?php esc_html_e( 'Replace with: ', 'search-and-replace' ); ?>
-						</label>
-					</th>
-					<td>
-						<input
-							id="replace"
-							type="text"
-							name="replace"
-							value="<?php
-							echo $is_dry_run
-								? $escape( $data->get( 'replace', '' ) )
-								: '';
-							?>"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<th>
-						<label for="csv">
-							<?php esc_html_e( 'CSV Format Search/Replace:', 'search-and-replace' ); ?>
-						</label>
-					</th>
-					<td>
+		<table class="form-table">
+			<tbody>
+			<tr>
+				<th>
+					<label for="search">
+						<?php esc_html_e( 'Search for: ', 'search-and-replace' ); ?>
+					</label>
+				</th>
+				<td>
+					<input
+						id="search"
+						type="text"
+						name="search"
+						value="<?php
+						echo $is_dry_run
+							? $escape( $data->get( 'search', '' ) )
+							: '';
+						?>"
+					/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<label for="replace">
+						<?php esc_html_e( 'Replace with: ', 'search-and-replace' ); ?>
+					</label>
+				</th>
+				<td>
+					<input
+						id="replace"
+						type="text"
+						name="replace"
+						value="<?php
+						echo $is_dry_run
+							? $escape( $data->get( 'replace', '' ) )
+							: '';
+						?>"
+					/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<label for="csv">
+						<?php esc_html_e( 'CSV Format Search/Replace:', 'search-and-replace' ); ?>
+					</label>
+				</th>
+				<td>
 				<textarea
 					id="csv"
 					cols="46"
@@ -140,72 +130,70 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 						? $escape( $data->get( 'csv', '' ) )
 						: '';
 					?></textarea>
-						<p id="csv-hint">
-							<?php esc_html_e(
-								'Using comma delimited( , ). For example to replace cat with dog: cat,dog',
-								'search-and-replace'
-							); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th><strong><?php esc_html_e( 'Select tables', 'search-and-replace' ); ?></strong></th>
-					<td>
-						<?php $this->show_table_list(); ?>
-						<p>
-							<input id="select_all_tables" type="checkbox" name="select_all" />
-							<label for="select_all_tables">
-								<?php esc_html_e( 'Select all tables', 'search-and-replace' ); ?>
-							</label>
-						</p>
-					</td>
-				</tr>
-
-				<tr>
-					<th>
-						<label for="dry_run">
-							<?php esc_html_e( 'Dry Run', 'search-and-replace' ); ?>
+					<p id="csv-hint">
+						<?php esc_html_e(
+							'Using comma delimited( , ). For example to replace cat with dog: cat,dog',
+							'search-and-replace'
+						); ?>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<th><strong><?php esc_html_e( 'Select tables', 'search-and-replace' ); ?></strong></th>
+				<td>
+					<?php $this->show_table_list(); ?>
+					<p>
+						<input id="select_all_tables" type="checkbox" name="select_all" />
+						<label for="select_all_tables">
+							<?php esc_html_e( 'Select all tables', 'search-and-replace' ); ?>
 						</label>
-					</th>
-					<td>
-						<input type="checkbox" id="dry_run" name="dry_run" checked />
-					</td>
-				</tr>
-				<tr class="maybe_disabled disabled">
-					<th>
-						<?php esc_html_e( 'Export SQL file or write changes to DB?', 'search-and-replace' ); ?>
-					</th>
-					<td>
-						<p>
-							<input id="radio1" type="radio" name="export_or_save" value="export" checked disabled />
-							<label for="radio1">
-								<?php esc_html_e( 'Export SQL file with changes', 'search-and-replace' ); ?>
-							</label>
-						</p>
-						<p>
-							<input id="radio2" type="radio" name="export_or_save" value="save_to_db" disabled />
-							<label for="radio2">
-								<?php esc_html_e( 'Save changes to Database', 'search-and-replace' ); ?>
-							</label>
-						</p>
-					</td>
-				</tr>
-				<tr class="maybe_disabled disabled">
-					<th>
-						<label for="compress">
-							<?php esc_html_e( 'Use GZ compression', 'search-and-replace' ); ?>
-						</label>
-					</th>
-					<td>
-						<input id="compress" type="checkbox" name="compress" disabled />
-					</td>
-				</tr>
+					</p>
+				</td>
+			</tr>
 
-				</tbody>
-			</table>
-			<?= \Brain\Nonces\formField( $this->auth->nonce() ) /* xss ok */ ?>
-			<?php $this->show_submit_button( 'search-submit' ); ?>
-		</form>
+			<tr>
+				<th>
+					<label for="dry_run">
+						<?php esc_html_e( 'Dry Run', 'search-and-replace' ); ?>
+					</label>
+				</th>
+				<td>
+					<input type="checkbox" id="dry_run" name="dry_run" checked />
+				</td>
+			</tr>
+			<tr class="maybe_disabled disabled">
+				<th>
+					<?php esc_html_e( 'Export SQL file or write changes to DB?', 'search-and-replace' ); ?>
+				</th>
+				<td>
+					<p>
+						<input id="radio1" type="radio" name="export_or_save" value="export" checked disabled />
+						<label for="radio1">
+							<?php esc_html_e( 'Export SQL file with changes', 'search-and-replace' ); ?>
+						</label>
+					</p>
+					<p>
+						<input id="radio2" type="radio" name="export_or_save" value="save_to_db" disabled />
+						<label for="radio2">
+							<?php esc_html_e( 'Save changes to Database', 'search-and-replace' ); ?>
+						</label>
+					</p>
+				</td>
+			</tr>
+			<tr class="maybe_disabled disabled">
+				<th>
+					<label for="compress">
+						<?php esc_html_e( 'Use GZ compression', 'search-and-replace' ); ?>
+					</label>
+				</th>
+				<td>
+					<input id="compress" type="checkbox" name="compress" disabled />
+				</td>
+			</tr>
+
+			</tbody>
+		</table>
+		<?php $this->show_submit_button( 'search-submit' ); ?>
 
 		<?php
 
@@ -271,6 +259,12 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 		$replace = stripslashes( $data->get( 'replace' ) );
 		$csv     = stripslashes( $data->get( 'csv' ) );
 
+		// if search field is empty and replace field is not empty quit. If both fields are empty, go on (useful for backup of single tables without changing)
+		if ( '' === $search && '' !== $replace ) {
+			$this->add_error( __( 'Search field is empty.', 'search-and-replace' ) );
+
+			return FALSE;
+		}
 		// if dry run is checked we run the replace function with dry run and return
 		if ( TRUE === $dry_run ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
@@ -310,7 +304,7 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 		if ( is_wp_error( $report ) ) {
 			$this->add_error( __( $report->get_error_message(), 'search-and-replace' ) );
 		} elseif ( 0 === count( $report [ 'changes' ] ) ) {
-			$this->add_error( __( 'Search pattern not found.', 'search-and-replace', 'search-and-replace' ) );
+			$this->add_error( __( 'Search pattern not found.', 'search-and-replace' ) );
 
 			return FALSE;
 		} elseif ( count( $report[ 'changes' ] ) > 0 ) {
@@ -395,14 +389,6 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 		}
 
 		return $tables;
-	}
-
-	/**
-	 * @return SettingsPageAuthInterface
-	 */
-	public function auth() {
-
-		return $this->auth;
 	}
 
 }
