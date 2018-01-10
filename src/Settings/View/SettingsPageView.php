@@ -2,9 +2,10 @@
 
 namespace Inpsyde\SearchAndReplace\Settings\View;
 
-use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Core\PluginConfig;
+use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
+use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
 /**
  * @package Inpsyde\SearchAndReplace\Page
@@ -29,10 +30,22 @@ class SettingsPageView implements SettingsPageViewInterface {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function render( array $pages = [], NonceInterface $nonce ) {
+	public function render( array $pages = [], Request $request ) {
 
 		$url          = admin_url( 'tools.php' );
-		$current_page = isset( $_GET[ 'page' ] ) ? $_GET[ 'page' ] : key( $pages );
+		$current_page = $request->query()
+			->has( 'page' )
+			? $request->query()
+				->get( 'page' )
+			: key( $pages );
+
+		$pages = array_filter(
+			$pages,
+			function ( SettingsPageInterface $page ) use ( $request ) {
+
+				return ( $page instanceof UpdateAwareSettingsPage && ! $page->auth()->is_allowed( $request ) ) || TRUE;
+			}
+		);
 
 		?>
 		<div class="wrap">
@@ -41,6 +54,10 @@ class SettingsPageView implements SettingsPageViewInterface {
 			<div class="inpsyde-tabs">
 				<div class="inpsyde-tab__navigation">
 					<?php
+					/**
+					 * @var string                $slug
+					 * @var SettingsPageInterface $page
+					 */
 					foreach ( $pages as $slug => $page ) :
 						$class = $current_page === $slug ? 'ui-tabs-active' : '';
 						printf(
@@ -59,7 +76,7 @@ class SettingsPageView implements SettingsPageViewInterface {
 					/** @var SettingsPageInterface $page */
 					$page = $pages[ $current_page ];
 					$page->render_notifications();
-					$page->render( $nonce );
+					$page->render( $request );
 					?>
 				</div>
 				<img

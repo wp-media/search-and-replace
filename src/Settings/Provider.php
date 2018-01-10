@@ -27,7 +27,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 		$plugin[ 'Settings.Auth.SettingsPageAuth' ] = function ( Container $plugin ): SettingsPageAuthInterface {
 
-			return new SettingsPageAuth( $plugin[ 'config' ]->get( 'plugin.textdomain' ) );
+			return new SettingsPageAuth();
 		};
 
 		$plugin[ 'Settings.SettingsManager' ] = function ( Container $plugin ): SettingsManager {

@@ -6,7 +6,13 @@ use Brain\Nonces\ArrayContext;
 use Brain\Nonces\NonceInterface;
 use Brain\Nonces\WpNonce;
 use Inpsyde\SearchAndReplace\Events\LogEvents;
+use Inpsyde\SearchAndReplace\Http\Request;
 
+/**
+ * Class SettingsPageAuth
+ *
+ * @package Inpsyde\SearchAndReplace\Settings\Auth
+ */
 class SettingsPageAuth implements SettingsPageAuthInterface {
 
 	const DEFAULT_CAP = 'manage_options';
@@ -14,12 +20,17 @@ class SettingsPageAuth implements SettingsPageAuthInterface {
 	/**
 	 * @var string
 	 */
-	private $cap;
+	protected $cap;
 
 	/**
 	 * @var WpNonce
 	 */
-	private $nonce;
+	protected $nonce;
+
+	/**
+	 * @var array
+	 */
+	protected $errors = [];
 
 	/**
 	 * SettingsPageAuth constructor.
@@ -28,37 +39,53 @@ class SettingsPageAuth implements SettingsPageAuthInterface {
 	 * @param string         $cap
 	 * @param NonceInterface $nonce
 	 */
-	public function __construct( string $action, $cap = NULL, NonceInterface $nonce = NULL ) {
+	public function __construct( string $action = 'search-and-replace', $cap = self::DEFAULT_CAP, NonceInterface $nonce = NULL ) {
 
-		$this->cap   = $cap === NULL ? self::DEFAULT_CAP : $cap;
+		$this->cap   = $cap;
 		$this->nonce = $nonce == NULL ? new WpNonce( $action ) : $nonce;
 	}
 
 	/**
-	 * @param array $request_data
+	 * @param Request $request
 	 *
 	 * @return bool
 	 */
-	public function is_allowed( array $request_data = [] ) {
+	public function is_allowed( Request $request ) {
+
+		$context = [
+			'method'  => __METHOD__,
+			'cap'     => $this->cap,
+			'nonce'   => $this->nonce,
+			'request' => $request,
+		];
 
 		if ( ! current_user_can( $this->cap ) ) {
+			$msg = __( 'User has no sufficient rights to save page', 'search-and-replace' );
+
+			$this->errors[] = $msg;
 			do_action(
 				LogEvents::ERROR,
-				'User has no sufficient rights to save page',
-				[
-					'method' => __METHOD__,
-					'cap'    => $this->cap,
-					'nonce'  => $this->nonce,
-				]
+				$msg,
+				$context
 			);
 
 			return FALSE;
 		}
-		if ( is_multisite() && ms_is_switched() ) {
-			return FALSE;
+
+		$nonce_validated = $this->nonce->validate( new ArrayContext( (array) $request->data() ) );
+
+		if ( ! $nonce_validated ) {
+			$msg = __( 'Nonce did not validated correctly.', 'search-and-replace' );
+
+			$this->errors[] = $msg;
+			do_action(
+				LogEvents::ERROR,
+				$msg,
+				$context
+			);
 		}
 
-		return $this->nonce->validate( new ArrayContext( $request_data ) );
+		return TRUE;
 	}
 
 	/**
@@ -75,5 +102,13 @@ class SettingsPageAuth implements SettingsPageAuthInterface {
 	public function cap() {
 
 		return (string) $this->cap;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function errors() {
+
+		return $this->errors;
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Inpsyde\SearchAndReplace\Credits;
 
-use Brain\Nonces\NonceInterface;
+use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 
@@ -31,8 +31,10 @@ class CreditsSettingsPage extends AbstractSettingsPage implements SettingsPageIn
 
 	/**
 	 * Callback function for credits content.
+	 *
+	 * @param Request $request
 	 */
-	public function render( NonceInterface $nonce ) {
+	public function render( Request $request ) {
 
 		?>
 

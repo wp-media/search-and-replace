@@ -2,10 +2,11 @@
 
 namespace Inpsyde\SearchAndReplace\Backup;
 
-use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
+use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
+use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -27,13 +28,20 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	private $downloader;
 
 	/**
+	 * @var SettingsPageAuthInterface
+	 */
+	private $auth;
+
+	/**
 	 * BackupSettingsPage constructor.
 	 *
-	 * @param DatabaseBackup $exporter
-	 * @param FileDownloader $downloader
+	 * @param SettingsPageAuthInterface $auth
+	 * @param DatabaseBackup            $exporter
+	 * @param FileDownloader            $downloader
 	 */
-	public function __construct( DatabaseBackup $exporter, FileDownloader $downloader ) {
+	public function __construct( SettingsPageAuthInterface $auth, DatabaseBackup $exporter, FileDownloader $downloader ) {
 
+		$this->auth       = $auth;
 		$this->exporter   = $exporter;
 		$this->downloader = $downloader;
 	}
@@ -58,8 +66,10 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 
 	/**
 	 * Shows the page template
+	 *
+	 * @param Request $request
 	 */
-	public function render( NonceInterface $nonce ) {
+	public function render( Request $request ) {
 
 		?>
 		<p>
@@ -69,7 +79,7 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 			); ?>
 		</p>
 		<form action="" method="post">
-			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
+			<?= \Brain\Nonces\formField( $this->auth->nonce() ) /* xss ok */ ?>
 			<?php $this->show_submit_button(); ?>
 		</form>
 		<?php
@@ -86,16 +96,24 @@ class BackupSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	/**
 	 * Event handler for click on export sql button.
 	 *
-	 * @param array $request_data
+	 * @param Request $request
 	 *
 	 * @return bool
 	 */
-	public function update( array $request_data = [] ) {
+	public function update( Request $request ) {
 
 		$report = $this->exporter->backup();
 		$this->downloader->show_modal( $report );
 
 		return TRUE;
+	}
+
+	/**
+	 * @return SettingsPageAuthInterface
+	 */
+	public function auth() {
+
+		return $this->auth;
 	}
 
 }

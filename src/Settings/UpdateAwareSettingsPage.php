@@ -2,6 +2,9 @@
 
 namespace Inpsyde\SearchAndReplace\Settings;
 
+use Inpsyde\SearchAndReplace\Http\Request;
+use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
+
 /**
  * Interface SaveableSettingsPage
  *
@@ -10,11 +13,16 @@ namespace Inpsyde\SearchAndReplace\Settings;
 interface UpdateAwareSettingsPage {
 
 	/**
+	 * @return SettingsPageAuthInterface
+	 */
+	public function auth();
+
+	/**
 	 * Updating or using the send data.
 	 *
-	 * @param array $request_data
+	 * @param Request $request
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	public function update( array $request_data = [] );
+	public function update( Request $request );
 }

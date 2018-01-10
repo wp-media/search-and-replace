@@ -2,7 +2,7 @@
 
 namespace Inpsyde\SearchAndReplace\Settings;
 
-use Brain\Nonces\NonceInterface;
+use Inpsyde\SearchAndReplace\Http\Request;
 
 /**
  * Interface PageInterface
@@ -45,8 +45,8 @@ interface SettingsPageInterface {
 	/**
 	 * Rendering the page content.
 	 *
-	 * @param NonceInterface $nonce
+	 * @param Request $request
 	 */
-	public function render( NonceInterface $nonce );
+	public function render( Request $request );
 
 }

@@ -2,11 +2,12 @@
 
 namespace Inpsyde\SearchAndReplace\Replace\Domain;
 
-use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseBackup;
 use Inpsyde\SearchAndReplace\Database\Manager;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
+use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
+use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -14,6 +15,11 @@ use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
  * @package Inpsyde\SearchAndReplace\Replace\Domain
  */
 class ReplaceDomainSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
+
+	/**
+	 * @var SettingsPageAuthInterface
+	 */
+	private $auth;
 
 	/**
 	 * @var DatabaseBackup
@@ -37,8 +43,14 @@ class ReplaceDomainSettingsPage extends AbstractSettingsPage implements Settings
 	 * @param DatabaseBackup $backup
 	 * @param FileDownloader $downloader
 	 */
-	public function __construct( Manager $manager, DatabaseBackup $backup, FileDownloader $downloader ) {
+	public function __construct(
+		SettingsPageAuthInterface $auth,
+		Manager $manager,
+		DatabaseBackup $backup,
+		FileDownloader $downloader
+	) {
 
+		$this->auth       = $auth;
 		$this->db_manager = $manager;
 		$this->backup     = $backup;
 		$this->downloader = $downloader;
@@ -71,17 +83,16 @@ class ReplaceDomainSettingsPage extends AbstractSettingsPage implements Settings
 	/**
 	 * {@inheritdoc}
 	 */
-	public function update( array $request_data = [] ) {
+	public function update( Request $request ) {
 
-		$search        = isset( $request_data[ 'search' ] ) ? esc_url_raw( $request_data[ 'search' ] ) : '';
-		$replace       = isset( $request_data[ 'replace' ] ) ? esc_url_raw( $request_data[ 'replace' ] ) : '';
-		$new_db_prefix = isset( $request_data[ 'new_db_prefix' ] ) ? esc_attr( $request_data[ 'new_db_prefix' ] ) : '';
+		$data = $request->data();
+
+		$search        = esc_url_raw( $data->get( 'search', '' ) );
+		$replace       = esc_url_raw( $data->get( 'replace', '' ) );
+		$new_db_prefix = esc_attr( $data->get( 'new_db_prefix', '' ) );
+
 		// Do not pass the new db prefix if `change_db_prefix` isn't flagged.
-		// @codingStandardsIgnoreStart
-		$change_db_prefix = isset( $_POST[ 'change_db_prefix' ] )
-			? filter_var( $_POST[ 'change_db_prefix' ], FILTER_VALIDATE_BOOLEAN )
-			: FALSE;
-		// @codingStandardsIgnoreEnd
+		$change_db_prefix = $data->has( 'change_db_prefix' );
 
 		// search field should not be empty
 		if ( '' === $replace ) {
@@ -100,8 +111,10 @@ class ReplaceDomainSettingsPage extends AbstractSettingsPage implements Settings
 
 	/**
 	 * Shows the page template
+	 *
+	 * @param Request $request
 	 */
-	public function render( NonceInterface $nonce ) {
+	public function render( Request $request ) {
 
 		?>
 
@@ -178,11 +191,22 @@ class ReplaceDomainSettingsPage extends AbstractSettingsPage implements Settings
 				</tr>
 				</tbody>
 			</table>
-			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
+			<?= \Brain\Nonces\formField(
+				$this->auth()
+					->nonce()
+			) /* xss ok */ ?>
 			<?php $this->show_submit_button(); ?>
 		</form>
 
 		<?php
+	}
+
+	/**
+	 * @return SettingsPageAuthInterface
+	 */
+	public function auth() {
+
+		return $this->auth;
 	}
 
 }

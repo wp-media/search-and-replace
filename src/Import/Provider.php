@@ -2,7 +2,6 @@
 
 namespace Inpsyde\SearchAndReplace\Import;
 
-use Inpsyde\SearchAndReplace\Core\BootableProviderInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsManager;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -19,7 +18,10 @@ final class Provider implements ServiceProviderInterface {
 
 		$plugin[ 'Backup.ImportSettingsPage' ] = function ( Container $plugin ) {
 
-			return new ImportSettingsPage( $plugin[ 'Database.DatabaseImporter' ] );
+			return new ImportSettingsPage(
+				$plugin[ 'Settings.Auth.SettingsPageAuth' ],
+				$plugin[ 'Database.DatabaseImporter' ]
+			);
 		};
 
 		$plugin->extend(

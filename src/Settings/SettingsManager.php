@@ -2,7 +2,8 @@
 
 namespace Inpsyde\SearchAndReplace\Settings;
 
-use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
+use Inpsyde\SearchAndReplace\Http\Request;
+use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuth;
 use Inpsyde\SearchAndReplace\Settings\View\SettingsPageView;
 use Inpsyde\SearchAndReplace\Settings\View\SettingsPageViewInterface;
 
@@ -22,18 +23,23 @@ class SettingsManager {
 	private $view;
 
 	/**
-	 * @var SettingsPageAuthInterface
+	 * @var SettingsPageAuth
 	 */
 	private $auth;
 
 	/**
-	 * @param SettingsPageViewInterface $view
-	 * @param SettingsPageAuthInterface $auth
+	 * @var static
 	 */
-	public function __construct( SettingsPageViewInterface $view, SettingsPageAuthInterface $auth ) {
+	private $request;
 
-		$this->view = $view;
-		$this->auth = $auth;
+	/**
+	 * @param SettingsPageViewInterface $view
+	 */
+	public function __construct( SettingsPageViewInterface $view, SettingsPageAuth $auth ) {
+
+		$this->view    = $view;
+		$this->auth    = $auth;
+		$this->request = Request::from_globals();
 	}
 
 	/**
@@ -45,15 +51,20 @@ class SettingsManager {
 
 		foreach ( $this->pages as $slug => $page ) {
 
+			$cap = $page instanceof UpdateAwareSettingsPage
+				? $page->auth()
+					->cap()
+				: $this->auth->cap();
+
 			$hook = add_submenu_page(
 				'tools.php',
 				$page->get_page_title(),
 				$page->get_menu_title(),
-				$this->auth->cap( $page ),
+				$cap,
 				$slug,
 				function () {
 
-					$this->view->render( $this->pages, $this->auth->nonce() );
+					$this->view->render( $this->pages, $this->request );
 				}
 			);
 
@@ -80,21 +91,35 @@ class SettingsManager {
 	 */
 	public function save() {
 
-		$request_data = $_POST;
-		$page         = $_GET[ 'page' ] ? : '';
-
-		if ( $page === '' || ! isset( $this->pages[ $page ] ) ) {
+		if ( $this->request->server()->get( 'REQUEST_METHOD' ) !== 'POST' ) {
 
 			return FALSE;
 		}
 
-		if ( ! $this->auth->is_allowed( $request_data ) ) {
+		$page_slug = $this->request->query()
+			->get( 'page', '' );
+
+		if ( $page_slug === '' || ! isset( $this->pages[ $page_slug ] ) ) {
 
 			return FALSE;
 		}
 
-		/** @var UpdateAwareSettingsPage */
-		return $this->pages[ $page ]->update( $request_data );
+		/** @var SettingsPageInterface|UpdateAwareSettingsPage $page */
+		$page = $this->pages[ $page_slug ];
+
+		if ( ! $page->auth()
+			->is_allowed( $this->request ) ) {
+
+			array_walk(
+				$page->auth()
+					->errors(),
+				[ $page, 'add_error' ]
+			);
+
+			return FALSE;
+		}
+
+		return $page->update( $this->request );
 	}
 
 	/**

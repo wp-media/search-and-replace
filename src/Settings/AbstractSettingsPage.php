@@ -2,8 +2,6 @@
 
 namespace Inpsyde\SearchAndReplace\Settings;
 
-use Inpsyde\SearchAndReplace\Core\PluginConfig;
-
 /**
  * Class AbstractSettingsPage
  *

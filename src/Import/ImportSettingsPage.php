@@ -2,10 +2,11 @@
 
 namespace Inpsyde\SearchAndReplace\Import;
 
-use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseImporter;
 use Inpsyde\SearchAndReplace\File\UploadedFile;
+use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
+use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -30,12 +31,19 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	private $importer;
 
 	/**
+	 * @var SettingsPageAuthInterface
+	 */
+	private $auth;
+
+	/**
 	 * ImportSettingsPage constructor.
 	 *
-	 * @param DatabaseImporter $importer
+	 * @param SettingsPageAuthInterface $auth
+	 * @param DatabaseImporter          $importer
 	 */
-	public function __construct( DatabaseImporter $importer ) {
+	public function __construct( SettingsPageAuthInterface $auth, DatabaseImporter $importer ) {
 
+		$this->auth     = $auth;
 		$this->importer = $importer;
 	}
 
@@ -65,8 +73,10 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 
 	/**
 	 * Callback function for menu item
+	 *
+	 * @param Request $request
 	 */
-	public function render( NonceInterface $nonce ) {
+	public function render( Request $request ) {
 
 		?>
 
@@ -105,7 +115,7 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 				</tr>
 				</tbody>
 			</table>
-			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
+			<?= \Brain\Nonces\formField( $this->auth->nonce() ) /* xss ok */ ?>
 			<?php $this->show_submit_button(); ?>
 		</form>
 
@@ -115,9 +125,10 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	/**
 	 * {@inheritdoc}
 	 */
-	public function update( array $request_data = [] ) {
+	public function update( Request $request ) {
 
-		$file = new UploadedFile( $_FILES[ self::FILE_KEY ] );
+		$files = $request->files();
+		$file  = new UploadedFile( $files[ self::FILE_KEY ] );
 
 		if ( $file->error() !== UPLOAD_ERR_OK ) {
 
@@ -191,6 +202,14 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 
 		return TRUE;
 
+	}
+
+	/**
+	 * @return SettingsPageAuthInterface
+	 */
+	public function auth() {
+
+		return $this->auth;
 	}
 
 	/**

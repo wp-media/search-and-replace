@@ -2,10 +2,11 @@
 
 namespace Inpsyde\SearchAndReplace\Replace;
 
-use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database;
 use Inpsyde\SearchAndReplace\File\FileDownloader;
+use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
+use Inpsyde\SearchAndReplace\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
 use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
 
@@ -13,6 +14,11 @@ use Inpsyde\SearchAndReplace\Settings\UpdateAwareSettingsPage;
  * @package Inpsyde\SearchAndReplace\Replace
  */
 class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements SettingsPageInterface, UpdateAwareSettingsPage {
+
+	/**
+	 * @var SettingsPageAuthInterface
+	 */
+	private $auth;
 
 	/**
 	 * @var Database\Manager
@@ -37,13 +43,21 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 	/**
 	 * BackupDatabase constructor.
 	 *
-	 * @param Database\Manager        $manager
-	 * @param Database\Replace        $replace
-	 * @param Database\DatabaseBackup $dbe
-	 * @param FileDownloader          $downloader
+	 * @param  SettingsPageAuthInterface $auth
+	 * @param Database\Manager           $manager
+	 * @param Database\Replace           $replace
+	 * @param Database\DatabaseBackup    $dbe
+	 * @param FileDownloader             $downloader
 	 */
-	public function __construct( Database\Manager $manager, Database\Replace $replace, Database\DatabaseBackup $dbe, FileDownloader $downloader ) {
+	public function __construct(
+		SettingsPageAuthInterface $auth,
+		Database\Manager $manager,
+		Database\Replace $replace,
+		Database\DatabaseBackup $dbe,
+		FileDownloader $downloader
+	) {
 
+		$this->auth       = $auth;
 		$this->dbm        = $manager;
 		$this->replace    = $replace;
 		$this->exporter   = $dbe;
@@ -53,7 +67,15 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 	/**
 	 * Shows the page contents
 	 */
-	public function render( NonceInterface $nonce ) {
+	public function render( Request $request ) {
+
+		$data       = $request->data();
+		$is_dry_run = $data->has( 'dry_run' );
+
+		$escape = function ( $value ) {
+
+			return htmlentities( stripslashes( $value ) );
+		}
 
 		?>
 		<form action="" method="post">
@@ -66,7 +88,16 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 						</label>
 					</th>
 					<td>
-						<input id="search" type="text" name="search" value="<?php $this->get_search_value() ?>" />
+						<input
+							id="search"
+							type="text"
+							name="search"
+							value="<?php
+							echo $is_dry_run
+								? $escape( $data->get( 'search', '' ) )
+								: '';
+							?>"
+						/>
 					</td>
 				</tr>
 				<tr>
@@ -76,7 +107,16 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 						</label>
 					</th>
 					<td>
-						<input id="replace" type="text" name="replace" value="<?php $this->get_replace_value() ?>" />
+						<input
+							id="replace"
+							type="text"
+							name="replace"
+							value="<?php
+							echo $is_dry_run
+								? $escape( $data->get( 'replace', '' ) )
+								: '';
+							?>"
+						/>
 					</td>
 				</tr>
 				<tr>
@@ -95,7 +135,11 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 						'search value, replace value (one per line)',
 						'search-and-replace'
 					); ?>"
-				><?php $this->get_csv_value(); ?></textarea>
+				><?php
+					echo $is_dry_run
+						? $escape( $data->get( 'csv', '' ) )
+						: '';
+					?></textarea>
 						<p id="csv-hint">
 							<?php esc_html_e(
 								'Using comma delimited( , ). For example to replace cat with dog: cat,dog',
@@ -159,7 +203,7 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 
 				</tbody>
 			</table>
-			<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
+			<?= \Brain\Nonces\formField( $this->auth->nonce() ) /* xss ok */ ?>
 			<?php $this->show_submit_button( 'search-submit' ); ?>
 		</form>
 
@@ -175,48 +219,6 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 				'site_url'                => $this->get_stripped_site_url(),
 			)
 		);
-	}
-
-	/**
-	 * Shows the replace value in template
-	 */
-	private function get_replace_value() {
-
-		$replace = isset( $_POST[ 'replace' ] ) ? $_POST[ 'replace' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-		if ( $dry_run ) {
-			$replace = stripslashes( $replace );
-			$replace = htmlentities( $replace );
-			echo $replace;
-		}
-	}
-
-	/**
-	 * Shows the search value in template.
-	 */
-	private function get_search_value() {
-
-		$search  = isset( $_POST[ 'search' ] ) ? $_POST[ 'search' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-		if ( $dry_run ) {
-			$search = stripslashes( $search );
-			$search = htmlentities( $search );
-			echo $search;
-		}
-	}
-
-	/**
-	 * Shows the csv value in template.
-	 */
-	private function get_csv_value() {
-
-		$csv     = isset( $_POST[ 'csv' ] ) ? $_POST[ 'csv' ] : '';
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
-		if ( $dry_run ) {
-			$csv = stripslashes( $csv );
-			$csv = htmlentities( $csv );
-			echo $csv;
-		}
 	}
 
 	/**
@@ -256,33 +258,27 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 	/**
 	 * {@inheritdoc}
 	 */
-	public function update( array $request_data = [] ) {
-
-		if ( ! $this->is_request_valid() ) {
-			return FALSE;
-		}
+	public function update( Request $request ) {
 
 		// Retrieve tables.
 		$tables = $this->selected_tables();
 
-		// @codingStandardsIgnoreLine
-		$dry_run = isset( $_POST[ 'dry_run' ] ) ? TRUE : FALSE;
+		$data = $request->data();
 
-		// remove wp_magic_quotes
-		$search  = stripslashes( filter_input( INPUT_POST, 'search' ) );
-		$replace = stripslashes( filter_input( INPUT_POST, 'replace' ) );
-		$csv     = stripslashes( filter_input( INPUT_POST, 'csv' ) );
-		$csv     = ( $csv === '' ? NULL : $csv );
+		// @codingStandardsIgnoreLine
+		$dry_run = $data->has( 'dry_run' );
+		$search  = stripslashes( $data->get( 'search' ) );
+		$replace = stripslashes( $data->get( 'replace' ) );
+		$csv     = stripslashes( $data->get( 'csv' ) );
 
 		// if dry run is checked we run the replace function with dry run and return
 		if ( TRUE === $dry_run ) {
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
 
-			return FALSE;
+			return TRUE;
 		}
 
-		$export_or_save = filter_input( INPUT_POST, 'export_or_save' );
-
+		$export_or_save = $data->get( 'export_or_save' );
 		if ( 'export' === $export_or_save ) {
 			// 'export'-button was checked
 			$report = $this->exporter->backup( $search, $replace, $tables, FALSE, '', $csv );
@@ -290,38 +286,6 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 		} else {
 			// "Save changes to database" was checked
 			$this->run_replace( $search, $replace, $tables, $dry_run, $csv );
-		}
-
-		return TRUE;
-	}
-
-	/**
-	 * Checks the input form and writes possible errors to a WP_Error object
-	 *
-	 * @return bool true|false
-	 */
-	protected function is_request_valid() {
-
-		// If not table are selected mark the request as invalid but let user know why.
-		if ( ! $this->selected_tables() ) {
-			$this->add_error(
-				esc_html__(
-					'No Tables were selected. You must select at least one table to perform the action.',
-					'search-and-replace'
-				)
-			);
-
-			return FALSE;
-		}
-
-		$search  = filter_input( INPUT_POST, 'search' );
-		$replace = filter_input( INPUT_POST, 'replace' );
-
-		// if search field is empty and replace field is not empty quit. If both fields are empty, go on (useful for backup of single tables without changing)
-		if ( '' === $search && '' !== $replace ) {
-			$this->add_error( esc_attr__( 'Search field is empty.', 'search-and-replace' ) );
-
-			return FALSE;
 		}
 
 		return TRUE;
@@ -339,7 +303,6 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 	 * @return null
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = NULL ) {
-
 
 		$this->replace->set_dry_run( $dry_run );
 
@@ -433,4 +396,13 @@ class SearchAndReplaceSettingsPage extends AbstractSettingsPage implements Setti
 
 		return $tables;
 	}
+
+	/**
+	 * @return SettingsPageAuthInterface
+	 */
+	public function auth() {
+
+		return $this->auth;
+	}
+
 }
