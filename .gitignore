@@ -78,6 +78,9 @@ phpcs.xml
 report-*.txt
 ruleset.xml
 
+# PHPStorm
+.idea/*
+
 # Generated files
 /assets
 /svn-assets
