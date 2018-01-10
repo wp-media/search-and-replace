@@ -59,7 +59,7 @@ class Request {
 		$this->data    = new ParameterBag( $data );
 		$this->cookies = new ParameterBag( $cookies );
 		$this->server  = new ParameterBag( $server );
-		$this->files   = new ParameterBag( $files );
+		$this->files   = new FileBag( $files );
 	}
 
 	/**

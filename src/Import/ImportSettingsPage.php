@@ -2,9 +2,7 @@
 
 namespace Inpsyde\SearchAndReplace\Import;
 
-use Brain\Nonces\NonceInterface;
 use Inpsyde\SearchAndReplace\Database\DatabaseImporter;
-use Inpsyde\SearchAndReplace\File\UploadedFile;
 use Inpsyde\SearchAndReplace\Http\Request;
 use Inpsyde\SearchAndReplace\Settings\AbstractSettingsPage;
 use Inpsyde\SearchAndReplace\Settings\SettingsPageInterface;
@@ -115,8 +113,13 @@ class ImportSettingsPage extends AbstractSettingsPage implements SettingsPageInt
 	public function update( Request $request ) {
 
 		$files = $request->files();
-		$file  = new UploadedFile( $files[ self::FILE_KEY ] );
+		if ( ! $files->has( self::FILE_KEY ) ) {
+			$this->add_error( esc_html__( 'Please select a file which should be imported', 'search-and-replace' ) );
 
+			return FALSE;
+		}
+
+		$file = $files->get( self::FILE_KEY );
 		if ( $file->error() !== UPLOAD_ERR_OK ) {
 
 			$this->add_error(
