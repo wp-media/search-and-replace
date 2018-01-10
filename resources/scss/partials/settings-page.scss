@@ -1,30 +1,37 @@
-.wp-admin {
 
-	// adding the green background.
-	#wpcontent:before {
-		content: ' ';
-		position: absolute;
-		left: 0;
-		top: 0;
-		z-index: -1;
-		width: 100%;
-		min-height: 400px;
-		background: $color__inpsyde;
-	}
+.tools_page_ {
+	&sql-import,
+	&credits,
+	&backup-database,
+	&search-replace,
+	&replace-domain-url {
 
-	// sometimes it's very important to use.. !important...
-	// we've to use a strong selector to overwrite the WP-default stuff...
-	.settings__headline {
-		color: $color__white;
-		margin: 0;
-		padding: 50px 0 !important;
-		font-size: 250% !important;
-	}
+		// adding the green background.
+		#wpcontent:before {
+			content: ' ';
+			position: absolute;
+			left: 0;
+			top: 0;
+			z-index: -1;
+			width: 100%;
+			min-height: 400px;
+			background: $color__inpsyde;
+		}
 
-	.inpsyde-logo {
-		&__image {
-			margin-top: 20px;
-			float: right;
+		// sometimes it's very important to use.. !important...
+		// we've to use a strong selector to overwrite the WP-default stuff...
+		.settings__headline {
+			color: $color__white;
+			margin: 0;
+			padding: 50px 0 !important;
+			font-size: 250% !important;
+		}
+
+		.inpsyde-logo {
+			&__image {
+				margin-top: 20px;
+				float: right;
+			}
 		}
 	}
 }
