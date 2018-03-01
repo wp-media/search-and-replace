@@ -312,7 +312,7 @@ class Replace {
 				maybe_unserialize( $data ) :
 				false;
 
-			if ( $unserialized !== false ) {
+			if ( $unserialized !== false && ! is_serialized_string($data) ) {
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, false );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = [];
