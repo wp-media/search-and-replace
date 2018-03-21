@@ -529,12 +529,9 @@ class Exporter {
 		header( 'Content-Length: ' . filesize( $diskfile ) );
 		header( 'Content-Disposition: attachment; filename=' . basename( $diskfile ) );
 
-		$success = readfile( $diskfile );
+		readfile( $diskfile );
 
-		if ( $success ) {
-			unlink( $diskfile );
-			die();
-		}
+		die();
 	}
 
 	/**
