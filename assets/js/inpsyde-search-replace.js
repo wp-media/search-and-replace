@@ -88,6 +88,14 @@
 			}
 			return true;
 		} );
+
+		// Auto resize textarea search field if the content is multilines
+		var search_textarea = $( 'textarea#search' );
+		search_textarea.on('input change drop keydown cut paste', function() {
+  			search_textarea.height('auto');
+			search_textarea.height(search_textarea.prop('scrollHeight'));
+		}).trigger('input');
+
 	} );
 
 }( window.jQuery ));

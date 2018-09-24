@@ -19,7 +19,7 @@ if ( ! defined( 'SEARCH_REPLACE_BASEDIR' ) ) {
 				</label>
 			</th>
 			<td>
-				<input id="search" type="text" name="search" value="<?php $this->get_search_value() ?>" />
+				<textarea id="search" type="text" name="search" rows="1"><?php $this->get_search_value() ?></textarea> 
 			</td>
 		</tr>
 		<tr>
