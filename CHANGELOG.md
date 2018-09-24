@@ -1,9 +1,10 @@
 # Changelog
 
 ## 3.2.0 (ToDo)
-* Added CSV format alternative for search/replace [#82].
-* Change code structure, preparation for more solid UnitTests.
+* Added CSV format alternative for search/replace [#82](https://github.com/inpsyde/search-and-replace/issues/82).
+* Improve code structure, preparation for more solid UnitTests.
 * Improve Modal Table UI.
+* Added Multiline searching [#119](https://github.com/inpsyde/search-and-replace/issues/119).
 
 ## v3.1.2 (2016-12-31)
 - hotfix: prevent declaration error with Requisite
