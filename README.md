@@ -45,6 +45,32 @@ Go to `Tools -> Search & Replace` to view the plugin's user interface.
 
 Please **always** backup your database before performing search/replace operations.
 
+
+For avoiding problem please keep in mind that this plugin search and replace strictly  what is specified in "Replace With".
+
+
+Common error example:
+
+Search For: http://web.com/wordpress/
+
+Replace With: http://neuweb.com/wordpress
+
+The url become something like:
+http://neuweb.com/wordpresscontent/...
+
+
+
+Correct "Replace with": 
+
+Search For: http://web.com/wordpress/
+
+Replace With: http://neuweb.com/wordpress/
+
+The url become something like:
+http://neuweb.com/wordpress/content/...
+
+
+
 **Multisite usage:**
 
 If you are running a WordPress multisite and want to export the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only backup the tables of that subsite.
