@@ -10,6 +10,17 @@ Search & Replace data in your database with WordPress admin, replace domains/URL
 == Description ==
 With Search & Replace you can search for everything and replace this with everything **but before** you do this you can easily **create** a simple **database backup** and restore it.
 
+For avoiding problem please keep in mind that this plugin search and replace strictly what is specified in "Replace With".
+Common error example:
+Search For: http://web.com/wordpress/
+Replace With: http://neuweb.com/wordpress
+The url become something like: http://neuweb.com/wordpresscontent/...
+
+Correct "Replace with":
+Search For: http://web.com/wordpress/
+Replace With: http://neuweb.com/wordpress/
+The url become something like: http://neuweb.com/wordpress/content/...
+
 **We have implements special features!**
 The first one is "Replace a Domain / Url" that is useful for a quick and simple transfer or a migration of an WordPress.
 The second is a full support for serialized data but there are a lot more features - find them!
