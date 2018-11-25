@@ -388,7 +388,8 @@ class Exporter {
 								$value = $this->replace->recursive_unserialize_replace(
 									$table_prefix,
 									$new_table_prefix,
-									$value
+									$value,
+									true
 								);
 							} else {
 								$value = str_replace( $table_prefix, $new_table_prefix, $value );
@@ -411,7 +412,8 @@ class Exporter {
 									$edited_data = $this->replace->recursive_unserialize_replace(
 										$search,
 										$replace,
-										$value
+										$value,
+										true
 									);
 								} else {
 									$edited_data = str_replace( $search, $replace, $value );
@@ -425,7 +427,8 @@ class Exporter {
 										$this->replace->recursive_unserialize_replace(
 											$entry[ 'search' ],
 											$entry[ 'replace' ],
-											$edited_data
+											$edited_data,
+											true
 										) : str_replace( $entry[ 'search' ], $entry[ 'replace' ], $value );
 								}
 							}

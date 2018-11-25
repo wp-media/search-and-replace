@@ -345,7 +345,7 @@ class ReplaceTest extends AbstractTestCase {
 	/**
 	 * @dataProvider serializedDataProvider
 	 */
-	public function test_recursive_unserialize_replace( $from, $to, $data, $expected ) {
+	public function test_recursive_unserialize_replace( $from, $to, $data, $expected, $serialized ) {
 
 		\Brain\Monkey\Functions\when( 'is_serialized_string' )
 			->alias( [ $this, 'is_serialized_string' ] );
@@ -363,7 +363,7 @@ class ReplaceTest extends AbstractTestCase {
 		$max_exec_time_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
 		$sut      = new Replace( $manager_mock, $max_exec_time_mock );
-		$response = $sut->recursive_unserialize_replace( $from, $to, $data );
+		$response = $sut->recursive_unserialize_replace( $from, $to, $data, $serialized );
 
 		$this->assertSame( $expected, $response );
 	}
@@ -372,76 +372,88 @@ class ReplaceTest extends AbstractTestCase {
 
 		return [
 			[
-				'from'     => '1',
-				'two'      => '2',
-				'data'     => 'a:0:{}',
-				'expected' => 'a:0:{}',
+				'from'       => '1',
+				'to'         => '2',
+				'data'       => 'a:0:{}',
+				'expected'   => 'a:0:{}',
+				'serialized' => true,
 			],
 			[
-				'from'     => 'count',
-				'two'      => 'new_count',
-				'data'     => 'a:2:{i:2;s:5:"count";s:12:"_multiwidget";i:1;}',
-				'expected' => 'a:2:{i:2;s:9:"new_count";s:12:"_multiwidget";i:1;}',
+				'from'       => 'count',
+				'to'         => 'new_count',
+				'data'       => 'a:2:{i:2;s:5:"count";s:12:"_multiwidget";i:1;}',
+				'expected'   => 'a:2:{i:2;s:9:"new_count";s:12:"_multiwidget";i:1;}',
+				'serialized' => true,
 			],
 			[
-				'from'     => 'grr',
-				'to'       => 'grra',
-				'data'     => 's:+3:\”grr\”;',
-				'expected' => 's:18:"s:+3:\”grra\”;";',
+				'from'       => 'grr',
+				'to'         => 'grra',
+				'data'       => 's:+3:\"grr\";',
+				'expected'   => 's:+3:\"grra\";',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'grr',
-				'to'       => 'grra',
-				'data'     => 'a:+3:\”grr\”;',
-				'expected' => 's:18:"a:+3:\”grra\”;";',
+				'from'       => 'grr',
+				'to'         => 'grra',
+				'data'       => 'a:+3:\"grr\";',
+				'expected'   => 'a:+3:\"grra\";',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'grr',
-				'to'       => 'grra',
-				'data'     => 'O:+3:\”grr\”;',
-				'expected' => 's:18:"O:+3:\”grra\”;";',
+				'from'       => 'grr',
+				'to'         => 'grra',
+				'data'       => 'O:+3:\"grr\";',
+				'expected'   => 'O:+3:\"grra\";',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'grr',
-				'to'       => 'grra',
-				'data'     => 'C:+3:\”grr\”;',
-				'expected' => 's:18:"C:+3:\”grra\”;";',
+				'from'       => 'grr',
+				'to'         => 'grra',
+				'data'       => 'C:+3:\"grr\";',
+				'expected'   => 'C:+3:\"grra\";',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'grr',
-				'to'       => 'grra',
-				'data'     => 'o:+3:\”grr\”;',
-				'expected' => 's:18:"o:+3:\”grra\”;";',
+				'from'       => 'grr',
+				'to'         => 'grra',
+				'data'       => 'o:+3:\"grr\";',
+				'expected'   => 'o:+3:\"grra\";',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'grr',
-				'to'       => 'grra',
-				'data'     => 'S:+3:\”grr\”;',
-				'expected' => 's:18:"S:+3:\”grra\”;";',
+				'from'       => 'grr',
+				'to'         => 'grra',
+				'data'       => 'S:+3:\"grr\";',
+				'expected'   => 'S:+3:\"grra\";',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'a',
-				'to'       => 'b',
-				'data'     => 'O:3:%22foo%22:2:{s:4:%22file%22;s:9:%22shell.php%22;s:4:%22data%22;s:5:%22aaaa%22;}',
-				'expected' => 's:89:"O:3:%22foo%22:2:{s:4:%22file%22;s:9:%22shell.php%22;s:4:%22d|bt|b%22;s:5:%22|b|b|b|b%22;}";',
+				'from'       => 'a',
+				'to'         => 'b',
+				'data'       => 'O:3:%22foo%22:2:{s:4:%22file%22;s:9:%22shell.php%22;s:4:%22data%22;s:5:%22aaaa%22;}',
+				'expected'   => 'O:3:%22foo%22:2:{s:4:%22file%22;s:9:%22shell.php%22;s:4:%22d|bt|b%22;s:5:%22|b|b|b|b%22;}',
+				'serialized' => false,
 			],
 			[
-				'from'     => 'l',
-				'to'       => 'x',
-				'data'     => 's:8:"last_log";s:19:"making a test entry";',
-				'expected' => 's:8:"xast_xog";',
+				'from'       => 'l',
+				'to'         => 'x',
+				'data'       => 's:8:"last_log";s:19:"making a test entry";',
+				'expected'   => 's:8:"xast_xog";',
+				'serialized' => true,
 			],
 			[
-				'from'     => '0',
-				'to'       => '1',
-				'data'     => 's:11:"\x00*\x00log_date";s:8:"07-09-17";',
-				'expected' => 's:0:"";',
+				'from'       => '0',
+				'to'         => '1',
+				'data'       => 's:11:"\x00*\x00log_date";s:8:"07-09-17";',
+				'expected'   => 's:0:"";',
+				'serialized' => true,
 			],
 			[
-				'from'     => '0',
-				'to'       => '1',
-				'data'     => 'a:+2:{i:1;s:3:"key";i:0;o:1:"s:2:"ID";s:1:"1";}}',
-				'expected' => 's:48:"a:+2:{i:1;s:3:"key";i:1;o:1:"s:2:"ID";s:1:"1";}}";',
+				'from'       => '0',
+				'to'         => '1',
+				'data'       => 'a:+2:{i:1;s:3:"key";i:0;o:1:"s:2:"ID";s:1:"1";}}',
+				'expected'   => 'a:+2:{i:1;s:3:"key";i:1;o:1:"s:2:"ID";s:1:"1";}}',
+				'serialized' => false,
 			],
 		];
 	}
