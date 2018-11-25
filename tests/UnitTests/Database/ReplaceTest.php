@@ -54,27 +54,27 @@ class ReplaceTest extends AbstractTestCase {
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
-			->once()
-			->andReturn( $table_structure );
+		         ->once()
+		         ->andReturn( $table_structure );
 
 		$dbm_mock->shouldReceive( 'get_columns' )
-			->andReturn( $columns );
+		         ->andReturn( $columns );
 
 		$dbm_mock->shouldReceive( 'get_rows' )
-			->once()
-			->andReturn( 1 );
+		         ->once()
+		         ->andReturn( 1 );
 
 		$dbm_mock->shouldReceive( 'get_table_content' )
-			->once()
-			->andReturn( $table_content );
+		         ->once()
+		         ->andReturn( $table_content );
 
 		$dbm_mock->shouldReceive( 'flush' )
-			->once();
+		         ->once();
 
 		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
 		$result = $testee->replace_values( 'Mr WordPress', 'Mr. Drupal', 'wp_plugin_test_comments' );
 
-		$this->assertEquals( 'Mr. Drupal', $result[ 'changes' ][ 0 ][ 'to' ] );
+		$this->assertEquals( 'Mr. Drupal', $result['changes'][0]['to'] );
 	}
 
 	public function test_umlaut_replace() {
@@ -109,28 +109,28 @@ class ReplaceTest extends AbstractTestCase {
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
-			->once()
-			->andReturn( $table_structure );
+		         ->once()
+		         ->andReturn( $table_structure );
 
 		$dbm_mock->shouldReceive( 'get_columns' )
-			->once()
-			->andReturn( $columns );
+		         ->once()
+		         ->andReturn( $columns );
 
 		$dbm_mock->shouldReceive( 'get_rows' )
-			->once()
-			->andReturn( 1 );
+		         ->once()
+		         ->andReturn( 1 );
 
 		$dbm_mock->shouldReceive( 'get_table_content' )
-			->once()
-			->andReturn( $table_content );
+		         ->once()
+		         ->andReturn( $table_content );
 
 		$dbm_mock->shouldReceive( 'flush' )
-			->once();
+		         ->once();
 
 		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
 		$result = $testee->replace_values( 'Mr Wordpress', 'Mr. Drüpal', 'wp_plugin_test_comments' );
 
-		$this->assertEquals( 'Mr. Drüpal', $result[ 'changes' ][ 0 ][ 'to' ] );
+		$this->assertEquals( 'Mr. Drüpal', $result['changes'][0]['to'] );
 	}
 
 	public function test_substring_replace() {
@@ -165,28 +165,28 @@ class ReplaceTest extends AbstractTestCase {
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
-			->once()
-			->andReturn( $table_structure );
+		         ->once()
+		         ->andReturn( $table_structure );
 
 		$dbm_mock->shouldReceive( 'get_columns' )
-			->once()
-			->andReturn( $columns );
+		         ->once()
+		         ->andReturn( $columns );
 
 		$dbm_mock->shouldReceive( 'get_rows' )
-			->once()
-			->andReturn( 1 );
+		         ->once()
+		         ->andReturn( 1 );
 
 		$dbm_mock->shouldReceive( 'get_table_content' )
-			->once()
-			->andReturn( $table_content );
+		         ->once()
+		         ->andReturn( $table_content );
 
 		$dbm_mock->shouldReceive( 'flush' )
-			->once();
+		         ->once();
 
 		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
 		$result = $testee->replace_values( 'Mr', 'Mrs', 'wp_plugin_test_comments' );
 
-		$this->assertEquals( $result[ 'changes' ][ 0 ][ 'to' ], 'Mrs WordPress' );
+		$this->assertEquals( $result['changes'][0]['to'], 'Mrs WordPress' );
 	}
 
 	public function objectProvider() {
@@ -318,28 +318,28 @@ class ReplaceTest extends AbstractTestCase {
 		);
 
 		$dbm_mock->shouldReceive( 'get_table_structure' )
-			->once()
-			->andReturn( $table_structure );
+		         ->once()
+		         ->andReturn( $table_structure );
 
 		$dbm_mock->shouldReceive( 'get_columns' )
-			->once()
-			->andReturn( $columns );
+		         ->once()
+		         ->andReturn( $columns );
 
 		$dbm_mock->shouldReceive( 'get_rows' )
-			->once()
-			->andReturn( 1 );
+		         ->once()
+		         ->andReturn( 1 );
 
 		$dbm_mock->shouldReceive( 'get_table_content' )
-			->once()
-			->andReturn( $table_content );
+		         ->once()
+		         ->andReturn( $table_content );
 
 		$dbm_mock->shouldReceive( 'flush' )
-			->once();
+		         ->once();
 
 		$testee = new Replace( $dbm_mock, $this->get_max_exec_mock() );
 		$result = $testee->replace_values( $search, $replace, 'wp_plugin_test_comments' );
 
-		$this->assertEquals( $expected, $result[ 'changes' ][ 0 ][ 'to' ] );
+		$this->assertEquals( $expected, $result['changes'][0]['to'] );
 	}
 
 	/**
@@ -362,7 +362,7 @@ class ReplaceTest extends AbstractTestCase {
 		$manager_mock       = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
 		$max_exec_time_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Service\\MaxExecutionTime' );
 
-		$sut      = new Replace( $manager_mock, $max_exec_time_mock);
+		$sut      = new Replace( $manager_mock, $max_exec_time_mock );
 		$response = $sut->recursive_unserialize_replace( $from, $to, $data );
 
 		$this->assertSame( $expected, $response );
@@ -384,65 +384,65 @@ class ReplaceTest extends AbstractTestCase {
 				'expected' => 'a:2:{i:2;s:9:"new_count";s:12:"_multiwidget";i:1;}',
 			],
 			[
-			 	'from'     => 'grr',
-			 	'to'       => 'grra',
-			 	'data'     => 's:+3:\”grr\”;',
-			 	'expected' => 's:18:"s:+3:\”grra\”;";',
+				'from'     => 'grr',
+				'to'       => 'grra',
+				'data'     => 's:+3:\”grr\”;',
+				'expected' => 's:18:"s:+3:\”grra\”;";',
 			],
-		        [
-			        'from'     => 'grr',
+			[
+				'from'     => 'grr',
 				'to'       => 'grra',
 				'data'     => 'a:+3:\”grr\”;',
 				'expected' => 's:18:"a:+3:\”grra\”;";',
-		        ],
-		        [
+			],
+			[
 				'from'     => 'grr',
 				'to'       => 'grra',
 				'data'     => 'O:+3:\”grr\”;',
 				'expected' => 's:18:"O:+3:\”grra\”;";',
-		        ],
-		        [
+			],
+			[
 				'from'     => 'grr',
 				'to'       => 'grra',
 				'data'     => 'C:+3:\”grr\”;',
 				'expected' => 's:18:"C:+3:\”grra\”;";',
-		        ],
-		        [
+			],
+			[
 				'from'     => 'grr',
 				'to'       => 'grra',
 				'data'     => 'o:+3:\”grr\”;',
 				'expected' => 's:18:"o:+3:\”grra\”;";',
-		        ],
-		        [
+			],
+			[
 				'from'     => 'grr',
 				'to'       => 'grra',
 				'data'     => 'S:+3:\”grr\”;',
 				'expected' => 's:18:"S:+3:\”grra\”;";',
-		        ],                                       
-		        [
+			],
+			[
 				'from'     => 'a',
 				'to'       => 'b',
 				'data'     => 'O:3:%22foo%22:2:{s:4:%22file%22;s:9:%22shell.php%22;s:4:%22data%22;s:5:%22aaaa%22;}',
 				'expected' => 's:89:"O:3:%22foo%22:2:{s:4:%22file%22;s:9:%22shell.php%22;s:4:%22d|bt|b%22;s:5:%22|b|b|b|b%22;}";',
-		        ],
-		        [
-				 'from'     => 'l',
-				 'to'       => 'x',
-				 'data'     => 's:8:"last_log";s:19:"making a test entry";',
-				 'expected' => 's:8:"xast_xog";',
-		        ],
-		        [
-				 'from'     => '0',
-				 'to'       => '1',
-				 'data'     => 's:11:"\x00*\x00log_date";s:8:"07-09-17";',
-				 'expected' => 's:0:"";',
-		        ],
-		        [
-				 'from'     => '0',
-				 'to'       => '1',
-				 'data'     => 'a:+2:{i:1;s:3:"key";i:0;o:1:"s:2:"ID";s:1:"1";}}',
-				 'expected' => 's:48:"a:+2:{i:1;s:3:"key";i:1;o:1:"s:2:"ID";s:1:"1";}}";',
-		        ],			
+			],
+			[
+				'from'     => 'l',
+				'to'       => 'x',
+				'data'     => 's:8:"last_log";s:19:"making a test entry";',
+				'expected' => 's:8:"xast_xog";',
+			],
+			[
+				'from'     => '0',
+				'to'       => '1',
+				'data'     => 's:11:"\x00*\x00log_date";s:8:"07-09-17";',
+				'expected' => 's:0:"";',
+			],
+			[
+				'from'     => '0',
+				'to'       => '1',
+				'data'     => 'a:+2:{i:1;s:3:"key";i:0;o:1:"s:2:"ID";s:1:"1";}}',
+				'expected' => 's:48:"a:+2:{i:1;s:3:"key";i:1;o:1:"s:2:"ID";s:1:"1";}}";',
+			],
 		];
 	}
 }
