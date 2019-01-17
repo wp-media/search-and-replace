@@ -36,6 +36,7 @@ class FileDownloader {
 	 * Admin constructor.
 	 *
 	 * @param Exporter $dbe
+	 * @param MaxExecutionTime $max_execution
 	 */
 	public function __construct( Exporter $dbe, MaxExecutionTime $max_execution ) {
 
@@ -52,19 +53,19 @@ class FileDownloader {
 
 		// Set compress status.
 		// @codingStandardsIgnoreLine
-		$compress = ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
+		$compress = ( isset( $_POST['compress'] ) && 'on' === $_POST['compress'] );
 
-		if ( array_key_exists( 'changes', $report ) && ! empty( $report[ 'changes' ] ) ) :
+		if ( array_key_exists( 'changes', $report ) && ! empty( $report['changes'] ) ) :
 			?>
 			<div class="updated notice is-dismissible">
 				<?php
 				// Show changes if there are any.
-				if ( count( $report[ 'changes' ] ) > 0 ) {
+				if ( count( $report['changes'] ) > 0 ) {
 					$this->show_changes( $report );
 				}
 
 				// If no changes found report that.
-				if ( 0 === count( $report [ 'changes' ] ) ) {
+				if ( 0 === count( $report ['changes'] ) ) {
 					echo '<p>' . esc_html__( 'Search pattern not found.', 'search-and-replace' ) . '</p>';
 				}
 				?>
@@ -77,22 +78,22 @@ class FileDownloader {
 			<p><?php esc_html_e( 'Your SQL file was created!', 'search-and-replace' ); ?> </p>
 			<form action method="post">
 				<?php wp_nonce_field( $this->nonce_action, $this->nonce_name ); ?>
-				<input type="hidden" name="action" value="download_file" />
-				<input type="hidden" name="sql_file" value="<?php echo esc_attr( $report[ 'filename' ] ); ?>">
+				<input type="hidden" name="action" value="download_file"/>
+				<input type="hidden" name="sql_file" value="<?php echo esc_attr( $report['filename'] ); ?>">
 				<input type="hidden" name="compress" value="<?php echo esc_attr( $compress ); ?>">
 				<input id="insr_submit" type="submit" value="<?php esc_attr_e(
 					'Download SQL File', 'search-and-replace'
-				) ?>" class="button" />
+				) ?>" class="button"/>
 			</form>
 		</div>
 		<?php
 	}
 
 	/**
-	 * displays the changes made to the db
-	 * echoes the changes in formatted html
+	 * Displays the changes made to the db
+	 * echoes the changes in formatted html.
 	 *
-	 * @param $report array 'errors' : WP-Error Object if Errors.
+	 * @param array $report WP-Error Object if Errors
 	 *
 	 *      'tables' : Number of tables processed
 	 *      'changes_count' : Number of changes made
@@ -102,18 +103,17 @@ class FileDownloader {
 	 *          'column'    => [column that has been changed],
 	 *          'from'      => ( old value ),
 	 *          'to'        => ( $new value ),
-	 *
-	 * @return string
+	 * .
 	 */
 	public function show_changes( $report ) {
 
 		// Get search & replace values in order to highlight them in the results.
 		// @codingStandardsIgnoreStart
-		$search  = isset( $_POST[ 'search' ] ) ?
-			esc_html( filter_var( $_POST [ 'search' ], FILTER_SANITIZE_STRING ) ) :
+		$search  = isset( $_POST['search'] ) ?
+			esc_html( filter_var( $_POST ['search'], FILTER_SANITIZE_STRING ) ) :
 			'';
-		$replace = isset( $_POST[ 'replace' ] ) ?
-			esc_html( filter_var( $_POST [ 'replace' ], FILTER_SANITIZE_STRING ) ) :
+		$replace = isset( $_POST['replace'] ) ?
+			esc_html( filter_var( $_POST ['replace'], FILTER_SANITIZE_STRING ) ) :
 			'';
 		// @codingStandardsIgnoreEnd
 
@@ -132,15 +132,15 @@ class FileDownloader {
 			</div>
 			<div class="search-replace-changes-modal-content">
 				<?php
-				foreach ( $report[ 'changes' ] as $table_report ) :
-					$changes = $table_report[ 'changes' ];
+				foreach ( $report['changes'] as $table_report ) :
+					$changes      = $table_report['changes'];
 					$changes_made = count( $changes );
 
 					if ( $changes_made < 1 ) {
 						continue;
 					}
 
-					$table = $table_report[ 'table_name' ];
+					$table = $table_report['table_name'];
 					?>
 					<h2 class="search-replace-modal-table-headline">
 						<strong><?php esc_html_e( 'Table:', 'search-and-replace' ); ?></strong>
@@ -173,21 +173,22 @@ class FileDownloader {
 						<?php
 						foreach ( $changes as $change ) :
 							// Trim results and wrap with highlight class.
-							$old_value = esc_html( $change [ 'from' ] );
+							$old_value = esc_html( $change ['from'] );
 							$old_value = $this->trim_search_results( $search, $old_value, $delimiter );
 							$old_value = str_replace( $search, $search_highlight, $old_value );
 
-							$new_value = esc_html( $change[ 'to' ] );
+							$new_value = esc_html( $change['to'] );
 							$new_value = $this->trim_search_results( $replace, $new_value, $delimiter );
 							$new_value = str_replace( $replace, $replace_highlight, $new_value );
 
-							if ( $old_value and $new_value ) : ?>
+							if ( $old_value && $new_value ) :
+								?>
 								<tr>
 									<td class="search-replace-row search-replace-narrow">
-										<?php echo esc_html( $change [ 'row' ] ); ?>
+										<?php echo esc_html( $change ['row'] ); ?>
 									</td>
 									<td class="search-replace-column">
-										<?php echo esc_html( $change [ 'column' ] ); ?>
+										<?php echo esc_html( $change ['column'] ); ?>
 									</td>
 									<td class="search-replace-old-value">
 										<?php echo wp_kses( $old_value, [ 'span' => [ 'class' => [] ] ] ); ?>
@@ -198,7 +199,8 @@ class FileDownloader {
 								</tr>
 							<?php
 							endif;
-						endforeach; ?>
+						endforeach;
+						?>
 						</tbody>
 
 					</table>
@@ -211,11 +213,45 @@ class FileDownloader {
 	}
 
 	/**
+	 * Show Message by Report
+	 *
+	 * @param array $report The list of all the changes made.
+	 *
+	 * @return void
+	 */
+	private function show_message_by_report( $report ) {
+
+		$msg = sprintf(
+				// translators: %s is the count of tables.
+			_n(
+				'%s table was processed. ',
+				'%s tables were processed. ',
+				$report['tables'],
+				'search-and-replace'
+			),
+			(int) $report['tables']
+		);
+
+		$msg .= sprintf(
+				// translators: %s is the count of selected cells after search in tables.
+			_n(
+				'%s cell needs to be updated. ',
+				'%s cells need to be updated.',
+				$report['changes_count'],
+				'search-and-replace'
+			),
+			(int) $report['changes_count']
+		);
+
+		echo '<p>' . esc_html( $msg ) . '</p>';
+	}
+
+	/**
 	 * Trims a given string to 50 chars before and after the search string, if the string is longer than 199 chars.
 	 *
-	 * @param $needle    string
-	 * @param $haystack  string
-	 * @param $delimiter array  $delimiter[0]=start delimiter, $delimiter[1] = end delimiter
+	 * @param string $needle
+	 * @param string $haystack
+	 * @param array  $delimiter $delimiter[0]=start delimiter, $delimiter[1] = end delimiter.
 	 *
 	 * @return string The trimmed $haystack
 	 */
@@ -241,9 +277,9 @@ class FileDownloader {
 
 			// Check if the first trimmed result is the beginning of $haystack. if so remove leading delimiter.
 			if ( $i === 0 ) {
-				$pos = strpos( $haystack, $trimmed_results[ 0 ][ $i ] );
+				$pos = strpos( $haystack, $trimmed_results[0][ $i ] );
 				if ( $pos === 0 ) {
-					$local_delimiter[ 0 ] = '';
+					$local_delimiter[0] = '';
 				}
 			}
 
@@ -251,21 +287,21 @@ class FileDownloader {
 			$last_index = $matches - 1;
 
 			if ( $i === $last_index ) {
-				$trimmed_result_length = strlen( $trimmed_results[ 0 ][ $i ] );
+				$trimmed_result_length = strlen( $trimmed_results[0][ $i ] );
 				$substring             = substr( $haystack, - $trimmed_result_length );
 
-				if ( $substring === $trimmed_results[ 0 ][ $i ] ) {
-					$local_delimiter[ 1 ] = '';
+				if ( $substring === $trimmed_results[0][ $i ] ) {
+					$local_delimiter[1] = '';
 				}
 			}
-			$return_value .= $local_delimiter[ 0 ] . $trimmed_results[ 0 ][ $i ] . $local_delimiter[ 1 ];
+			$return_value .= $local_delimiter[0] . $trimmed_results[0][ $i ] . $local_delimiter[1];
 		}
 
 		return $return_value;
 	}
 
 	/**
-	 * calls the file delivery in Class DatabaseExporter
+	 * Calls the file delivery in Class DatabaseExporter.
 	 *
 	 * @wp-hook init
 	 *
@@ -296,7 +332,7 @@ class FileDownloader {
 
 		// Get the action to perform.
 		// @codingStandardsIgnoreLine
-		$action = isset( $_POST[ 'action' ] ) ? filter_var( $_POST[ 'action' ], FILTER_SANITIZE_STRING ) : '';
+		$action = isset( $_POST['action'] ) ? filter_var( $_POST['action'], FILTER_SANITIZE_STRING ) : '';
 
 		if ( 'download_file' !== $action ) {
 			return false;
@@ -306,9 +342,9 @@ class FileDownloader {
 		$compress = false;
 
 		// @codingStandardsIgnoreLine
-		if ( isset( $_POST[ 'sql_file' ] ) ) {
+		if ( isset( $_POST['sql_file'] ) ) {
 			// @codingStandardsIgnoreLine
-			$sql_file = sanitize_file_name( $_POST[ 'sql_file' ] );
+			$sql_file = sanitize_file_name( $_POST['sql_file'] );
 		}
 
 		if ( ! $sql_file ) {
@@ -316,16 +352,16 @@ class FileDownloader {
 		}
 
 		// If file name contains path or does not end with '.sql' exit.
-		// @todo create a function to prevent traversal path.
+		// @ToDo create a function to prevent traversal path.
 		$ext = strrchr( $sql_file, '.' );
 		if ( false !== strpos( $sql_file, '/' ) || '.sql' !== $ext ) {
 			wp_die( 'Cheating Uh?' );
 		}
 
 		// @codingStandardsIgnoreLine
-		if ( isset( $_POST[ 'compress' ] ) ) {
+		if ( isset( $_POST['compress'] ) ) {
 			// @codingStandardsIgnoreLine
-			$compress = (bool) filter_var( $_POST[ 'compress' ], FILTER_VALIDATE_BOOLEAN );
+			$compress = (bool) filter_var( $_POST['compress'], FILTER_VALIDATE_BOOLEAN );
 		}
 
 		// Download the file.
@@ -334,37 +370,5 @@ class FileDownloader {
 		$this->max_execution->restore();
 
 		return true;
-	}
-
-	/**
-	 * Show Message by Report
-	 *
-	 * @param array $report The list of all the changes made.
-	 *
-	 * @return void
-	 */
-	private function show_message_by_report( $report ) {
-
-		$msg = sprintf(
-			_n(
-				'%s table was processed. ',
-				'%s tables were processed. ',
-				$report[ 'tables' ],
-				'search-and-replace'
-			),
-			intval( $report[ 'tables' ] )
-		);
-
-		$msg .= sprintf(
-			_n(
-				'%s cell needs to be updated. ',
-				'%s cells need to be updated.',
-				$report[ 'changes_count' ],
-				'search-and-replace'
-			),
-			intval( $report[ 'changes_count' ] )
-		);
-
-		echo '<p>' . esc_html( $msg ) . '</p>';
 	}
 }
