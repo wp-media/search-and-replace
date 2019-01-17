@@ -164,7 +164,7 @@ class Exporter {
 		foreach ( $tables as $table ) {
 
 			// Count tables.
-			$report [ 'tables' ] ++;
+			$report ['tables'] ++;
 
 			/**
 			 * Check if we are replacing the domain in a multisite.
@@ -188,10 +188,10 @@ class Exporter {
 			}
 
 			// Log changes if any.
-			if ( 0 !== $table_report[ 'change' ] ) {
-				$report[ 'changes' ][ $table ] = $table_report;
+			if ( 0 !== $table_report['change'] ) {
+				$report['changes'][ $table ] = $table_report;
 
-				$report [ 'changes_count' ] += $table_report[ 'change' ];
+				$report ['changes_count'] += $table_report['change'];
 			}
 		}
 
@@ -199,12 +199,80 @@ class Exporter {
 
 		// Return errors if any.
 		if ( count( $this->errors->get_error_codes() ) ) {
-			$report[ 'errors' ] = $this->errors;
+			$report['errors'] = $this->errors;
 		}
 
-		$report [ 'filename' ] = $this->backup_filename;
+		$report ['filename'] = $this->backup_filename;
 
 		return $report;
+	}
+
+	/**
+	 * Open Resource
+	 *
+	 * @param string $filename
+	 * @param string $mode
+	 *
+	 * @return bool|resource
+	 */
+	private function open( $filename = '', $mode = 'wb' ) {
+
+		if ( '' === $filename ) {
+			return false;
+		}
+
+		return @fopen( $filename, $mode );
+	}
+
+	/**
+	 * writes a line to the backup file
+	 *
+	 * @param $query_line
+	 */
+	private function stow( $query_line ) {
+
+		if ( @fwrite( $this->fp, $query_line ) === false ) {
+			$this->errors->add(
+				4,
+				sprintf(
+					esc_attr__(
+						'There was an error writing a line to the backup script: %s',
+						'search-and-replace'
+					),
+					(int) $query_line
+				)
+			);
+		}
+	}
+
+	/**
+	 * Back Quote
+	 *
+	 * Add backquotes to tables and db-names in
+	 * SQL queries. Taken from phpMyAdmin.
+	 *
+	 * @param $a_name
+	 *
+	 * @return array|string
+	 */
+	private function backquote( $a_name ) {
+
+		if ( ! empty( $a_name ) && $a_name !== '*' ) {
+			if ( is_array( $a_name ) ) {
+				$result = [];
+				reset( $a_name );
+				foreach ( $a_name as $key => $val ) {
+				// while ( list( $key, $val ) = each( $a_name ) ) {
+					$result[ $key ] = '`' . $val . '`';
+				}
+
+				return $result;
+			}
+
+			return '`' . $a_name . '`';
+		}
+
+		return $a_name;
 	}
 
 	/**
@@ -300,11 +368,11 @@ class Exporter {
 
 		// Replace prefix if necessary
 		if ( '' !== $new_table_prefix ) {
-			$create_table[ 0 ][ 1 ]           = str_replace( $table, $new_table, $create_table[ 0 ][ 1 ] );
-			$table_report[ 'new_table_name' ] = $new_table;
+			$create_table[0][1]             = str_replace( $table, $new_table, $create_table[0][1] );
+			$table_report['new_table_name'] = $new_table;
 		}
 
-		$this->stow( $create_table[ 0 ][ 1 ] . ' ;' );
+		$this->stow( $create_table[0][1] . ' ;' );
 
 		if ( false === $table_structure ) {
 			/* translators: $1 is the name of the table */
@@ -325,20 +393,20 @@ class Exporter {
 
 		foreach ( $table_structure as $struct ) {
 			if ( 0 === strpos( $struct->Type, 'tinyint' )
-				|| 0 === stripos( $struct->Type, 'smallint' )
-				|| 0 === stripos( $struct->Type, 'mediumint' )
-				|| 0 === stripos( $struct->Type, 'int' )
-				|| 0 === stripos( $struct->Type, 'bigint' )
+			     || 0 === stripos( $struct->Type, 'smallint' )
+			     || 0 === stripos( $struct->Type, 'mediumint' )
+			     || 0 === stripos( $struct->Type, 'int' )
+			     || 0 === stripos( $struct->Type, 'bigint' )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( null === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
 
 			} elseif ( 0 === stripos( $struct->Type, 'binary' )
-				|| 0 === stripos( $struct->Type, 'varbinary' )
-				|| 0 === stripos( $struct->Type, 'blob' )
-				|| 0 === stripos( $struct->Type, 'tinyblob' )
-				|| 0 === stripos( $struct->Type, 'mediumblob' )
-				|| 0 === stripos( $struct->Type, 'longblob' )
+			           || 0 === stripos( $struct->Type, 'varbinary' )
+			           || 0 === stripos( $struct->Type, 'blob' )
+			           || 0 === stripos( $struct->Type, 'tinyblob' )
+			           || 0 === stripos( $struct->Type, 'mediumblob' )
+			           || 0 === stripos( $struct->Type, 'longblob' )
 			) {
 				$binaries[ strtolower( $struct->Field ) ] = 1;
 			}
@@ -351,7 +419,7 @@ class Exporter {
 
 		// Split columns array in primary key string and columns array.
 		$columns     = $this->dbm->get_columns( $table );
-		$primary_key = $columns[ 0 ];
+		$primary_key = $columns[0];
 		$row_count   = $this->dbm->get_rows( $table );
 		$page_size   = $this->page_size;
 		$pages       = ceil( $row_count / $page_size );
@@ -379,7 +447,7 @@ class Exporter {
 			if ( $table_data ) :
 				foreach ( $table_data as $row ) :
 					$values = [];
-					$table_report[ 'rows' ] ++;
+					$table_report['rows'] ++;
 
 					foreach ( $row as $column => $value ) :
 						// If "change database prefix" is set we have to look for occurrences of the old prefix
@@ -427,20 +495,20 @@ class Exporter {
 								foreach ( $this->csv_data as $entry ) {
 									$edited_data = is_serialized( $edited_data, false ) ?
 										$this->replace->recursive_unserialize_replace(
-											$entry[ 'search' ],
-											$entry[ 'replace' ],
+											$entry['search'],
+											$entry['replace'],
 											$edited_data
-										) : str_replace( $entry[ 'search' ], $entry[ 'replace' ], $value );
+										) : str_replace( $entry['search'], $entry['replace'], $value );
 								}
 							}
 
 							// When a replace happen, update the table report.
 							if ( $edited_data && $edited_data !== $value ) {
-								$table_report[ 'change' ] ++;
+								$table_report['change'] ++;
 
 								// log changes
-								$table_report[ 'changes' ][] = [
-									'row'    => $table_report[ 'rows' ],
+								$table_report['changes'][] = [
+									'row'    => $table_report['rows'],
 									'column' => $column,
 									'from'   => $value,
 									'to'     => $edited_data,
@@ -490,10 +558,62 @@ class Exporter {
 	}
 
 	/**
+	 * Get new Table name
+	 *
+	 * strips the current table prefix and adds a new one provided in $new_table_prefix
+	 *
+	 * @param $table
+	 * @param $new_table_prefix
+	 *
+	 * @return string  The table name with new prefix
+	 */
+	private function get_new_table_name( $table, $new_table_prefix ) {
+
+		// Get length of base_prefix
+		$prefix        = $this->dbm->get_base_prefix();
+		$prefix_length = strlen( $prefix );
+		// Strip old prefix
+		$part_after_prefix = substr( $table, $prefix_length );
+
+		// Build new table name
+		return $new_table_prefix . $part_after_prefix;
+	}
+
+	/**
+	 * Better addslashes for SQL queries.
+	 * Taken from phpMyAdmin.
+	 *
+	 * @param string $a_string
+	 * @param bool $is_like
+	 *
+	 * @return mixed
+	 */
+	private function sql_addslashes( $a_string = '', $is_like = false ) {
+
+		if ( $is_like ) {
+			$a_string = str_replace( '\\', '\\\\\\\\', $a_string );
+		} else {
+			$a_string = str_replace( '\\', '\\\\', $a_string );
+		}
+
+		return str_replace( '\'', '\\\'', $a_string );
+	}
+
+	/**
+	 * Close Resource
+	 *
+	 * @param $fp
+	 */
+	private function close( $fp ) {
+
+		fclose( $fp );
+	}
+
+	/**
 	 * Deliver
 	 *
 	 * @param string $filename The name of the file to be downloaded.
-	 * @param bool   $compress If TRUE, gz compression is used.
+	 * @param bool $compress If TRUE, gz compression is used.
 	 *
 	 * @return bool FALSE if error , has to DIE when file is delivered
 	 */
@@ -537,6 +657,19 @@ class Exporter {
 	}
 
 	/**
+	 * Increase Memory
+	 *
+	 * @return void
+	 */
+	private function increase_memory() {
+
+		// Try upping the memory limit before gzipping.
+		if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
+			@ini_set( 'memory_limit', '64M' );
+		}
+	}
+
+	/**
 	 * Gzip
 	 *
 	 * @param string $diskfile The path of the file to compress
@@ -576,136 +709,5 @@ class Exporter {
 		}
 
 		return $diskfile;
-	}
-
-	/**
-	 * Increase Memory
-	 *
-	 * @return void
-	 */
-	private function increase_memory() {
-
-		// Try upping the memory limit before gzipping.
-		if ( function_exists( 'memory_get_usage' ) && ( (int) @ini_get( 'memory_limit' ) < 64 ) ) {
-			@ini_set( 'memory_limit', '64M' );
-		}
-	}
-
-	/**
-	 * Get new Table name
-	 *
-	 * strips the current table prefix and adds a new one provided in $new_table_prefix
-	 *
-	 * @param $table
-	 * @param $new_table_prefix
-	 *
-	 * @return string  The table name with new prefix
-	 */
-	private function get_new_table_name( $table, $new_table_prefix ) {
-
-		// Get length of base_prefix
-		$prefix        = $this->dbm->get_base_prefix();
-		$prefix_length = strlen( $prefix );
-		// Strip old prefix
-		$part_after_prefix = substr( $table, $prefix_length );
-
-		// Build new table name
-		return $new_table_prefix . $part_after_prefix;
-	}
-
-	/**
-	 * Better addslashes for SQL queries.
-	 * Taken from phpMyAdmin.
-	 *
-	 * @param string $a_string
-	 * @param bool   $is_like
-	 *
-	 * @return mixed
-	 */
-	private function sql_addslashes( $a_string = '', $is_like = false ) {
-
-		if ( $is_like ) {
-			$a_string = str_replace( '\\', '\\\\\\\\', $a_string );
-		} else {
-			$a_string = str_replace( '\\', '\\\\', $a_string );
-		}
-
-		return str_replace( '\'', '\\\'', $a_string );
-	}
-
-	/**
-	 * Back Quote
-	 *
-	 * Add backquotes to tables and db-names in
-	 * SQL queries. Taken from phpMyAdmin.
-	 *
-	 * @param $a_name
-	 *
-	 * @return array|string
-	 */
-	private function backquote( $a_name ) {
-
-		if ( ! empty( $a_name ) && $a_name !== '*' ) {
-			if ( is_array( $a_name ) ) {
-				$result = [];
-				reset( $a_name );
-				foreach ($a_name as $key => $val) {
-				/*while ( list( $key, $val ) = each( $a_name ) ) {*/
-					$result[ $key ] = '`' . $val . '`';
-				}
-
-				return $result;
-			}
-			return '`' . $a_name . '`';
-		}
-		return $a_name;
-	}
-
-	/**
-	 * Open Resource
-	 *
-	 * @param string $filename
-	 * @param string $mode
-	 *
-	 * @return bool|resource
-	 */
-	private function open( $filename = '', $mode = 'wb' ) {
-
-		if ( '' === $filename ) {
-			return false;
-		}
-
-		return @fopen( $filename, $mode );
-	}
-
-	/**
-	 * Close Resource
-	 *
-	 * @param $fp
-	 */
-	private function close( $fp ) {
-
-		fclose( $fp );
-	}
-
-	/**
-	 * writes a line to the backup file
-	 *
-	 * @param $query_line
-	 */
-	private function stow( $query_line ) {
-
-		if ( @fwrite( $this->fp, $query_line ) === false ) {
-			$this->errors->add(
-				4,
-				sprintf(
-					esc_attr__(
-						'There was an error writing a line to the backup script: %s',
-						'search-and-replace'
-					),
-					(int) $query_line
-				)
-			);
-		}
 	}
 }
