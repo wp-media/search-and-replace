@@ -1,9 +1,12 @@
 === Search & Replace ===
-Contributors: inpsyde, Bueltge, derpixler, ChriCo, s-hinse, Giede
+Contributors: inpsyde, Bueltge, derpixler, ChriCo, s-hinse
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
 Tested up to: 5.1
+Requires PHP: 5.6
 Stable tag: 3.2.0
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
 
