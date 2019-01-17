@@ -3,16 +3,6 @@
 
 	<description>A custom set of code standard rules to check for Inpsyde Codex.</description>
 
-	<!-- Check for cross-version support for PHP 7.0 and higher. -->
-	<config name="testVersion" value="5.6-"/>
-
-	<!-- Allow . in hook names -->
-	<rule ref="WordPress.NamingConventions.ValidHookName">
-		<properties>
-			<property name="additionalWordDelimiters" value="."/>
-		</properties>
-	</rule>
-
 	<!-- Include the WordPress ruleset, with exclusions. -->
 	<rule ref="WordPress">
 
@@ -63,6 +53,33 @@
 		<!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
 
+	</rule>
+
+	<!-- How to scan -->
+	<arg value="sp"/> <!-- Show sniff and progress -->
+	<arg name="colors"/> <!-- Show results with colors -->
+	<arg name="basepath" value="."/> <!-- Strip the file paths down to the relevant bit -->
+	<arg name="parallel" value="50"/> <!-- Enables parallel processing when available for faster results. -->
+	<arg name="extensions" value="php"/> <!-- Limit to PHP files -->
+	<!-- Rules: Check PHP version compatibility - see
+       https://github.com/PHPCompatibility/PHPCompatibilityWP -->
+	<rule ref="PHPCompatibilityWP"/>
+	<!-- For help in understanding this testVersion:
+		https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
+	<config name="testVersion" value="5.6-"/>
+	<!-- Rules: WordPress Coding Standards - see
+       https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
+	<rule ref="WordPress-Extra"/><!-- Includes WordPress-Core -->
+	<rule ref="WordPress-Docs"/>
+	<!-- For help in understanding these custom sniff properties:
+		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
+	<config name="minimum_supported_wp_version" value="4.0"/>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element name="search-and-replace"/>
+			</property>
+		</properties>
 	</rule>
 
 	<!-- Adapt to be able to use namespaced hooks in dot notation. -->
