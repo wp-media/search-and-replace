@@ -561,12 +561,12 @@ class Exporter {
 		if ( $diskfile !== $gz_diskfile && function_exists( 'gzencode' ) ) {
 			$text    = file_get_contents( $diskfile );
 			$gz_text = gzencode( $text, 9 );
-			$fp      = fopen( $gz_diskfile, 'wb' );
+			$file      = fopen( $gz_diskfile, 'wb' );
 
-			fwrite( $fp, $gz_text );
+			fwrite( $file, $gz_text );
 
 			// Don't serve gzipped file if actually we encounter problem to close it.
-			if ( fclose( $fp ) ) {
+			if ( fclose( $file ) ) {
 				unlink( $diskfile );
 
 				$diskfile = $gz_diskfile;
