@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlNoDataSourceInspection */
 
 namespace Inpsyde\SearchReplace\Database;
 
@@ -61,6 +61,7 @@ class Exporter {
 	 *
 	 * @param Replace $replace
 	 * @param Manager $dbm
+	 * @param \WP_Error $wp_error
 	 */
 	public function __construct( Replace $replace, Manager $dbm, \WP_Error $wp_error ) {
 
@@ -75,15 +76,16 @@ class Exporter {
 	 *
 	 * @param string $search
 	 * @param string $replace
-	 * @param array  $tables         The array of table names that should be exported.
-	 * @param bool   $domain_replace If set, exporter will change the domain name without leading http:// in table
+	 * @param array $tables The array of table names that should be exported.
+	 * @param bool $domain_replace If set, exporter will change the domain name without leading http:// in table
 	 *                               wp_blogs if we are on a multisite
 	 * @param string $new_table_prefix
-	 * @param null   $csv
+	 * @param null $csv
 	 *
 	 * @return array $report    $report [ 'filename'] : Name of Backup file,
 	 *                          $report[ 'errors'] : WP_Error_object,
 	 * $report ['changes'] : Array with replacements in tables
+	 * @throws \Throwable
 	 */
 	public function db_backup(
 		$search = '',
@@ -116,7 +118,7 @@ class Exporter {
 			DB_NAME . "_$new_table_prefix.sql";
 
 		// If the directory for the backup isn't writable, don't proceed.
-		// @todo Use WP_Filesystem() to access to the file system.
+		// @ToDo Use WP_Filesystem() to access to the file system.
 		if ( ! is_writable( $this->backup_dir ) ) {
 			$this->errors->add( 9, esc_attr__( 'The backup directory is not writable!', 'search-and-replace' ) );
 
@@ -169,7 +171,7 @@ class Exporter {
 			 * If so, we replace in wp_blogs the stripped url without http(s), because the domains
 			 * are stored without http://
 			 */
-			if ( $domain_replace && is_multisite() && $table === $wp_blogs_table ) {
+			if ( $table === $wp_blogs_table && $domain_replace && is_multisite() ) {
 				$stripped_url_search  = substr( $search, strpos( $search, '/' ) + 2 );
 				$stripped_url_replace = substr( $replace, strpos( $replace, '/' ) + 2 );
 
@@ -453,17 +455,15 @@ class Exporter {
 							// yet try to avoid quotation marks around integers
 							$value    = ( null === $value || '' === $value ) ? $defs[ strtolower( $column ) ] : $value;
 							$values[] = ( '' === $value ) ? "''" : $value;
+						} else if ( isset( $binaries[ strtolower( $column ) ] ) ) {
+							$hex      = unpack( 'H*', $value );
+							$values[] = "0x$hex[1]";
 						} else {
-							if ( isset( $binaries[ strtolower( $column ) ] ) ) {
-								$hex      = unpack( 'H*', $value );
-								$values[] = "0x$hex[1]";
-							} else {
-								$values[] = "'" . str_replace(
-										$hex_search,
-										$hex_replace,
-										$this->sql_addslashes( $value )
-									) . "'";
-							}
+							$values[] = "'" . str_replace(
+									$hex_search,
+									$hex_replace,
+									$this->sql_addslashes( $value )
+								) . "'";
 						}
 					endforeach;
 
@@ -550,7 +550,7 @@ class Exporter {
 
 		// Always serve a fresh file.
 		// If file all-ready exists doesn't mean we have the same replace request.
-		file_exists( $gz_diskfile ) and unlink( $gz_diskfile );
+		file_exists( $gz_diskfile ) && unlink( $gz_diskfile );
 
 		// Try gzipping with an external application.
 		@exec( "gzip $diskfile" );
