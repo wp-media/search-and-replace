@@ -2,8 +2,7 @@
 
 use Inpsyde\SearchReplace\Database\Replace;
 use Inpsyde\SearchReplace\Tests\AbstractTestCase;
-use \Mockery as m;
-use \Brain\Monkey as bm;
+use Brain\Monkey\Functions;
 
 /**
  * Class ReplaceTest
@@ -23,6 +22,8 @@ class ReplaceTest extends AbstractTestCase {
 	}
 
 	public function test_string_replace() {
+
+		Functions\when( 'is_serialized' )->alias( [ $this, 'is_serialized' ] );
 
 		$columns = [
 			0 => 'comment_ID',
