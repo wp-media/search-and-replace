@@ -5,6 +5,7 @@ namespace Inpsyde\SearchReplace\Database;
 /**
  * Class Exporter
  *
+ * @property bool|resource fb
  * @package Inpsyde\SearchReplace\Database
  */
 class Exporter {
@@ -219,6 +220,7 @@ class Exporter {
 	 * @param string $new_table_prefix
 	 *
 	 * @return array $table_report Reports the changes made to the db.
+	 * @throws \Throwable
 	 */
 	public function backup_table( $search = '', $replace = '', $table, $new_table_prefix = '', $csv = null ) {
 
@@ -321,26 +323,26 @@ class Exporter {
 
 		foreach ( $table_structure as $struct ) {
 			if ( 0 === strpos( $struct->Type, 'tinyint' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'smallint' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'mediumint' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'int' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'bigint' )
+				|| 0 === stripos( $struct->Type, 'smallint' )
+				|| 0 === stripos( $struct->Type, 'mediumint' )
+				|| 0 === stripos( $struct->Type, 'int' )
+				|| 0 === stripos( $struct->Type, 'bigint' )
 			) {
 				$defs[ strtolower( $struct->Field ) ] = ( null === $struct->Default ) ? 'NULL' : $struct->Default;
 				$ints[ strtolower( $struct->Field ) ] = '1';
 
-			} elseif ( 0 === strpos( strtolower( $struct->Type ), 'binary' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'varbinary' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'blob' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'tinyblob' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'mediumblob' )
-				|| 0 === strpos( strtolower( $struct->Type ), 'longblob' )
+			} elseif ( 0 === stripos( $struct->Type, 'binary' )
+				|| 0 === stripos( $struct->Type, 'varbinary' )
+				|| 0 === stripos( $struct->Type, 'blob' )
+				|| 0 === stripos( $struct->Type, 'tinyblob' )
+				|| 0 === stripos( $struct->Type, 'mediumblob' )
+				|| 0 === stripos( $struct->Type, 'longblob' )
 			) {
 				$binaries[ strtolower( $struct->Field ) ] = 1;
 			}
 
 			// Longtext is used for meta_values as best practice in all of the automatic products.
-			if ( 0 === strpos( strtolower( $struct->Type ), 'longtext' ) ) {
+			if ( 0 === stripos( $struct->Type, 'longtext' ) ) {
 				$maybe_serialized[] = strtolower( $struct->Field );
 			}
 		}
@@ -382,8 +384,8 @@ class Exporter {
 						// in the db entries and change them.
 						if ( $new_table !== $table ) {
 							// Check if column is expected to hold serialized value.
-							if ( in_array( strtolower( $column ), $maybe_serialized, true )
-								&& is_serialized( $value, false )
+							if ( is_serialized( $value, false )
+							     && in_array( strtolower( $column ), $maybe_serialized, true )
 							) {
 								$value = $this->replace->recursive_unserialize_replace(
 									$table_prefix,
@@ -405,8 +407,8 @@ class Exporter {
 
 							if ( '' !== $search ) {
 								// Check if column is expected to hold serialized value.
-								if ( in_array( strtolower( $column ), $maybe_serialized, true )
-									&& is_serialized( $value, false )
+								if ( is_serialized( $value, false )
+								     && in_array( strtolower( $column ), $maybe_serialized, true )
 								) {
 									$edited_data = $this->replace->recursive_unserialize_replace(
 										$search,
@@ -559,14 +561,14 @@ class Exporter {
 
 		// If we are not capable of using `gzip` command, lets try something else.
 		if ( $diskfile !== $gz_diskfile && function_exists( 'gzencode' ) ) {
-			$text    = file_get_contents( $diskfile );
-			$gz_text = gzencode( $text, 9 );
-			$file      = fopen( $gz_diskfile, 'wb' );
+			$text     = file_get_contents( $diskfile );
+			$gz_text  = gzencode( $text, 9 );
+			$this->fb = fopen( $gz_diskfile, 'wb' );
 
-			fwrite( $file, $gz_text );
+			fwrite( $this->fp, $gz_text );
 
 			// Don't serve gzipped file if actually we encounter problem to close it.
-			if ( fclose( $file ) ) {
+			if ( fclose( $this->fp ) ) {
 				unlink( $diskfile );
 
 				$diskfile = $gz_diskfile;
