@@ -56,7 +56,7 @@
     "post-update-cmd": [
       "@phpcs"
     ],
-    "phpcs": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs"
+    "phpcs": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp/PHPCompatibilityWP"
   },
   "autoload": {
     "psr-4": {
