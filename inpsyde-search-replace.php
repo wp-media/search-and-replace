@@ -13,10 +13,10 @@
  * License URI:  license.txt
  */
 
-use Inpsyde\SearchReplace\Database as Database;
-use Inpsyde\SearchReplace\Page as Page;
+use Inpsyde\SearchReplace\Database;
+use Inpsyde\SearchReplace\Page;
 
-defined( 'ABSPATH' ) or die( 'No direct access!' );
+defined( 'ABSPATH' ) || die( 'No direct access!' );
 
 add_action( 'plugins_loaded', 'search_replace_load' );
 register_activation_hook( __FILE__, 'search_replace_activate' );
@@ -34,7 +34,7 @@ register_activation_hook( __FILE__, 'search_replace_activate' );
 function search_replace_activate() {
 
 	$required_php_version = '5.6.0';
-	$correct_php_version  = version_compare( phpversion(), $required_php_version, '>=' );
+	$correct_php_version  = version_compare( PHP_VERSION, $required_php_version, '>=' );
 
 	search_replace_textdomain();
 
@@ -44,13 +44,15 @@ function search_replace_activate() {
 		wp_die(
 			'<p>' .
 			sprintf(
+				// translators: %1$s will replace with the PHP version of the client.
 				esc_attr__(
 					'This plugin can not be activated because it requires at least PHP version %1$s. ',
 					'search-and-replace'
 				),
 				$required_php_version
 			)
-			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">' . esc_attr__( 'back', 'search-and-replace' ) . '</a>'
+			. '</p> <a href="' . admin_url( 'plugins.php' ) . '">'
+			. esc_attr__( 'back', 'search-and-replace' ) . '</a>'
 		);
 
 	}
@@ -84,6 +86,7 @@ function search_replace_load() {
 		return false;
 	}
 
+	/** @noinspection PhpIncludeInspection */
 	include_once $file;
 
 	$max_execution = new Inpsyde\SearchReplace\Service\MaxExecutionTime();
