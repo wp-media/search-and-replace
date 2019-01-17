@@ -561,7 +561,7 @@ class Exporter {
 		if ( $diskfile !== $gz_diskfile && function_exists( 'gzencode' ) ) {
 			$text    = file_get_contents( $diskfile );
 			$gz_text = gzencode( $text, 9 );
-			$fp      = fopen( $gz_diskfile, 'w' );
+			$fp      = fopen( $gz_diskfile, 'wb' );
 
 			fwrite( $fp, $gz_text );
 
