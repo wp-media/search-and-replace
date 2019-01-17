@@ -2,8 +2,8 @@
 Contributors: inpsyde, Bueltge, derpixler, ChriCo, s-hinse, Giede
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
-Tested up to: 4.9
-Stable tag: 3.1.2
+Tested up to: 5.1
+Stable tag: 3.2
 
 Search & Replace data in your database with WordPress admin, replace domains/URLs of your WordPress installation.
 
@@ -60,9 +60,12 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 5. Result screen after search or search and replace
 
 == Changelog ==
-= 3.2.0 (ToDo) =
-* Added CSV format alternative for search/replace [#82].
-* Change code structure, preparation for more solid UnitTests.
+= 3.2.0 (2019-01-17) =
+* Added CSV format alternative for search/replace [#82](https://github.com/inpsyde/search-and-replace/issues/82).
+* Improve code structure, preparation for more solid UnitTests.
+* Improve Modal Table UI.
+* Added Multiline searching [#119](https://github.com/inpsyde/search-and-replace/issues/119).
+* Fix several issues to run always with php 5.6 to 7.2.
 
 = v3.1.2 (2016-12-31) =
 * hotfix: prevent declaration error with Requisite

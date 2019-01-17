@@ -7,7 +7,7 @@
  * Author:       Inpsyde GmbH
  * URI:          https://inpsyde.com
  * Contributors: s-hinse, derpixler, ChriCo, Bueltge, inpsyde
- * Version:      3.2.0-dev
+ * Version:      3.2.0
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
  * License:      GPLv3+

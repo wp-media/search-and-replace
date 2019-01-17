@@ -43,6 +43,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 
 	/**
 	 * @return bool
+	 * @throws \Throwable
 	 */
 	public function save() {
 
@@ -80,7 +81,7 @@ class ReplaceDomain extends AbstractPage implements PageInterface {
 	 */
 	public function render() {
 
-		require_once( __DIR__ . '/../templates/replace-domain.php' );
+		require_once __DIR__ . '/../templates/replace-domain.php';
 	}
 
 	/**

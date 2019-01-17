@@ -3,7 +3,6 @@
 namespace Inpsyde\SearchReplace\Page;
 
 use Inpsyde\SearchReplace\Database;
-use Inpsyde\SearchReplace\Service;
 use Inpsyde\SearchReplace\FileDownloader;
 
 /**
@@ -54,7 +53,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	public function render() {
 
-		require_once( __DIR__ . '/../templates/search-replace.php' );
+		require_once __DIR__ . '/../templates/search-replace.php';
 
 		wp_localize_script(
 			'insr-js',
@@ -98,6 +97,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 	/**
 	 * @return bool
+	 * @throws \Throwable
 	 */
 	public function save() {
 
@@ -122,7 +122,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 
 		// Do not perform anything if we haven't anything.
 		if ( ( ! $search && ! $replace ) && ! $csv ) {
-			$this->add_error( esc_html__( 'You must provide at least a search string or a csv data' ) );
+			$this->add_error( esc_html__( 'You must provide at least a search string or a csv data', 'search-and-replace' ) );
 			return false;
 		}
 
@@ -180,15 +180,15 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * Calls run_replace_table()  on each table provided in array $tables
+	 * Calls run_replace_table()  on each table provided in array $tables.
 	 *
 	 * @param string $search
 	 * @param string $replace
-	 * @param array  $tables  array of tables we want to search
-	 * @param bool   $dry_run True if dry run (no changes are written to db)
+	 * @param array  $tables  Array of tables we want to search.
+	 * @param bool   $dry_run True if dry run (no changes are written to db).
 	 * @param bool   $csv
 	 *
-	 * @return null
+	 * @throws \Throwable
 	 */
 	protected function run_replace( $search, $replace, $tables, $dry_run, $csv = null ) {
 
@@ -214,7 +214,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 		$report = $this->replace->run_search_replace( $search, $replace, $tables, $csv );
 
 		if ( is_wp_error( $report ) ) {
-			$this->add_error( __( $report->get_error_message(), 'search-and-replace' ) );
+			$this->add_error( $report->get_error_message() );
 		} else {
 			if ( count( $report[ 'changes' ] ) > 0 ) {
 				$this->downloader->show_changes( $report );
@@ -264,7 +264,7 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			);
 
 		}
-		echo( '</select>' );
+		echo '</select>';
 	}
 
 	/**

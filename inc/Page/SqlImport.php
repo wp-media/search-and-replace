@@ -65,7 +65,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	 */
 	public function save() {
 
-		// TODO: Better handling of large files
+		// @ToDo: Better handling of large files
 		// maybe like here: http://stackoverflow.com/questions/147821/loading-sql-files-from-within-php , answer by user 'gromo'
 		$php_upload_error_code = $_FILES[ 'file_to_upload' ][ 'error' ];
 		if ( 0 === $php_upload_error_code ) {
@@ -104,11 +104,12 @@ class SqlImport extends AbstractPage implements PageInterface {
 				echo '<div class="updated notice is-dismissible">';
 				echo '<p>';
 				printf(
+				// Translators: %s print the sql source.
 					esc_html__(
 						'The SQL file was successfully imported. %s SQL queries were performed.',
 						'search-and-replace'
 					),
-					$success
+					esc_html($success)
 				);
 				echo '</p></div>';
 			}
@@ -150,6 +151,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 
 			$this->add_error(
 				sprintf(
+					// Translators: %s print the error message.
 					esc_html__( 'Upload Error: %s', 'search-and-replace' ),
 					$php_upload_errors[ $php_upload_error_code ]
 				)
@@ -159,7 +161,7 @@ class SqlImport extends AbstractPage implements PageInterface {
 	}
 
 	/**
-	 * reads a gz file into a string
+	 * Reads a gz file into a string.
 	 *
 	 * @param string $filename String path ot file.
 	 *
@@ -213,10 +215,9 @@ class SqlImport extends AbstractPage implements PageInterface {
 		$size = preg_replace( '/[^0-9\.]/', '', $size );
 		if ( $unit ) {
 			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
-			return round( $size * pow( 1024, stripos( 'bkmgtpezy', $unit[0] ) ) );
-		} else {
-			return round( $size );
+			return round( $size * ( 1024 ** stripos( 'bkmgtpezy', $unit[0] ) ) );
 		}
+		return round( $size );
 	}
 
 }
