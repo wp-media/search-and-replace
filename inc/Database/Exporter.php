@@ -647,17 +647,16 @@ class Exporter {
 			if ( is_array( $a_name ) ) {
 				$result = [];
 				reset( $a_name );
-				while ( list( $key, $val ) = each( $a_name ) ) {
+				foreach ($a_name as $key => $val) {
+				/*while ( list( $key, $val ) = each( $a_name ) ) {*/
 					$result[ $key ] = '`' . $val . '`';
 				}
 
 				return $result;
-			} else {
-				return '`' . $a_name . '`';
 			}
-		} else {
-			return $a_name;
+			return '`' . $a_name . '`';
 		}
+		return $a_name;
 	}
 
 	/**
