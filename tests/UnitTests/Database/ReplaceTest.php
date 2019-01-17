@@ -80,6 +80,8 @@ class ReplaceTest extends AbstractTestCase {
 
 	public function test_umlaut_replace() {
 
+		Functions\when( 'is_serialized' )->alias( [ $this, 'is_serialized' ] );
+
 		$columns = [
 			0 => 'comment_ID',
 			1 => [
@@ -135,6 +137,8 @@ class ReplaceTest extends AbstractTestCase {
 	}
 
 	public function test_substring_replace() {
+
+		Functions\when( 'is_serialized' )->alias( [ $this, 'is_serialized' ] );
 
 		$columns = [
 			0 => 'comment_ID',
@@ -276,6 +280,8 @@ class ReplaceTest extends AbstractTestCase {
 	 * @dataProvider objectProvider
 	 */
 	public function test_object_replace( $serialized, $expected, $search, $replace ) {
+
+		Functions\when( 'is_serialized' )->alias( [ $this, 'is_serialized' ] );
 
 		$columns = [
 			0 => 'comment_ID',
