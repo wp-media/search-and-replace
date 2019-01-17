@@ -701,7 +701,7 @@ class Exporter {
 						'There was an error writing a line to the backup script: %s',
 						'search-and-replace'
 					),
-					intval( $query_line )
+					(int) $query_line
 				)
 			);
 		}
