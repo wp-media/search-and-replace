@@ -52,7 +52,7 @@ class FileDownloader {
 
 		// Set compress status.
 		// @codingStandardsIgnoreLine
-		$compress = (bool) ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
+		$compress = ( isset( $_POST[ 'compress' ] ) && 'on' === $_POST[ 'compress' ] );
 
 		if ( array_key_exists( 'changes', $report ) && ! empty( $report[ 'changes' ] ) ) :
 			?>

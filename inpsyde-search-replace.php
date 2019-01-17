@@ -1,9 +1,10 @@
 <?php # -*- coding: utf-8 -*-
-/*
+
+/**
  * Plugin Name:  Search & Replace
  * Plugin URI:   https://wordpress.org/plugins/search-and-replace/
  * Description:  Search & Replace data in your whole WordPress setup, backup and import your database, change table prefix or migrate your domain to another domain.
- * Author:       Inpsyde GmbH Author
+ * Author:       Inpsyde GmbH
  * URI:          https://inpsyde.com
  * Contributors: s-hinse, derpixler, ChriCo, Bueltge, inpsyde
  * Version:      3.2.0-dev
@@ -44,7 +45,7 @@ function search_replace_activate() {
 		wp_die(
 			'<p>' .
 			sprintf(
-				// translators: %1$s will replace with the PHP version of the client.
+			// translators: %1$s will replace with the PHP version of the client.
 				esc_attr__(
 					'This plugin can not be activated because it requires at least PHP version %1$s. ',
 					'search-and-replace'

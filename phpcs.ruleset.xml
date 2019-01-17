@@ -1,94 +1,94 @@
 <?xml version="1.0"?>
 <ruleset name="search-and-replace">
 
-	<description>A custom set of code standard rules to check.</description>
+    <description>A custom set of code standard rules to check.</description>
 
-	<config name="installed_paths" value="vendor/wp-coding-standards/wpcs" />
+    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
 
-	<!-- Include the WordPress ruleset, with exclusions. -->
-	<rule ref="WordPress">
+    <!-- Include the WordPress ruleset, with exclusions. -->
+    <rule ref="WordPress">
 
-		<exclude name="WordPress.PHP.YodaConditions"/>
+        <exclude name="WordPress.PHP.YodaConditions"/>
 
-		<!-- Exclude to be able to adhere to PSR-4. -->
-		<exclude name="WordPress.Files.FileName"/>
+        <!-- Exclude to be able to adhere to PSR-4. -->
+        <exclude name="WordPress.Files.FileName"/>
 
-		<exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect"/>
-		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
-		<exclude name="Generic.PHP.DisallowShortOpenTag"/>
+        <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect"/>
+        <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+        <exclude name="Generic.PHP.DisallowShortOpenTag"/>
 
-		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
-		<exclude name="Squiz.Commenting.FileComment.Missing"/>
+        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
+        <exclude name="Squiz.Commenting.FileComment.Missing"/>
 
-		<exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
 
-		<!-- Remove spaces before types check. -->
-		<exclude name="Squiz.Commenting.VariableComment.VarIndent"/>
-		<exclude name="Squiz.Commenting.FunctionComment.SpacingBeforeParamType"/>
-		<exclude name="Squiz.Commenting.FunctionComment.SpacingBeforeParams"/>
+        <!-- Remove spaces before types check. -->
+        <exclude name="Squiz.Commenting.VariableComment.VarIndent"/>
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingBeforeParamType"/>
+        <exclude name="Squiz.Commenting.FunctionComment.SpacingBeforeParams"/>
 
-		<!-- Exclude Full Stops on inline comment. -->
-		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
-		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+        <!-- Exclude Full Stops on inline comment. -->
+        <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
 
-		<!-- Remove empty line not required before block comment -->
-		<exclude name="Squiz.Commenting.BlockComment.HasEmptyLineBefore"/>
-		<!-- Remove rule for /** style for each var -->
-		<exclude name="Squiz.Commenting.VariableComment.WrongStyle"/>
-		<!-- Exclude to be able to include an encoding cookie. -->
-		<exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
-		<exclude name="Squiz.Commenting.InlineComment.WrongStyle"/>
+        <!-- Remove empty line not required before block comment -->
+        <exclude name="Squiz.Commenting.BlockComment.HasEmptyLineBefore"/>
+        <!-- Remove rule for /** style for each var -->
+        <exclude name="Squiz.Commenting.VariableComment.WrongStyle"/>
+        <!-- Exclude to be able to include an encoding cookie. -->
+        <exclude name="Squiz.Commenting.FileComment.WrongStyle"/>
+        <exclude name="Squiz.Commenting.InlineComment.WrongStyle"/>
 
-		<!-- Exclude to be able to use variadic arguments. https://github.com/squizlabs/PHP_CodeSniffer/issues/1652 -->
-		<exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/>
+        <!-- Exclude to be able to use variadic arguments. https://github.com/squizlabs/PHP_CodeSniffer/issues/1652 -->
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/>
 
-		<!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
-		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
+        <!-- Exclude to be able to use "@noinspection PhpUnusedParameterInspection" annotations. -->
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/>
 
-		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect"/>
-		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
-		<exclude name="WordPress.Arrays.ArrayDeclaration.KeyNotAligned"/>
-		<!-- Remove spaces instead of tabs check -->
-		<exclude name="WordPress.Arrays.ArrayDeclaration.ValueNotAligned"/>
-		<exclude name="WordPress.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
+        <exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect"/>
+        <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+        <exclude name="WordPress.Arrays.ArrayDeclaration.KeyNotAligned"/>
+        <!-- Remove spaces instead of tabs check -->
+        <exclude name="WordPress.Arrays.ArrayDeclaration.ValueNotAligned"/>
+        <exclude name="WordPress.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
 
-		<!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
-		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
+        <!-- Exclude to not be forced to use a space before return type colons. https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/547. -->
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterCloseParenthesis"/>
 
-	</rule>
+    </rule>
 
-	<!-- How to scan -->
-	<arg value="sp"/> <!-- Show sniff and progress -->
-	<arg name="colors"/> <!-- Show results with colors -->
-	<arg name="basepath" value="."/> <!-- Strip the file paths down to the relevant bit -->
-	<arg name="parallel" value="50"/> <!-- Enables parallel processing when available for faster results. -->
-	<arg name="extensions" value="php"/> <!-- Limit to PHP files -->
-	<!-- Rules: Check PHP version compatibility - see
+    <!-- How to scan -->
+    <arg value="sp"/> <!-- Show sniff and progress -->
+    <arg name="colors"/> <!-- Show results with colors -->
+    <arg name="basepath" value="."/> <!-- Strip the file paths down to the relevant bit -->
+    <arg name="parallel" value="50"/> <!-- Enables parallel processing when available for faster results. -->
+    <arg name="extensions" value="php"/> <!-- Limit to PHP files -->
+    <!-- Rules: Check PHP version compatibility - see
        https://github.com/PHPCompatibility/PHPCompatibilityWP -->
-	<!-- <rule ref="PHPCompatibilityWP"/> -->
-	<!-- For help in understanding this testVersion:
-		https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
-	<!-- <config name="testVersion" value="5.6-"/> -->
-	<!-- Rules: WordPress Coding Standards - see
+    <!-- <rule ref="PHPCompatibilityWP"/> -->
+    <!-- For help in understanding this testVersion:
+        https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
+    <!-- <config name="testVersion" value="5.6-"/> -->
+    <!-- Rules: WordPress Coding Standards - see
        https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
-	<rule ref="WordPress-Extra"/><!-- Includes WordPress-Core -->
-	<rule ref="WordPress-Docs"/>
-	<!-- For help in understanding these custom sniff properties:
-		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
-	<config name="minimum_supported_wp_version" value="4.0"/>
-	<rule ref="WordPress.WP.I18n">
-		<properties>
-			<property name="text_domain" type="array">
-				<element value="search-and-replace"/>
-			</property>
-		</properties>
-	</rule>
+    <rule ref="WordPress-Extra"/><!-- Includes WordPress-Core -->
+    <rule ref="WordPress-Docs"/>
+    <!-- For help in understanding these custom sniff properties:
+        https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
+    <config name="minimum_supported_wp_version" value="4.0"/>
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="search-and-replace"/>
+            </property>
+        </properties>
+    </rule>
 
-	<!-- Adapt to be able to use namespaced hooks in dot notation. -->
-	<rule ref="WordPress.NamingConventions.ValidHookName">
-		<properties>
-			<property name="additionalWordDelimiters" value="."/>
-		</properties>
-	</rule>
+    <!-- Adapt to be able to use namespaced hooks in dot notation. -->
+    <rule ref="WordPress.NamingConventions.ValidHookName">
+        <properties>
+            <property name="additionalWordDelimiters" value="."/>
+        </properties>
+    </rule>
 
 </ruleset>
