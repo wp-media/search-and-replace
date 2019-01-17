@@ -62,18 +62,19 @@ class Replace {
 	 * We split large tables into  blocks (size is set via $page_size)when dealing with them to save
 	 * on memory consumption.
 	 *
-	 * @param string $search  What we want to replace.
+	 * @param string $search What we want to replace.
 	 * @param string $replace What we want to replace it with.
-	 * @param string $tables  The name of the table we want to look at.
+	 * @param string $tables The name of the table we want to look at.
 	 * @param null   $csv
 	 *
 	 * @return array|\WP_Error Collection of information gathered during the run.
+	 * @throws \Throwable
 	 */
 
 	public function run_search_replace( $search, $replace, $tables, $csv = null ) {
 
 		if ( $search === $replace && '' !== $search ) {
-			return new \WP_Error( 'error', __( "Search and replace pattern can't be the same!" ) );
+			return new \WP_Error( 'error', esc_html__( 'Search and replace pattern can\'t be the same!', 'search-and-replace' ) );
 		}
 
 		$this->max_execution->set();
@@ -86,17 +87,14 @@ class Replace {
 		];
 
 		foreach ( (array) $tables as $table ) {
-			//count tables
-			$report [ 'tables' ] ++;
+			// Count tables.
+			$report ['tables'] ++;
 			$table_report = $this->replace_values( $search, $replace, $table, $csv );
-			//log changes if any
-
-			if ( 0 !== $table_report[ 'change' ] ) {
-				$report[ 'changes' ][ $table ] = $table_report;
-
-				$report [ 'changes_count' ] += $table_report[ 'change' ];
+			// Log changes if any.
+			if ( 0 !== $table_report['change'] ) {
+				$report['changes'][ $table ] = $table_report;
+				$report ['changes_count'] += $table_report['change'];
 			}
-
 		}
 
 		$this->max_execution->restore();
@@ -105,12 +103,15 @@ class Replace {
 	}
 
 	/**
+	 * Replace data values inside the table.
+	 *
 	 * @param string $search
 	 * @param string $replace
 	 * @param string $table
 	 * @param null   $csv
 	 *
 	 * @return array
+	 * @throws \Throwable
 	 */
 	public function replace_values( $search = '', $replace = '', $table, $csv = null ) {
 
@@ -127,7 +128,7 @@ class Replace {
 
 		// Check we have a search string, bail if not.
 		if ( empty( $search ) && empty( $csv ) ) {
-			$table_report[ 'errors' ][] = 'Search string is empty';
+			$table_report['errors'][] = 'Search string is empty';
 
 			return $table_report;
 		}
@@ -156,7 +157,7 @@ class Replace {
 
 		if ( null === $primary_key ) {
 			array_push(
-				$table_report[ 'errors' ],
+				$table_report['errors'],
 				"The table \"{$table}\" has no primary key. Changes will have to be made manually.",
 				'results'
 			);
@@ -164,7 +165,7 @@ class Replace {
 			return $table_report;
 		}
 
-		$table_report[ 'start' ] = microtime();
+		$table_report['start'] = microtime();
 
 		// Count the number of rows we have in the table if large we'll split into blocks, This is a mod from Simon Wheatley
 		$row_count = $this->dbm->get_rows( $table );
@@ -189,11 +190,11 @@ class Replace {
 			$data = $this->dbm->get_table_content( $table, $start, $page_size );
 
 			if ( ! $data ) {
-				$table_report[ 'errors' ][] = 'no data in table ' . $table;
+				$table_report['errors'][] = 'no data in table ' . $table;
 			}
 
 			foreach ( $data as $row ) {
-				++ $table_report[ 'rows' ];
+				++ $table_report['rows'];
 
 				$update_sql = [];
 				$where_sql  = [];
@@ -213,8 +214,8 @@ class Replace {
 					}
 
 					// Run a search replace on the data that'll respect the serialisation.
-					if ( in_array( strtolower( $column ), $maybe_serialized, true )
-						&& is_serialized( $data_to_fix, false )
+					if ( is_serialized( $data_to_fix, false )
+						&& in_array( strtolower( $column ), $maybe_serialized, true )
 					) {
 						// Run a search replace on the data that'll respect the serialisation.
 						$edited_data = $this->recursive_unserialize_replace( $search, $replace, $data_to_fix );
@@ -227,21 +228,21 @@ class Replace {
 						foreach ( $this->csv_data as $entry ) {
 							$edited_data = is_serialized( $edited_data, false ) ?
 								$this->recursive_unserialize_replace(
-									$entry[ 'search' ],
-									$entry[ 'replace' ],
+									$entry['search'],
+									$entry['replace'],
 									$edited_data
-								) : str_replace( $entry[ 'search' ], $entry[ 'replace' ], $data_to_fix );
+								) : str_replace( $entry['search'], $entry['replace'], $data_to_fix );
 						}
 					}
 
 					// Something was changed.
 					if ( $edited_data !== $data_to_fix ) {
-						++ $table_report[ 'change' ];
+						++ $table_report['change'];
 
 						// log changes
 						// @todo : does it work with non UTF-8 encodings?
-						$table_report[ 'changes' ][] = [
-							'row'    => $table_report[ 'rows' ],
+						$table_report['changes'][] = [
+							'row'    => $table_report['rows'],
 							'column' => $column,
 							'from'   => $data_to_fix,
 							'to'     => $edited_data,
@@ -263,24 +264,50 @@ class Replace {
 					$result = $this->dbm->update( $table, $update_sql, $where_sql );
 
 					if ( ! $result ) {
-						$table_report[ 'errors' ][] = sprintf(
+						$table_report['errors'][] = sprintf(
 						/* translators: $1 is the number of rows found in database */
 							esc_html__( 'Error updating row: %d.', 'search-and-replace' ),
 							$row
 						);
 					} else {
-						$table_report[ 'updates' ] ++;
+						$table_report['updates'] ++;
 					}
 				}
 			}
 		}
 
-		$table_report[ 'end' ] = microtime( true );
+		$table_report['end'] = microtime( true );
 
 		$this->dbm->flush();
 
 		return $table_report;
 
+	}
+
+	/**
+	 * Mimics the mysql_real_escape_string function. Adapted from a post by 'feedr' on php.net.
+	 *
+	 * @link   http://php.net/manual/en/function.mysql-real-escape-string.php#101248
+	 * @access public
+	 *
+	 * @param  array|string $input The string to escape.
+	 *
+	 * @return string
+	 */
+	public function mysql_escape_mimic( $input ) {
+
+		if ( is_array( $input ) ) {
+			return array_map( __METHOD__, $input );
+		}
+		if ( ! empty( $input ) && is_string( $input ) ) {
+			return str_replace(
+				[ '\\', "\0", "\n", "\r", "'", '"', "\x1a" ],
+				[ '\\\\', '\\0', '\\n', '\\r', "\\'", '\\"', '\\Z' ],
+				$input
+			);
+		}
+
+		return $input;
 	}
 
 	/**
@@ -294,9 +321,9 @@ class Replace {
 	 *
 	 * It's up to you to be sure the value is serialized before call the method.
 	 *
-	 * @param string              $from       String we're looking to replace.
-	 * @param string              $to         What we want it to be replaced with.
-	 * @param array|string|object $data       Used to pass any subordinate arrays back to in.
+	 * @param string              $from String we're looking to replace.
+	 * @param string              $to What we want it to be replaced with.
+	 * @param array|string|object $data Used to pass any subordinate arrays back to in.
 	 * @param bool                $serialised Does the array passed via $data need serialising. Default to true.
 	 *
 	 * @throws \Throwable Whatever exception is thrown if WP_DEBUG is true.
@@ -307,17 +334,14 @@ class Replace {
 
 		// Some unserialized data cannot be re-serialised eg. SimpleXMLElements.
 		try {
-			$unserialized = ( is_serialized( $data, false ) ) ?
-				// @codingStandardsIgnoreLine
-				maybe_unserialize( $data ) :
-				false;
+			$unserialized = is_serialized( $data, false ) ? maybe_unserialize( $data ) : false;
 
-			if ( $unserialized !== false && ! is_serialized_string($data) ) {
+			if ( $unserialized !== false && ! is_serialized_string( $data ) ) {
 				$data = $this->recursive_unserialize_replace( $from, $to, $unserialized, false );
 			} elseif ( is_array( $data ) ) {
 				$_tmp = [];
 				foreach ( (array) $data as $key => $value ) {
-					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false);
+					$_tmp[ $key ] = $this->recursive_unserialize_replace( $from, $to, $value, false );
 				}
 
 				$data = $_tmp;
@@ -327,7 +351,7 @@ class Replace {
 				$_tmp  = $data;
 				$props = get_object_vars( $data );
 				foreach ( $props as $key => $value ) {
-					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false);
+					$_tmp->$key = $this->recursive_unserialize_replace( $from, $to, $value, false );
 				}
 
 				$data = $_tmp;
@@ -378,36 +402,19 @@ class Replace {
 	}
 
 	/**
-	 * Mimics the mysql_real_escape_string function. Adapted from a post by 'feedr' on php.net.
+	 * Returns true, if dry run, false if not
 	 *
-	 * @link   http://php.net/manual/en/function.mysql-real-escape-string.php#101248
-	 * @access public
-	 *
-	 * @param  array|string $input The string to escape.
-	 *
-	 * @return string
+	 * @return bool
 	 */
+	public function get_dry_run() {
 
-	public function mysql_escape_mimic( $input ) {
-
-		if ( is_array( $input ) ) {
-			return array_map( __METHOD__, $input );
-		}
-		if ( ! empty( $input ) && is_string( $input ) ) {
-			return str_replace(
-				[ '\\', "\0", "\n", "\r", "'", '"', "\x1a" ],
-				[ '\\\\', '\\0', '\\n', '\\r', "\\'", '\\"', '\\Z' ],
-				$input
-			);
-		}
-
-		return $input;
+		return $this->dry_run;
 	}
 
 	/**
 	 * Sets the dry run option.
 	 *
-	 * @param bool $state : TRUE for dry run, FALSE for writing changes to DB
+	 * @param bool $state : TRUE for dry run, FALSE for writing changes to DB.
 	 *
 	 * @return bool
 	 */
@@ -419,15 +426,5 @@ class Replace {
 		}
 
 		return $state;
-	}
-
-	/**
-	 * Returns true, if dry run, false if not
-	 *
-	 * @return bool
-	 */
-	public function get_dry_run() {
-
-		return $this->dry_run;
 	}
 }
