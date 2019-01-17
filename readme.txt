@@ -124,7 +124,7 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 * Fix for change User-ID, add table `comments`
 
 = v2.6.4 =
-* Fix capability check, if the constant `DISALLOW_FILE_EDIT` ist defined
+* Fix capability check, if the constant `DISALLOW_FILE_EDIT` is defined
 
 = v2.6.3 (10/10/2011) =
 * filter for return values, html-filter
