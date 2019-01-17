@@ -3,7 +3,7 @@
 
     <description>A custom set of code standard rules to check.</description>
 
-    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs"/>
+    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp/PHPCompatibilityWP"/>
 
     <!-- Include the WordPress ruleset, with exclusions. -->
     <rule ref="WordPress">
@@ -65,10 +65,10 @@
     <arg name="extensions" value="php"/> <!-- Limit to PHP files -->
     <!-- Rules: Check PHP version compatibility - see
        https://github.com/PHPCompatibility/PHPCompatibilityWP -->
-    <rule ref="PHPCompatibilityWP"/>
+    <!--<rule ref="PHPCompatibilityWP"/>-->
     <!-- For help in understanding this testVersion:
         https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
-    <config name="testVersion" value="5.6-"/>
+    <!--<config name="testVersion" value="5.6-"/>-->
     <!-- Rules: WordPress Coding Standards - see
        https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
     <rule ref="WordPress-Extra"/><!-- Includes WordPress-Core -->
