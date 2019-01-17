@@ -47,8 +47,7 @@
     "brain/monkey": "^2",
     "wp-coding-standards/wpcs": "^2",
     "phpcompatibility/phpcompatibility-wp": "^2",
-    "dg/composer-cleaner": "^2",
-    "phan/phan": "^1.2"
+    "dg/composer-cleaner": "^2"
   },
   "scripts": {
     "post-install-cmd": [
