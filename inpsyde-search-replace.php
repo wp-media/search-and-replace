@@ -11,7 +11,7 @@
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
  * License:      GPLv3+
- * License URI:  license.txt
+ * License URI:  LICENSE
  */
 
 use Inpsyde\SearchReplace\Database;
