@@ -14,6 +14,10 @@ composer.lock
 # Vendor (e.g. Composer)
 vendor/*
 
+# Assets
+*.min.css
+*.min.js
+
 # Package
 *.zip
 
