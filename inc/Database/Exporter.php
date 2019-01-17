@@ -667,7 +667,7 @@ class Exporter {
 	 *
 	 * @return bool|resource
 	 */
-	private function open( $filename = '', $mode = 'w' ) {
+	private function open( $filename = '', $mode = 'wb' ) {
 
 		if ( '' === $filename ) {
 			return false;
