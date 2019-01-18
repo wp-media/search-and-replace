@@ -235,7 +235,7 @@ class FileDownloader {
 		$msg .= sprintf(
 				// translators: %s is the count of selected cells after search in tables.
 			_n(
-				'%s cell needs to be updated. ',
+				'%s cell needs to be updated.',
 				'%s cells need to be updated.',
 				$report['changes_count'],
 				'search-and-replace'

@@ -9,7 +9,7 @@ With Search & Replace you can search for everything and replace this with everyt
 The first one is "Replace a Domain / URL" that is useful for a quick and simple transfer or a migration of a WordPress site. 
 The second feature is full support for serialized data. There are a lot more features - check them out! :-)
 
-Our goal with this plugin is to give you a good solution for manipulating your data for both: Developers and Users of WordPress.
+Our goal with this plugin is to give you a good solution for manipulating your data for both Developers and Users of WordPress.
 
 > **Note:** This plugin requires PHP 5.6 or higher to be activated.
 

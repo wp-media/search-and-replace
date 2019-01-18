@@ -24,11 +24,12 @@ Search For: http://web.com/wordpress/
 Replace With: http://neuweb.com/wordpress/
 The url become something like: http://neuweb.com/wordpress/content/...
 
-**We have implements special features!**
-The first one is "Replace a Domain / Url" that is useful for a quick and simple transfer or a migration of an WordPress.
-The second is a full support for serialized data but there are a lot more features - find them!
+**We have implemented special features!** 
 
-Our goal with this plugin is to give you a good solution for both Developers and Users of WordPress.
+The first one is "Replace a Domain / URL" that is useful for a quick and simple transfer or a migration of a WordPress site. 
+The second feature is full support for serialized data. There are a lot more features - check them out! :-)
+
+Our goal with this plugin is to give you a good solution for manipulating your data for both Developers and Users of WordPress.
 
 > **Note:** This plugin requires PHP 5.6 or higher to be activated.
 
@@ -123,7 +124,7 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 * Fix for change User-ID, add table `comments`
 
 = v2.6.4 =
-* Fix capability check, if the constant `DISALLOW_FILE_EDIT` ist defined
+* Fix capability check, if the constant `DISALLOW_FILE_EDIT` is defined
 
 = v2.6.3 (10/10/2011) =
 * filter for return values, html-filter
