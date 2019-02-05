@@ -124,6 +124,6 @@ function search_replace_textdomain() {
 	return load_plugin_textdomain(
 		'search-and-replace',
 		false,
-		plugin_basename( __DIR__ ) . '/l10n/'
+		plugin_basename( __DIR__ ) . '/languages/'
 	);
 }
