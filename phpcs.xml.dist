@@ -3,7 +3,13 @@
 
     <description>A custom set of code standard rules to check.</description>
 
-    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp/PHPCompatibilityWP"/>
+    <config
+    name="installed_paths"
+    value="vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/php-compatibility/PHPCompatibility,vendor/phpcompatibility/phpcompatibility-wp/PHPCompatibilityWP,vendor/phpcompatibility/phpcompatibility-paragonie/PHPCompatibilityParagonieRandomCompat,vendor/phpcompatibility/phpcompatibility-paragonie/PHPCompatibilityParagonieSodiumCompat"
+    />
+
+    <file>./inc</file>
+    <exclude-pattern>./tests/</exclude-pattern>
 
     <!-- Include the WordPress ruleset, with exclusions. -->
     <rule ref="WordPress">

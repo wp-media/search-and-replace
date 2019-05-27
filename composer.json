@@ -47,7 +47,8 @@
     "brain/monkey": "^2",
     "wp-coding-standards/wpcs": "^2",
     "phpcompatibility/phpcompatibility-wp": "^2",
-    "dg/composer-cleaner": "^2"
+    "dg/composer-cleaner": "^2",
+    "phpcompatibility/php-compatibility": "^9.1"
   },
   "scripts": {
     "post-install-cmd": [
@@ -56,7 +57,7 @@
     "post-update-cmd": [
       "@phpcs"
     ],
-    "phpcs": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/phpcompatibility-wp/PHPCompatibilityWP"
+    "phpcs": "./vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcompatibility/php-compatibility/PHPCompatibility,vendor/phpcompatibility/phpcompatibility-wp/PHPCompatibilityWP,vendor/phpcompatibility/phpcompatibility-paragonie/PHPCompatibilityParagonieRandomCompat,vendor/phpcompatibility/phpcompatibility-paragonie/PHPCompatibilityParagonieSodiumCompat"
   },
   "autoload": {
     "psr-4": {
