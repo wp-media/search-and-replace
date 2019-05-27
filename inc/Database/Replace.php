@@ -2,6 +2,7 @@
 
 namespace Inpsyde\SearchReplace\Database;
 
+use Exception;
 use Inpsyde\SearchReplace\Service;
 
 /**
@@ -390,7 +391,7 @@ class Replace {
 				// @codingStandardsIgnoreLine
 				$data = serialize( $data );
 			}
-		} catch ( \Throwable $throwable ) {
+		} catch ( Exception $throwable ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				throw $throwable;
 			}
