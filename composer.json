@@ -7,7 +7,7 @@
     "plugin",
     "database"
   ],
-  "license": "GPL-3.0-or-later",
+  "license": "GPL-2.0-or-later",
   "type": "wordpress-plugin",
   "homepage": "https://github.com/inpsyde/search-and-replace/",
   "authors": [
