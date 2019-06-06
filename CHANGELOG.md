@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.1 (2019-06-06)
+* Update readme for tested up WP versions
+* Add check for replace function to get more solid replace for custom tables. [#132](https://github.com/inpsyde/search-and-replace/pull/132/files)
+* Fix small typos
+* Fix Throwable because we set as minimum php 5.6
+
 ## 3.2.0 (2019-01-17)
 * Added CSV format alternative for search/replace [#82](https://github.com/inpsyde/search-and-replace/issues/82).
 * Improve code structure, preparation for more solid UnitTests.
@@ -22,7 +28,6 @@
 - Add support for Searchpattern with quotes. [#40](https://github.com/inpsyde/search-and-replace/issues/40)
 - Basic travis support for travis was added. [#38](https://github.com/inpsyde/search-and-replace/issues/38)
 - Fix Unittest [#37](https://github.com/inpsyde/search-and-replace/issues/37)
-
 
 ## v3.0.2 (2016-04-01)
 - Implement better tab and adminpage handling [#33](https://github.com/inpsyde/search-and-replace/issues/33)
