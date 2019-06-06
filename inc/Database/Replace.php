@@ -260,7 +260,7 @@ class Replace {
 					continue;
 				}
 
-				if ( $update && ! empty( $where_sql ) && !empty( $update_sql ) ) {
+				if ( $update && ! empty( $where_sql ) && ! empty( $update_sql ) ) {
 					// If there are changes to make, run the query.
 					$result = $this->dbm->update( $table, $update_sql, $where_sql );
 
