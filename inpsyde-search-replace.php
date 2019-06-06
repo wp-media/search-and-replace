@@ -10,7 +10,7 @@
  * Version:      3.2.0
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
- * License:      GPLv3+
+ * License:      GPLv2+
  * License URI:  LICENSE
  */
 
