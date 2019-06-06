@@ -2,7 +2,7 @@
 Contributors: inpsyde, Bueltge, derpixler, ChriCo, s-hinse
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
-Tested up to: 5
+Tested up to: 5.2
 Requires PHP: 5.6
 Stable tag: 3.2.1
 License: GPLv2 or later
