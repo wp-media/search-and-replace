@@ -236,6 +236,7 @@ class Replace {
 								) : str_replace( $entry['search'], $entry['replace'], $csvDataToFix );
                             $csvDataToFix = $edited_data;
 						}
+                        unset($csvDataToFix);
 					}
 
 					// Something was changed.
