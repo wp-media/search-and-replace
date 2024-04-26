@@ -1,7 +1,7 @@
 name: search-and-replace
 type: php
 docroot: .ddev/wordpress
-php_version: "7.0"
+php_version: "5.6"
 nodejs_version: "18"
 webserver_type: apache-fpm
 router_http_port: "80"
@@ -14,14 +14,13 @@ mysql_version: ""
 nfs_mount_enabled: false
 mutagen_enabled: false
 use_dns_when_possible: true
-composer_version: "2"
+composer_version: "2.2"
 hooks:
     pre-start:
         - exec-host: "mkdir -p .ddev/wordpress/wp-content/plugins/${DDEV_PROJECT}"
-    post-start:
-        - exec-host: "ddev describe -j | ddev exec php /var/www/html/.ddev/ddev-phpstorm-datasource.php"
+
 web_environment:
-  - WP_VERSION=6.5.2
+  - WP_VERSION=6.2.5
   - WP_LOCALE=de_DE
   - WP_TITLE=DDEV Search and Replace Test
   #- WP_MULTISITE=true
