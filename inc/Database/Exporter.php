@@ -430,7 +430,10 @@ class Exporter {
 			$csv_head  = str_getcsv( 'search,replace' );
 
 			foreach ( $csv_lines as $line ) {
-				$this->csv_data[] = array_combine( $csv_head, str_getcsv( $line ) );
+				$csv_line = str_getcsv( $line );
+				if ( count( $csv_line ) === 2 ) {
+					$this->csv_data[] = array_combine( $csv_head, $csv_line );
+				}
 			}
 		}
 

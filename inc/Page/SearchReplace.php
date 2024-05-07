@@ -328,10 +328,22 @@ class SearchReplace extends AbstractPage implements PageInterface {
 	 */
 	private function selected_tables() {
 
-		$tables = [];
+		$tables    = array();
+		$tables_db = $this->dbm->get_tables();
 
 		if ( ! empty( $_POST[ 'select_tables' ] ) ) {
-			$tables = filter_var( $_POST[ 'select_tables' ], FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY );
+			$tables = filter_var( $_POST[ 'select_tables' ], FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		}
+
+		if ( ! is_array( $tables ) ) {
+			return array();
+		}
+
+		$number_tables = count($tables);
+		for ( $i = 0; $i < $number_tables; $i++ ) {
+			if ( ! in_array( $tables[$i], $tables_db, true ) ) {
+				unset($tables[$i]);
+			}
 		}
 
 		return $tables;
