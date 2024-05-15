@@ -1,9 +1,7 @@
 # Search & Replace
-[![Latest Stable Version](https://poser.pugx.org/inpsyde/search-and-replace/v/stable)](https://packagist.org/packages/inpsyde/search-and-replace) [![Latest Unstable Version](https://poser.pugx.org/inpsyde/search-and-replace/v/unstable)](https://packagist.org/packages/inpsyde/search-and-replace) [![License](https://poser.pugx.org/inpsyde/search-and-replace/license)](https://packagist.org/packages/inpsyde/search-and-replace) [![Build Status](https://travis-ci.org/inpsyde/search-and-replace.svg?branch=master)](https://travis-ci.org/inpsyde/search-and-replace)
 
 ## UNMAINTAINED
 Note: This version of the plugin is not maintained anymore.
-
 
 ## Description:
 With Search & Replace you can search for everything and replace this with everything **but before** you do this you can easily **create** a simple **database backup** and restore it.
@@ -42,7 +40,7 @@ WordPress 4.x (might work with 3.x, but not tested yet)
 ## Usage
 Go to `Tools -> Search & Replace` to view the plugin's user interface.
 
-![screenshot-6](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-6.png)
+![screenshot-6](https://raw.githubusercontent.com/wp-media/search-and-replace/master/assets/wporg/screenshot-6.png)
 
 #### *Backup Database* tab
 **Urgent: Backup your database!**
@@ -79,7 +77,7 @@ http://neuweb.com/wordpress/content/...
 
 If you are running a WordPress multisite and want to export the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only backup the tables of that subsite.
 
-![screenshot-4](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-4.png)
+![screenshot-4](https://raw.githubusercontent.com/wp-media/search-and-replace/master/assets/wporg/screenshot-4.png)
 
 #### *Replace Domain/URL* Tab
 If you want to migrate your site to another domain, please enter here your new domain URL, then download a sql file with the replaced URLs. Import this file into the database of your WordPress installation on your new domain.
@@ -93,7 +91,7 @@ Press *Replace Domain URL* button to download your SQL file for migration.
 **Multisite usage:**
 If you are running multisite and want to migrate the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only migrate the tables of that subsite. The plugin will also replace the domain names (without http(s)://) in the *wp_blogs* table.
 
-![screenshot-2](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-2.png)
+![screenshot-2](https://raw.githubusercontent.com/wp-media/search-and-replace/master/assets/wporg/screenshot-2.png)
 
 #### *Search and Replace* Tab
 **Please backup your database before any search/replace!**
@@ -106,12 +104,12 @@ If you want to apply the changes, uncheck the "dry run"-button, choose if you wa
 
 If you are running multisite and want to search the tables of all sites, run the plugin on the main site. Using the plugin on a subsite will only show the tables for that subsite.
 
-![screenshot-1](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-1.png)
+![screenshot-1](https://raw.githubusercontent.com/wp-media/search-and-replace/master/assets/wporg/screenshot-1.png)
 
 #### *Import SQL* tab
 Import a SQL file or a gzipped SQL file into your database here. This may delete or change existing tables in your database. Please backup your database before doing this!
 
-![screenshot-3](https://raw.githubusercontent.com/inpsyde/search-and-replace/master/assets/wporg/screenshot-3.png)
+![screenshot-3](https://raw.githubusercontent.com/wp-media/search-and-replace/master/assets/wporg/screenshot-3.png)
 
 ### License
 Good news, this plugin is free for everyone! Since it's released under the [GNU General Public License v2+ (or later)](http://www.gnu.org/licenses/gpl-2.0.html), you can use it free of charge on your personal or commercial blog.

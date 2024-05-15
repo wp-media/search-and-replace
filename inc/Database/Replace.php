@@ -226,17 +226,14 @@ class Replace {
 
 					// Run a search replace by CSV parameters if CSV input present
 					if ( null !== $csv ) {
-						$csvDataToFix = $data_to_fix;
 						foreach ( $this->csv_data as $entry ) {
 							$edited_data = is_serialized( $edited_data, false ) ?
 								$this->recursive_unserialize_replace(
 									$entry['search'],
 									$entry['replace'],
 									$edited_data
-								) : str_replace( $entry['search'], $entry['replace'], $csvDataToFix );
-							$csvDataToFix = $edited_data;
+								) : str_replace( $entry['search'], $entry['replace'], $data_to_fix );
 						}
-						unset($csvDataToFix);
 					}
 
 					// Something was changed.
