@@ -1,6 +1,6 @@
 === Search & Replace ===
 Contributors: wp_media, krafit, Bueltge, derpixler, ChriCo, s-hinse
-Tags: search, replace, backup, import, sql, migrate, multisite
+Tags: search, replace, import, sql, migrate,
 Requires at least: 4.0
 Tested up to: 6.5
 Requires PHP: 5.6
