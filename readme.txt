@@ -2,9 +2,9 @@
 Contributors: wp_media, krafit, Bueltge, derpixler, ChriCo, s-hinse
 Tags: search, replace, backup, import, sql, migrate, multisite
 Requires at least: 4.0
-Tested up to: 6.0
+Tested up to: 6.5
 Requires PHP: 5.6
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,10 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 5. Result screen after search or search and replace
 
 == Changelog ==
+= 3.2.2 (2024-05-16) =
+* Now owned by WP Media
+* Fixed potential time based SQL injection
+
 = 3.2.1 (2019-06-06) =
 * Update readme for tested up WP versions
 * Add check for replace function to get more solid replace for custom tables. [#132](https://github.com/wp-media/search-and-replace/pull/132/files)
