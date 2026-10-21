@@ -358,6 +358,11 @@ class FileDownloader {
 			wp_die( 'Cheating Uh?' );
 		}
 
+		// Only the site and user that created the file may download it.
+		if ( ! $this->dbe->is_backup_owner( $sql_file ) ) {
+			wp_die( esc_html__( 'The file you are looking for doesn\'t exists.', 'search-and-replace' ) );
+		}
+
 		// @codingStandardsIgnoreLine
 		if ( isset( $_POST['compress'] ) ) {
 			// @codingStandardsIgnoreLine
