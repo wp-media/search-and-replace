@@ -204,7 +204,49 @@ class Exporter {
 
 		$report ['filename'] = $this->backup_filename;
 
+		$this->remember_backup_owner( $this->backup_filename );
+
 		return $report;
+	}
+
+	/**
+	 * Stores which site and user created the given backup file.
+	 *
+	 * @param string $filename The name of the backup file.
+	 */
+	private function remember_backup_owner( $filename ) {
+
+		set_transient( $this->get_backup_owner_key( $filename ), $this->get_current_owner(), HOUR_IN_SECONDS );
+	}
+
+	/**
+	 * Whether the current site and user created the given backup file.
+	 *
+	 * @param string $filename The name of the backup file.
+	 *
+	 * @return bool
+	 */
+	public function is_backup_owner( $filename ) {
+
+		return get_transient( $this->get_backup_owner_key( $filename ) ) === $this->get_current_owner();
+	}
+
+	/**
+	 * @param string $filename The name of the backup file.
+	 *
+	 * @return string
+	 */
+	private function get_backup_owner_key( $filename ) {
+
+		return 'insr_backup_' . md5( $filename );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_current_owner() {
+
+		return get_current_blog_id() . ':' . get_current_user_id();
 	}
 
 	/**

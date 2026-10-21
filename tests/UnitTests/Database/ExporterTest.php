@@ -8,6 +8,71 @@ use Brain\Monkey\Functions;
 
 class ExporterTest extends AbstractTestCase {
 
+	private function get_exporter() {
+
+		$wp_error_mock = \Mockery::mock( '\WP_Error' );
+		$wp_error_mock->shouldReceive( 'get_error_codes' )->andReturn( [] );
+
+		$dbm_mock = \Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Manager' );
+		$dbm_mock->shouldReceive( 'get_base_prefix' )->andReturn( 'wp_' );
+		$dbm_mock->shouldReceive( 'get_tables' )->andReturn( [] );
+
+		return new Exporter(
+			\Mockery::mock( 'Inpsyde\\SearchReplace\\Database\\Replace' ),
+			$dbm_mock,
+			$wp_error_mock
+		);
+	}
+
+	public function test_db_backup_remembers_who_created_the_backup() {
+
+		$dir = sys_get_temp_dir() . '/';
+
+		Functions\when( 'get_temp_dir' )->justReturn( $dir );
+		Functions\when( 'esc_attr__' )->returnArg( 1 );
+		Functions\when( '__' )->returnArg( 1 );
+		Functions\when( 'get_current_blog_id' )->justReturn( 2 );
+		Functions\when( 'get_current_user_id' )->justReturn( 5 );
+		Functions\expect( 'set_transient' )
+			->once()
+			->with( 'insr_backup_' . md5( 'test__database_wp_.sql' ), '2:5', 3600 );
+
+		$report = $this->get_exporter()->db_backup();
+
+		$this->assertSame( 'test__database_wp_.sql', $report['filename'] );
+
+		@unlink( $dir . 'test__database_wp_.sql' );
+	}
+
+	/**
+	 * @dataProvider backup_owner_provider
+	 *
+	 * @param mixed $stored
+	 * @param bool  $expected
+	 */
+	public function test_is_backup_owner( $stored, $expected ) {
+
+		Functions\when( 'get_temp_dir' )->justReturn( './' );
+		Functions\when( 'get_current_blog_id' )->justReturn( 2 );
+		Functions\when( 'get_current_user_id' )->justReturn( 5 );
+		Functions\expect( 'get_transient' )
+			->once()
+			->with( 'insr_backup_' . md5( 'backup.sql' ) )
+			->andReturn( $stored );
+
+		$this->assertSame( $expected, $this->get_exporter()->is_backup_owner( 'backup.sql' ) );
+	}
+
+	public function backup_owner_provider() {
+
+		return [
+			'same site and user' => [ '2:5', true ],
+			'other user'         => [ '2:6', false ],
+			'other site'         => [ '1:5', false ],
+			'no backup recorded' => [ false, false ],
+		];
+	}
+
 	public function test_search_and_replace() {
 
 		Functions\when( 'get_temp_dir' )->justReturn( './' );
