@@ -339,14 +339,14 @@ class SearchReplace extends AbstractPage implements PageInterface {
 			return array();
 		}
 
-		$number_tables = count($tables);
-		for ( $i = 0; $i < $number_tables; $i++ ) {
-			if ( ! in_array( $tables[$i], $tables_db, true ) ) {
-				unset($tables[$i]);
+		$valid_tables = array();
+		foreach ( $tables as $table ) {
+			if ( is_string( $table ) && in_array( $table, $tables_db, true ) ) {
+				$valid_tables[] = $table;
 			}
 		}
 
-		return $tables;
+		return $valid_tables;
 	}
 
 }
