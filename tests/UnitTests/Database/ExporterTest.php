@@ -33,7 +33,7 @@ class ExporterTest extends AbstractTestCase {
 		Functions\when( '__' )->returnArg( 1 );
 		Functions\when( 'get_current_blog_id' )->justReturn( 2 );
 		Functions\when( 'get_current_user_id' )->justReturn( 5 );
-		Functions\expect( 'set_transient' )
+		Functions\expect( 'set_site_transient' )
 			->once()
 			->with( 'insr_backup_' . md5( 'test__database_wp_.sql' ), '2:5', 3600 );
 
@@ -55,7 +55,7 @@ class ExporterTest extends AbstractTestCase {
 		Functions\when( 'get_temp_dir' )->justReturn( './' );
 		Functions\when( 'get_current_blog_id' )->justReturn( 2 );
 		Functions\when( 'get_current_user_id' )->justReturn( 5 );
-		Functions\expect( 'get_transient' )
+		Functions\expect( 'get_site_transient' )
 			->once()
 			->with( 'insr_backup_' . md5( 'backup.sql' ) )
 			->andReturn( $stored );

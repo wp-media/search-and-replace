@@ -212,11 +212,13 @@ class Exporter {
 	/**
 	 * Stores which site and user created the given backup file.
 	 *
+	 * The backup file is shared by the whole network, so the owner is stored as a site transient.
+	 *
 	 * @param string $filename The name of the backup file.
 	 */
 	private function remember_backup_owner( $filename ) {
 
-		set_transient( $this->get_backup_owner_key( $filename ), $this->get_current_owner(), HOUR_IN_SECONDS );
+		set_site_transient( $this->get_backup_owner_key( $filename ), $this->get_current_owner(), HOUR_IN_SECONDS );
 	}
 
 	/**
@@ -228,7 +230,7 @@ class Exporter {
 	 */
 	public function is_backup_owner( $filename ) {
 
-		return get_transient( $this->get_backup_owner_key( $filename ) ) === $this->get_current_owner();
+		return get_site_transient( $this->get_backup_owner_key( $filename ) ) === $this->get_current_owner();
 	}
 
 	/**
