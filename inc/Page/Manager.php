@@ -38,6 +38,16 @@ class Manager {
 			return;
 		}
 
+		$this->save_page( $page );
+	}
+
+	/**
+	 * Saves the given page after checking the nonce and the capability of the current user.
+	 *
+	 * @param string $page The slug of the page.
+	 */
+	private function save_page( $page ) {
+
 		if ( ! isset( $this->pages[ $page ] ) ) {
 			return;
 		}
@@ -46,8 +56,39 @@ class Manager {
 			return;
 		}
 
+		if ( ! current_user_can( $this->get_capability( $this->pages[ $page ] ) ) ) {
+			wp_die(
+				esc_html__( 'Sorry, you are not allowed to access this page.', 'search-and-replace' ),
+				'',
+				[ 'response' => 403 ]
+			);
+		}
+
 		/** @var PageInterface */
 		$this->pages[ $page ]->save();
+	}
+
+	/**
+	 * Returns the capability a user needs to use the given page.
+	 *
+	 * @param PageInterface $page
+	 *
+	 * @return string
+	 */
+	private function get_capability( PageInterface $page ) {
+
+		/**
+		 * @param string        $cap
+		 * @param PageInterface $page
+		 */
+		$cap = apply_filters( 'insr-capability', 'manage_options', $page );
+
+		// Running SQL against the whole database is a network-wide operation on multisite.
+		if ( $page instanceof SqlImport && is_multisite() ) {
+			$cap = 'manage_network_options';
+		}
+
+		return $cap;
 	}
 
 	/**
@@ -59,11 +100,7 @@ class Manager {
 
 		foreach ( $this->pages as $slug => $page ) {
 
-			/**
-			 * @param string        $cap
-			 * @param PageInterface $page
-			 */
-			$cap = apply_filters( 'insr-capability', 'manage_options', $page );
+			$cap = $this->get_capability( $page );
 
 			add_submenu_page(
 				'tools.php',
@@ -105,6 +142,9 @@ class Manager {
 		$output .= '<h2 class="nav-tab-wrapper">';
 
 		foreach ( $this->pages as $slug => $page ) :
+			if ( ! current_user_can( $this->get_capability( $page ) ) ) {
+				continue;
+			}
 			$class  = $current_page === $slug ? 'nav-tab-active' : '';
 			$output .= sprintf(
 				'<a class="nav-tab %1$s" href="%2$s">%3$s</a>',
