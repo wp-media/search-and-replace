@@ -364,7 +364,7 @@ class FileDownloader {
 				wp_die( esc_html__( 'Backup expired, create a new one.', 'search-and-replace' ) );
 			}
 
-			wp_die( esc_html__( 'This backup was created by another user or site. Create your own backup to download it.', 'search-and-replace' ) );
+			wp_die( esc_html__( 'This backup can\'t be downloaded, please create your own backup to download it.', 'search-and-replace' ) );
 		}
 
 		// @codingStandardsIgnoreLine

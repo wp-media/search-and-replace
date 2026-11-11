@@ -142,7 +142,7 @@ class FileDownloaderTest extends AbstractTestCase {
 			->returnArg( 1 );
 		\Brain\Monkey\Functions\expect( 'wp_die' )
 			->once()
-			->with( 'This backup was created by another user or site. Create your own backup to download it.' )
+			->with( 'This backup can\'t be downloaded, please create your own backup to download it.' )
 			->andReturnUsing(
 				function () {
 					throw new \Exception( 'WP DIE' );
