@@ -73,6 +73,32 @@ class ExporterTest extends AbstractTestCase {
 		];
 	}
 
+	/**
+	 * @dataProvider backup_record_provider
+	 *
+	 * @param mixed $stored
+	 * @param bool  $expected
+	 */
+	public function test_has_backup_owner( $stored, $expected ) {
+
+		Functions\when( 'get_temp_dir' )->justReturn( './' );
+		Functions\expect( 'get_site_transient' )
+			->once()
+			->with( 'insr_backup_' . md5( 'backup.sql' ) )
+			->andReturn( $stored );
+
+		$this->assertSame( $expected, $this->get_exporter()->has_backup_owner( 'backup.sql' ) );
+	}
+
+	public function backup_record_provider() {
+
+		return [
+			'recorded for this user'    => [ '2:5', true ],
+			'recorded for someone else' => [ '2:6', true ],
+			'expired or never recorded' => [ false, false ],
+		];
+	}
+
 	public function test_search_and_replace() {
 
 		Functions\when( 'get_temp_dir' )->justReturn( './' );

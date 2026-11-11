@@ -234,6 +234,20 @@ class Exporter {
 	}
 
 	/**
+	 * Whether an owner is still recorded for the given backup file.
+	 *
+	 * False means the record expired, or the file was created before owners were recorded.
+	 *
+	 * @param string $filename The name of the backup file.
+	 *
+	 * @return bool
+	 */
+	public function has_backup_owner( $filename ) {
+
+		return false !== get_site_transient( $this->get_backup_owner_key( $filename ) );
+	}
+
+	/**
 	 * @param string $filename The name of the backup file.
 	 *
 	 * @return string
