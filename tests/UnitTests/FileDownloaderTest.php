@@ -96,6 +96,7 @@ class FileDownloaderTest extends AbstractTestCase {
 			->returnArg( 1 );
 		\Brain\Monkey\Functions\expect( 'wp_die' )
 			->once()
+			->with( 'Backup expired, create a new one.' )
 			->andReturnUsing(
 				function () {
 					throw new \Exception( 'WP DIE' );
