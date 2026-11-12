@@ -7,7 +7,7 @@
  * Author:		 WP MEDIA SAS
  * Author URI:	 https://wp-media.me/
  * Contributors: s-hinse, derpixler, ChriCo, Bueltge, inpsyde
- * Version:      3.2.3
+ * Version:      3.2.4
  * Text Domain:  search-and-replace
  * Domain Path:  /languages
  * License:      GPLv2+
