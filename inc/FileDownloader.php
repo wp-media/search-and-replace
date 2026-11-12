@@ -358,6 +358,15 @@ class FileDownloader {
 			wp_die( 'Cheating Uh?' );
 		}
 
+		// Only the site and user that created the file may download it.
+		if ( ! $this->dbe->is_backup_owner( $sql_file ) ) {
+			if ( ! $this->dbe->has_backup_owner( $sql_file ) ) {
+				wp_die( esc_html__( 'Backup expired, create a new one.', 'search-and-replace' ) );
+			}
+
+			wp_die( esc_html__( 'This backup can\'t be downloaded, please create your own backup to download it.', 'search-and-replace' ) );
+		}
+
 		// @codingStandardsIgnoreLine
 		if ( isset( $_POST['compress'] ) ) {
 			// @codingStandardsIgnoreLine
