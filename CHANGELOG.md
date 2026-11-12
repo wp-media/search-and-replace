@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.4 (2026-11-12)
+* Validate every submitted table against the available tables. [#149](https://github.com/wp-media/search-and-replace/pull/149)
+* Require a network capability for the SQL import on multisite. [#150](https://github.com/wp-media/search-and-replace/pull/150)
+* Only deliver a backup file to the site and user that created it. [#151](https://github.com/wp-media/search-and-replace/pull/151)
+
 ## 3.2.3 (2024-08-26)
 * Fix a vulnerability when deserializing objects from the database
 * Fix deprecation logs about optional parameters declared before required parameters

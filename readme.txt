@@ -2,9 +2,9 @@
 Contributors: wp_media, krafit, Bueltge, derpixler, ChriCo, s-hinse
 Tags: search, replace, import, sql, migrate,
 Requires at least: 4.0
-Tested up to: 6.5
+Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,11 @@ You want to donate - we prefer a [positive review](https://wordpress.org/support
 5. Result screen after search or search and replace
 
 == Changelog ==
+= 3.2.4 (2026-11-12) =
+* Validate every submitted table against the available tables. [#149](https://github.com/wp-media/search-and-replace/pull/149)
+* Require a network capability for the SQL import on multisite. [#150](https://github.com/wp-media/search-and-replace/pull/150)
+* Only deliver a backup file to the site and user that created it. [#151](https://github.com/wp-media/search-and-replace/pull/151)
+
 = 3.2.3 (2024-08-26) =
 * Fix a vulnerability when deserializing objects from the database
 * Fix deprecation logs about optional parameters declared before required parameters
